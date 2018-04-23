@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Runs the node with configuration necessary for running the live integration tests
+
 set -x
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -14,7 +16,7 @@ go run -ldflags "${GOLDFLAGS}" cmd/skycoin/skycoin.go \
     -gui-dir="${DIR}/src/gui/static/" \
     -launch-browser=true \
     -enable-wallet-api=true \
-    -rpc-interface=false \
+    -enable-seed-api=true \
     $@
 
 popd >/dev/null
