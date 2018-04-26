@@ -1,46 +1,36 @@
 #!/bin/bash
-# Runs "stable"-mode tests against a skycoin node configured with a pinned database
-# "stable" mode tests assume the blockchain data is static, in order to check API responses more precisely
-# $TEST defines which test to run i.e, cli or gui; If empty both are run
+# Runs "disable-seed-api"-mode tests against a skycoin node configured with -enable-seed-api=false
+# and /wallet/seed api endpoint should return 403 forbidden error.
 
 #Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
-PORT="46420"
-RPC_PORT="46430"
+PORT="46422"
+RPC_PORT="46432"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="127.0.0.1:$RPC_PORT"
-MODE="stable"
+MODE="disable-seed-api"
 BINARY="skycoin-integration"
 TEST=""
-UPDATE=""
+RUN_TESTS=""
 # run go test with -v flag
 VERBOSE=""
-# run go test with -run flag
-RUN_TESTS=""
-
-COMMIT=$(git rev-parse HEAD)
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-GOLDFLAGS="-X main.Commit=${COMMIT} -X main.Branch=${BRANCH}"
 
 usage () {
   echo "Usage: $SCRIPT"
   echo "Optional command line arguments"
   echo "-t <string>  -- Test to run, gui or cli; empty runs both tests"
-  echo "-r <string>  -- Run test with -run flag"
-  echo "-u <boolean> -- Update stable testdata"
   echo "-v <boolean> -- Run test with -v flag"
   exit 1
 }
 
-while getopts "h?t:r:uvw" args; do
+while getopts "h?t:r:vw" args; do
   case $args in
     h|\?)
         usage;
         exit;;
     t ) TEST=${OPTARG};;
-    r ) RUN_TESTS="-run ${OPTARG}";;
-    u ) UPDATE="--update";;
     v ) VERBOSE="-v";;
+    r ) RUN_TESTS="-run ${OPTARG}";;
   esac
 done
 
@@ -57,7 +47,7 @@ fi
 # Compile the skycoin node
 # We can't use "go run" because this creates two processes which doesn't allow us to kill it at the end
 echo "compiling skycoin"
-go build -o "$BINARY" -ldflags "${GOLDFLAGS}" cmd/skycoin/skycoin.go
+go build -o "$BINARY" cmd/skycoin/skycoin.go
 
 # Run skycoin node with pinned blockchain database
 echo "starting skycoin node in background with http listener on $HOST"
@@ -71,9 +61,9 @@ echo "starting skycoin node in background with http listener on $HOST"
                       -rpc-interface-port=$RPC_PORT \
                       -launch-browser=false \
                       -data-dir="$DATA_DIR" \
-                      -enable-wallet-api=true \
                       -wallet-dir="$WALLET_DIR" \
-                      -enable-seed-api=true &
+                      -enable-wallet-api=true \
+                      -enable-seed-api=false &
 SKYCOIN_PID=$!
 
 echo "skycoin node pid=$SKYCOIN_PID"
@@ -86,8 +76,8 @@ set +e
 
 if [[ -z $TEST || $TEST = "gui" ]]; then
 
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE SKYCOIN_NODE_HOST=$HOST \
-    go test ./src/gui/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
+SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE SKYCOIN_NODE_HOST=$HOST WALLET_DIR=$WALLET_DIR \
+    go test ./src/gui/integration/... -timeout=30s $VERBOSE $RUN_TESTS
 
 GUI_FAIL=$?
 
@@ -95,8 +85,8 @@ fi
 
 if [[ -z $TEST  || $TEST = "cli" ]]; then
 
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR \
-    go test ./src/api/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
+# SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR \
+#     go test ./src/api/cli/integration/... -timeout=30s $VERBOSE $RUN_TESTS
 
 CLI_FAIL=$?
 
