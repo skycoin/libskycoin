@@ -1,5 +1,7 @@
 # Installing go
 
+Skycoin supports go1.10+.
+
 ## For OSX
 First you need to have `homebrew` installed, if you don't have it yet.
 
@@ -33,14 +35,14 @@ sudo apt-get install -y curl git mercurial make binutils gcc bzr bison libgmp3-d
 sudo yum update -y && sudo yum upgrade -y
 sudo yum install -y git curl make gcc mercurial binutils bzr bison screen
 if [[ "$(cat /etc/redhat-release | grep -o CentOS)" == "CentOS" ]]; then sudo yum install -y build-essential libgmp3-dev; else sudo yum groupinstall -y "Development Tools" "Development Libraries" && sudo yum install -y gmp; fi;
-```	
+```
 
 ### Install Go with Gvm
 #### Install Gvm
 `gvm` need to be installed.
 
 ```sh
-curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer > gvm-installer && chmod a+x gvm-installer && 
+curl -sSL https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer > gvm-installer && chmod a+x gvm-installer &&
 source $HOME/.gvm/scripts/gvm
 ```
 
@@ -51,8 +53,8 @@ In China, use `--source=https://github.com/golang/go` to bypass firewall when fe
 gvm install go1.4 --source=https://github.com/golang/go
 gvm use go1.4
 
-gvm install go1.9
-gvm use go1.9 --default
+gvm install go1.10.2
+gvm use go1.10.2 --default
 ```
 
 #### Installation issues
@@ -60,7 +62,7 @@ If you open up new a terminal and the `go` command is not found then add this to
 
 ```sh
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
-gvm use go1.9 >/dev/null
+gvm use go1.10.2 >/dev/null
 ```
 
 ## Install Go manually
@@ -70,7 +72,7 @@ Let's go to home directory and declare `go`'s version that you want to download.
 
 ```sh
 cd ~
-export GOV=1.9 # golang version. Could be any of the following versions 1.1, 1.2, 1.3, 1.4, ..., 1.9
+export GOV=1.10.2 # golang version
 ```
 
 After that, let's download and uncompress golang source.
