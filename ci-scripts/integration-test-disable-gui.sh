@@ -1,7 +1,6 @@
 #!/bin/bash
-# Runs "stable"-mode tests against a skycoin node configured with a pinned database
-# "stable" mode tests assume the blockchain data is static, in order to check API responses more precisely
-# $TEST defines which test to run i.e, cli or api; If empty both are run
+# Runs "disable-gui"-mode tests against a skycoin node configured with -enable-gui=false
+# and /api/v1/api endpoint should return 404 Not Found error
 
 # Set Script Name variable
 SCRIPT=`basename ${BASH_SOURCE[0]}`
@@ -16,48 +15,31 @@ COIN="${COIN:-skycoin}"
 RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="http://127.0.0.1:$RPC_PORT"
-MODE="stable"
-NAME=""
+MODE="disable-gui"
+BINARY="${COIN}-integration-disable-gui.test"
 TEST=""
-UPDATE=""
+RUN_TESTS=""
 # run go test with -v flag
 VERBOSE=""
-# run go test with -run flag
-RUN_TESTS=""
-DISABLE_CSRF="-disable-csrf"
-USE_CSRF=""
-DB_NO_UNCONFIRMED=""
-DB_FILE="blockchain-180.db"
 
 usage () {
   echo "Usage: $SCRIPT"
   echo "Optional command line arguments"
   echo "-t <string>  -- Test to run, api or cli; empty runs both tests"
-  echo "-r <string>  -- Run test with -run flag"
-  echo "-n <string>  -- Specific name for this test, affects coverage output files"
-  echo "-u <boolean> -- Update stable testdata"
   echo "-v <boolean> -- Run test with -v flag"
-  echo "-c <boolean> -- Run tests with CSRF enabled"
-  echo "-d <boolean> -- Run tests without unconfirmed transactions"
   exit 1
 }
 
-while getopts "h?t:r:n:uvcd" args; do
+while getopts "h?t:r:v" args; do
   case $args in
     h|\?)
         usage;
         exit;;
     t ) TEST=${OPTARG};;
-    r ) RUN_TESTS="-run ${OPTARG}";;
-    n ) NAME="-${OPTARG}";;
-    u ) UPDATE="--update";;
     v ) VERBOSE="-v";;
-    d ) DB_NO_UNCONFIRMED="1"; DB_FILE="blockchain-180-no-unconfirmed.db";;
-    c ) DISABLE_CSRF=""; USE_CSRF="1";
+    r ) RUN_TESTS="-run ${OPTARG}";;
   esac
 done
-
-BINARY="${COIN}-integration${NAME}.test"
 
 COVERAGEFILE="coverage/${BINARY}.coverage.out"
 if [ -f "${COVERAGEFILE}" ]; then
@@ -66,11 +48,8 @@ fi
 
 set -euxo pipefail
 
-COMMIT=$(git rev-parse HEAD)
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
 CMDPKG=$(go list ./cmd/${COIN})
 COVERPKG=$(dirname $(dirname ${CMDPKG}))
-GOLDFLAGS="-X ${CMDPKG}.Commit=${COMMIT} -X ${CMDPKG}.Branch=${BRANCH}"
 
 DATA_DIR=$(mktemp -d -t ${COIN}-data-dir.XXXXXX)
 WALLET_DIR="${DATA_DIR}/wallets"
@@ -83,7 +62,7 @@ fi
 # Compile the skycoin node
 # We can't use "go run" because that creates two processes which doesn't allow us to kill it at the end
 echo "compiling $COIN with coverage"
-go test -c -ldflags "${GOLDFLAGS}" -tags testrunmain -o "$BINARY" -coverpkg="${COVERPKG}/..." ./cmd/${COIN}/
+go test -c -tags testrunmain -o "$BINARY" -coverpkg="${COVERPKG}/..." ./cmd/${COIN}/
 
 mkdir -p coverage/
 
@@ -93,13 +72,13 @@ echo "starting $COIN node in background with http listener on $HOST"
 ./"$BINARY" -disable-networking=true \
             -web-interface-port=$PORT \
             -download-peerlist=false \
-            -db-path=./src/api/integration/testdata/$DB_FILE \
+            -db-path=./src/api/integration/testdata/blockchain-180.db \
             -db-read-only=true \
             -launch-browser=false \
             -data-dir="$DATA_DIR" \
-            -enable-api-set=READ,STATUS,WALLET \
             -wallet-dir="$WALLET_DIR" \
-            $DISABLE_CSRF \
+            -enable-api-set=ALL \
+            -enable-gui=false \
             -test.run "^TestRunMain$" \
             -test.coverprofile="${COVERAGEFILE}" \
             &
@@ -116,22 +95,12 @@ set +e
 
 if [[ -z $TEST || $TEST = "api" ]]; then
 
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE SKYCOIN_NODE_HOST=$HOST USE_CSRF=$USE_CSRF DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED \
-    go test ./src/api/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
+SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE SKYCOIN_NODE_HOST=$HOST WALLET_DIR=$WALLET_DIR \
+    go test ./src/api/integration/... -timeout=30s $VERBOSE $RUN_TESTS
 
 API_FAIL=$?
 
 fi
-
-if [[ -z $TEST  || $TEST = "cli" ]]; then
-
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR USE_CSRF=$USE_CSRF DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED \
-    go test ./src/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
-
-CLI_FAIL=$?
-
-fi
-
 
 echo "shutting down $COIN node"
 
@@ -144,9 +113,6 @@ rm "$BINARY"
 
 if [[ (-z $TEST || $TEST = "api") && $API_FAIL -ne 0 ]]; then
   exit $API_FAIL
-elif [[ (-z $TEST || $TEST = "cli") && $CLI_FAIL -ne 0 ]]; then
-  exit $CLI_FAIL
 else
   exit 0
 fi
-# exit $FAIL
