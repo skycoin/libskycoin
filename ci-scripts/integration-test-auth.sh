@@ -17,7 +17,7 @@ RPC_PORT="$PORT"
 HOST="http://127.0.0.1:$PORT"
 RPC_ADDR="http://127.0.0.1:$RPC_PORT"
 MODE="stable"
-NAME=""
+BINARY="${COIN}-integration-auth.test"
 TEST=""
 UPDATE=""
 # run go test with -v flag
@@ -28,13 +28,14 @@ DISABLE_CSRF="-disable-csrf"
 USE_CSRF=""
 DB_NO_UNCONFIRMED=""
 DB_FILE="blockchain-180.db"
+WEB_USERNAME="foobar"
+WEB_PASSWORD="abcdef123"
 
 usage () {
   echo "Usage: $SCRIPT"
   echo "Optional command line arguments"
   echo "-t <string>  -- Test to run, api or cli; empty runs both tests"
   echo "-r <string>  -- Run test with -run flag"
-  echo "-n <string>  -- Specific name for this test, affects coverage output files"
   echo "-u <boolean> -- Update stable testdata"
   echo "-v <boolean> -- Run test with -v flag"
   echo "-c <boolean> -- Run tests with CSRF enabled"
@@ -49,15 +50,12 @@ while getopts "h?t:r:n:uvcd" args; do
         exit;;
     t ) TEST=${OPTARG};;
     r ) RUN_TESTS="-run ${OPTARG}";;
-    n ) NAME="-${OPTARG}";;
     u ) UPDATE="--update";;
     v ) VERBOSE="-v";;
     d ) DB_NO_UNCONFIRMED="1"; DB_FILE="blockchain-180-no-unconfirmed.db";;
     c ) DISABLE_CSRF=""; USE_CSRF="1";
   esac
 done
-
-BINARY="${COIN}-integration${NAME}.test"
 
 COVERAGEFILE="coverage/${BINARY}.coverage.out"
 if [ -f "${COVERAGEFILE}" ]; then
@@ -97,6 +95,9 @@ echo "starting $COIN node in background with http listener on $HOST"
             -db-read-only=true \
             -launch-browser=false \
             -data-dir="$DATA_DIR" \
+            -web-interface-username=$WEB_USERNAME \
+            -web-interface-password=$WEB_PASSWORD \
+            -web-interface-plaintext-auth=true \
             -enable-all-api-sets=true \
             -wallet-dir="$WALLET_DIR" \
             $DISABLE_CSRF \
@@ -116,8 +117,9 @@ set +e
 
 if [[ -z $TEST || $TEST = "api" ]]; then
 
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE SKYCOIN_NODE_HOST=$HOST \
-	USE_CSRF=$USE_CSRF DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED COIN=$COIN \
+SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE \
+SKYCOIN_NODE_HOST=$HOST SKYCOIN_NODE_USERNAME=$WEB_USERNAME SKYCOIN_NODE_PASSWORD=$WEB_PASSWORD \
+USE_CSRF=$USE_CSRF DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED \
     go test ./src/api/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
 API_FAIL=$?
@@ -126,8 +128,9 @@ fi
 
 if [[ -z $TEST  || $TEST = "cli" ]]; then
 
-SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE RPC_ADDR=$RPC_ADDR \
-	USE_CSRF=$USE_CSRF DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED COIN=$COIN \
+SKYCOIN_INTEGRATION_TESTS=1 SKYCOIN_INTEGRATION_TEST_MODE=$MODE \
+RPC_ADDR=$RPC_ADDR RPC_USER=$WEB_USERNAME RPC_PASS=$WEB_PASSWORD \
+USE_CSRF=$USE_CSRF DB_NO_UNCONFIRMED=$DB_NO_UNCONFIRMED \
     go test ./src/cli/integration/... $UPDATE -timeout=3m $VERBOSE $RUN_TESTS
 
 CLI_FAIL=$?
