@@ -136,19 +136,19 @@ func lookupConfigHandle(handle C.Config__Handle) (*cli.Config, bool) {
 	return nil, false
 }
 
-func registerAppHandle(obj *cli.App) C.App__Handle {
-	return (C.App__Handle)(registerHandle(obj))
-}
+// func registerAppHandle(obj *cli.App) C.App__Handle {
+// 	return (C.App__Handle)(registerHandle(obj))
+// }
 
-func lookupAppHandle(handle C.App__Handle) (*cli.App, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*cli.App); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
+// func lookupAppHandle(handle C.App__Handle) (*cli.App, bool) {
+// 	obj, ok := lookupHandle(C.Handle(handle))
+// 	if ok {
+// 		if obj, isOK := (obj).(*cli.App); isOK {
+// 			return obj, true
+// 		}
+// 	}
+// 	return nil, false
+// }
 
 func registerContextHandle(obj *gcli.Context) C.Context__Handle {
 	return (C.Context__Handle)(registerHandle(obj))
