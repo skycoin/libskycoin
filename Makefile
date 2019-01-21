@@ -24,13 +24,7 @@ LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BU
 GOPATHSUB = gopath/src/github.com/skycoin/skycoin
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
-#ARCH=$(shell uname -m)
-ifeq ($(ARCH),x86_64)
-	GOARCH=amd64
-endif
-ifeq ($(ARCH),i386)
-	GOARCH=386
-endif
+
 ifeq ($(shell uname -s),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
   LDPATH=$(shell printenv LD_LIBRARY_PATH)
@@ -60,12 +54,12 @@ configure-build:
 
 $(BUILDLIB_DIR)/libskycoin.so: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	rm -Rf $(BUILDLIB_DIR)/libskycoin.so
-	GOARCH=$(GOARCH) go build -buildmode=c-shared  -o $(BUILDLIB_DIR)/libskycoin.so $(LIB_FILES)
+	GOARCH=$(ARCHGO) go build -buildmode=c-shared  -o $(BUILDLIB_DIR)/libskycoin.so $(LIB_FILES)
 	mv $(BUILDLIB_DIR)/libskycoin.h $(INCLUDE_DIR)/
 
 $(BUILDLIB_DIR)/libskycoin.a: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	rm -Rf $(BUILDLIB_DIR)/libskycoin.a
-	GOARCH=$(GOARCH) go build -buildmode=c-archive -o $(BUILDLIB_DIR)/libskycoin.a  $(LIB_FILES)
+	GOARCH=$(ARCHGO) go build -buildmode=c-archive -o $(BUILDLIB_DIR)/libskycoin.a  $(LIB_FILES)
 	mv $(BUILDLIB_DIR)/libskycoin.h $(INCLUDE_DIR)/
 
 ## Build libskycoin C static library
@@ -120,7 +114,7 @@ install-deps-libc: configure-build ## Install locally dependencies for testing l
 	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/skycoin/skycoin ./lib
+	GOARCH=$(ARCHGO) goimports -w -local github.com/skycoin/skycoin ./lib
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
