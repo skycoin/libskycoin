@@ -24,7 +24,7 @@ LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BU
 GOPATHSUB = gopath/src/github.com/skycoin/skycoin
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
-ARCH=$(shell uname -m)
+#ARCH=$(shell uname -m)
 ifeq ($(ARCH),x86_64)
 	GOARCH=amd64
 endif

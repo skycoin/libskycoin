@@ -14,6 +14,7 @@ matrix:
       env:
         - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 45s
         - ARCH: arm
+        - GOARCH: arm
 #    - os: osx
       # Do not start osx build for PR
 #      if: type != pull_request
