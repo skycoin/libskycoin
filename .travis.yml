@@ -50,7 +50,5 @@ script:
   - CC=gcc-6 make test-libc
 
 notifications:
-  email:
-    - false
-  # https://github.com/kvld/travisci-telegram TravisCI Telegram Bot integration
+  email: false
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
