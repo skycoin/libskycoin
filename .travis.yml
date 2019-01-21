@@ -14,8 +14,8 @@ matrix:
     - os: linux
       env:
         - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 45s
-        - ARCH: arm
-        - ARCHGO: arm
+        - ARCH: i386
+        - ARCHGO: 386
 #    - os: osx
       # Do not start osx build for PR
 #      if: type != pull_request
@@ -32,6 +32,7 @@ env:
     - BUILD_DIR: build
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
+    - CGO_ENABLED: 1
 
 install:
   # Install gox

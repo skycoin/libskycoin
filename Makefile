@@ -24,6 +24,7 @@ LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BU
 GOPATHSUB = gopath/src/github.com/skycoin/skycoin
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
+CGO_ENABLED=1
 
 ifeq ($(shell uname -s),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
@@ -108,7 +109,7 @@ install-linters: ## Install linters
 
 install-deps-libc: configure-build ## Install locally dependencies for testing libskycoin
 	git clone --recursive https://github.com/skycoin/Criterion $(BUILD_DIR)/usr/tmp/Criterion
-	mkdir $(BUILD_DIR)/usr/tmp/Criterion/build
+	mkdir -p $(BUILD_DIR)/usr/tmp/Criterion/build
 	cd    $(BUILD_DIR)/usr/tmp/Criterion/build && cmake .. && cmake --build .
 	mv    $(BUILD_DIR)/usr/tmp/Criterion/build/libcriterion.* $(BUILD_DIR)/usr/lib/
 	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
