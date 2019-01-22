@@ -2,7 +2,7 @@
 # Install gcc6 (6.4.0-2 on Mac OS) for Travis builds
 
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-  sudo apt-get install -qq gcc gcc-multilib g++ g++-multilib build-essential;
+  sudo apt-get install -qq gcc gcc-multilib g++ g++-multilib build-essential python-dev;
 fi
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
