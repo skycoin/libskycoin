@@ -41,7 +41,7 @@ install:
   - go get -t ./...
   - make install-linters
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
-  - env CC=i686-linux-gnu-gcc make install-deps-libc
+  - make install-deps-libc
 
 script:
   - make lint
