@@ -5,7 +5,7 @@ import (
 	"unsafe"
 
 	"github.com/skycoin/skycoin/src/cipher"
-	"github.com/skycoin/skycoin/src/util/http"
+	httphelper "github.com/skycoin/skycoin/src/util/http"
 )
 
 /*
