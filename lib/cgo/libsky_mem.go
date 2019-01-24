@@ -20,19 +20,21 @@ import (
 */
 import "C"
 
+// Define sizes of data types
 const (
-	SizeofRipemd160         = unsafe.Sizeof(C.cipher__Ripemd160{})
-	SizeOfAddress           = unsafe.Sizeof(C.cipher__Address{})
-	SizeofPubKey            = unsafe.Sizeof(C.cipher__PubKey{})
-	SizeofSecKey            = unsafe.Sizeof(C.cipher__SecKey{})
-	SizeofSig               = unsafe.Sizeof(C.cipher__Sig{})
-	SizeofChecksum          = unsafe.Sizeof(C.cipher__Checksum{})
-	SizeofSendAmount        = unsafe.Sizeof(C.cli__SendAmount{})
-	SizeofSHA256            = unsafe.Sizeof(C.cipher__SHA256{})
-	SizeofTransactionOutput = unsafe.Sizeof(C.coin__TransactionOutput{})
-	SizeofTransaction       = unsafe.Sizeof(C.coin__Transaction{})
-	SizeofEntry             = unsafe.Sizeof(C.wallet__Entry{})
-	SizeofUxBalance         = unsafe.Sizeof(C.wallet__UxBalance{})
+	SizeofRipemd160 = unsafe.Sizeof(C.cipher__Ripemd160{})
+	//   It is not being used.
+	// SizeOfAddress           = unsafe.Sizeof(C.cipher__Address{})
+	SizeofPubKey = unsafe.Sizeof(C.cipher__PubKey{})
+	SizeofSecKey = unsafe.Sizeof(C.cipher__SecKey{})
+	SizeofSig    = unsafe.Sizeof(C.cipher__Sig{})
+	// SizeofChecksum          = unsafe.Sizeof(C.cipher__Checksum{})
+	// SizeofSendAmount        = unsafe.Sizeof(C.cli__SendAmount{})
+	SizeofSHA256 = unsafe.Sizeof(C.cipher__SHA256{})
+	// SizeofTransactionOutput = unsafe.Sizeof(C.coin__TransactionOutput{})
+	// SizeofTransaction       = unsafe.Sizeof(C.coin__Transaction{})
+	// SizeofEntry             = unsafe.Sizeof(C.wallet__Entry{})
+	// SizeofUxBalance         = unsafe.Sizeof(C.wallet__UxBalance{})
 )
 
 /**
@@ -123,28 +125,29 @@ func copyToStringMap(gomap map[string]string, dest *C.GoStringMap_) {
 	*dest = (C.GoStringMap_)(registerHandle(gomap))
 }
 
-func splitCliArgs(args string) (result []string) {
-	prevSep := -1
-	quoted := false
-	var i int
-	for i = 0; i < len(args); i++ {
-		if args[i] == '"' {
-			quoted = !quoted
-			if !quoted {
-				result = append(result, args[prevSep+1:i])
-			}
-			prevSep = i
-		} else if !quoted && args[i] == ' ' {
-			if prevSep+1 < i {
-				result = append(result, args[prevSep+1:i])
-			}
-			prevSep = i
-		}
-	}
-	if len(args) > 0 {
-		if prevSep+1 < i {
-			result = append(result, args[prevSep+1:i])
-		}
-	}
-	return
-}
+// It is not being used.
+// func splitCliArgs(args string) (result []string) {
+// 	prevSep := -1
+// 	quoted := false
+// 	var i int
+// 	for i = 0; i < len(args); i++ {
+// 		if args[i] == '"' {
+// 			quoted = !quoted
+// 			if !quoted {
+// 				result = append(result, args[prevSep+1:i])
+// 			}
+// 			prevSep = i
+// 		} else if !quoted && args[i] == ' ' {
+// 			if prevSep+1 < i {
+// 				result = append(result, args[prevSep+1:i])
+// 			}
+// 			prevSep = i
+// 		}
+// 	}
+// 	if len(args) > 0 {
+// 		if prevSep+1 < i {
+// 			result = append(result, args[prevSep+1:i])
+// 		}
+// 	}
+// 	return
+// }

@@ -68,6 +68,7 @@ func SKY_cli_Config_FullDBPath(_c C.Config__Handle, _arg0 *C.GoString_) (____err
 // 	return
 // }
 
+//export SKY_cli_NewPasswordReader
 func SKY_cli_NewPasswordReader(_password []byte, passwordReader *C.PasswordReader__Handle) {
 	password := *(*[]byte)(unsafe.Pointer(&_password))
 	pr := cli.NewPasswordReader(password)
