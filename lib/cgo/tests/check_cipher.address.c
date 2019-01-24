@@ -8,6 +8,8 @@
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
+#include "testutils/criteiun_wrapper_calls.h"
+#include "shared_tests.h"
 
 #define SKYCOIN_ADDRESS_VALID "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv"
 
@@ -179,23 +181,6 @@ Test(cipher_address, TestAddressBulk)
 
 Test(cipher_address, TestAddressNull)
 {
-  cipher__Address a;
-  memset(&a, 0, sizeof(cipher__Address));
-  GoUint32 result;
-  GoUint8 isNull;
-  result = SKY_cipher_Address_Null(&a, &isNull);
-  cr_assert(result == SKY_OK, "SKY_cipher_Address_Null");
-  cr_assert(isNull == 1);
-
-  cipher__PubKey p;
-  cipher__SecKey s;
-
-  result = SKY_cipher_GenerateKeyPair(&p, &s);
-  cr_assert(result == SKY_OK, "SKY_cipher_GenerateKeyPair failed");
-
-  result = SKY_cipher_AddressFromPubKey(&p, &a);
-  cr_assert(result == SKY_OK, "SKY_cipher_AddressFromPubKey failed");
-  result = SKY_cipher_Address_Null(&a, &isNull);
-  cr_assert(result == SKY_OK, "SKY_cipher_Address_Null");
-  cr_assert(isNull == 0);
+	xUnitTest xunit = create_test_framework_wrapper();
+	TestAddressNullShared(&xunit);
 }
