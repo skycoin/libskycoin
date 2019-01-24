@@ -6,24 +6,16 @@ go:
 
 matrix:
   include:
-    # - os: linux
-    # env:
-    # - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 45s
-    # - ARCH: x86_64
-    # - ARCHGO: amd64
-    - os: linux
-      env:
-        - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 45s
-        - ARCH: i386
-        - ARCHGO: 386
-        - CC: i686-linux-gnu-gcc
-
-      #    - os: osx
-      # Do not start osx build for PR
-#      if: type != pull_request
-#      osx_image: xcode8
-#      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
-#      env: ARCH=x86_64
+     - os: linux
+     env:
+     - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 45s
+     - ARCH: x86_64
+     - ARCHGO: amd64
+     - os: osx
+#       Do not start osx build for PR
+      if: type != pull_request
+      osx_image: xcode8
+      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq && sudo apt install qemu; fi
@@ -49,7 +41,7 @@ install:
 script:
   - make lint
   # libskycoin tests
-  - env CC=i686-linux-gnu-gcc GOOS=linux ARCHGO=386 GOHOSTARCH=386 ARCH=x86_64 GOARM=5 CGO_ENABLED=1 make test-libc
+  - make test-libc
 
 notifications:
   email: false
