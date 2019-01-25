@@ -1,22 +1,13 @@
 package main
 
 import (
+	"C"
+	"encoding/hex"
 	"reflect"
 	"unsafe"
 
 	cipher "github.com/skycoin/skycoin/src/cipher"
 )
-
-//export SKY_cipher_SecKeyFromHex
-func SKY_cipher_SecKeyFromHex(_s string, _arg1 *C.cipher__SecKey) (____error_code uint32) {
-	sk, err := cipher.SecKeyFromHex(_s)
-	errcode := libErrorCode(err)
-	if err == nil {
-		copyToBuffer(reflect.ValueOf(sk[:]), unsafe.Pointer(_arg1), uint(SizeofSecKey))
-	}
-	____error_code = errcode
-	return
-}
 
 /*
 
@@ -36,6 +27,17 @@ func SKY_base58_String2Hex(_s string, _arg1 *C.GoSlice_) (____error_code uint32)
 		copyToGoSlice(reflect.ValueOf(__arg1), _arg1)
 	}
 
+	return
+}
+
+//export SKY_cipher_SecKeyFromHex
+func SKY_cipher_SecKeyFromHex(_s string, _arg1 *C.cipher__SecKey) (____error_code uint32) {
+	sk, err := cipher.SecKeyFromHex(_s)
+	errcode := libErrorCode(err)
+	if err == nil {
+		copyToBuffer(reflect.ValueOf(sk[:]), unsafe.Pointer(_arg1), uint(SizeofSecKey))
+	}
+	____error_code = errcode
 	return
 }
 
