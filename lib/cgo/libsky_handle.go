@@ -468,17 +468,6 @@ func SKY_handle_close(handle C.Handle) {
 	closeHandle(Handle(handle))
 }
 
-//export SKY_handle_copy
-func SKY_handle_copy(handle C.Handle, copy *C.Handle) uint32 {
-	obj, ok := lookupHandle(handle)
-	if ok {
-		*copy = registerHandle(obj)
-		return SKY_OK
-	} else {
-		return SKY_BAD_HANDLE
-	}
-}
-
 func registerReadableUnspentOutputsSummaryHandle(obj *readable.UnspentOutputsSummary) C.ReadableUnspentOutputsSummary_Handle {
 	return (C.ReadableUnspentOutputsSummary_Handle)(registerHandle(obj))
 }
