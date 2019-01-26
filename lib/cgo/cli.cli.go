@@ -52,21 +52,21 @@ func SKY_cli_Config_FullDBPath(_c C.Config__Handle, _arg0 *C.GoString_) (____err
 	return
 }
 
-//export SKY_cli_NewCLI
-func SKY_cli_NewCLI(_cfg C.Config__Handle, _arg1 *C.CLI__Handle) (____error_code uint32) {
-	__cfg, okcfg := lookupConfigHandle(_cfg)
-	if !okcfg {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	cfg := *__cfg
-	__arg1, ____return_err := cli.NewCLI(cfg)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-		*_arg1 = registerCLIHandle(__arg1)
-	}
-	return
-}
+// //export SKY_cli_NewApp
+// func SKY_cli_NewApp(_cfg C.Config__Handle, _arg1 *C.App__Handle) (____error_code uint32) {
+// 	__cfg, okcfg := lookupConfigHandle(_cfg)
+// 	if !okcfg {
+// 		____error_code = SKY_BAD_HANDLE
+// 		return
+// 	}
+// 	cfg := *__cfg
+// 	__arg1, ____return_err := cli.NewApp(cfg)
+// 	____error_code = libErrorCode(____return_err)
+// 	if ____return_err == nil {
+// 		*_arg1 = registerAppHandle(__arg1)
+// 	}
+// 	return
+// }
 
 func SKY_cli_NewPasswordReader(_password []byte, passwordReader *C.PasswordReader__Handle) {
 	password := *(*[]byte)(unsafe.Pointer(&_password))

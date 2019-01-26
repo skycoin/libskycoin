@@ -13,20 +13,20 @@ import (
 */
 import "C"
 
-//export SKY_cli_CLI_Run
-func SKY_cli_CLI_Run(_app C.CLI__Handle) (____error_code uint32) {
-	cli, okapp := lookupCLIHandle(_app)
-	if !okapp {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-
-	____return_err := cli.Execute()
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-	}
-	return
-}
+// //export SKY_cli_App_Run
+// func SKY_cli_App_Run(_app C.App__Handle, _args string) (____error_code uint32) {
+// 	app, okapp := lookupAppHandle(_app)
+// 	if !okapp {
+// 		____error_code = SKY_BAD_HANDLE
+// 		return
+// 	}
+// 	args := splitCliArgs(_args)
+// 	____return_err := app.Run(args)
+// 	____error_code = libErrorCode(____return_err)
+// 	if ____return_err == nil {
+// 	}
+// 	return
+// }
 
 //export SKY_cli_Config_GetCoin
 func SKY_cli_Config_GetCoin(_c C.Config__Handle, _arg0 *C.GoString_) (____error_code uint32) {
