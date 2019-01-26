@@ -38,7 +38,7 @@ Test(cipher_address, TestDecodeBase58Address)
   cr_assert(
       errorcode == SKY_ERROR,
       "preceding whitespace is invalid");
- 
+
   // preceding zeroes are invalid
   strcpy(tempStr, "000");
   strcat(tempStr, SKYCOIN_ADDRESS_VALID);
@@ -76,17 +76,21 @@ Test(cipher_address, TestAddressFromBytes)
   cipher__SecKey sk;
   cipher__PubKey pk;
   GoSlice bytes;
+  GoSlice_ tempBytes;
 
-  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  GoUint32 err = SKY_cipher_GenerateKeyPair(&pk, &sk);
+  cr_assert(err == SKY_OK);
   SKY_cipher_AddressFromPubKey(&pk, &addr);
 
-  bytes.data = buff;
-  bytes.len = 0;
-  bytes.cap = sizeof(buff);
+  tempBytes.data = buff;
+  tempBytes.len = 0;
+  tempBytes.cap = sizeof(buff);
 
-  SKY_cipher_Address_Bytes(&addr, (GoSlice_ *)&bytes);
-  cr_assert(bytes.len > 0, "address bytes written");
-  cr_assert(SKY_cipher_AddressFromBytes(bytes, &addr2) == SKY_OK, "convert bytes to SKY address");
+  SKY_cipher_Address_Bytes(&addr, &tempBytes);
+  cr_assert(tempBytes.len > 0, "address bytes written");
+  copyGoSlice_toGoSlice(&bytes, &tempBytes, tempBytes.len);
+  err = SKY_cipher_AddressFromBytes(bytes, &addr2);
+  cr_assert(err == SKY_OK, "convert bytes to SKY address");
 
   cr_assert(eq(type(cipher__Address), addr, addr2));
 
@@ -100,7 +104,8 @@ Test(cipher_address, TestAddressFromBytes)
   cr_assert(SKY_cipher_AddressFromBytes(bytes, &addr2) == SKY_ErrAddressInvalidChecksum, "no SKY address due to corrupted bytes");
 
   addr.Version = 2;
-  SKY_cipher_Address_Bytes(&addr, (GoSlice_ *)&bytes);
+  SKY_cipher_Address_Bytes(&addr, &tempBytes);
+  copyGoSlice_toGoSlice(&bytes, &tempBytes, tempBytes.len);
   cr_assert(SKY_cipher_AddressFromBytes(bytes, &addr2) == SKY_ErrAddressInvalidVersion, "Invalid version");
 }
 
@@ -154,23 +159,29 @@ Test(cipher_address, TestAddressBulk)
 
   unsigned char buff[50];
   GoSlice slice = {buff, 0, 50};
-
-  for (int i = 0; i < 1024; ++i)
+  int i;
+  for (i = 0; i < 1024; ++i)
   {
+    GoUint32 err;
     randBytes(&slice, 32);
     cipher__PubKey pubkey;
     cipher__SecKey seckey;
-    SKY_cipher_GenerateDeterministicKeyPair(slice, &pubkey, &seckey);
+    err = SKY_cipher_GenerateDeterministicKeyPair(slice, &pubkey, &seckey);
+    cr_assert(err == SKY_OK);
     cipher__Address addr;
-    SKY_cipher_AddressFromPubKey(&pubkey, &addr);
-    unsigned int err;
+    err = SKY_cipher_AddressFromPubKey(&pubkey, &addr);
+    cr_assert(err == SKY_OK);
     err = SKY_cipher_Address_Verify(&addr, &pubkey);
     cr_assert(err == SKY_OK);
-    GoString strAddr;
-    SKY_cipher_Address_String(&addr, (GoString_ *)&strAddr);
-    registerMemCleanup((void *)strAddr.p);
-    cipher__Address addr2;
 
+    GoString_ tempstrAddr;
+    err = SKY_cipher_Address_String(&addr, &tempstrAddr);
+    cr_assert(err == SKY_OK);
+    registerMemCleanup((void *)tempstrAddr.p);
+    cipher__Address addr2;
+    GoString strAddr;
+    strAddr.n = tempstrAddr.n;
+    strAddr.p = tempstrAddr.p;
     err = SKY_cipher_DecodeBase58Address(strAddr, &addr2);
     cr_assert(err == SKY_OK);
     cr_assert(eq(type(cipher__Address), addr, addr2));
