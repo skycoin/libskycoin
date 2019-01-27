@@ -13,7 +13,7 @@ import "C"
 import (
 	"hash"
 
-	"github.com/skycoin/libskycoin/vendor/github.com/skycoin/skycoin/vendor/github.com/spf13/cobra"
+	"github.com/spf13/cobra"
 
 	"github.com/skycoin/skycoin/src/api"
 	"github.com/skycoin/skycoin/src/api/webrpc"
