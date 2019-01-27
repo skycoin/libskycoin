@@ -63,7 +63,11 @@ func SKY_cli_NewCLI(_cfg C.Config__Handle, _arg1 *C.CLI__Handle) (____error_code
 	__arg1, ____return_err := cli.NewCLI(cfg)
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {
-		*_arg1 = registerCLIHandle(__arg1)
+		if cmd, ok := inplaceCobraCommand(__arg1); ok {
+			*_arg1 = registerCLIHandle(cmd)
+		} else {
+			____error_code = SKY_ERROR
+		}
 	}
 	return
 }
