@@ -41,7 +41,7 @@ install:
 script:
   - make lint
   # libskycoin tests
-  - make test-libc
+  - CC=gcc-6 make test-libc
 
 notifications:
   email: false
