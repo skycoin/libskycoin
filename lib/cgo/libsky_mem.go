@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"unsafe"
 
+	"github.com/spf13/cobra"
+
 	"github.com/skycoin/skycoin/src/cipher"
 	httphelper "github.com/skycoin/skycoin/src/util/http"
 )
@@ -47,6 +49,11 @@ func inplaceAddress(p *C.cipher__Address) *cipher.Address {
 
 func inplaceHttpHelperAddress(p *C.httphelper__Address) *httphelper.Address {
 	return (*httphelper.Address)(unsafe.Pointer(p))
+}
+
+func inplaceCobraCommand(p interface{}) (cmd *cobra.Command, isInstance bool) {
+	cmd, isInstance = p.(*cobra.Command)
+	return
 }
 
 /**
