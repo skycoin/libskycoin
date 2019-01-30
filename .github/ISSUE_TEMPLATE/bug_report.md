@@ -7,27 +7,32 @@ assignees: ''
 
 ---
 
-## Expected Behavior
+**Describe the bug**
+A clear and concise description of the problem and bug effects.
 
+**Environment information:**
 
-## Actual Behavior
+- OS: e.g. Linux, Windows, Mac OS X
+- Platform: the equivalent of `uname -smr` or `uname -smrv` e.g. Darwin 17.4.0 x86_64
+- Firmware Version: e.g. 0.5.18
 
+**Steps to Reproduce**
+Steps to reproduce the behavior:
 
-## Steps to Reproduce the Problem
-<!--- Provide a link to a live example, or an unambiguous set of steps to -->
-<!--- reproduce this bug. Include code to reproduce, if relevant -->
+1. Go to '...'
+2. Run '....'
+3. Write data to '....'
+4. See error
 
-  1.
-  1.
-  1.
+**Actual behavior**
+Explain the failure modes and effects, everything indicating the existence of the bug.
+If applicable, add screenshots to help explain your problem.
 
-## Specifications
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-  - Version:
-  - Platform:
-  - Subsystem:
+**Additional context**
+Add any other context about the problem here.
 
-## Possible Solution
-<!--- Not obligatory, but suggest a fix/reason for the bug, -->
-<!--- Not obligatory, but suggest an idea for implementing addition or change -->
-
+**Possible implementation**
+Hints to fix the bug.
