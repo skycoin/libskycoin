@@ -4,12 +4,30 @@
 
 COIN ?= skycoin
 
+# Resource paths
+# --- Absolute path to repository root
+LIBSRC_ABS_PATH        = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+# --- Relative path to repository root
+LIBSRC_REL_PATH        = .
+# --- Relative path to repository root from local vendor directory
+LIBSRC_VENDORREL_PATH  = ..
+# --- Relative path to repository root from Skycoin source root directory
+LIBSRC_SKYSRCREL_PATH  = ../../../..
+# --- Relative path to libskycoin vendor directory
+LIBVENDOR_REL_PATH     = vendor
+# --- Relative path to Skycoin source code submodule
+SKYSRC_REL_PATH        = $(LIBVENDOR_REL_PATH)/github.com/skycoin/skycoin
+# --- Relative path to Skycoin vendor directory
+SKYVENDOR_REL_PATH     = $(SKYSRC_REL_PATH)/vendor
+
+# Source files
+LIB_FILES = $(shell find ./lib/cgo -type f -name "*.go")
+HEADER_FILES = $(shell find ./include -type f -name "*.h")
+
 # Compilation output for libskycoin
 BUILD_DIR = build
 BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
 LIB_DIR = lib
-LIB_FILES = $(shell find ./lib/cgo -type f -name "*.go")
-HEADER_FILES = $(shell find ./include -type f -name "*.h")
 BIN_DIR = bin
 DOC_DIR = docs
 INCLUDE_DIR = include
@@ -21,7 +39,6 @@ CC_VERSION = $(shell $(CC) -dumpversion)
 STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): print('-std=C99'")
 LIBC_LIBS = -lcriterion
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
-GOPATHSUB = gopath/src/github.com/skycoin/skycoin
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
 
@@ -51,6 +68,14 @@ endif
 configure-build:
 	mkdir -p $(BUILD_DIR)/usr/tmp $(BUILD_DIR)/usr/lib $(BUILD_DIR)/usr/include
 	mkdir -p $(BUILDLIB_DIR) $(BIN_DIR) $(INCLUDE_DIR)
+
+## Update links to dependency packages
+dep:
+	git submodule init || true
+	git submodule update
+	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/golang.org $(LIBVENDOR_REL_PATH)/golang.org
+	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/gopkg.in $(LIBVENDOR_REL_PATH)/gopkg.in
+	ls -1 $(SKYVENDOR_REL_PATH)/github.com | grep -v '^skycoin$$' | xargs -I NAME ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/github.com/NAME $(LIBVENDOR_REL_PATH)/github.com/NAME
 
 $(BUILDLIB_DIR)/libskycoin.so: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	rm -Rf $(BUILDLIB_DIR)/libskycoin.so
