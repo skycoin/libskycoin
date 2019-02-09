@@ -147,7 +147,6 @@ func lookupCLIHandle(handle C.CLI__Handle) (*cobra.Command, bool) {
 			return obj, true
 		}
 	}
-
 	return nil, false
 }
 

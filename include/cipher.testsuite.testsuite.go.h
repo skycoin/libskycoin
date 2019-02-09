@@ -19,7 +19,7 @@
 
 // FIXME: Does not work on e.g. Windowa
 #define FILEPATH_SEPARATOR      "/"
-#define TEST_DATA_DIR           "src/cipher/testsuite/testdata/"
+#define TEST_DATA_DIR           "vendor/github.com/skycoin/skycoin/src/cipher/testsuite/testdata/"
 #define MANY_ADDRESSES_FILENAME "many-addresses.golden"
 #define  INPUT_HASHES_FILENAME   "input-hashes.golden"
 #define SEED_FILE_REGEX         "seed-\d+.golden"
