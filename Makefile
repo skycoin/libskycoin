@@ -139,6 +139,12 @@ install-deps-libc: configure-build ## Install locally dependencies for testing l
 	mv    $(BUILD_DIR)/usr/tmp/Criterion/build/libcriterion.* $(BUILD_DIR)/usr/lib/
 	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
 
+install-googletest-libc: configure-build ##Install googletest in debian && ubuntu
+	sudo apt-get install libgtest-dev 
+	sudo apt-get install cmake # install cmake
+	cd /usr/src/gtest && sudo cmake CMakeLists.txt &&	sudo make && sudo cp *.a /usr/lib
+ 		
+
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
 
