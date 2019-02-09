@@ -6,6 +6,8 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 fi
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  echo 'Removing gcc'
+  brew remove gcc
   echo 'Updating packages database'
   brew update
   echo 'Available versions (gcc)'
