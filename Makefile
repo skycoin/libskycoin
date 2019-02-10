@@ -130,7 +130,7 @@ check: lint test-libc ## Run tests and linters
 install-linters-Linux: ## Install linters on GNU/Linux
 	sudo apt-get install clang-format
 
-install-linters-Linux: ## Install linters on Mac OSX
+install-linters-Darwin: ## Install linters on Mac OSX
 	brew install clang-format
 
 install-linters-Darwin: ## Install linters on Mac OSX
