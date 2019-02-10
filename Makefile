@@ -43,18 +43,16 @@ LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BU
 OSNAME  = $(TRAVIS_OS_NAME)
 UNAME_S = $(shell uname -s)
 
+PKG_CLANG_FORMAT ?= clang-format
+
 ifeq ($(UNAME_S),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
   LDPATH=$(shell printenv LD_LIBRARY_PATH)
   LDPATHVAR=LD_LIBRARY_PATH
   LDFLAGS=$(LIBC_FLAGS) $(STDC_FLAG)
-ifndef OSNAME
-  OSNAME = linux
-endif
+  OSNAME ?= linux
 else ifeq ($(UNAME_S),Darwin)
-ifndef OSNAME
-  OSNAME = osx
-endif
+  OSNAME ?= osx
   LDLIBS = $(LIBC_LIBS)
   LDPATH=$(shell printenv DYLD_LIBRARY_PATH)
   LDPATHVAR=DYLD_LIBRARY_PATH
@@ -128,12 +126,10 @@ lint: ## Run linters. Use make install-linters first.
 check: lint test-libc ## Run tests and linters
 
 install-linters-Linux: ## Install linters on GNU/Linux
-	sudo apt-get install clang-format
+	sudo apt-get install $(PKG_CLANG_FORMAT)
 
 install-linters-Darwin: ## Install linters on Mac OSX
-	brew install clang-format
-
-install-linters-Darwin: ## Install linters on Mac OSX
+	brew install $(PKG_CLANG_FORMAT)
 
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
