@@ -40,9 +40,10 @@ STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): 
 LIBC_LIBS = -lcriterion
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
 # Platform specific checks
-OSNAME = $(TRAVIS_OS_NAME)
+OSNAME  = $(TRAVIS_OS_NAME)
+UNAME_S = $(shell uname -s)
 
-ifeq ($(shell uname -s),Linux)
+ifeq ($(UNAME_S),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
   LDPATH=$(shell printenv LD_LIBRARY_PATH)
   LDPATHVAR=LD_LIBRARY_PATH
@@ -50,7 +51,7 @@ ifeq ($(shell uname -s),Linux)
 ifndef OSNAME
   OSNAME = linux
 endif
-else ifeq ($(shell uname -s),Darwin)
+else ifeq ($(UNAME_S),Darwin)
 ifndef OSNAME
   OSNAME = osx
 endif
@@ -120,12 +121,21 @@ lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
 	# lib/cgo needs separate linting rules
 	golangci-lint run -c .golangci.libcgo.yml ./lib/cgo/...
+	clang-format
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
 check: lint test-libc ## Run tests and linters
 
-install-linters: ## Install linters
+install-linters-Linux: ## Install linters on GNU/Linux
+	sudo apt-get install clang-format
+
+install-linters-Linux: ## Install linters on Mac OSX
+	brew install clang-format
+
+install-linters-Darwin: ## Install linters on Mac OSX
+
+install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
 	# However, they suggest `curl ... | bash` which we should not do
