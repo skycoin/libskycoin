@@ -8,6 +8,10 @@ matrix:
   include:
     - os: linux
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-7
     - os: osx
       osx_image: xcode8
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
@@ -25,7 +29,7 @@ env:
 before_install:
   # Ubuntu Trusty official package name is clang-format-3.4
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    PKG_CLANG_FORMAT=clang-format-3.4 ; else
+    PKG_CLANG_FORMAT=clang-format-7 ; else
     PKG_CLANG_FORMAT=clang-format ;
     fi
 
