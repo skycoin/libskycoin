@@ -24,7 +24,7 @@ env:
 
 before_install:
   # Ubuntu Trusty official package name is clang-format-3.4
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     PKG_CLANG_FORMAT=clang-format-3.4 ; else
     PKG_CLANG_FORMAT=clang-format ;
     fi
