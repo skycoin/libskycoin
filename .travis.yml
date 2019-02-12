@@ -31,11 +31,14 @@ install:
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   - ./ci-scripts/install-travis-gcc.sh
   - make install-deps-libc
+  - make install-swagger
 
 script:
   - make lint
   # libskycoin tests
   - CC=gcc-6 make test-libc
+  - make generate-swagger-spec
+  - make check-swagger
 
 notifications:
   email:
