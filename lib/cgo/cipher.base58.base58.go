@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/hex"
 	"reflect"
+	"unsafe"
+	"github.com/skycoin/skycoin/src/cipher/base58"
 )
 
 /*
@@ -23,5 +25,13 @@ func SKY_base58_String2Hex(_s string, _arg1 *C.GoSlice_) (____error_code uint32)
 		copyToGoSlice(reflect.ValueOf(__arg1), _arg1)
 	}
 
+	return
+}
+
+//export SKY_base58_Hex2Base58
+func SKY_base58_Hex2Base58(_val []byte, _arg1 *C.GoString_) (____error_code uint32) {
+	val := *(*[]byte)(unsafe.Pointer(&_val))
+	__arg1 := string(base58.Encode(val))
+	copyString(__arg1, _arg1)
 	return
 }
