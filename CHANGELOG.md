@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 - Add function `SKY_base58_Hex2Base58`
+- Add function `SKY_base58_Encode`
+- Add function `SKY_base58_Decode`
+- Add function `SKY_api_Client_RecoverWallet`
+- Add function `SKY_api_Client_Disconnect`
+- Delete function `SKY_base58_String2Hex`
 
 ### Added
 - Add CLI `addressTransactions` command

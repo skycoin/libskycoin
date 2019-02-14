@@ -798,3 +798,34 @@ func SKY_api_Client_DecryptWallet(_c C.Client__Handle, _id string, _password str
 	}
 	return
 }
+
+//export SKY_api_Client_RecoverWallet
+func SKY_api_Client_RecoverWallet(_c C.Client__Handle, _id string, _seed string, _password string, _arg2 *C.WalletResponse__Handle) (____error_code uint32) {
+	c, okc := lookupClientHandle(_c)
+	if !okc {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	id := _id
+	password := _password
+	seed := _seed
+	__arg2, ____return_err := c.RecoverWallet(id, seed, password)
+	____error_code = libErrorCode(____return_err)
+	if ____return_err == nil {
+		*_arg2 = registerWalletResponseHandle(__arg2)
+	}
+	return
+}
+
+//export SKY_api_Client_Disconnect
+func SKY_api_Client_Disconnect(_c C.Client__Handle, _id uint64) (____error_code uint32) {
+	c, okc := lookupClientHandle(_c)
+	if !okc {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	id := _id
+	____return_err := c.Disconnect(id)
+	____error_code = libErrorCode(____return_err)
+	return
+}
