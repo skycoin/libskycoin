@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add function `SKY_base58_Decode`
 - Add function `SKY_api_Client_RecoverWallet`
 - Add function `SKY_api_Client_Disconnect`
+- Add function `SKY_cipher_BitcoinPubKeyRipemd160`
 - Delete function `SKY_base58_String2Hex`
 
 ### Added
