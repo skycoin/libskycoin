@@ -21,8 +21,9 @@ It is also the foundation to build client libraries for other programming langua
 
 The Skycoin C library is made of the following components
 
-- `lib/cgo`  : C wrappers for the Skycoin core API
-- `lib/swig` : SWIG interfaces to generate wrappers around the Skycoin core API for other programming languages
+- `lib/cgo`     : C wrappers for the Skycoin core API
+- `lib/swagger` : Swagger specifications for generating REST API clients
+- `lib/swig`    : SWIG interfaces to generate wrappers around the Skycoin core API for other programming languages
 
 Consult respective `README` files for further details.
 
