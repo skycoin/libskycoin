@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add function `SKY_api_Client_RecoverWallet`
 - Add function `SKY_api_Client_Disconnect`
 - Add function `SKY_cipher_BitcoinPubKeyRipemd160`
+- Add function `SKY_cipher_Ripemd160FromBytes`
+- Add function `SKY_cipher_SHA256FromBytes`
+- Add function `SKY_coin_MultUint64`
+- Add function `SKY_params_GetDistributionAddressesDecoded`
+- Add function `SKY_params_GetUnlockedDistributionAddressesDecoded`
+- Add function `SKY_params_GetLockedDistributionAddressesDecoded`
+- Add function `SKY_testutil_MakePubKey`
+- Add function `SKY_httphelper_SHA256_UnmarshalJSON`
+- Add function `SKY_httphelper_SHA256_MarshalJSON`
+- Add data type `httphelper__SHA256`
 - Delete function `SKY_base58_String2Hex`
 
 ### Added

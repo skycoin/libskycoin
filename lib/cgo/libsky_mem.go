@@ -49,6 +49,9 @@ func inplaceHttpHelperAddress(p *C.httphelper__Address) *httphelper.Address {
 	return (*httphelper.Address)(unsafe.Pointer(p))
 }
 
+func inplaceHttpHelperSHA256(p *C.httphelper__SHA256) *httphelper.SHA256 {
+	return (*httphelper.SHA256)(unsafe.Pointer(p))
+}
 func inplaceCobraCommand(p interface{}) (cmd *cobra.Command, isInstance bool) {
 	cmd, isInstance = p.(*cobra.Command)
 	return

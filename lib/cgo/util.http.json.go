@@ -97,3 +97,25 @@ func SKY_httphelper_Hours_Value(_h *C.httphelper__Hours, _arg0 *uint64) (____err
 	*_arg0 = __arg0
 	return
 }
+
+//export SKY_httphelper_SHA256_UnmarshalJSON
+func SKY_httphelper_SHA256_UnmarshalJSON(_a *C.httphelper__SHA256, _b []byte) (____error_code uint32) {
+	a := inplaceHttpHelperSHA256(_a)
+	b := *(*[]byte)(unsafe.Pointer(&_b))
+	____return_err := a.UnmarshalJSON(b)
+	____error_code = libErrorCode(____return_err)
+	if ____return_err == nil {
+	}
+	return
+}
+
+//export SKY_httphelper_SHA256_MarshalJSON
+func SKY_httphelper_SHA256_MarshalJSON(_a *C.httphelper__SHA256, _arg0 *C.GoSlice_) (____error_code uint32) {
+	a := *inplaceHttpHelperSHA256(_a)
+	__arg0, ____return_err := a.MarshalJSON()
+	____error_code = libErrorCode(____return_err)
+	if ____return_err == nil {
+		copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+	}
+	return
+}
