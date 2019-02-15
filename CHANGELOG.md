@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add function `SKY_httphelper_SHA256_MarshalJSON`
 - Add data type `httphelper__SHA256`
 - Delete function `SKY_base58_String2Hex`
+- Add function `SKY_wallet_Entry_SkycoinAddress`
+- Add function `SKY_wallet_Entry_BitcoinAddress`
+- Add function `SKY_wallet_ResolveCoinType`
+- Add function `SKY_wallet_NewWalletFilename`
 
 ### Added
 - Add CLI `addressTransactions` command

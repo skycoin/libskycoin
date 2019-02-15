@@ -306,3 +306,32 @@ func SKY_wallet_ChooseSpendsMaximizeUxOuts(_uxa []C.wallet__UxBalance, _coins, _
 	}
 	return
 }
+
+//export SKY_wallet_ResolveCoinType
+func SKY_wallet_ResolveCoinType(_s string, _ct *C.GoString_) (____error_code uint32) {
+	s := _s
+	ct, err := wallet.ResolveCoinType(s)
+	____error_code = libErrorCode(err)
+	if err != nil {
+		copyString(string(ct), _ct)
+	}
+	return
+}
+
+//export SKY_wallet_NewWalletFilename
+func SKY_wallet_NewWalletFilename(_arg0 *C.GoString_) (____error_code uint32) {
+	arg0 := wallet.NewWalletFilename()
+	copyString(arg0, _arg0)
+	return
+}
+
+//export SKY_wallet_Wallet_Erase
+func SKY_wallet_Wallet_Erase(_w C.Wallet__Handle) (____error_code uint32) {
+	w, okw := lookupWalletHandle(_w)
+	if !okw {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	w.Erase()
+	return
+}
