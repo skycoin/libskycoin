@@ -384,12 +384,28 @@ func SKY_wallet_Wallet_CreateAndSignTransaction(_w C.Wallet__Handle, _uxo C.GoSl
 }
 
 //export SKY_wallet_Wallet_CreateAndSignTransactionAdvanced
-func SKY_wallet_Wallet_CreateAndSignTransactionAdvanced(_w C.Wallet__Handle, _uxo C.GoSlice_, _headTime uint64, _arg0 *C.coin__Transaction, _arg1 *C.GoSlice_) (____error_code uint32) {
+func SKY_wallet_Wallet_CreateAndSignTransactionAdvanced(_w C.Wallet__Handle, _c C.CreateTransactionParams__Handle, _uxo C.GoSlice_, _headTime uint64, _arg0 *C.coin__Transaction, _arg1 *C.GoSlice_) (____error_code uint32) {
 	w, okw := lookupWalletHandle(_w)
 	if !okw {
 		____error_code = SKY_BAD_HANDLE
 		return
 	}
+
+	c, okc := lookupCreateTransactionParamsHandle(_c)
+	if !okc {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+
 	uxo := *(*coin.AddressUxOuts)(unsafe.Pointer(&_uxo))
+	ctp := *(*wallet.CreateTransactionParams)(unsafe.Pointer(&c))
 	headTime := _headTime
+
+	arg0, arg1, err := w.CreateAndSignTransactionAdvanced(ctp, uxo, headTime)
+	____error_code = libErrorCode(err)
+	if err == nil {
+		_arg0 = (*C.coin__Transaction)(unsafe.Pointer(arg0))
+		copyToGoSlice(reflect.ValueOf(arg1), _arg1)
+	}
+	return
 }

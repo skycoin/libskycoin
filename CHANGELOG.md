@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add function `SKY_wallet_Wallet_GetEntry`
 - Add function `SKY_wallet_Wallet_CreateAndSignTransaction`
 - Add function `CreateTransactionParams_Handle`
+- Add function `SKY_wallet_Wallet_CreateAndSignTransactionAdvanced`
 
 ### Added
 - Add CLI `addressTransactions` command

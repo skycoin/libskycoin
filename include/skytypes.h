@@ -176,7 +176,7 @@ typedef Handle ReadableOutputSet_Handle;
 /**
  *  CreateTransactionParams wallet.CreateTransactionParams
  */
-typedef Handle CreateTransactionParams_Handle;
+typedef Handle CreateTransactionParams__Handle;
 
     /**
  * Instances of Go interface types.
