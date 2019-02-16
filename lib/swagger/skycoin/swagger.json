@@ -17,7 +17,7 @@
     "title": "Skycoin REST API.",
     "contact": {
       "name": "Skycoin project",
-      "url": "http://127.0.0.1:6420",
+      "url": "https://127.0.0.1:6420",
       "email": "skycoin.doe@example.com"
     },
     "version": "0.25.1"
@@ -37,8 +37,7 @@
             "type": "string",
             "description": "address to filter by",
             "name": "address",
-            "in": "query",
-            "required": true
+            "in": "query"
           }
         ],
         "responses": {
@@ -70,7 +69,7 @@
                     "type": "integer",
                     "format": "int64"
                   },
-                  "src_tx": {
+                  "src_tc": {
                     "type": "string"
                   },
                   "time": {
@@ -550,10 +549,7 @@
             "in": "query"
           },
           {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            },
+            "type": "string",
             "name": "seqs",
             "in": "query"
           }
@@ -721,10 +717,7 @@
             "in": "query"
           },
           {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            },
+            "type": "string",
             "name": "seqs",
             "in": "query"
           }
@@ -994,10 +987,6 @@
                   "status": {
                     "type": "object",
                     "properties": {
-                      "block_seq": {
-                        "type": "integer",
-                        "format": "int64"
-                      },
                       "confirmed": {
                         "type": "boolean"
                       },
@@ -1060,8 +1049,7 @@
                           "type": "string"
                         },
                         "seq": {
-                          "type": "integer",
-                          "format": "int64"
+                          "type": "string"
                         },
                         "timestamp": {
                           "type": "integer",
@@ -1210,8 +1198,7 @@
           {
             "type": "integer",
             "name": "num",
-            "in": "query",
-            "required": true
+            "in": "query"
           }
         ],
         "responses": {
@@ -1445,7 +1432,7 @@
       }
     },
     "/api/v1/network/connection/disconnect": {
-      "post": {
+      "get": {
         "security": [
           {
             "csrfAuth": []
@@ -1676,18 +1663,12 @@
         "operationId": "outputsGet",
         "parameters": [
           {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "name": "address",
             "in": "query"
           },
           {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "name": "hash",
             "in": "query"
           }
@@ -2177,7 +2158,7 @@
         "operationId": "richlist",
         "parameters": [
           {
-            "type": "boolean",
+            "type": "string",
             "description": "include distribution addresses or not, default value false",
             "name": "include-distribution",
             "in": "query"
@@ -2769,7 +2750,7 @@
                   "type": "integer",
                   "format": "int64"
                 },
-                "src_tx": {
+                "src_tc": {
                   "type": "string"
                 },
                 "time": {
@@ -2822,8 +2803,7 @@
             "x-go-name": "Id",
             "description": "tags to filter by",
             "name": "id",
-            "in": "query",
-            "required": true
+            "in": "query"
           }
         ],
         "responses": {

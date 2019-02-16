@@ -7,7 +7,7 @@ info:
   contact:
     email: skycoin.doe@example.com
     name: Skycoin project
-    url: http://127.0.0.1:6420
+    url: https://127.0.0.1:6420
   description: Skycoin is a next-generation cryptocurrency.
   title: Skycoin REST API.
   version: 0.25.1
@@ -20,7 +20,6 @@ paths:
       - description: address to filter by
         in: query
         name: address
-        required: true
         type: string
       produces:
       - application/json
@@ -46,7 +45,7 @@ paths:
                 src_block_seq:
                   format: int64
                   type: integer
-                src_tx:
+                src_tc:
                   type: string
                 time:
                   format: int64
@@ -366,10 +365,8 @@ paths:
         name: end
         type: integer
       - in: query
-        items:
-          type: integer
         name: seqs
-        type: array
+        type: string
       produces:
       - application/json
       responses:
@@ -479,10 +476,8 @@ paths:
         name: end
         type: integer
       - in: query
-        items:
-          type: integer
         name: seqs
-        type: array
+        type: string
       produces:
       - application/json
       responses:
@@ -666,9 +661,6 @@ paths:
                   type: array
                 status:
                   properties:
-                    block_seq:
-                      format: int64
-                      type: integer
                     confirmed:
                       type: boolean
                     label:
@@ -710,8 +702,7 @@ paths:
                       previous_block_hash:
                         type: string
                       seq:
-                        format: int64
-                        type: integer
+                        type: string
                       timestamp:
                         format: int64
                         type: integer
@@ -810,7 +801,6 @@ paths:
         type: boolean
       - in: query
         name: num
-        required: true
         type: integer
       produces:
       - application/json
@@ -970,7 +960,7 @@ paths:
           $ref: '#/responses/genericError'
       summary: This endpoint returns a specific connection.
   /api/v1/network/connection/disconnect:
-    post:
+    get:
       description: This endpoint disconnects a connection by ID or address
       operationId: networkConnectionsDisconnect
       parameters:
@@ -1125,15 +1115,11 @@ paths:
       operationId: outputsGet
       parameters:
       - in: query
-        items:
-          type: string
         name: address
-        type: array
+        type: string
       - in: query
-        items:
-          type: string
         name: hash
-        type: array
+        type: string
       produces:
       - application/json
       responses:
@@ -1477,7 +1463,7 @@ paths:
       - description: include distribution addresses or not, default value false
         in: query
         name: include-distribution
-        type: boolean
+        type: string
       - description: include distribution addresses or not, default value false
         in: query
         name: "n"
@@ -1895,7 +1881,7 @@ paths:
               src_block_seq:
                 format: int64
                 type: integer
-              src_tx:
+              src_tc:
                 type: string
               time:
                 format: int64
@@ -1926,7 +1912,6 @@ paths:
       - description: tags to filter by
         in: query
         name: id
-        required: true
         type: string
         x-go-name: Id
       produces:
