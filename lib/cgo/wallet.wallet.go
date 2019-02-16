@@ -312,7 +312,7 @@ func SKY_wallet_ResolveCoinType(_s string, _ct *C.GoString_) (____error_code uin
 	s := _s
 	ct, err := wallet.ResolveCoinType(s)
 	____error_code = libErrorCode(err)
-	if err != nil {
+	if err == nil {
 		copyString(string(ct), _ct)
 	}
 	return
@@ -334,4 +334,62 @@ func SKY_wallet_Wallet_Erase(_w C.Wallet__Handle) (____error_code uint32) {
 	}
 	w.Erase()
 	return
+}
+
+//export SKY_wallet_Wallet_GetAddress
+func SKY_wallet_Wallet_GetAddress(_w C.Wallet__Handle, _arg0 *C.GoSlice_) (____error_code uint32) {
+	w, okw := lookupWalletHandle(_w)
+	if !okw {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	arg0 := w.GetAddresses()
+
+	copyToGoSlice(reflect.ValueOf(arg0), _arg0)
+	return
+}
+
+//export SKY_wallet_Wallet_GetSkycoinAddresses
+func SKY_wallet_Wallet_GetSkycoinAddresses(_w C.Wallet__Handle, _arg0 *C.GoSlice_) (____error_code uint32) {
+	w, okw := lookupWalletHandle(_w)
+	if !okw {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	arg0, err := w.GetSkycoinAddresses()
+	____error_code = libErrorCode(err)
+
+	copyToGoSlice(reflect.ValueOf(arg0), _arg0)
+	return
+}
+
+//export SKY_wallet_Wallet_CreateAndSignTransaction
+func SKY_wallet_Wallet_CreateAndSignTransaction(_w C.Wallet__Handle, _uxo C.GoSlice_, _headTime uint64, _coins uint64, _dest C.cipher__Address, _arg0 *C.coin__Transaction) (____error_code uint32) {
+	w, okw := lookupWalletHandle(_w)
+	if !okw {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	uxo := *(*coin.AddressUxOuts)(unsafe.Pointer(&_uxo))
+	headTime := _headTime
+	coins := _coins
+	dest := *(*cipher.Address)(unsafe.Pointer(&_dest))
+
+	arg0, err := w.CreateAndSignTransaction(uxo, headTime, coins, dest)
+	____error_code = libErrorCode(err)
+	if err == nil {
+		_arg0 = (*C.coin__Transaction)(unsafe.Pointer(&arg0))
+	}
+	return
+}
+
+//export SKY_wallet_Wallet_CreateAndSignTransactionAdvanced
+func SKY_wallet_Wallet_CreateAndSignTransactionAdvanced(_w C.Wallet__Handle, _uxo C.GoSlice_, _headTime uint64, _arg0 *C.coin__Transaction, _arg1 *C.GoSlice_) (____error_code uint32) {
+	w, okw := lookupWalletHandle(_w)
+	if !okw {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	uxo := *(*coin.AddressUxOuts)(unsafe.Pointer(&_uxo))
+	headTime := _headTime
 }

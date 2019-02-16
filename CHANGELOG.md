@@ -26,6 +26,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add function `SKY_wallet_Entry_BitcoinAddress`
 - Add function `SKY_wallet_ResolveCoinType`
 - Add function `SKY_wallet_NewWalletFilename`
+- Add function `SKY_wallet_Wallet_GetAddress`
+- Add function `SKY_wallet_Wallet_GetSkycoinAddresses`
+- Add function `SKY_wallet_Wallet_GetEntry`
+- Add function `SKY_wallet_Wallet_CreateAndSignTransaction`
+- Add function `CreateTransactionParams_Handle`
 
 ### Added
 - Add CLI `addressTransactions` command
