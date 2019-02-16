@@ -27,3 +27,32 @@ The Skycoin C library is made of the following components
 
 Consult respective `README` files for further details.
 
+## C Wrapper for Skycoin Api
+
+The C wrapper for Skycoin Api is made with swagger specifications, and generated automatically with open api.
+
+The C wrapper is in `lib/Clients/cClient`.
+
+## Generate Clients for other Languages with Swagger Spec
+
+You can generate multiple clients for Skycoin Api from swagger spec.
+You need install openapi:
+
+``` sh
+    $ npm install swagger2openapi -g
+```
+
+To Generate a Client from swagger spec, just type:
+
+``` sh
+    $ make generate-c-client
+```
+This command generate a C client in `lib/Clients` with name `cClient<current git commit at specified branch>`
+
+To generate a wrapper for many other languages, just type:
+
+```sh
+    $ openapi-generator generate -g <supported_Language> --additional-properties=prependFormOrBodyParameters=true -o /path/to/client -i ./lib/swagger/swagger.yml
+```
+
+For further details in this [Open Api Valid Languagues]( https://openapi-generator.tech/docs/generators)
