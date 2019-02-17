@@ -377,9 +377,7 @@ func SKY_wallet_Wallet_CreateAndSignTransaction(_w C.Wallet__Handle, _uxo C.GoSl
 
 	arg0, err := w.CreateAndSignTransaction(uxo, headTime, coins, dest)
 	____error_code = libErrorCode(err)
-	if err == nil {
-		_arg0 = (*C.coin__Transaction)(unsafe.Pointer(&arg0))
-	}
+	*_arg0 = *(*C.coin__Transaction)(unsafe.Pointer(&arg0))
 	return
 }
 
@@ -404,7 +402,7 @@ func SKY_wallet_Wallet_CreateAndSignTransactionAdvanced(_w C.Wallet__Handle, _c 
 	arg0, arg1, err := w.CreateAndSignTransactionAdvanced(ctp, uxo, headTime)
 	____error_code = libErrorCode(err)
 	if err == nil {
-		_arg0 = (*C.coin__Transaction)(unsafe.Pointer(arg0))
+		*_arg0 = *(*C.coin__Transaction)(unsafe.Pointer(arg0))
 		copyToGoSlice(reflect.ValueOf(arg1), _arg1)
 	}
 	return
