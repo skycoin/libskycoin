@@ -37,7 +37,7 @@ LIBDOC_DIR = $(DOC_DIR)/libc
 # Compilation flags for libskycoin
 CC_VERSION = $(shell $(CC) -dumpversion)
 STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): print('-std=C99'")
-LIBC_LIBS = -pthread -lcheck_pic -pthread -lrt -lm -lsubunit
+LIBC_LIBS = `pkg-config --cflags --libs check`
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
