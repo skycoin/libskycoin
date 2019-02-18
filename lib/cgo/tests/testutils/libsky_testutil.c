@@ -7,7 +7,8 @@
 #include "json.h"
 #include "skytypes.h"
 #include "skytest.h"
-
+#include "skyerrors.h"
+#include "libskycoin.h"
 #define BUFFER_SIZE 1024
 #define stableWalletName "integration-test.wlt"
 #define STRING_SIZE 128

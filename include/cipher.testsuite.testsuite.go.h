@@ -2,8 +2,6 @@
 #ifndef CIPHER_TESTSUITE_TESTSUITE
 #define CIPHER_TESTSUITE_TESTSUITE
 
-#include <criterion/criterion.h>
-#include <criterion/new/assert.h>
 
 #include "base64.h"
 #include "json.h"
@@ -94,6 +92,7 @@ SeedTestDataJSON* registerSeedTestDataJSONCleanup(SeedTestDataJSON* input_data);
 void SeedTestDataToJson(SeedTestData* input_data, SeedTestDataJSON* json_data);
 GoUint32 SeedTestDataFromJSON(SeedTestDataJSON* json_data, SeedTestData* input_data);
 void ValidateSeedData(SeedTestData* seedData, InputTestData* inputData);
+int isGoldenFile(const char *filename);
 
 #endif
 

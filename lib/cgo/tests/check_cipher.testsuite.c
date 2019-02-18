@@ -1,6 +1,7 @@
 
 #include <fts.h>
 #include <stdio.h>
+#include <check.h>
 
 #include "cipher.testsuite.testsuite.go.h"
 
@@ -8,34 +9,32 @@
 
 // Determine if a file name matches pattern for golden dataset
 // i.e. matches 'seed-\d+.golden' regex
-bool isGoldenFile(const char* filename) {
+int isGoldenFile(const char* filename) {
   if (strncmp(filename, "seed-", 5) != 0)
-    return false;
+    return 1;
   char* ptr = (char*) filename + 5;
   if (*ptr < '0' || *ptr > '9')
-    return false;
+    return 1;
   while (*++ptr >= '0' && *ptr <='9') {}
   return strcmp(ptr, ".golden") == 0;
 }
 
-TestSuite(cipher_testsuite, .init = setup, .fini = teardown);
-
-Test(cipher_testsuite, TestManyAddresses) {
+START_TEST(TestManyAddresses) {
   SeedTestDataJSON dataJSON;
   SeedTestData data;
   GoUint32 err;
 
   json_value* json = loadGoldenFile(MANY_ADDRESSES_FILENAME);
-  cr_assert(json != NULL, "Error loading file %s", MANY_ADDRESSES_FILENAME);
+  ck_assert_msg(json != NULL, "Error loading file %s", MANY_ADDRESSES_FILENAME);
   registerJsonFree(json);
   SeedTestDataJSON* dataset = jsonToSeedTestData(json, &dataJSON);
-  cr_assert(dataset != NULL, "Loaded JSON golden dataset must not be NULL");
+  ck_assert_msg(dataset != NULL, "Loaded JSON golden dataset must not be NULL");
   registerSeedTestDataJSONCleanup(&dataJSON);
   err = SeedTestDataFromJSON(&dataJSON, &data);
   registerSeedTestDataCleanup(&data);
-  cr_assert(err == SKY_OK, "Deserializing seed test data from JSON ... %d", err);
+  ck_assert_msg(err == SKY_OK, "Deserializing seed test data from JSON ... %d", err);
   ValidateSeedData(&data, NULL);
-}
+}END_TEST
 
 GoUint32 traverseGoldenFiles(const char *path, InputTestData* inputData) {
   char* _path[2];
@@ -55,29 +54,42 @@ GoUint32 traverseGoldenFiles(const char *path, InputTestData* inputData) {
       SeedTestData seedData;
 
       json_value* json = loadGoldenFile(node->fts_name);
-      cr_assert(json != NULL, "Error loading file %s", node->fts_name);
+      ck_assert_msg(json != NULL, "Error loading file %s", node->fts_name);
       SeedTestDataJSON* dataset = jsonToSeedTestData(json, &seedDataJSON);
-      cr_assert(dataset != NULL, "Loaded JSON seed golden dataset must not be NULL");
+      ck_assert_msg(dataset != NULL, "Loaded JSON seed golden dataset must not be NULL");
       GoUint32 err = SeedTestDataFromJSON(&seedDataJSON, &seedData);
-      cr_assert(err == SKY_OK, "Deserializing seed test data from JSON ... %d", err);
+      ck_assert_msg(err == SKY_OK, "Deserializing seed test data from JSON ... %d", err);
       ValidateSeedData(&seedData, inputData);
     }
   }
   return 0;
 }
 
-Test(cipher_testsuite, TestSeedSignatures) {
+START_TEST(TestSeedSignatures) {
   InputTestDataJSON inputDataJSON;
   InputTestData inputData;
   GoUint32 err;
 
   json_value* json = loadGoldenFile(INPUT_HASHES_FILENAME);
-  cr_assert(json != NULL, "Error loading file %s", INPUT_HASHES_FILENAME);
+  ck_assert_msg(json != NULL, "Error loading file %s", INPUT_HASHES_FILENAME);
   InputTestDataJSON* dataset = jsonToInputTestData(json, &inputDataJSON);
-  cr_assert(dataset != NULL, "Loaded JSON input golden dataset must not be NULL");
+  ck_assert_msg(dataset != NULL, "Loaded JSON input golden dataset must not be NULL");
   err = InputTestDataFromJSON(&inputDataJSON, &inputData);
-  cr_assert(err == SKY_OK, "Deserializing seed test data from JSON ... %d", err);
+  ck_assert_msg(err == SKY_OK, "Deserializing seed test data from JSON ... %d", err);
   err = traverseGoldenFiles(TEST_DATA_DIR, &inputData);
-  cr_assert(err == 0);
-}
+  ck_assert(err == 0);
+}END_TEST
 
+Suite *cipher_testsuite(void)
+{
+  Suite *s = suite_create("");
+  TCase *tc;
+
+  tc = tcase_create("cipher.testsuite");
+  tcase_add_test(tc, TestManyAddresses);
+  tcase_add_test(tc, TestSeedSignatures);
+  suite_add_tcase(s, tc);
+  tcase_set_timeout(tc, 150);
+
+  return s;
+}

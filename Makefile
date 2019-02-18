@@ -37,7 +37,7 @@ LIBDOC_DIR = $(DOC_DIR)/libc
 # Compilation flags for libskycoin
 CC_VERSION = $(shell $(CC) -dumpversion)
 STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): print('-std=C99'")
-LIBC_LIBS = -lcriterion
+LIBC_LIBS = -pthread -lcheck_pic -pthread -lrt -lm -lsubunit
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
@@ -140,8 +140,8 @@ install-deps-libc: configure-build ## Install locally dependencies for testing l
 	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
 
 install-googletest-libc: configure-build ##Install googletest in debian && ubuntu
-	sudo apt-get install libgtest-dev 
-	sudo apt-get install cmake # install cmake
+	$(BUILD_DIR)/usr/tmp/ && wget -c https://github.com/google/googletest/archive/release-1.8.1.tar.gz && tar -xzvf release-1.8.1.tar.gz
+	cd $(BUILD_DIR)/usr/tmp/googletest-release-1.8.1 && mkdir mybuild && cd mybuild && cmake -G"Unix Makefiles" .. && make
 	cd /usr/src/gtest && sudo cmake CMakeLists.txt &&	sudo make && sudo cp *.a /usr/lib
  		
 
