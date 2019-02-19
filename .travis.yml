@@ -37,8 +37,8 @@ script:
   - make lint
   # libskycoin tests
   - CC=gcc-6 make test-libc
-  - make generate-swagger-spec
-  - make check-swagger
+  - make swagger2
+  - make check-swagger2
 
 notifications:
   email:
