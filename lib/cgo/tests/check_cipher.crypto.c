@@ -50,7 +50,8 @@ START_TEST(TestNewPubKey)
   ck_assert_msg(errorcode == SKY_OK);
 
   ck_assert(isPubKeyEq(&pk, &pk2));
-}END_TEST
+}
+END_TEST
 
 START_TEST(TestPubKeyFromHex)
 {
@@ -74,7 +75,7 @@ START_TEST(TestPubKeyFromHex)
 
   // Invalid hex length
   SKY_cipher_GenerateKeyPair(&p, &sk);
-  memcpy(slice.data, (void *) p, sizeof(p));
+  memcpy(slice.data, (void *)p, sizeof(p));
   slice.len = sizeof(p);
   bytesnhex(&p[0], sbuff, slice.len >> 1);
   s.p = sbuff;
@@ -88,31 +89,33 @@ START_TEST(TestPubKeyFromHex)
   s.n = sizeof(p) << 1;
   errorcode = SKY_cipher_PubKeyFromHex(s, &p1);
   ck_assert_msg(errorcode == SKY_OK, "TestPubKeyFromHex: Valid. No panic.");
-  ck_assert(isPubKeyEq( &p, &p1));
-}END_TEST
+  ck_assert(isPubKeyEq(&p, &p1));
+}
+END_TEST
 
-// Test(cipher_crypto, TestPubKeyHex)
-// {
-//   cipher__PubKey p, p2;
-//   cipher__SecKey sk;
-//   GoString s3, s4;
-//   unsigned char buff[50];
-//   GoSlice slice = {buff, 0, 50};
-//   unsigned int errorcode;
+START_TEST(TestPubKeyHex)
+{
+  cipher__PubKey p, p2;
+  cipher__SecKey sk;
+  GoString s3, s4;
+  unsigned char buff[50];
+  GoSlice slice = {buff, 0, 50};
+  unsigned int errorcode;
 
-//   SKY_cipher_GenerateKeyPair(&p, &sk);
-//   SKY_cipher_PubKey_Hex(&p, (GoString_ *)&s3);
-//   registerMemCleanup((void *)s3.p);
-//   errorcode = SKY_cipher_PubKeyFromHex(s3, &p2);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[33], p, p2));
+  GoUint32 err = SKY_cipher_GenerateKeyPair(&p, &sk);
+  ck_assert(err == SKY_OK);
+  // SKY_cipher_PubKey_Hex(&p, (GoString_ *)&s3);
+  // registerMemCleanup((void *)s3.p);
+  // errorcode = SKY_cipher_PubKeyFromHex(s3, &p2);
+  // ck_assert(errorcode == SKY_OK);
+  // ck_assert(isPubKeyEq(&p, &p2));
 
-//   SKY_cipher_PubKey_Hex(&p2, (GoString_ *)&s4);
-//   registerMemCleanup((void *)s4.p);
-//   // TODO: Translate into cr_assert(eq(type(GoString), s3, s4));
-//   cr_assert(s3.n == s4.n);
-//   cr_assert(eq(str, ((char *)s3.p), ((char *)s4.p)));
-// }
+  // SKY_cipher_PubKey_Hex(&p2, (GoString_ *)&s4);
+  // registerMemCleanup((void *)s4.p);
+  // // TODO: Translate into cr_assert(eq(type(GoString), s3, s4));
+  // ck_assert(isGoStringEq(&s3, &s4));
+}
+END_TEST
 
 // Test(cipher_crypto, TestPubKeyVerify)
 // {
@@ -798,6 +801,7 @@ Suite *cipher_crypto(void)
   tc = tcase_create("cipher.crypto");
   tcase_add_test(tc, TestNewPubKey);
   tcase_add_test(tc, TestPubKeyFromHex);
+  tcase_add_test(tc, TestPubKeyHex);
   suite_add_tcase(s, tc);
   tcase_set_timeout(tc, 150);
 

@@ -330,4 +330,3 @@ int concatSlices(GoSlice_* slice1, GoSlice_* slice2, int elem_size, GoSlice_* re
   }
   return SKY_OK;
 }
-

@@ -41,6 +41,11 @@ int isGoStringEq(GoString *string1, GoString *string2)
          (strcmp((char *)string1->p, (char *)string2->p) == 0);
 }
 
+int isGoString_Eq(GoString_ *string1, GoString_ *string2)
+{
+  return (string1->n == string2->n) &&
+         (strcmp((char *)string1->p, (char *)string2->p) == 0);
+}
 
 
 
