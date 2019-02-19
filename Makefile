@@ -154,8 +154,6 @@ install-linters: ## Install linters
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
 	# However, they suggest `curl ... | bash` which we should not do
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-install-openapi: ## Install linters
-	@npm install swagger2openapi -g
 
 install-deps-libc: configure-build ## Install locally dependencies for testing libskycoin
 	git clone --recursive https://github.com/skycoin/Criterion $(BUILD_DIR)/usr/tmp/Criterion
@@ -166,6 +164,7 @@ install-deps-libc: configure-build ## Install locally dependencies for testing l
 
 install-deps-swagger: ## Install swagger
 	go get -u github.com/go-swagger/go-swagger/cmd/swagger
+	@npm install swagger2openapi -g
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib

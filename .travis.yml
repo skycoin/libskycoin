@@ -31,7 +31,7 @@ install:
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   - ./ci-scripts/install-travis-gcc.sh
   - make install-deps-libc
-  - make install-swagger
+  - make install-deps-swagger
 
 script:
   - make lint
