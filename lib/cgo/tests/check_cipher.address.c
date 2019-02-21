@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -92,7 +91,7 @@ START_TEST(TestAddressFromBytes)
   err = SKY_cipher_AddressFromBytes(bytes, &addr2);
   ck_assert_msg(err == SKY_OK, "convert bytes to SKY address");
 
-  ck_assert_msg(isAddressEq(&addr, &addr2), 'Not equal Address');
+  ck_assert_msg(isAddressEq(&addr, &addr2), "Not equal Address");
 
   int bytes_len = bytes.len;
 

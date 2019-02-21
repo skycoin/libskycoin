@@ -55,16 +55,14 @@ START_TEST(TestBitcoinAddress)
     GoString tmpStr = {str.p, str.n};
     ck_assert(isGoStringEq(&tmpStr, addrStr));
 
-    str.p = buff;
-    str.n = 0;
     error = SKY_cipher_BitcoinAddressFromSecKey(&seckey, &btcAddr);
     ck_assert(error == SKY_OK);
-    GoString_ tmpstr = {str.p, str.n};
+    GoString_ tmpstr = {buff, 0};
     SKY_cipher_BitcoinAddress_String(&btcAddr, &tmpstr);
-    // registerMemCleanup((void *)tmpstr.p);
-    str.p = tmpstr.p;
-    str.n = tmpstr.n;
-    ck_assert(isGoStringEq(&str, addrStr));
+    GoString str1;
+    str1.p = tmpstr.p;
+    str1.n = tmpstr.n;
+    ck_assert(isGoStringEq(&str1, addrStr));
   }
 }
 END_TEST
@@ -78,11 +76,17 @@ START_TEST(TestBitcoinWIFRoundTrip)
   slice.cap = sizeof(buff);
   slice.len = 33;
   SKY_cipher_GenerateKeyPair(&pubkey, &seckey);
-  GoString_ wip1;
-  SKY_cipher_BitcoinWalletImportFormatFromSeckey(&seckey, &wip1);
+  unsigned char wip1_buff[50];
+  unsigned char wip2_buff[50];
+  GoString wip1;
+  GoString_ tmp_wip1 = {wip1_buff, 0};
+  SKY_cipher_BitcoinWalletImportFormatFromSeckey(&seckey, &tmp_wip1);
+  wip1.n = tmp_wip1.n;
+  wip1.p = tmp_wip1.p;
+  registerMemCleanup((void *)wip1.p);
   cipher__SecKey seckey2;
-  unsigned int err;
-  err = SKY_cipher_SecKeyFromBitcoinWalletImportFormat((*((GoString *)&wip1)), &seckey2);
+  GoUint32 err;
+  err = SKY_cipher_SecKeyFromBitcoinWalletImportFormat(wip1, &seckey2);
   ck_assert(err == SKY_OK);
   GoString_ wip2;
   SKY_cipher_BitcoinWalletImportFormatFromSeckey(&seckey2, &wip2);
@@ -93,7 +97,7 @@ START_TEST(TestBitcoinWIFRoundTrip)
   SKY_cipher_SecKey_Hex(&seckey, &seckeyhex1);
   SKY_cipher_SecKey_Hex(&seckey2, &seckeyhex2);
   ck_assert(isGoString_Eq(&(seckeyhex1), &(seckeyhex2)));
-  ck_assert(isGoString_Eq(&(wip1), &(wip2)));
+  ck_assert(isGoString_Eq(&(tmp_wip1), &(wip2)));
 }
 END_TEST
 
@@ -123,7 +127,8 @@ START_TEST(TestBitcoinWIF)
   addr[0].n = 34;
   addr[1].n = 34;
   addr[2].n = 34;
-  for (int i = 0; i < 3; i++)
+  int i;
+  for (i = 0; i < 3; i++)
   {
     cipher__SecKey seckey;
     unsigned int err;
@@ -140,8 +145,13 @@ START_TEST(TestBitcoinWIF)
     cipher__BitcoinAddress bitcoinAddr;
     GoString bitcoinAddrStr;
     SKY_cipher_BitcoinAddressFromPubKey(&pubkey, &bitcoinAddr);
-    SKY_cipher_BitcoinAddress_String(&bitcoinAddr, (GoString_ *)&bitcoinAddrStr);
-    ck_assert(isGoStringEq(&addr[i], &bitcoinAddrStr));
+    unsigned char buff_bitcoinAddrStr[50];
+    GoString_ tmp_bitcoinAddrStr = {buff_bitcoinAddrStr, 0};
+    SKY_cipher_BitcoinAddress_String(&bitcoinAddr, &tmp_bitcoinAddrStr);
+    bitcoinAddrStr.p = tmp_bitcoinAddrStr.p;
+    bitcoinAddrStr.n = tmp_bitcoinAddrStr.n;
+    registerMemCleanup((void *)bitcoinAddrStr.p);
+    ck_assert(isGoStringEq(&addr[i], &buff_bitcoinAddrStr) == 0);
   }
 }
 END_TEST
