@@ -269,7 +269,7 @@ START_TEST(TestSecKeyFromHex)
   SKY_cipher_RandByte(32, &b);
   cipher__SecKey p;
   err = SKY_cipher_NewSecKey(b, &p);
-  ck_assert(err == SKY_ErrInvalidLengthSecKey);
+  ck_assert(err == SKY_OK);
   int len_b = b.len;
   b.len = (int)(len_b / 2);
   //TODO: NOt implement
@@ -319,496 +319,542 @@ START_TEST(TestMustSecKeyFromHex)
 }
 END_TEST
 
-// Test(cipher_crypto, TestSecKeyHex) {
-//   cipher__SecKey sk, sk2;
-//   unsigned char buff[101];
-//   char strBuff[50];
-//   GoSlice b;
-//   GoString str, h;
-//   int errorcode;
-
-//   b.data = buff;
-//   b.cap = 50;
-//   h.p = strBuff;
-//   h.n = 0;
-
-//   randBytes(&b, 32);
-//   SKY_cipher_NewSecKey(b, &sk);
-//   SKY_cipher_SecKey_Hex(&sk, (GoString_ *)&str);
-//   registerMemCleanup((void *)str.p);
-
-//   // Copy early to ensure memory is released
-//   strncpy((char *) h.p, str.p, str.n);
-//   h.n = str.n;
-
-//   errorcode = SKY_cipher_SecKeyFromHex(h, &sk2);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[32], sk, sk2));
-// }
-
-// Test(cipher_crypto, TestSecKeyVerify) {
-//   cipher__SecKey sk;
-//   cipher__PubKey pk;
-//   int errorcode;
-
-//   // Empty secret key should not be valid
-//   memset(sk, 0, 32);
-//   errorcode = SKY_cipher_SecKey_Verify(&sk);
-//   cr_assert(errorcode == SKY_ErrInvalidSecKey);
-
-//   // Generated sec key should be valid
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   errorcode = SKY_cipher_SecKey_Verify(&sk);
-//   cr_assert(errorcode == SKY_OK);
-
-//   // Random bytes are usually valid
-// }
-
-// Test(cipher_crypto, TestECDHonce) {
-//   cipher__PubKey pub1, pub2;
-//   cipher__SecKey sec1, sec2;
-//   unsigned char buff1[50], buff2[50];
-//   GoSlice_ buf1, buf2;
-
-//   buf1.data = buff1;
-//   buf1.len = 0;
-//   buf1.cap = 50;
-//   buf2.data = buff2;
-//   buf2.len = 0;
-//   buf2.cap = 50;
-
-//   SKY_cipher_GenerateKeyPair(&pub1, &sec1);
-//   SKY_cipher_GenerateKeyPair(&pub2, &sec2);
-
-//   SKY_cipher_ECDH(&pub2, &sec1, &buf1);
-//   SKY_cipher_ECDH(&pub1, &sec2, &buf2);
-
-//   // ECDH shared secrets are 32 bytes SHA256 hashes in the end
-//   cr_assert(eq(u8[32], buff1, buff2));
-// }
-
-// Test(cipher_crypto, TestECDHloop) {
-//   int i;
-//   cipher__PubKey pub1, pub2;
-//   cipher__SecKey sec1, sec2;
-//   unsigned char buff1[50], buff2[50];
-//   GoSlice_ buf1, buf2;
-
-//   buf1.data = buff1;
-//   buf1.len = 0;
-//   buf1.cap = 50;
-//   buf2.data = buff2;
-//   buf2.len = 0;
-//   buf2.cap = 50;
-
-//   for (i = 0; i < 128; i++) {
-//     SKY_cipher_GenerateKeyPair(&pub1, &sec1);
-//     SKY_cipher_GenerateKeyPair(&pub2, &sec2);
-//     SKY_cipher_ECDH(&pub2, &sec1, &buf1);
-//     SKY_cipher_ECDH(&pub1, &sec2, &buf2);
-//     cr_assert(eq(u8[32], buff1, buff2));
-//   }
-// }
-
-// Test(cipher_crypto, TestNewSig) {
-//   unsigned char buff[101];
-//   GoSlice b;
-//   cipher__Sig s;
-//   int errorcode;
-
-//   b.data = buff;
-//   b.len = 0;
-//   b.cap = 101;
-
-//   randBytes(&b, 64);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSig);
-
-//   randBytes(&b, 66);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSig);
-
-//   randBytes(&b, 67);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSig);
-
-//   randBytes(&b, 0);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSig);
-
-//   randBytes(&b, 100);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSig);
-
-//   randBytes(&b, 65);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[65], buff, s));
-// }
-
-// Test(cipher_crypto, TestMustSigFromHex) {
-//   unsigned char buff[101];
-//   char strBuff[257];
-//   GoSlice b = { buff, 0, 101 };
-//   GoString str;
-//   cipher__Sig s, s2;
-//   int errorcode;
-
-//   // Invalid hex
-//   str.p = "";
-//   str.n = strlen(str.p);
-//   errorcode = SKY_cipher_SigFromHex(str, &s2);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSig);
-
-//   str.p = "cascs";
-//   str.n = strlen(str.p);
-//   errorcode = SKY_cipher_SigFromHex(str, &s2);
-//   cr_assert(errorcode == SKY_ErrInvalidSig);
-
-//   // Invalid hex length
-//   randBytes(&b, 65);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-//   cr_assert(errorcode == SKY_OK);
-//   str.p = strBuff;
-//   str.n = 0;
-//   bytesnhex(s, (char *) str.p, 32);
-//   str.n = strlen(str.p);
-//   errorcode = SKY_cipher_SigFromHex(str, &s2);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSig);
-
-//   // Valid
-//   bytesnhex(s, (char *) str.p, 65);
-//   str.n = strlen(str.p);
-//   errorcode = SKY_cipher_SigFromHex(str, &s2);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[65], s2, s));
-// }
-
-// Test(cipher_crypto, TestSigHex) {
-//   unsigned char buff[66];
-//   GoSlice b = {buff, 0, 66};
-//   char strBuff[150],
-//       strBuff2[150];
-//   GoString str = {NULL, 0},
-//            str2 = {NULL, 0};
-//   cipher__Sig s, s2;
-//   int errorcode;
-
-//   randBytes(&b, 65);
-//   errorcode = SKY_cipher_NewSig(b, &s);
-
-//   cr_assert(errorcode == SKY_OK);
-//   SKY_cipher_Sig_Hex(&s, (GoString_ *) &str);
-//   registerMemCleanup((void *) str.p);
-//   errorcode = SKY_cipher_SigFromHex(str, &s2);
-
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[65], s, s2));
-
-//   SKY_cipher_Sig_Hex(&s2, (GoString_ *) &str2);
-//   registerMemCleanup((void *) str2.p);
-//   cr_assert(eq(type(GoString), str, str2));
-// }
-
-// // FIXME: Split in multiple test cases so as to catch panic at the right place
-// Test(cipher_crypto, TestVerifyAddressSignedHash) {
-//   cipher__PubKey pk, pk2;
-//   cipher__SecKey sk, sk2;
-//   cipher__Address addr, addr2;
-//   unsigned char buff[257];
-//   GoSlice b = { buff, 0, 257 };
-//   cipher__SHA256 h, h2;
-//   cipher__Sig sig, sig2;
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   errorcode = SKY_cipher_PubKey_Verify(&pk);
-//   cr_assert(errorcode == SKY_OK);
-//   errorcode = SKY_cipher_SecKey_Verify(&sk);
-//   cr_assert(errorcode == SKY_OK);
-
-//   SKY_cipher_AddressFromPubKey(&pk, &addr);
-//   errorcode = SKY_cipher_Address_Verify(&addr, &pk);
-//   cr_assert(errorcode == SKY_OK);
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h);
-//   SKY_cipher_SignHash(&h, &sk, &sig);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
-//   cr_assert(errorcode == SKY_OK);
-
-//   // Empty sig should be invalid
-//   memset(&sig, 0, sizeof(sig));
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
-//   cr_assert(errorcode == SKY_ErrInvalidSigPubKeyRecovery);
-
-//   // Random sigs should not pass
-//   int i;
-//   for (i = 0; i < 100; i++) {
-//     randBytes(&b, 65);
-//     SKY_cipher_NewSig(b, &sig);
-//     errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
-//     cr_assert(errorcode != SKY_OK); // One of many error codes
-//   }
-
-//   // Sig for one hash does not work for another hash
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h2);
-//   SKY_cipher_SignHash(&h2, &sk, &sig2);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h2);
-//   cr_assert(errorcode == SKY_OK);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h);
-//   cr_assert(errorcode == SKY_ErrInvalidAddressForSig);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h2);
-//   cr_assert(errorcode != SKY_OK); // One of many error codes
-
-//   // Different secret keys should not create same sig
-//   SKY_cipher_GenerateKeyPair(&pk2, &sk2);
-//   SKY_cipher_AddressFromPubKey(&pk2, &addr2);
-//   memset(&h, 0, sizeof(h));
-//   SKY_cipher_SignHash(&h, &sk, &sig);
-//   SKY_cipher_SignHash(&h, &sk2, &sig2);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
-//   cr_assert(errorcode == SKY_OK);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(not(eq(u8[65], sig, sig2)));
-
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h);
-//   SKY_cipher_SignHash(&h, &sk, &sig);
-//   SKY_cipher_SignHash(&h, &sk2, &sig2);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
-//   cr_assert(errorcode == SKY_OK);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(not(eq(u8[65], sig, sig2)));
-
-//   // Bad address should be invalid
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h);
-//   cr_assert(errorcode == SKY_ErrInvalidAddressForSig);
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig, &h);
-//   cr_assert(errorcode == SKY_ErrInvalidAddressForSig);
-// }
-
-// Test(cipher_crypto, TestSignHash) {
-//   cipher__PubKey pk, pk2;
-//   cipher__SecKey sk;
-//   cipher__Address addr;
-//   unsigned char buff[257];
-//   GoSlice b = { buff, 0, 257 };
-//   cipher__SHA256 h;
-//   cipher__Sig sig, sig2;
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   SKY_cipher_AddressFromPubKey(&pk, &addr);
-
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h);
-//   errorcode = SKY_cipher_SignHash(&h, &sk, &sig);
-//   cr_assert(errorcode == SKY_OK);
-//   memset((void *) &sig2, 0, 65);
-//   cr_assert(not(eq(u8[65], sig2, sig)));
-//   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
-//   cr_assert(errorcode == SKY_OK);
-
-//   errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[33], pk, pk2));
-
-//   cipher__SecKey empty_sk;
-//   cipher__Sig temp_sig;
-//   memset((void *) &empty_sk, 0, 32);
-//   errorcode = SKY_cipher_SignHash(&h, &empty_sk, &temp_sig);
-//   cr_assert(errorcode == SKY_ErrInvalidSecKey);
-// }
-
-// Test(cipher_crypto, TestPubKeyFromSecKey) {
-//   cipher__PubKey pk, pk2;
-//   cipher__SecKey sk;
-//   unsigned char buff[101];
-//   GoSlice b = { buff, 0, 101 };
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   errorcode = SKY_cipher_PubKeyFromSecKey(&sk, &pk2);
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[33], pk, pk2));
-
-//   memset(&sk, 0, sizeof(sk));
-//   errorcode = SKY_cipher_PubKeyFromSecKey(&sk, &pk);
-//   cr_assert(errorcode == SKY_ErrPubKeyFromNullSecKey);
-
-//   randBytes(&b, 99);
-//   errorcode = SKY_cipher_NewSecKey(b, &sk);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSecKey);
-
-//   randBytes(&b, 31);
-//   errorcode = SKY_cipher_NewSecKey(b, &sk);
-//   cr_assert(errorcode == SKY_ErrInvalidLengthSecKey);
-// }
-
-// Test(cipher_crypto, TestPubKeyFromSig) {
-//   cipher__PubKey pk, pk2;
-//   cipher__SecKey sk;
-//   cipher__SHA256 h;
-//   cipher__Sig sig;
-//   unsigned char buff[257];
-//   GoSlice b = { buff, 0, 257 };
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h);
-//   SKY_cipher_SignHash(&h, &sk, &sig);
-//   errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
-
-//   cr_assert(errorcode == SKY_OK);
-//   cr_assert(eq(u8[33], pk, pk2));
-
-//   memset(&sig, 0, sizeof(sig));
-//   errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
-//   cr_assert(errorcode == SKY_ErrInvalidSigPubKeyRecovery);
-// }
-
-// Test(cipher_crypto, TestVerifyPubKeySignedHash) {
-//   cipher__PubKey pk, pk2;
-//   cipher__SecKey sk, sk2;
-//   cipher__SHA256 h, h2;
-//   cipher__Sig sig, sig2;
-//   unsigned char buff[257];
-//   GoSlice b = { buff, 0, 257 };
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h);
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h2);
-//   SKY_cipher_SignHash(&h, &sk, &sig);
-//   errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk, &sig, &h);
-//   cr_assert(errorcode == SKY_OK);
-
-//   memset(&sig2, 0, sizeof(sig2));
-//   errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk, &sig2, &h);
-//   cr_assert(errorcode == SKY_ErrInvalidSigPubKeyRecovery);
-
-//   errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk, &sig, &h2);
-//   cr_assert(errorcode == SKY_ErrPubKeyRecoverMismatch);
-
-//   SKY_cipher_GenerateKeyPair(&pk2, &sk2);
-//   errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk2, &sig, &h);
-//   cr_assert(errorcode == SKY_ErrPubKeyRecoverMismatch);
-
-//   memset(&pk2, 0, sizeof(pk2));
-//   errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk2, &sig, &h);
-//   cr_assert(errorcode == SKY_ErrPubKeyRecoverMismatch);
-// }
-
-// Test(cipher_crypto, TestVerifySignedHash) {
-//   cipher__SHA256 h;
-//   cipher__Sig sig, badSig1, badSig2;
-//   GoString hS, sigS, badSig1S, badSig2S;
-//   int error;
-
-//   hS.p = "127e9b0d6b71cecd0363b366413f0f19fcd924ae033513498e7486570ff2a1c8";
-//   hS.n = strlen(hS.p);
-//   error = SKY_cipher_SHA256FromHex(hS, &h);
-//   cr_assert(error == SKY_OK);
-
-//   sigS.p = "63c035b0c95d0c5744fc1c0bdf38af02cef2d2f65a8f923732ab44e436f8a491216d9ab5ff795e3144f4daee37077b8b9db54d2ba3a3df8d4992f06bb21f724401";
-//   sigS.n = strlen(sigS.p);
-//   error = SKY_cipher_SigFromHex(sigS, &sig);
-//   cr_assert(error == SKY_OK);
-
-//   badSig1S.p = "71f2c01516fe696328e79bcf464eb0db374b63d494f7a307d1e77114f18581d7a81eed5275a9e04a336292dd2fd16977d9bef2a54ea3161d0876603d00c53bc9dd";
-//   badSig1S.n = strlen(badSig1S.p);
-//   error = SKY_cipher_SigFromHex(badSig1S, &badSig1);
-//   cr_assert(error == SKY_OK);
-
-//   badSig2S.p = "63c035b0c95d0c5744fc1c0bdf39af02cef2d2f65a8f923732ab44e436f8a491216d9ab5ff795e3144f4daee37077b8b9db54d2ba3a3df8d4992f06bb21f724401";
-//   badSig2S.n = strlen(badSig2S.p);
-//   error = SKY_cipher_SigFromHex(badSig2S, &badSig2);
-//   cr_assert(error == SKY_OK);
-
-//   error = SKY_cipher_VerifySignedHash(&sig, &h);
-//   cr_assert(error == SKY_OK);
-
-//   error = SKY_cipher_VerifySignedHash(&badSig1, &h);
-//   cr_assert(error == SKY_ErrInvalidHashForSig);
-
-//   error = SKY_cipher_VerifySignedHash(&badSig2, &h);
-//   cr_assert(error == SKY_ErrInvalidSigPubKeyRecovery);
-// }
-
-// Test(cipher_crypto, TestGenerateKeyPair) {
-//   cipher__PubKey pk;
-//   cipher__SecKey sk;
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   errorcode = SKY_cipher_PubKey_Verify(&pk);
-//   cr_assert(errorcode == SKY_OK);
-//   errorcode = SKY_cipher_SecKey_Verify(&sk);
-//   cr_assert(errorcode == SKY_OK);
-// }
-
-// Test(cipher_crypto, TestGenerateDeterministicKeyPair) {
-//   cipher__PubKey pk;
-//   cipher__SecKey sk;
-//   unsigned char buff[33];
-//   GoSlice seed = { buff, 0, 33 };
-//   int errorcode;
-
-//   // TODO -- deterministic key pairs are useless as is because we can't
-//   // generate pair n+1, only pair 0
-//   randBytes(&seed, 32);
-//   SKY_cipher_GenerateDeterministicKeyPair(seed, &pk, &sk);
-//   errorcode = SKY_cipher_PubKey_Verify(&pk);
-//   cr_assert(errorcode == SKY_OK);
-//   errorcode = SKY_cipher_SecKey_Verify(&sk);
-//   cr_assert(errorcode == SKY_OK);
-
-//   SKY_cipher_GenerateDeterministicKeyPair(seed, &pk, &sk);
-//   errorcode = SKY_cipher_PubKey_Verify(&pk);
-//   cr_assert(errorcode == SKY_OK);
-//   errorcode = SKY_cipher_SecKey_Verify(&sk);
-//   cr_assert(errorcode == SKY_OK);
-// }
-
-// Test(cipher_crypto, TestSecKeTest) {
-//   cipher__PubKey pk;
-//   cipher__SecKey sk;
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   errorcode = SKY_cipher_CheckSecKey(&sk);
-//   cr_assert(errorcode == SKY_OK);
-
-//   memset(&sk, 0, sizeof(sk));
-//   errorcode = SKY_cipher_CheckSecKey(&sk);
-//   cr_assert(errorcode == SKY_ErrInvalidSecKyVerification);
-// }
-
-// Test(cipher_crypto, TestSecKeyHashTest) {
-//   cipher__PubKey pk;
-//   cipher__SecKey sk;
-//   cipher__SHA256 h;
-//   unsigned char buff[257];
-//   GoSlice b = { buff, 0, 257};
-//   int errorcode;
-
-//   SKY_cipher_GenerateKeyPair(&pk, &sk);
-//   randBytes(&b, 256);
-//   SKY_cipher_SumSHA256(b, &h);
-//   errorcode = SKY_cipher_CheckSecKeyHash(&sk, &h);
-//   cr_assert(errorcode == SKY_OK);
-
-//   memset(&sk, 0, sizeof(sk));
-//   errorcode = SKY_cipher_CheckSecKeyHash(&sk, &h);
-//   cr_assert(errorcode == SKY_ErrInvalidSecKyVerification);
-// }
+START_TEST(TestSecKeyHex)
+{
+  cipher__SecKey sk, sk2;
+  unsigned char buff[101];
+  char strBuff[50];
+  GoSlice b;
+  GoString str, h;
+  int errorcode;
+
+  b.data = buff;
+  b.cap = 50;
+  h.p = strBuff;
+  h.n = 0;
+
+  randBytes(&b, 32);
+  SKY_cipher_NewSecKey(b, &sk);
+  SKY_cipher_SecKey_Hex(&sk, (GoString_ *)&str);
+  registerMemCleanup((void *)str.p);
+
+  // Copy early to ensure memory is released
+  strncpy((char *)h.p, str.p, str.n);
+  h.n = str.n;
+
+  errorcode = SKY_cipher_SecKeyFromHex(h, &sk2);
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isSecKeyEq(&sk, &sk2));
+}
+END_TEST
+
+START_TEST(TestSecKeyVerify)
+{
+  cipher__SecKey sk;
+  cipher__PubKey pk;
+  int errorcode;
+
+  // Empty secret key should not be valid
+  memset(sk, 0, 32);
+  errorcode = SKY_cipher_SecKey_Verify(&sk);
+  ck_assert(errorcode == SKY_ErrInvalidSecKey);
+
+  // Generated sec key should be valid
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  errorcode = SKY_cipher_SecKey_Verify(&sk);
+  ck_assert(errorcode == SKY_OK);
+
+  // Random bytes are usually valid
+}
+END_TEST
+
+START_TEST(TestECDHonce)
+{
+  cipher__PubKey pub1, pub2;
+  cipher__SecKey sec1, sec2;
+  unsigned char buff1[50], buff2[50];
+  GoSlice_ buf1, buf2;
+
+  buf1.data = buff1;
+  buf1.len = 0;
+  buf1.cap = 50;
+  buf2.data = buff2;
+  buf2.len = 0;
+  buf2.cap = 50;
+
+  SKY_cipher_GenerateKeyPair(&pub1, &sec1);
+  SKY_cipher_GenerateKeyPair(&pub2, &sec2);
+
+  SKY_cipher_ECDH(&pub2, &sec1, &buf1);
+  SKY_cipher_ECDH(&pub1, &sec2, &buf2);
+
+  // ECDH shared secrets are 32 bytes SHA256 hashes in the end
+  ck_assert(isSecKeyEq(&sec1, &sec2) == 0);
+  // ck_assert(eq(u8[32], buff1, buff2));
+}
+END_TEST
+
+START_TEST(TestECDHloop)
+{
+  int i;
+  cipher__PubKey pub1, pub2;
+  cipher__SecKey sec1, sec2;
+  unsigned char buff1[50], buff2[50];
+  GoSlice_ buf1, buf2;
+
+  buf1.data = buff1;
+  buf1.len = 0;
+  buf1.cap = 50;
+  buf2.data = buff2;
+  buf2.len = 0;
+  buf2.cap = 50;
+
+  for (i = 0; i < 128; i++)
+  {
+    SKY_cipher_GenerateKeyPair(&pub1, &sec1);
+    SKY_cipher_GenerateKeyPair(&pub2, &sec2);
+    SKY_cipher_ECDH(&pub2, &sec1, &buf1);
+    SKY_cipher_ECDH(&pub1, &sec2, &buf2);
+    ck_assert_msg(isSecKeyEq(&sec1, &sec2) == 0, "Fail in %d", i);
+  }
+}
+END_TEST
+
+START_TEST(TestNewSig)
+{
+  unsigned char buff[101];
+  GoSlice b;
+  cipher__Sig s;
+  int errorcode;
+
+  b.data = buff;
+  b.len = 0;
+  b.cap = 101;
+
+  randBytes(&b, 64);
+  errorcode = SKY_cipher_NewSig(b, &s);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSig);
+
+  randBytes(&b, 66);
+  errorcode = SKY_cipher_NewSig(b, &s);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSig);
+
+  randBytes(&b, 67);
+  errorcode = SKY_cipher_NewSig(b, &s);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSig);
+
+  randBytes(&b, 0);
+  errorcode = SKY_cipher_NewSig(b, &s);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSig);
+
+  randBytes(&b, 100);
+  errorcode = SKY_cipher_NewSig(b, &s);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSig);
+
+  randBytes(&b, 65);
+  errorcode = SKY_cipher_NewSig(b, &s);
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(buff, s, 65) == 0);
+}
+END_TEST
+
+START_TEST(TestMustSigFromHex)
+{
+  unsigned char buff[101];
+  char strBuff[257];
+  GoSlice b = {buff, 0, 101};
+  GoString str;
+  cipher__Sig s, s2;
+  int errorcode;
+
+  // Invalid hex
+  str.p = "";
+  str.n = strlen(str.p);
+  errorcode = SKY_cipher_SigFromHex(str, &s2);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSig);
+
+  str.p = "cascs";
+  str.n = strlen(str.p);
+  errorcode = SKY_cipher_SigFromHex(str, &s2);
+  ck_assert(errorcode == SKY_ErrInvalidSig);
+
+  // Invalid hex length
+  randBytes(&b, 65);
+  errorcode = SKY_cipher_NewSig(b, &s);
+  ck_assert(errorcode == SKY_OK);
+  str.p = strBuff;
+  str.n = 0;
+  bytesnhex(s, (char *)str.p, 32);
+  str.n = strlen(str.p);
+  errorcode = SKY_cipher_SigFromHex(str, &s2);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSig);
+
+  // Valid
+  bytesnhex(s, (char *)str.p, 65);
+  str.n = strlen(str.p);
+  errorcode = SKY_cipher_SigFromHex(str, &s2);
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(s2, s, 65) == 0);
+}
+END_TEST
+
+START_TEST(TestSigHex)
+{
+  unsigned char buff[66];
+  GoSlice b = {buff, 0, 66};
+  char strBuff[150],
+      strBuff2[150];
+  GoString str = {NULL, 0},
+           str2 = {NULL, 0};
+  cipher__Sig s, s2;
+  int errorcode;
+
+  randBytes(&b, 65);
+  errorcode = SKY_cipher_NewSig(b, &s);
+
+  ck_assert(errorcode == SKY_OK);
+  char buffer[100];
+  GoString_ tmp_str = {buffer, 0};
+  SKY_cipher_Sig_Hex(&s, &tmp_str);
+  str.p = tmp_str.p;
+  str.n = tmp_str.n;
+  registerMemCleanup((void *)str.p);
+  errorcode = SKY_cipher_SigFromHex(str, &s2);
+
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(s, s2, 65) == 0);
+
+  char buffer2[100];
+  GoString_ tmp_str2 = {buffer, 0};
+  SKY_cipher_Sig_Hex(&s2, &tmp_str);
+  str2.p = tmp_str2.p;
+  str2.n = tmp_str2.n;
+  registerMemCleanup((void *)str2.p);
+  ck_assert(isGoStringEq(&str, &str2) == 0);
+}
+END_TEST
+
+// FIXME: Split in multiple test cases so as to catch panic at the right place
+START_TEST(TestVerifyAddressSignedHash)
+{
+  cipher__PubKey pk, pk2;
+  cipher__SecKey sk, sk2;
+  cipher__Address addr, addr2;
+  unsigned char buff[257];
+  GoSlice b = {buff, 0, 257};
+  cipher__SHA256 h, h2;
+  cipher__Sig sig, sig2;
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  errorcode = SKY_cipher_PubKey_Verify(&pk);
+  ck_assert(errorcode == SKY_OK);
+  errorcode = SKY_cipher_SecKey_Verify(&sk);
+  ck_assert(errorcode == SKY_OK);
+
+  SKY_cipher_AddressFromPubKey(&pk, &addr);
+  errorcode = SKY_cipher_Address_Verify(&addr, &pk);
+  ck_assert(errorcode == SKY_OK);
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h);
+  SKY_cipher_SignHash(&h, &sk, &sig);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
+  ck_assert(errorcode == SKY_OK);
+
+  // Empty sig should be invalid
+  memset(&sig, 0, sizeof(sig));
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
+  ck_assert(errorcode == SKY_ErrInvalidSigPubKeyRecovery);
+
+  // Random sigs should not pass
+  int i;
+  for (i = 0; i < 100; i++)
+  {
+    randBytes(&b, 65);
+    SKY_cipher_NewSig(b, &sig);
+    errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
+    ck_assert(errorcode != SKY_OK); // One of many error codes
+  }
+
+  // Sig for one hash does not work for another hash
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h2);
+  SKY_cipher_SignHash(&h2, &sk, &sig2);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h2);
+  ck_assert(errorcode == SKY_OK);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h);
+  ck_assert(errorcode == SKY_ErrInvalidAddressForSig);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h2);
+  ck_assert(errorcode != SKY_OK); // One of many error codes
+
+  // Different secret keys should not create same sig
+  SKY_cipher_GenerateKeyPair(&pk2, &sk2);
+  SKY_cipher_AddressFromPubKey(&pk2, &addr2);
+  memset(&h, 0, sizeof(h));
+  SKY_cipher_SignHash(&h, &sk, &sig);
+  SKY_cipher_SignHash(&h, &sk2, &sig2);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
+  ck_assert(errorcode == SKY_OK);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(sig, sig2, 65) == 1);
+  // cr_assert(not(eq(u8[65], sig, sig2)));
+
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h);
+  SKY_cipher_SignHash(&h, &sk, &sig);
+  SKY_cipher_SignHash(&h, &sk2, &sig2);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
+  ck_assert(errorcode == SKY_OK);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(sig, sig2, 65) == 1);
+
+  // Bad address should be invalid
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h);
+  ck_assert(errorcode == SKY_ErrInvalidAddressForSig);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig, &h);
+  ck_assert(errorcode == SKY_ErrInvalidAddressForSig);
+}
+END_TEST
+
+START_TEST(TestSignHash)
+{
+  cipher__PubKey pk, pk2;
+  cipher__SecKey sk;
+  cipher__Address addr;
+  unsigned char buff[257];
+  GoSlice b = {buff, 0, 257};
+  cipher__SHA256 h;
+  cipher__Sig sig, sig2;
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  SKY_cipher_AddressFromPubKey(&pk, &addr);
+
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h);
+  errorcode = SKY_cipher_SignHash(&h, &sk, &sig);
+  ck_assert(errorcode == SKY_OK);
+  memset((void *)&sig2, 0, 65);
+  ck_assert(isU8Eq(sig, sig2, 65) == 1);
+  errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
+  ck_assert(errorcode == SKY_OK);
+
+  errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(pk, pk2, 33) == 0);
+
+  cipher__SecKey empty_sk;
+  cipher__Sig temp_sig;
+  memset((void *)&empty_sk, 0, 32);
+  errorcode = SKY_cipher_SignHash(&h, &empty_sk, &temp_sig);
+  ck_assert(errorcode == SKY_ErrInvalidSecKey);
+}
+END_TEST
+
+START_TEST(TestPubKeyFromSecKey)
+{
+  cipher__PubKey pk, pk2;
+  cipher__SecKey sk;
+  unsigned char buff[101];
+  GoSlice b = {buff, 0, 101};
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  errorcode = SKY_cipher_PubKeyFromSecKey(&sk, &pk2);
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(pk, pk2, 33) == 0);
+
+  memset(&sk, 0, sizeof(sk));
+  errorcode = SKY_cipher_PubKeyFromSecKey(&sk, &pk);
+  ck_assert(errorcode == SKY_ErrPubKeyFromNullSecKey);
+
+  randBytes(&b, 99);
+  errorcode = SKY_cipher_NewSecKey(b, &sk);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSecKey);
+
+  randBytes(&b, 31);
+  errorcode = SKY_cipher_NewSecKey(b, &sk);
+  ck_assert(errorcode == SKY_ErrInvalidLengthSecKey);
+}
+END_TEST
+
+START_TEST(TestPubKeyFromSig)
+{
+  cipher__PubKey pk, pk2;
+  cipher__SecKey sk;
+  cipher__SHA256 h;
+  cipher__Sig sig;
+  unsigned char buff[257];
+  GoSlice b = {buff, 0, 257};
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h);
+  SKY_cipher_SignHash(&h, &sk, &sig);
+  errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
+
+  ck_assert(errorcode == SKY_OK);
+  ck_assert(isU8Eq(pk, pk2, 33) == 0);
+
+  memset(&sig, 0, sizeof(sig));
+  errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
+  ck_assert(errorcode == SKY_ErrInvalidSigPubKeyRecovery);
+}
+END_TEST
+
+START_TEST(TestVerifyPubKeySignedHash)
+{
+  cipher__PubKey pk, pk2;
+  cipher__SecKey sk, sk2;
+  cipher__SHA256 h, h2;
+  cipher__Sig sig, sig2;
+  unsigned char buff[257];
+  GoSlice b = {buff, 0, 257};
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h);
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h2);
+  SKY_cipher_SignHash(&h, &sk, &sig);
+  errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk, &sig, &h);
+  ck_assert(errorcode == SKY_OK);
+
+  memset(&sig2, 0, sizeof(sig2));
+  errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk, &sig2, &h);
+  ck_assert(errorcode == SKY_ErrInvalidSigPubKeyRecovery);
+
+  errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk, &sig, &h2);
+  ck_assert(errorcode == SKY_ErrPubKeyRecoverMismatch);
+
+  SKY_cipher_GenerateKeyPair(&pk2, &sk2);
+  errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk2, &sig, &h);
+  ck_assert(errorcode == SKY_ErrPubKeyRecoverMismatch);
+
+  memset(&pk2, 0, sizeof(pk2));
+  errorcode = SKY_cipher_VerifyPubKeySignedHash(&pk2, &sig, &h);
+  ck_assert(errorcode == SKY_ErrPubKeyRecoverMismatch);
+}
+END_TEST
+
+START_TEST(TestVerifySignedHash)
+{
+  cipher__SHA256 h;
+  cipher__Sig sig, badSig1, badSig2;
+  GoString hS, sigS, badSig1S, badSig2S;
+  int error;
+
+  hS.p = "127e9b0d6b71cecd0363b366413f0f19fcd924ae033513498e7486570ff2a1c8";
+  hS.n = strlen(hS.p);
+  error = SKY_cipher_SHA256FromHex(hS, &h);
+  ck_assert(error == SKY_OK);
+
+  sigS.p = "63c035b0c95d0c5744fc1c0bdf38af02cef2d2f65a8f923732ab44e436f8a491216d9ab5ff795e3144f4daee37077b8b9db54d2ba3a3df8d4992f06bb21f724401";
+  sigS.n = strlen(sigS.p);
+  error = SKY_cipher_SigFromHex(sigS, &sig);
+  ck_assert(error == SKY_OK);
+
+  badSig1S.p = "71f2c01516fe696328e79bcf464eb0db374b63d494f7a307d1e77114f18581d7a81eed5275a9e04a336292dd2fd16977d9bef2a54ea3161d0876603d00c53bc9dd";
+  badSig1S.n = strlen(badSig1S.p);
+  error = SKY_cipher_SigFromHex(badSig1S, &badSig1);
+  ck_assert(error == SKY_OK);
+
+  badSig2S.p = "63c035b0c95d0c5744fc1c0bdf39af02cef2d2f65a8f923732ab44e436f8a491216d9ab5ff795e3144f4daee37077b8b9db54d2ba3a3df8d4992f06bb21f724401";
+  badSig2S.n = strlen(badSig2S.p);
+  error = SKY_cipher_SigFromHex(badSig2S, &badSig2);
+  ck_assert(error == SKY_OK);
+
+  error = SKY_cipher_VerifySignedHash(&sig, &h);
+  ck_assert(error == SKY_OK);
+
+  error = SKY_cipher_VerifySignedHash(&badSig1, &h);
+  ck_assert(error == SKY_ErrInvalidHashForSig);
+
+  error = SKY_cipher_VerifySignedHash(&badSig2, &h);
+  ck_assert(error == SKY_ErrInvalidSigPubKeyRecovery);
+}
+END_TEST
+
+START_TEST(TestGenerateKeyPair)
+{
+  cipher__PubKey pk;
+  cipher__SecKey sk;
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  errorcode = SKY_cipher_PubKey_Verify(&pk);
+  ck_assert(errorcode == SKY_OK);
+  errorcode = SKY_cipher_SecKey_Verify(&sk);
+  ck_assert(errorcode == SKY_OK);
+}
+END_TEST
+
+START_TEST(TestGenerateDeterministicKeyPair)
+{
+  cipher__PubKey pk;
+  cipher__SecKey sk;
+  unsigned char buff[33];
+  GoSlice seed = {buff, 0, 33};
+  int errorcode;
+
+  // TODO -- deterministic key pairs are useless as is because we can't
+  // generate pair n+1, only pair 0
+  randBytes(&seed, 32);
+  SKY_cipher_GenerateDeterministicKeyPair(seed, &pk, &sk);
+  errorcode = SKY_cipher_PubKey_Verify(&pk);
+  ck_assert(errorcode == SKY_OK);
+  errorcode = SKY_cipher_SecKey_Verify(&sk);
+  ck_assert(errorcode == SKY_OK);
+
+  SKY_cipher_GenerateDeterministicKeyPair(seed, &pk, &sk);
+  errorcode = SKY_cipher_PubKey_Verify(&pk);
+  ck_assert(errorcode == SKY_OK);
+  errorcode = SKY_cipher_SecKey_Verify(&sk);
+  ck_assert(errorcode == SKY_OK);
+}
+END_TEST
+
+START_TEST(TestSecKeTest)
+{
+  cipher__PubKey pk;
+  cipher__SecKey sk;
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  errorcode = SKY_cipher_CheckSecKey(&sk);
+  ck_assert(errorcode == SKY_OK);
+
+  memset(&sk, 0, sizeof(sk));
+  errorcode = SKY_cipher_CheckSecKey(&sk);
+  ck_assert(errorcode == SKY_ErrInvalidSecKyVerification);
+}
+END_TEST
+
+START_TEST(TestSecKeyHashTest)
+{
+  cipher__PubKey pk;
+  cipher__SecKey sk;
+  cipher__SHA256 h;
+  unsigned char buff[257];
+  GoSlice b = {buff, 0, 257};
+  int errorcode;
+
+  SKY_cipher_GenerateKeyPair(&pk, &sk);
+  randBytes(&b, 256);
+  SKY_cipher_SumSHA256(b, &h);
+  errorcode = SKY_cipher_CheckSecKeyHash(&sk, &h);
+  ck_assert(errorcode == SKY_OK);
+
+  memset(&sk, 0, sizeof(sk));
+  errorcode = SKY_cipher_CheckSecKeyHash(&sk, &h);
+  ck_assert(errorcode == SKY_ErrInvalidSecKyVerification);
+}
+END_TEST
 
 Suite *cipher_crypto(void)
 {
@@ -826,6 +872,21 @@ Suite *cipher_crypto(void)
   tcase_add_test(tc, TestPubKeyToAddress2);
   tcase_add_test(tc, TestSecKeyFromHex);
   tcase_add_test(tc, TestMustSecKeyFromHex);
+  tcase_add_test(tc, TestSecKeyVerify);
+  tcase_add_test(tc, TestECDHonce);
+  tcase_add_test(tc, TestECDHloop);
+  tcase_add_test(tc, TestNewSig);
+  tcase_add_test(tc, TestMustSigFromHex);
+  tcase_add_test(tc, TestSigHex);
+  tcase_add_test(tc, TestVerifyAddressSignedHash);
+  tcase_add_test(tc, TestPubKeyFromSecKey);
+  tcase_add_test(tc, TestPubKeyFromSig);
+  tcase_add_test(tc, TestVerifyPubKeySignedHash);
+  tcase_add_test(tc, TestVerifySignedHash);
+  tcase_add_test(tc, TestGenerateDeterministicKeyPair);
+  tcase_add_test(tc, TestSecKeTest);
+  tcase_add_test(tc, TestSecKeyHashTest);
+  tcase_add_test(tc, TestGenerateKeyPair);
   suite_add_tcase(s, tc);
   tcase_set_timeout(tc, 150);
 

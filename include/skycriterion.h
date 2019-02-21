@@ -10,11 +10,10 @@ extern int isGoStringEq(GoString *string1, GoString *string2);
 extern int isGoString_Eq(GoString_ *string1, GoString_ *string2);
 
 extern int isPubKeyEq(cipher__PubKey *pubkey1, cipher__PubKey *pubkey2);
-
-extern char *cr_user_GoString_tostr(GoString *string);
-extern char *cr_user_GoString__tostr(GoString_ *string);
+extern int isSigEq(cipher__Sig *sig1, cipher__Sig *sig2);
 
 extern int isSecKeyEq(cipher__SecKey *seckey1, cipher__SecKey *seckey2);
+extern int isU8Eq(unsigned char p1[], unsigned char p2[], int len);
 extern char *cr_user_cipher__SecKey_tostr(cipher__SecKey *seckey1);
 
 extern int cr_user_cipher__Ripemd160_noteq(cipher__Ripemd160 *rp1, cipher__Ripemd160 *rp2);

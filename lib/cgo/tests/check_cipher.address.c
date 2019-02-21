@@ -70,30 +70,30 @@ START_TEST(TestDecodeBase58Address)
   cipher__PubKey p;
   cipher__SecKey s;
   errorcode = SKY_cipher_GenerateKeyPair(&p, &s);
-  cr_assert(errorcode == SKY_OK);
+  ck_assert(errorcode == SKY_OK);
   cipher__Address a;
   errorcode = SKY_cipher_AddressFromPubKey(&p, &a);
-  cr_assert(errorcode == SKY_OK);
+  ck_assert(errorcode == SKY_OK);
   GoSlice b;
   b.data = buff;
   b.len = 0;
   b.cap = sizeof(buff);
   errorcode = SKY_cipher_Address_Bytes(&addr, &b);
-  cr_assert(errorcode == SKY_OK, "Fail SKY_cipher_Address_Bytes");
+  ck_assert_msg(errorcode == SKY_OK, "Fail SKY_cipher_Address_Bytes");
   int len_b = b.len;
   char bufferHead[1024];
   GoString h = {bufferHead, 0};
   b.len = (int)(len_b / 2);
   errorcode = SKY_base58_Hex2Base58(b, &h);
-  cr_assert(errorcode == SKY_OK);
+  ck_assert(errorcode == SKY_OK);
   errorcode = SKY_cipher_DecodeBase58Address(h, &addr);
-  cr_assert(errorcode == SKY_ErrAddressInvalidLength);
+  ck_assert(errorcode == SKY_ErrAddressInvalidLength);
 
   b.len = len_b;
   errorcode = SKY_base58_Hex2Base58(b, &h);
-  cr_assert(errorcode == SKY_OK);
+  ck_assert(errorcode == SKY_OK);
   errorcode = SKY_cipher_DecodeBase58Address(h, &addr);
-  cr_assert(errorcode == SKY_OK);
+  ck_assert(errorcode == SKY_OK);
 }
 END_TEST
 
