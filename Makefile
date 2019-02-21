@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
-.PHONY: install-linters format
+.PHONY: install-linters format clean-libc
 
 COIN ?= skycoin
 
@@ -147,6 +147,10 @@ install-googletest-libc: configure-build ##Install googletest in debian && ubunt
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
+
+clean-libc: ## Clean files generate by library
+	rm -rfv $(BUILDLIB_DIR)/libskycoin.so
+	rm -rfv $(BUILDLIB_DIR)/libskycoin.a
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
