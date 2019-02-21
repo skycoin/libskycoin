@@ -367,3 +367,19 @@ func lookupBuildInfoHandle(handle C.BuildInfo_Handle) (*readable.BuildInfo, bool
 	}
 	return nil, false
 }
+
+// CreateTransactionParams
+
+func registerCreateTransactionParamsHandle(obj *wallet.CreateTransactionParams) C.CreateTransactionParams__Handle {
+	return (C.CreateTransactionParams__Handle)(registerHandle(obj))
+}
+
+func lookupCreateTransactionParamsHandle(handle C.CreateTransactionParams__Handle) (*wallet.CreateTransactionParams, bool) {
+	obj, ok := lookupHandle(C.Handle(handle))
+	if ok {
+		if obj, isOK := (obj).(*wallet.CreateTransactionParams); isOK {
+			return obj, true
+		}
+	}
+	return nil, false
+}

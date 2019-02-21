@@ -32,3 +32,21 @@ func SKY_params_GetLockedDistributionAddresses(_arg0 *C.GoSlice_) {
 	__arg0 := params.GetLockedDistributionAddresses()
 	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
 }
+
+//export SKY_params_GetDistributionAddressesDecoded
+func SKY_params_GetDistributionAddressesDecoded(_arg0 *C.GoSlice_) {
+	__arg0 := params.GetDistributionAddressesDecoded()
+	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+}
+
+//export SKY_params_GetUnlockedDistributionAddressesDecoded
+func SKY_params_GetUnlockedDistributionAddressesDecoded(_arg0 *C.GoSlice_) {
+	__arg0 := params.GetUnlockedDistributionAddressesDecoded()
+	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+}
+
+//export SKY_params_GetLockedDistributionAddressesDecoded
+func SKY_params_GetLockedDistributionAddressesDecoded(_arg0 *C.GoSlice_) {
+	__arg0 := params.GetLockedDistributionAddressesDecoded()
+	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+}

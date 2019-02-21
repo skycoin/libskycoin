@@ -177,10 +177,17 @@ typedef Handle Wallets__Handle;
  *  ReadableOutputSet Handle
  * */
 typedef Handle ReadableOutputSet_Handle;
+
 /**
+ *  CreateTransactionParams wallet.CreateTransactionParams
+ */
+typedef Handle CreateTransactionParams__Handle;
+
+    /**
  * Instances of Go interface types.
  */
-typedef struct {
+    typedef struct
+{
   void *t;      ///< Pointer to the information of the concrete Go type
                 ///< bound to this interface reference.
   void *v;      ///< Pointer to the data corresponding to the value
