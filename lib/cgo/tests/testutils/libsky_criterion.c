@@ -18,7 +18,7 @@ int equalTransactions(coin__Transactions *pTxs1, coin__Transactions *pTxs2)
   coin__Transaction *pTx2 = pTxs2->data;
   for (int i = 0; i < pTxs1->len; i++)
   {
-    if (!cr_user_coin__Transaction_eq(pTx1, pTx2))
+    if (!isTransactionEq(pTx1, pTx2))
       return 0;
     pTx1++;
     pTx2++;
@@ -31,6 +31,13 @@ int isAddressEq(cipher__Address *addr1, cipher__Address *addr2)
   if (addr1->Version != addr2->Version)
     return 0;
   return memcmp((void *)addr1, (void *)addr2, sizeof(cipher__Address)) == 0;
+}
+
+int isAddressEqPtr(cipher__Address addr1, cipher__Address addr2)
+{
+  if (addr1.Version != addr2.Version)
+    return 0;
+  return memcmp((void *)&addr1, (void *)&addr2, sizeof(cipher__Address)) == 0;
 }
 
 int isGoStringEq(GoString *string1, GoString *string2)
@@ -93,26 +100,27 @@ int cr_user_cipher__SHA256_eq(cipher__SHA256 *sh1, cipher__SHA256 *sh2)
   return memcmp((void *)sh1, (void *)sh1, sizeof(cipher__SHA256)) == 0;
 }
 
-int cr_user_GoSlice_eq(GoSlice *slice1, GoSlice *slice2)
+int isGoSliceEq(GoSlice *slice1, GoSlice *slice2)
 {
   return (slice1->len == slice2->len) &&
          (memcmp(slice1->data, slice2->data, slice1->len) == 0);
 }
 
+int isGoSlice_Eq(GoSlice_ *slice1, GoSlice_ *slice2)
+{
+  return (slice1->len == slice2->len) &&
+         (memcmp(slice1->data, slice2->data, slice1->len) == 0);
+}
 int cr_user_GoSlice__eq(GoSlice_ *slice1, GoSlice_ *slice2)
 {
   return ((slice1->len == slice2->len)) && (memcmp(slice1->data, slice2->data, slice1->len) == 0);
 }
 
-int cr_user_coin__Transactions_eq(coin__Transactions *x1, coin__Transactions *x2)
+int isTransactionsEq(coin__Transactions *x1, coin__Transactions *x2)
 {
   return equalTransactions(x1, x2);
 }
 
-int cr_user_coin__Transactions_noteq(coin__Transactions *x1, coin__Transactions *x2)
-{
-  return !equalTransactions(x1, x2);
-}
 
 int cr_user_coin__BlockBody_eq(coin__BlockBody *b1, coin__BlockBody *b2)
 {
@@ -134,7 +142,7 @@ int cr_user_coin__UxOut_noteq(coin__UxOut *x1, coin__UxOut *x2)
   return memcmp(x1, x2, sizeof(coin__UxOut)) != 0;
 }
 
-int cr_user_coin__Transaction_eq(coin__Transaction *x1, coin__Transaction *x2)
+int isTransactionEq(coin__Transaction *x1, coin__Transaction *x2)
 {
   if (x1->Length != x2->Length ||
       x1->Type != x2->Type)
@@ -152,10 +160,6 @@ int cr_user_coin__Transaction_eq(coin__Transaction *x1, coin__Transaction *x2)
   return 1;
 }
 
-int cr_user_coin__Transaction_noteq(coin__Transaction *x1, coin__Transaction *x2)
-{
-  return !cr_user_coin__Transaction_eq(x1, x2);
-}
 
 int cr_user_coin__TransactionOutput_eq(coin__TransactionOutput *x1, coin__TransactionOutput *x2)
 {
@@ -175,7 +179,7 @@ int cr_user_coin__TransactionOutput_noteq(coin__TransactionOutput *x1, coin__Tra
   return !cr_user_coin__TransactionOutput_eq(x1, x2);
 }
 
-int cr_user_coin__UxArray_eq(coin__UxArray *slice1, coin__UxArray *slice2)
+int isUxArrayEq(coin__UxArray *slice1, coin__UxArray *slice2)
 {
   return (memcmp(slice1->data, slice2->data, slice1->len) == 0) && ((slice1->len == slice2->len));
 }

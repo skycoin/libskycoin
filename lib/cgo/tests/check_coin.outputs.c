@@ -1,462 +1,474 @@
-// #include <stdio.h>
-// #include <string.h>
+#include <stdio.h>
+#include <string.h>
 
 // #include <criterion/criterion.h>
 // #include <criterion/new/assert.h>
+#include <check.h>
 
-// #include "libskycoin.h"
-// #include "skyerrors.h"
-// #include "skystring.h"
-// #include "skytest.h"
-// #include "skycriterion.h"
-// #include "skytxn.h"
+#include "libskycoin.h"
+#include "skyerrors.h"
+#include "skystring.h"
+#include "skytest.h"
+#include "skycriterion.h"
+#include "skytxn.h"
 
 // TestSuite(coin_outputs, .init = setup, .fini = teardown);
 
-// Test(coin_outputs, TestUxBodyHash)
-// {
-//   int result;
-//   coin__UxBody uxbody;
-//   result = makeUxBody(&uxbody);
-//   cr_assert(result == SKY_OK, "makeUxBody failed");
-//   cipher__SHA256 hash, nullHash;
-//   result = SKY_coin_UxBody_Hash(&uxbody, &hash);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
-//   memset(&nullHash, 0, sizeof(cipher__SHA256));
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], nullHash, hash)));
-// }
+START_TEST(TestUxBodyHash)
+{
+    int result;
+    coin__UxBody uxbody;
+    result = makeUxBody(&uxbody);
+    ck_assert_msg(result == SKY_OK, "makeUxBody failed");
+    cipher__SHA256 hash, nullHash;
+    result = SKY_coin_UxBody_Hash(&uxbody, &hash);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
+    memset(&nullHash, 0, sizeof(cipher__SHA256));
+    ck_assert(isU8Eq(nullHash, hash, sizeof(cipher__SHA256)) == 1);
+}
+END_TEST
 
-// Test(coin_outputs, TestUxOutHash)
-// {
-//   int result;
-//   coin__UxBody uxbody;
-//   result = makeUxBody(&uxbody);
-//   cr_assert(result == SKY_OK, "makeUxBody failed");
+START_TEST(TestUxOutHash)
+{
+    int result;
+    coin__UxBody uxbody;
+    result = makeUxBody(&uxbody);
+    ck_assert_msg(result == SKY_OK, "makeUxBody failed");
 
-//   coin__UxOut uxout;
-//   memset(&uxout, 0, sizeof(coin__UxOut));
-//   memcpy(&uxout.Body, &uxbody, sizeof(coin__UxBody));
+    coin__UxOut uxout;
+    memset(&uxout, 0, sizeof(coin__UxOut));
+    memcpy(&uxout.Body, &uxbody, sizeof(coin__UxBody));
 
-//   cipher__SHA256 hashBody, hashOut;
-//   result = SKY_coin_UxBody_Hash(&uxbody, &hashBody);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
-//   result = SKY_coin_UxOut_Hash(&uxout, &hashOut);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-//   cr_assert(eq(u8[sizeof(cipher__SHA256)], hashBody, hashOut));
+    cipher__SHA256 hashBody, hashOut;
+    result = SKY_coin_UxBody_Hash(&uxbody, &hashBody);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
+    result = SKY_coin_UxOut_Hash(&uxout, &hashOut);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
+    ck_assert(isU8Eq(hashBody, hashOut, sizeof(cipher__SHA256)) == 0);
 
-//   //Head should not affect hash
-//   uxout.Head.Time = 0;
-//   uxout.Head.BkSeq = 1;
-//   result = SKY_coin_UxOut_Hash(&uxout, &hashOut);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-//   cr_assert(eq(u8[sizeof(cipher__SHA256)], hashBody, hashOut));
-// }
+    //Head should not affect hash
+    uxout.Head.Time = 0;
+    uxout.Head.BkSeq = 1;
+    result = SKY_coin_UxOut_Hash(&uxout, &hashOut);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
+    ck_assert(isU8Eq(hashBody, hashOut, sizeof(cipher__SHA256)) == 0);
+}
+END_TEST
 
-// Test(coin_outputs, TestUxOutSnapshotHash)
-// {
-//   int result;
-//   coin__UxOut uxout, uxout2;
-//   result = makeUxOut(&uxout);
-//   cr_assert(result == SKY_OK, "makeUxOut failed");
-//   cipher__SHA256 hash1, hash2;
-//   result = SKY_coin_UxOut_SnapshotHash(&uxout, &hash1);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
+START_TEST(TestUxOutSnapshotHash)
+{
+    int result;
+    coin__UxOut uxout, uxout2;
+    result = makeUxOut(&uxout);
+    ck_assert_msg(result == SKY_OK, "makeUxOut failed");
+    cipher__SHA256 hash1, hash2;
+    result = SKY_coin_UxOut_SnapshotHash(&uxout, &hash1);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
 
-//   memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
-//   uxout2.Head.Time = 20;
-//   result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], hash1, hash2)), "Snapshot hash must be different");
+    memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
+    uxout2.Head.Time = 20;
+    result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
+    ck_assert_msg(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)) == 1, "SKY_coin_UxOut_SnapshotHash failed");
 
-//   memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
-//   uxout2.Head.BkSeq = 4;
-//   result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], hash1, hash2)), "Snapshot hash must be different");
+    memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
+    uxout2.Head.BkSeq = 4;
+    result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
 
-//   memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
-//   makeRandHash(&uxout2.Body.SrcTransaction);
-//   result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], hash1, hash2)), "Snapshot hash must be different");
+    memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
+    makeRandHash(&uxout2.Body.SrcTransaction);
+    result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
 
-//   memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
-//   makeAddress(&uxout2.Body.Address);
-//   result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], hash1, hash2)), "Snapshot hash must be different");
+    memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
+    makeAddress(&uxout2.Body.Address);
+    result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
 
-//   memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
-//   uxout2.Body.Coins = uxout.Body.Coins * 2;
-//   result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], hash1, hash2)), "Snapshot hash must be different");
+    memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
+    uxout2.Body.Coins = uxout.Body.Coins * 2;
+    result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
 
-//   memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
-//   uxout2.Body.Hours = uxout.Body.Hours * 2;
-//   result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], hash1, hash2)), "Snapshot hash must be different");
-// }
+    memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
+    uxout2.Body.Hours = uxout.Body.Hours * 2;
+    result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
+}
+END_TEST
 
-// Test(coin_outputs, TestUxOutCoinHours)
-// {
-//   GoUint64 _genCoins = 1000000000;
-//   GoUint64 _genCoinHours = 1000 * 1000;
+START_TEST(TestUxOutCoinHours)
+{
+    GoUint64 _genCoins = 1000000000;
+    GoUint64 _genCoinHours = 1000 * 1000;
 
-//   int result;
-//   coin__UxOut ux;
-//   result = makeUxOut(&ux);
-//   cr_assert(result == SKY_OK, "makeUxOut failed");
+    int result;
+    coin__UxOut ux;
+    result = makeUxOut(&ux);
+    ck_assert_msg(result == SKY_OK, "makeUxOut failed");
 
-//   GoUint64 now, hours;
+    GoUint64 now, hours;
 
-//   //Less than an hour passed
-//   now = ux.Head.Time + 100;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours);
+    //Less than an hour passed
+    now = ux.Head.Time + 100;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours);
 
-//   //An hour passed
-//   now = ux.Head.Time + 3600;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours + ux.Body.Coins / 1000000);
+    //An hour passed
+    now = ux.Head.Time + 3600;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours + ux.Body.Coins / 1000000);
 
-//   //6 hours passed
-//   now = ux.Head.Time + 3600 * 6;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours + (ux.Body.Coins / 1000000) * 6);
+    //6 hours passed
+    now = ux.Head.Time + 3600 * 6;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours + (ux.Body.Coins / 1000000) * 6);
 
-//   //Time is backwards (treated as no hours passed)
-//   now = ux.Head.Time / 2;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours);
+    //Time is backwards (treated as no hours passed)
+    now = ux.Head.Time / 2;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours);
 
-//   //1 hour has passed, output has 1.5 coins, should gain 1 coinhour
-//   ux.Body.Coins = 1500000;
-//   now = ux.Head.Time + 3600;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours + 1);
+    //1 hour has passed, output has 1.5 coins, should gain 1 coinhour
+    ux.Body.Coins = 1500000;
+    now = ux.Head.Time + 3600;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours + 1);
 
-//   //2 hours have passed, output has 1.5 coins, should gain 3 coin hours
-//   ux.Body.Coins = 1500000;
-//   now = ux.Head.Time + 3600 * 2;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours + 3);
+    //2 hours have passed, output has 1.5 coins, should gain 3 coin hours
+    ux.Body.Coins = 1500000;
+    now = ux.Head.Time + 3600 * 2;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours + 3);
 
-//   //1 second has passed, output has 3600 coins, should gain 1 coin hour
-//   ux.Body.Coins = 3600000000;
-//   now = ux.Head.Time + 1;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours + 1);
+    //1 second has passed, output has 3600 coins, should gain 1 coin hour
+    ux.Body.Coins = 3600000000;
+    now = ux.Head.Time + 1;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours + 1);
 
-//   //1000000 hours minus 1 second have passed, output has 1 droplet, should gain 0 coin hour
-//   ux.Body.Coins = 1;
-//   now = ux.Head.Time + (GoUint64)(1000000) * (GoUint64)(3600) - 1;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours);
+    //1000000 hours minus 1 second have passed, output has 1 droplet, should gain 0 coin hour
+    ux.Body.Coins = 1;
+    now = ux.Head.Time + (GoUint64)(1000000) * (GoUint64)(3600) - 1;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours);
 
-//   //1000000 hours have passed, output has 1 droplet, should gain 1 coin hour
-//   ux.Body.Coins = 1;
-//   now = ux.Head.Time + (GoUint64)(1000000) * (GoUint64)(3600);
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours + 1);
+    //1000000 hours have passed, output has 1 droplet, should gain 1 coin hour
+    ux.Body.Coins = 1;
+    now = ux.Head.Time + (GoUint64)(1000000) * (GoUint64)(3600);
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours + 1);
 
-//   // No hours passed, using initial coin hours
-//   ux.Body.Coins = _genCoins;
-//   ux.Body.Hours = _genCoinHours;
-//   now = ux.Head.Time;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours);
+    // No hours passed, using initial coin hours
+    ux.Body.Coins = _genCoins;
+    ux.Body.Hours = _genCoinHours;
+    now = ux.Head.Time;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours);
 
-//   // One hour passed, using initial coin hours
-//   now = ux.Head.Time + 3600;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == ux.Body.Hours + _genCoins / 1000000);
+    // One hour passed, using initial coin hours
+    now = ux.Head.Time + 3600;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == ux.Body.Hours + _genCoins / 1000000);
 
-//   // No hours passed and no hours to begin with0
-//   ux.Body.Hours = 0;
-//   now = ux.Head.Time;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(hours == 0);
+    // No hours passed and no hours to begin with0
+    ux.Body.Hours = 0;
+    now = ux.Head.Time;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(hours == 0);
 
-//   // Centuries have passed, time-based calculation overflows uint64
-//   // when calculating the whole coin seconds
-//   ux.Body.Coins = 2000000;
-//   now = 0xFFFFFFFFFFFFFFFF;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should fail");
+    // Centuries have passed, time-based calculation overflows uint64
+    // when calculating the whole coin seconds
+    ux.Body.Coins = 2000000;
+    now = 0xFFFFFFFFFFFFFFFF;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should fail");
 
-//   // Centuries have passed, time-based calculation overflows uint64
-//   // when calculating the droplet seconds
-//   ux.Body.Coins = 1500000;
-//   now = 0xFFFFFFFFFFFFFFFF;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should fail");
+    // Centuries have passed, time-based calculation overflows uint64
+    // when calculating the droplet seconds
+    ux.Body.Coins = 1500000;
+    now = 0xFFFFFFFFFFFFFFFF;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should fail");
 
-//   // Output would overflow if given more hours, has reached its limit
-//   ux.Body.Coins = 3600000000;
-//   now = 0xFFFFFFFFFFFFFFFE;
-//   result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
-//   cr_assert(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should fail");
-// }
+    // Output would overflow if given more hours, has reached its limit
+    ux.Body.Coins = 3600000000;
+    now = 0xFFFFFFFFFFFFFFFE;
+    result = SKY_coin_UxOut_CoinHours(&ux, now, &hours);
+    ck_assert_msg(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should fail");
+}
+END_TEST
 
-// Test(coin_outputs, TestUxArrayCoins)
-// {
-//   coin__UxArray uxs;
-//   int result = makeUxArray(&uxs, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   GoUint64 coins;
-//   result = SKY_coin_UxArray_Coins(&uxs, &coins);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Coins failed");
-//   cr_assert(coins == 4000000);
-//   coin__UxOut *p = (coin__UxOut *)uxs.data;
-//   p += 2;
-//   p->Body.Coins = 0xFFFFFFFFFFFFFFFF - 1000000;
-//   result = SKY_coin_UxArray_Coins(&uxs, &coins);
-//   cr_assert(result == SKY_ERROR, "SKY_coin_UxArray_Coins should fail with overflow");
-// }
+START_TEST(TestUxArrayCoins)
+{
+    coin__UxArray uxs;
+    int result = makeUxArray(&uxs, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    GoUint64 coins;
+    result = SKY_coin_UxArray_Coins(&uxs, &coins);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Coins failed");
+    ck_assert(coins == 4000000);
+    coin__UxOut *p = (coin__UxOut *)uxs.data;
+    p += 2;
+    p->Body.Coins = 0xFFFFFFFFFFFFFFFF - 1000000;
+    result = SKY_coin_UxArray_Coins(&uxs, &coins);
+    ck_assert_msg(result == SKY_ERROR, "SKY_coin_UxArray_Coins should fail with overflow");
+}
+END_TEST
 
-// Test(coin_outputs, TestUxArrayCoinHours)
-// {
-//   coin__UxArray uxs;
-//   int result = makeUxArray(&uxs, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   coin__UxOut *p = (coin__UxOut *)uxs.data;
-//   GoUint64 n;
+START_TEST(TestUxArrayCoinHours)
+{
+    coin__UxArray uxs;
+    int result = makeUxArray(&uxs, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    coin__UxOut *p = (coin__UxOut *)uxs.data;
+    GoUint64 n;
 
-//   result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time, &n);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(n == 400);
+    result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time, &n);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(n == 400);
 
-//   result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time + 3600, &n);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(n == 404);
+    result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time + 3600, &n);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(n == 404);
 
-//   result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time + 3600 + 4600, &n);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
-//   cr_assert(n == 408);
+    result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time + 3600 + 4600, &n);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_CoinHours failed");
+    ck_assert(n == 408);
 
-//   p[2].Body.Hours = 0xFFFFFFFFFFFFFFFF - 100;
-//   result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time, &n);
-//   cr_assert(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should have fail with overflow");
+    p[2].Body.Hours = 0xFFFFFFFFFFFFFFFF - 100;
+    result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time, &n);
+    ck_assert_msg(result == SKY_ERROR, "SKY_coin_UxOut_CoinHours should have fail with overflow");
 
-//   result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time * (GoUint64)1000000000000, &n);
-//   cr_assert(result == SKY_ErrAddEarnedCoinHoursAdditionOverflow, "SKY_coin_UxOut_CoinHours should have fail with overflow");
-// }
+    result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time * (GoUint64)1000000000000, &n);
+    ck_assert_msg(result == SKY_ErrAddEarnedCoinHoursAdditionOverflow, "SKY_coin_UxOut_CoinHours should have fail with overflow");
+}
+END_TEST
 
-// Test(coin_outputs, TestUxArrayHashArray)
-// {
-//   coin__UxArray uxs;
-//   int result = makeUxArray(&uxs, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   coin__UxOut *p = (coin__UxOut *)uxs.data;
+START_TEST(TestUxArrayHashArray)
+{
+    coin__UxArray uxs;
+    int result = makeUxArray(&uxs, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    coin__UxOut *p = (coin__UxOut *)uxs.data;
 
-//   GoSlice_ hashes = {NULL, 0, 0};
-//   result = SKY_coin_UxArray_Hashes(&uxs, &hashes);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Hashes failed");
-//   registerMemCleanup(hashes.data);
-//   cr_assert(hashes.len == uxs.len);
-//   coin__UxOut *pux = (coin__UxOut *)uxs.data;
-//   cipher__SHA256 *ph = (cipher__SHA256 *)hashes.data;
-//   cipher__SHA256 hash;
-//   for (int i = 0; i < hashes.len; i++)
-//   {
-//     result = SKY_coin_UxOut_Hash(pux, &hash);
-//     cr_assert(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-//     cr_assert(eq(u8[sizeof(cipher__SHA256)], hash, *ph));
-//     pux++;
-//     ph++;
-//   }
-// }
+    GoSlice_ hashes = {NULL, 0, 0};
+    result = SKY_coin_UxArray_Hashes(&uxs, &hashes);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Hashes failed");
+    registerMemCleanup(hashes.data);
+    ck_assert(hashes.len == uxs.len);
+    coin__UxOut *pux = (coin__UxOut *)uxs.data;
+    cipher__SHA256 *ph = (cipher__SHA256 *)hashes.data;
+    cipher__SHA256 hash;
+    for (int i = 0; i < hashes.len; i++)
+    {
+        result = SKY_coin_UxOut_Hash(pux, &hash);
+        ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
+        ck_assert(isU8Eq(hash, *ph, sizeof(cipher__SHA256)) == 0);
+        pux++;
+        ph++;
+    }
+}
+END_TEST
 
-// Test(coin_outputs, TestUxArrayHasDupes)
-// {
-//   coin__UxArray uxs;
-//   int result = makeUxArray(&uxs, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   GoUint8 hasDupes;
-//   result = SKY_coin_UxArray_HasDupes(&uxs, &hasDupes);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_HasDupes failed");
-//   cr_assert(hasDupes == 0);
-//   coin__UxOut *p = (coin__UxOut *)uxs.data;
-//   p++;
-//   memcpy(uxs.data, p, sizeof(coin__UxOut));
-//   result = SKY_coin_UxArray_HasDupes(&uxs, &hasDupes);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_HasDupes failed");
-//   cr_assert(hasDupes != 0);
-// }
+START_TEST(TestUxArrayHasDupes)
+{
+    coin__UxArray uxs;
+    int result = makeUxArray(&uxs, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    GoUint8 hasDupes;
+    result = SKY_coin_UxArray_HasDupes(&uxs, &hasDupes);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_HasDupes failed");
+    ck_assert(hasDupes == 0);
+    coin__UxOut *p = (coin__UxOut *)uxs.data;
+    p++;
+    memcpy(uxs.data, p, sizeof(coin__UxOut));
+    result = SKY_coin_UxArray_HasDupes(&uxs, &hasDupes);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_HasDupes failed");
+    ck_assert(hasDupes != 0);
+}
+END_TEST
 
-// Test(coin_outputs, TestUxArraySub)
-// {
+START_TEST(TestUxArraySub)
+{
 
-//   int result, equal;
-//   coin__UxArray uxa, uxb, uxc, uxd;
-//   coin__UxArray t1, t2, t3, t4;
+    int result, equal;
+    coin__UxArray uxa, uxb, uxc, uxd;
+    coin__UxArray t1, t2, t3, t4;
 
-//   int arraySize = sizeof(coin__UxArray);
-//   memset(&uxa, 0, arraySize);
-//   memset(&uxb, 0, arraySize);
-//   memset(&uxc, 0, arraySize);
-//   memset(&uxd, 0, arraySize);
-//   memset(&t1, 0, arraySize);
-//   memset(&t2, 0, arraySize);
-//   memset(&t3, 0, arraySize);
-//   memset(&t4, 0, arraySize);
+    int arraySize = sizeof(coin__UxArray);
+    memset(&uxa, 0, arraySize);
+    memset(&uxb, 0, arraySize);
+    memset(&uxc, 0, arraySize);
+    memset(&uxd, 0, arraySize);
+    memset(&t1, 0, arraySize);
+    memset(&t2, 0, arraySize);
+    memset(&t3, 0, arraySize);
+    memset(&t4, 0, arraySize);
 
-//   result = makeUxArray(&uxa, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   result = makeUxArray(&uxb, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
+    result = makeUxArray(&uxa, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    result = makeUxArray(&uxb, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
 
-//   int elems_size = sizeof(coin__UxOut);
-//   cutSlice(&uxa, 0, 1, elems_size, &t1);
-//   cr_assert(result == SKY_OK, "cutSlice failed");
-//   result = concatSlices(&t1, &uxb, elems_size, &t2);
-//   cr_assert(result == SKY_OK, "concatSlices failed");
-//   result = cutSlice(&uxa, 1, 2, elems_size, &t3);
-//   cr_assert(result == SKY_OK, "cutSlice failed");
-//   result = concatSlices(&t2, &t3, elems_size, &uxc);
-//   cr_assert(result == SKY_OK, "concatSlices failed");
-//   //   //TODO: Fix comparision
-//   memset(&uxd, 0, arraySize);
-//   result = SKY_coin_UxArray_Sub(&uxc, &uxa, &uxd);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
-//   cr_assert(eq(type(coin__UxArray), uxd, uxb));
+    int elems_size = sizeof(coin__UxOut);
+    cutSlice(&uxa, 0, 1, elems_size, &t1);
+    ck_assert_msg(result == SKY_OK, "cutSlice failed");
+    result = concatSlices(&t1, &uxb, elems_size, &t2);
+    ck_assert_msg(result == SKY_OK, "concatSlices failed");
+    result = cutSlice(&uxa, 1, 2, elems_size, &t3);
+    ck_assert_msg(result == SKY_OK, "cutSlice failed");
+    result = concatSlices(&t2, &t3, elems_size, &uxc);
+    ck_assert_msg(result == SKY_OK, "concatSlices failed");
+    //   //TODO: Fix comparision
+    memset(&uxd, 0, arraySize);
+    result = SKY_coin_UxArray_Sub(&uxc, &uxa, &uxd);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
+    ck_assert(isUxArrayEq(&uxd, &uxb) == 0);
 
-//   memset(&uxd, 0, arraySize);
-//   result = SKY_coin_UxArray_Sub(&uxc, &uxb, &uxd);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
-//   cr_assert(uxd.len == 2, "uxd length must be 2 and it is: %s", uxd.len);
-//   cutSlice(&uxa, 0, 2, elems_size, &t1);
-//   cr_assert(eq(type(coin__UxArray), uxd, t1));
+    memset(&uxd, 0, arraySize);
+    result = SKY_coin_UxArray_Sub(&uxc, &uxb, &uxd);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
+    ck_assert_msg(uxd.len == 2, "uxd length must be 2 and it is: %s", uxd.len);
+    cutSlice(&uxa, 0, 2, elems_size, &t1);
+    ck_assert(isUxArrayEq(&uxd, &t1) == 0);
 
-//   // No intersection
-//   memset(&t1, 0, arraySize);
-//   memset(&t2, 0, arraySize);
-//   result = SKY_coin_UxArray_Sub(&uxa, &uxb, &t1);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
-//   result = SKY_coin_UxArray_Sub(&uxb, &uxa, &t2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
-//   cr_assert(eq(type(coin__UxArray), uxa, t1));
-//   cr_assert(eq(type(coin__UxArray), uxb, t2));
-// }
+    // No intersection
+    memset(&t1, 0, arraySize);
+    memset(&t2, 0, arraySize);
+    result = SKY_coin_UxArray_Sub(&uxa, &uxb, &t1);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
+    result = SKY_coin_UxArray_Sub(&uxb, &uxa, &t2);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
+    ck_assert(isUxArrayEq(&uxa, &t1) == 0);
+    ck_assert(isUxArrayEq(&uxb, &t2) == 0);
+}
+END_TEST
 
-// int isUxArraySorted(coin__UxArray *uxa)
-// {
-//   int n = uxa->len;
-//   coin__UxOut *prev = uxa->data;
-//   coin__UxOut *current = prev;
-//   current++;
-//   cipher__SHA256 hash1, hash2;
-//   cipher__SHA256 *prevHash = NULL;
-//   cipher__SHA256 *currentHash = NULL;
+int isUxArraySorted(coin__UxArray *uxa)
+{
+    int n = uxa->len;
+    coin__UxOut *prev = uxa->data;
+    coin__UxOut *current = prev;
+    current++;
+    cipher__SHA256 hash1, hash2;
+    cipher__SHA256 *prevHash = NULL;
+    cipher__SHA256 *currentHash = NULL;
 
-//   int result;
-//   for (int i = 1; i < n; i++)
-//   {
-//     if (prevHash == NULL)
-//     {
-//       result = SKY_coin_UxOut_Hash(prev, &hash1);
-//       cr_assert(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-//       prevHash = &hash1;
-//     }
-//     if (currentHash == NULL)
-//       currentHash = &hash2;
-//     result = SKY_coin_UxOut_Hash(current, currentHash);
-//     cr_assert(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-//     if (memcmp(prevHash, currentHash, sizeof(cipher__SHA256)) > 0)
-//       return 0; //Array is not sorted
-//     if (i % 2 != 0)
-//     {
-//       prevHash = &hash2;
-//       currentHash = &hash1;
-//     }
-//     else
-//     {
-//       prevHash = &hash1;
-//       currentHash = &hash2;
-//     }
-//     prev++;
-//     current++;
-//   }
-//   return 1;
-// }
+    int result;
+    for (int i = 1; i < n; i++)
+    {
+        if (prevHash == NULL)
+        {
+            result = SKY_coin_UxOut_Hash(prev, &hash1);
+            ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
+            prevHash = &hash1;
+        }
+        if (currentHash == NULL)
+            currentHash = &hash2;
+        result = SKY_coin_UxOut_Hash(current, currentHash);
+        ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
+        if (memcmp(prevHash, currentHash, sizeof(cipher__SHA256)) > 0)
+            return 0; //Array is not sorted
+        if (i % 2 != 0)
+        {
+            prevHash = &hash2;
+            currentHash = &hash1;
+        }
+        else
+        {
+            prevHash = &hash1;
+            currentHash = &hash2;
+        }
+        prev++;
+        current++;
+    }
+    return 1;
+}
 
-// Test(coin_outputs, TestUxArraySorting)
-// {
+START_TEST(TestUxArraySorting)
+{
 
-//   int result;
-//   coin__UxArray uxa;
-//   result = makeUxArray(&uxa, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   int isSorted = isUxArraySorted(&uxa);
-//   if (isSorted)
-//   { //If already sorted then break the order
-//     coin__UxOut temp;
-//     coin__UxOut *p = uxa.data;
-//     memcpy(&temp, p, sizeof(coin__UxOut));
-//     memcpy(p, p + 1, sizeof(coin__UxOut));
-//     memcpy(p + 1, &temp, sizeof(coin__UxOut));
-//   }
-//   isSorted = isUxArraySorted(&uxa);
-//   cr_assert(isSorted == 0);
-//   result = SKY_coin_UxArray_Sort(&uxa);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Sort failed");
-//   isSorted = isUxArraySorted(&uxa);
-//   cr_assert(isSorted == 1);
-// }
+    int result;
+    coin__UxArray uxa;
+    result = makeUxArray(&uxa, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    int isSorted = isUxArraySorted(&uxa);
+    if (isSorted)
+    { //If already sorted then break the order
+        coin__UxOut temp;
+        coin__UxOut *p = uxa.data;
+        memcpy(&temp, p, sizeof(coin__UxOut));
+        memcpy(p, p + 1, sizeof(coin__UxOut));
+        memcpy(p + 1, &temp, sizeof(coin__UxOut));
+    }
+    isSorted = isUxArraySorted(&uxa);
+    ck_assert(isSorted == 0);
+    result = SKY_coin_UxArray_Sort(&uxa);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sort failed");
+    isSorted = isUxArraySorted(&uxa);
+    ck_assert(isSorted == 1);
+}
+END_TEST
 
-// Test(coin_outputs, TestUxArrayLen)
-// {
-//   int result;
-//   coin__UxArray uxa;
-//   result = makeUxArray(&uxa, 4);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   GoInt len;
-//   result = SKY_coin_UxArray_Len(&uxa, &len);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Len failed");
-//   cr_assert(len == uxa.len);
-//   cr_assert(len == 4);
-// }
+START_TEST(TestUxArrayLen)
+{
+    int result;
+    coin__UxArray uxa;
+    result = makeUxArray(&uxa, 4);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    GoInt len;
+    result = SKY_coin_UxArray_Len(&uxa, &len);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Len failed");
+    ck_assert(len == uxa.len);
+    ck_assert(len == 4);
+}
+END_TEST
 
-// Test(coin_outputs, TestUxArrayLess)
-// {
-//   int result;
-//   coin__UxArray uxa;
-//   result = makeUxArray(&uxa, 2);
-//   cr_assert(result == SKY_OK, "makeUxArray failed");
-//   cipher__SHA256 hashes[2];
-//   coin__UxOut *p = uxa.data;
-//   result = SKY_coin_UxOut_Hash(p, &hashes[0]);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-//   p++;
-//   result = SKY_coin_UxOut_Hash(p, &hashes[1]);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-//   GoUint8 lessResult1, lessResult2;
-//   int memcmpResult;
-//   result = SKY_coin_UxArray_Less(&uxa, 0, 1, &lessResult1);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Less failed");
-//   result = SKY_coin_UxArray_Less(&uxa, 1, 0, &lessResult2);
-//   cr_assert(result == SKY_OK, "SKY_coin_UxArray_Less failed");
-//   memcmpResult = memcmp(&hashes[0], &hashes[1], sizeof(cipher__SHA256));
-//   int r;
-//   r = (lessResult1 == 1) == (memcmpResult < 0);
-//   cr_assert(r != 0);
-//   r = (lessResult2 == 1) == (memcmpResult > 0);
-//   cr_assert(r != 0);
-// }
+START_TEST(TestUxArrayLess)
+{
+    int result;
+    coin__UxArray uxa;
+    result = makeUxArray(&uxa, 2);
+    ck_assert_msg(result == SKY_OK, "makeUxArray failed");
+    cipher__SHA256 hashes[2];
+    coin__UxOut *p = uxa.data;
+    result = SKY_coin_UxOut_Hash(p, &hashes[0]);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
+    p++;
+    result = SKY_coin_UxOut_Hash(p, &hashes[1]);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
+    GoUint8 lessResult1, lessResult2;
+    int memcmpResult;
+    result = SKY_coin_UxArray_Less(&uxa, 0, 1, &lessResult1);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Less failed");
+    result = SKY_coin_UxArray_Less(&uxa, 1, 0, &lessResult2);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Less failed");
+    memcmpResult = memcmp(&hashes[0], &hashes[1], sizeof(cipher__SHA256));
+    int r;
+    r = (lessResult1 == 1) == (memcmpResult < 0);
+    ck_assert(r != 0);
+    r = (lessResult2 == 1) == (memcmpResult > 0);
+    ck_assert(r != 0);
+}
+END_TEST
 
 // Test(coin_outputs, TestUxArraySwap)
 // {
@@ -832,3 +844,26 @@
 //   pData2 = ux2.data;
 //   cr_assert(eq(type(coin__UxOut), *(pData2), *(pData + 5)));
 // }
+Suite *coin_output(void)
+{
+    Suite *s = suite_create("");
+    TCase *tc;
+
+    tc = tcase_create("coin.output");
+    tcase_add_test(tc, TestUxBodyHash);
+    tcase_add_test(tc, TestUxOutHash);
+    tcase_add_test(tc, TestUxOutSnapshotHash);
+    tcase_add_test(tc, TestUxOutCoinHours);
+    tcase_add_test(tc, TestUxArrayCoins);
+    tcase_add_test(tc, TestUxArrayCoinHours);
+    tcase_add_test(tc, TestUxArrayHashArray);
+    tcase_add_test(tc, TestUxArrayHasDupes);
+    tcase_add_test(tc, TestUxArraySub);
+    tcase_add_test(tc, TestUxArraySorting);
+    tcase_add_test(tc, TestUxArrayLen);
+    tcase_add_test(tc, TestUxArrayLess);
+    suite_add_tcase(s, tc);
+    tcase_set_timeout(tc, 150);
+
+    return s;
+}

@@ -5,6 +5,7 @@
 #include "skyerrors.h"
 
 extern int isAddressEq(cipher__Address *addr1, cipher__Address *addr2);
+extern int isAddressEqPtr(cipher__Address addr1, cipher__Address addr2);
 
 extern int isGoStringEq(GoString *string1, GoString *string2);
 extern int isGoString_Eq(GoString_ *string1, GoString_ *string2);
@@ -20,7 +21,8 @@ extern int cr_user_cipher__Ripemd160_noteq(cipher__Ripemd160 *rp1, cipher__Ripem
 extern int cr_user_cipher__Ripemd160_eq(cipher__Ripemd160 *rp1, cipher__Ripemd160 *rp2);
 extern char *cr_user_cipher__Ripemd160_tostr(cipher__Ripemd160 *rp1);
 
-extern int cr_user_GoSlice_eq(GoSlice *slice1, GoSlice *slice2);
+extern int isGoSliceEq(GoSlice *slice1, GoSlice *slice2);
+extern int isGoSlice_Eq(GoSlice_ *slice1, GoSlice_ *slice2);
 extern char *cr_user_GoSlice_tostr(GoSlice *slice1);
 extern int cr_user_GoSlice_noteq(GoSlice *slice1, GoSlice *slice2);
 
@@ -42,15 +44,15 @@ extern int cr_user_coin__UxOut_eq(coin__UxOut *x1, coin__UxOut *x2);
 extern int cr_user_coin__UxOut_noteq(coin__UxOut *x1, coin__UxOut *x2);
 extern char *cr_user_coin__UxOut_tostr(coin__UxOut *x1);
 
-extern int cr_user_coin__UxArray_eq(coin__UxArray *x1, coin__UxArray *x2);
+extern int isUxArrayEq(coin__UxArray *x1, coin__UxArray *x2);
 extern int cr_user_coin__UxArray_noteq(coin__UxArray *x1, coin__UxArray *x2);
 extern char *cr_user_coin__UxArray_tostr(coin__UxArray *x1);
 
-extern int cr_user_coin__Transaction_eq(coin__Transaction *x1, coin__Transaction *x2);
+extern int isTransactionEq(coin__Transaction *x1, coin__Transaction *x2);
 extern int cr_user_coin__Transaction_noteq(coin__Transaction *x1, coin__Transaction *x2);
 extern char *cr_user_coin__Transaction_tostr(coin__Transaction *x1);
 
-extern int cr_user_coin__Transactions_eq(coin__Transactions *x1, coin__Transactions *x2);
+extern int isTransactionsEq(coin__Transactions *x1, coin__Transactions *x2);
 extern int cr_user_coin__Transactions_noteq(coin__Transactions *x1, coin__Transactions *x2);
 extern char *cr_user_coin__Transactions_tostr(coin__Transactions *x1);
 
