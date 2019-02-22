@@ -162,3 +162,4 @@ seeds.csv
 histogram
 # Ignore compilator by qemu
 qemu_*
+core

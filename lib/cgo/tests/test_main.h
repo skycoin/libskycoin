@@ -21,5 +21,6 @@ Suite *coin_blocks(void);
 Suite *coin_coin(void);
 Suite *coin_math(void);
 Suite *coin_output(void);
+Suite *coin_transaction(void);
 
 #endif

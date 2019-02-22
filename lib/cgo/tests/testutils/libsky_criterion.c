@@ -121,7 +121,6 @@ int isTransactionsEq(coin__Transactions *x1, coin__Transactions *x2)
   return equalTransactions(x1, x2);
 }
 
-
 int cr_user_coin__BlockBody_eq(coin__BlockBody *b1, coin__BlockBody *b2)
 {
   return equalTransactions(&b1->Transactions, &b2->Transactions);
@@ -132,7 +131,7 @@ int cr_user_coin__BlockBody_noteq(coin__BlockBody *b1, coin__BlockBody *b2)
   return !equalTransactions(&b1->Transactions, &b2->Transactions);
 }
 
-int cr_user_coin__UxOut_eq(coin__UxOut *x1, coin__UxOut *x2)
+int isUxOutEq(coin__UxOut *x1, coin__UxOut *x2)
 {
   return memcmp(x1, x2, sizeof(coin__UxOut)) == 0;
 }
@@ -160,8 +159,7 @@ int isTransactionEq(coin__Transaction *x1, coin__Transaction *x2)
   return 1;
 }
 
-
-int cr_user_coin__TransactionOutput_eq(coin__TransactionOutput *x1, coin__TransactionOutput *x2)
+int isTransactionOutputEq(coin__TransactionOutput *x1, coin__TransactionOutput *x2)
 {
   if (x1->Coins != x2->Coins ||
       x1->Hours != x2->Hours)
@@ -174,10 +172,6 @@ int cr_user_coin__TransactionOutput_eq(coin__TransactionOutput *x1, coin__Transa
   return 1;
 }
 
-int cr_user_coin__TransactionOutput_noteq(coin__TransactionOutput *x1, coin__TransactionOutput *x2)
-{
-  return !cr_user_coin__TransactionOutput_eq(x1, x2);
-}
 
 int isUxArrayEq(coin__UxArray *slice1, coin__UxArray *slice2)
 {

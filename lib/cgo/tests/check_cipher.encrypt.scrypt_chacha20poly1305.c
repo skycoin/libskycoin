@@ -212,7 +212,7 @@ END_TEST
 
 Suite *cipher_encrypt_scrypt_chacha20poly1305(void)
 {
-    Suite *s = suite_create("");
+    Suite *s = suite_create("Load cipher.encrypt.scrypt.chacha20poly1305");
     TCase *tc;
 
     tc = tcase_create("cipher.encrypt.scrypt.chacha20poly1305");

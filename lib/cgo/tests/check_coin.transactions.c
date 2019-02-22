@@ -1,486 +1,508 @@
 
-// #include <criterion/criterion.h>
-// #include <criterion/new/assert.h>
-// #include <signal.h>
-// #include <stdio.h>
-// #include <string.h>
+#include <signal.h>
+#include <stdio.h>
 
-// #include "libskycoin.h"
-// #include "skycriterion.h"
-// #include "skyerrors.h"
-// #include "skystring.h"
-// #include "skytest.h"
-// #include "skytxn.h"
+#include "libskycoin.h"
+#include "skycriterion.h"
+#include "skyerrors.h"
+#include "skystring.h"
+#include "skytest.h"
+#include "skytxn.h"
+#include <check.h>
+#include <stdlib.h>
+#include <string.h>
 
+#include "check.h"
 // TestSuite(coin_transaction, .init = setup, .fini = teardown);
 
-// GoUint64 Million = 1000000;
+GoUint64 Million = 1000000;
 
-// Test(coin_transaction, TestTransactionVerify) {
-//   unsigned long long MaxUint64 = 0xFFFFFFFFFFFFFFFF;
-//   unsigned int MaxUint16 = 0xFFFF;
-//   int result;
-//   coin__Transaction *ptx;
-//   Transaction__Handle handle;
-//   // Mismatch header hash
-//   ptx = makeTransaction(&handle);
-//   memset(ptx->InnerHash, 0, sizeof(cipher__SHA256));
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+START_TEST(TestTransactionVerify)
+{
+    unsigned long long MaxUint64 = 0xFFFFFFFFFFFFFFFF;
+    unsigned int MaxUint16 = 0xFFFF;
+    int result;
+    coin__Transaction *ptx;
+    Transaction__Handle handle;
+    // Mismatch header hash
+    ptx = makeTransaction(&handle);
+    memset(ptx->InnerHash, 0, sizeof(cipher__SHA256));
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // No inputs
-//   ptx = makeTransaction(&handle);
-//   result = SKY_coin_Transaction_ResetInputs(handle, 0);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // No inputs
+    ptx = makeTransaction(&handle);
+    result = SKY_coin_Transaction_ResetInputs(handle, 0);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // No outputs
-//   ptx = makeTransaction(&handle);
-//   result = SKY_coin_Transaction_ResetOutputs(handle, 0);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // No outputs
+    ptx = makeTransaction(&handle);
+    result = SKY_coin_Transaction_ResetOutputs(handle, 0);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // Invalid number of Sigs
-//   ptx = makeTransaction(&handle);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 0);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 20);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // Invalid number of Sigs
+    ptx = makeTransaction(&handle);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 0);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 20);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // Too many sigs & inputs
-//   ptx = makeTransaction(&handle);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, MaxUint16);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_ResetInputs(handle, MaxUint16);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // Too many sigs & inputs
+    ptx = makeTransaction(&handle);
+    result = SKY_coin_Transaction_ResetSignatures(handle, MaxUint16);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_ResetInputs(handle, MaxUint16);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // Duplicate inputs
-//   coin__UxOut ux;
-//   cipher__SecKey seckey;
-//   cipher__SHA256 sha256;
-//   makeUxOutWithSecret(&ux, &seckey);
-//   ptx = makeTransactionFromUxOut(&ux, &seckey, &handle);
-//   memcpy(&sha256, ptx->In.data, sizeof(cipher__SHA256));
-//   GoUint16 r;
-//   result = SKY_coin_Transaction_PushInput(handle, &sha256, &r);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 0);
-//   cr_assert(result == SKY_OK);
-//   GoSlice seckeys;
-//   seckeys.data = malloc(sizeof(cipher__SecKey) * 2);
-//   cr_assert(seckeys.data != NULL);
-//   registerMemCleanup(seckeys.data);
-//   seckeys.len = seckeys.cap = 2;
-//   memcpy(seckeys.data, &seckey, sizeof(cipher__SecKey));
-//   memcpy(((cipher__SecKey *)seckeys.data) + 1, &seckey, sizeof(cipher__SecKey));
-//   result = SKY_coin_Transaction_SignInputs(handle, seckeys);
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // Duplicate inputs
+    coin__UxOut ux;
+    cipher__SecKey seckey;
+    cipher__SHA256 sha256;
+    makeUxOutWithSecret(&ux, &seckey);
+    ptx = makeTransactionFromUxOut(&ux, &seckey, &handle);
+    memcpy(&sha256, ptx->In.data, sizeof(cipher__SHA256));
+    GoUint16 r;
+    result = SKY_coin_Transaction_PushInput(handle, &sha256, &r);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 0);
+    ck_assert(result == SKY_OK);
+    GoSlice seckeys;
+    seckeys.data = malloc(sizeof(cipher__SecKey) * 2);
+    ck_assert(seckeys.data != NULL);
+    registerMemCleanup(seckeys.data);
+    seckeys.len = seckeys.cap = 2;
+    memcpy(seckeys.data, &seckey, sizeof(cipher__SecKey));
+    memcpy(((cipher__SecKey *)seckeys.data) + 1, &seckey, sizeof(cipher__SecKey));
+    result = SKY_coin_Transaction_SignInputs(handle, seckeys);
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // Duplicate outputs
-//   ptx = makeTransaction(&handle);
-//   coin__TransactionOutput *pOutput = ptx->Out.data;
-//   cipher__Address addr;
-//   memcpy(&addr, &pOutput->Address, sizeof(cipher__Address));
-//   result = SKY_coin_Transaction_PushOutput(handle, &addr, pOutput->Coins,
-//                                            pOutput->Hours);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // Duplicate outputs
+    ptx = makeTransaction(&handle);
+    coin__TransactionOutput *pOutput = ptx->Out.data;
+    cipher__Address addr;
+    memcpy(&addr, &pOutput->Address, sizeof(cipher__Address));
+    result = SKY_coin_Transaction_PushOutput(handle, &addr, pOutput->Coins,
+                                             pOutput->Hours);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // Invalid signature, empty
-//   ptx = makeTransaction(&handle);
-//   memset(ptx->Sigs.data, 0, sizeof(cipher__Sig));
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ErrInvalidSigPubKeyRecovery);
+    // Invalid signature, empty
+    ptx = makeTransaction(&handle);
+    memset(ptx->Sigs.data, 0, sizeof(cipher__Sig));
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ErrInvalidSigPubKeyRecovery);
 
-//   // Output coins are 0
-//   ptx = makeTransaction(&handle);
-//   pOutput = ptx->Out.data;
-//   pOutput->Coins = 0;
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // Output coins are 0
+    ptx = makeTransaction(&handle);
+    pOutput = ptx->Out.data;
+    pOutput->Coins = 0;
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // Output coin overflow
-//   ptx = makeTransaction(&handle);
-//   pOutput = ptx->Out.data;
-//   pOutput->Coins = MaxUint64 - 3000000;
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_ERROR);
+    // Output coin overflow
+    ptx = makeTransaction(&handle);
+    pOutput = ptx->Out.data;
+    pOutput->Coins = MaxUint64 - 3000000;
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_ERROR);
 
-//   // Output coins are not multiples of 1e6 (valid, decimal restriction is not
-//   // enforced here)
-//   ptx = makeTransaction(&handle);
-//   pOutput = ptx->Out.data;
-//   pOutput->Coins += 10;
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 0);
-//   cr_assert(result == SKY_OK);
-//   cipher__PubKey pubkey;
-//   result = SKY_cipher_GenerateKeyPair(&pubkey, &seckey);
-//   cr_assert(result == SKY_OK);
-//   seckeys.data = &seckey;
-//   seckeys.len = 1;
-//   seckeys.cap = 1;
-//   result = SKY_coin_Transaction_SignInputs(handle, seckeys);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(pOutput->Coins % 1000000 != 0);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_OK);
+    // Output coins are not multiples of 1e6 (valid, decimal restriction is not
+    // enforced here)
+    ptx = makeTransaction(&handle);
+    pOutput = ptx->Out.data;
+    pOutput->Coins += 10;
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 0);
+    ck_assert(result == SKY_OK);
+    cipher__PubKey pubkey;
+    result = SKY_cipher_GenerateKeyPair(&pubkey, &seckey);
+    ck_assert(result == SKY_OK);
+    seckeys.data = &seckey;
+    seckeys.len = 1;
+    seckeys.cap = 1;
+    result = SKY_coin_Transaction_SignInputs(handle, seckeys);
+    ck_assert(result == SKY_OK);
+    ck_assert(pOutput->Coins % 1000000 != 0);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_OK);
 
-//   // Valid
-//   ptx = makeTransaction(&handle);
-//   pOutput = ptx->Out.data;
-//   pOutput->Coins = 10000000;
-//   pOutput++;
-//   pOutput->Coins = 1000000;
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_Verify(handle);
-//   cr_assert(result == SKY_OK);
-// }
+    // Valid
+    ptx = makeTransaction(&handle);
+    pOutput = ptx->Out.data;
+    pOutput->Coins = 10000000;
+    pOutput++;
+    pOutput->Coins = 1000000;
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert(result == SKY_OK);
+}
+END_TEST
 
-// Test(coin_transaction, TestTransactionPushInput, SKY_ABORT) {
-//   unsigned long long MaxUint64 = 0xFFFFFFFFFFFFFFFF;
-//   unsigned int MaxUint16 = 0xFFFF;
-//   int result;
-//   Transaction__Handle handle;
-//   coin__Transaction *ptx;
-//   coin__UxOut ux;
-//   ptx = makeEmptyTransaction(&handle);
-//   makeUxOut(&ux);
-//   cipher__SHA256 hash;
-//   result = SKY_coin_UxOut_Hash(&ux, &hash);
-//   cr_assert(result == SKY_OK);
-//   GoUint16 r;
-//   result = SKY_coin_Transaction_PushInput(handle, &hash, &r);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(r == 0);
-//   cr_assert(ptx->In.len == 1);
-//   cipher__SHA256 *pIn = ptx->In.data;
-//   cr_assert(eq(u8[sizeof(cipher__SHA256)], hash, *pIn));
+START_TEST(TestTransactionPushInput)
+{
+    unsigned long long MaxUint64 = 0xFFFFFFFFFFFFFFFF;
+    unsigned int MaxUint16 = 0xFFFF;
+    int result;
+    Transaction__Handle handle;
+    coin__Transaction *ptx;
+    coin__UxOut ux;
+    ptx = makeEmptyTransaction(&handle);
+    makeUxOut(&ux);
+    cipher__SHA256 hash;
+    result = SKY_coin_UxOut_Hash(&ux, &hash);
+    ck_assert(result == SKY_OK);
+    GoUint16 r;
+    result = SKY_coin_Transaction_PushInput(handle, &hash, &r);
+    ck_assert(result == SKY_OK);
+    ck_assert(r == 0);
+    ck_assert(ptx->In.len == 1);
+    cipher__SHA256 *pIn = ptx->In.data;
+    ck_assert(isU8Eq(hash, *pIn, sizeof(cipher__SHA256)) == 0);
 
-//   int len = ptx->In.len;
-//   void *data = malloc(len * sizeof(cipher__SHA256));
-//   cr_assert(data != NULL);
-//   registerMemCleanup(data);
-//   memcpy(data, ptx->In.data, len * sizeof(cipher__SHA256));
-//   result = SKY_coin_Transaction_ResetInputs(handle, MaxUint16 + len);
-//   cr_assert(result == SKY_OK);
-//   memcpy(ptx->In.data, data, len * sizeof(cipher__Sig));
-//   freeRegisteredMemCleanup(data);
-//   makeUxOut(&ux);
-//   result = SKY_coin_UxOut_Hash(&ux, &hash);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_PushInput(handle, &hash, &r);
-//   cr_assert(result == SKY_ERROR);
-// }
+    int len = ptx->In.len;
+    void *data = malloc(len * sizeof(cipher__SHA256));
+    ck_assert(data != NULL);
+    registerMemCleanup(data);
+    memcpy(data, ptx->In.data, len * sizeof(cipher__SHA256));
+    result = SKY_coin_Transaction_ResetInputs(handle, MaxUint16 + len);
+    ck_assert(result == SKY_OK);
+    memcpy(ptx->In.data, data, len * sizeof(cipher__Sig));
+    freeRegisteredMemCleanup(data);
+    makeUxOut(&ux);
+    result = SKY_coin_UxOut_Hash(&ux, &hash);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_PushInput(handle, &hash, &r);
+    ck_assert(result == SKY_ERROR);
+    // TODO: SKY_ABORT
+}
+END_TEST
 
-// Test(coin_transaction, TestTransactionPushOutput) {
-//   int result;
-//   Transaction__Handle handle;
-//   coin__Transaction *ptx;
-//   ptx = makeEmptyTransaction(&handle);
+START_TEST(TestTransactionPushOutput)
+{
+    int result;
+    Transaction__Handle handle;
+    coin__Transaction *ptx;
+    ptx = makeEmptyTransaction(&handle);
 
-//   cipher__Address addr;
-//   makeAddress(&addr);
-//   result = SKY_coin_Transaction_PushOutput(handle, &addr, 100, 150);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(ptx->Out.len == 1);
-//   coin__TransactionOutput *pOutput = ptx->Out.data;
-//   coin__TransactionOutput output;
-//   memcpy(&output.Address, &addr, sizeof(cipher__Address));
-//   output.Coins = 100;
-//   output.Hours = 150;
-//   cr_assert(eq(type(coin__TransactionOutput), output, *pOutput));
-//   for (int i = 1; i < 20; i++) {
-//     makeAddress(&addr);
-//     result = SKY_coin_Transaction_PushOutput(handle, &addr, i * 100, i * 50);
-//     cr_assert(result == SKY_OK);
-//     cr_assert(ptx->Out.len == i + 1);
-//     pOutput = ptx->Out.data;
-//     pOutput += i;
-//     memcpy(&output.Address, &addr, sizeof(cipher__Address));
-//     output.Coins = i * 100;
-//     output.Hours = i * 50;
-//     cr_assert(eq(type(coin__TransactionOutput), output, *pOutput));
-//   }
-// }
+    cipher__Address addr;
+    makeAddress(&addr);
+    result = SKY_coin_Transaction_PushOutput(handle, &addr, 100, 150);
+    ck_assert(result == SKY_OK);
+    ck_assert(ptx->Out.len == 1);
+    coin__TransactionOutput *pOutput = ptx->Out.data;
+    coin__TransactionOutput output;
+    memcpy(&output.Address, &addr, sizeof(cipher__Address));
+    output.Coins = 100;
+    output.Hours = 150;
+    ck_assert(isTransactionOutputEq(&output, pOutput) == 0);
+    for (int i = 1; i < 20; i++)
+    {
+        makeAddress(&addr);
+        result = SKY_coin_Transaction_PushOutput(handle, &addr, i * 100, i * 50);
+        ck_assert(result == SKY_OK);
+        ck_assert(ptx->Out.len == i + 1);
+        pOutput = ptx->Out.data;
+        pOutput += i;
+        memcpy(&output.Address, &addr, sizeof(cipher__Address));
+        output.Coins = i * 100;
+        output.Hours = i * 50;
+        ck_assert(isTransactionOutputEq(&output, pOutput) == 0);
+    }
+}
+END_TEST
 
-// Test(coin_transaction, TestTransactionHash) {
-//   int result;
-//   Transaction__Handle handle;
-//   coin__Transaction *ptx;
-//   ptx = makeEmptyTransaction(&handle);
+START_TEST(TestTransactionHash)
+{
+    int result;
+    Transaction__Handle handle;
+    coin__Transaction *ptx;
+    ptx = makeEmptyTransaction(&handle);
 
-//   cipher__SHA256 nullHash, hash1, hash2;
-//   memset(&nullHash, 0, sizeof(cipher__SHA256));
-//   result = SKY_coin_Transaction_Hash(handle, &hash1);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], nullHash, hash1)));
-//   result = SKY_coin_Transaction_HashInner(handle, &hash2);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], hash2, hash1)));
-// }
+    cipher__SHA256 nullHash, hash1, hash2;
+    memset(&nullHash, 0, sizeof(cipher__SHA256));
+    result = SKY_coin_Transaction_Hash(handle, &hash1);
+    ck_assert(result == SKY_OK);
+    ck_assert(isU8Eq(nullHash, hash1, sizeof(cipher__SHA256)) == 1);
+    result = SKY_coin_Transaction_HashInner(handle, &hash2);
+    ck_assert(result == SKY_OK);
+    ck_assert(isU8Eq(hash2, hash1, sizeof(cipher__SHA256)) == 1);
+}
+END_TEST
 
-// Test(coin_transaction, TestTransactionUpdateHeader) {
-//   int result;
-//   Transaction__Handle handle;
-//   coin__Transaction *ptx;
-//   ptx = makeTransaction(&handle);
-//   cipher__SHA256 hash, nullHash, hashInner;
-//   memcpy(&hash, &ptx->InnerHash, sizeof(cipher__SHA256));
-//   memset(&ptx->InnerHash, 0, sizeof(cipher__SHA256));
-//   memset(&nullHash, 0, sizeof(cipher__SHA256));
-//   result = SKY_coin_Transaction_UpdateHeader(handle);
-//   cr_assert(not(eq(u8[sizeof(cipher__SHA256)], ptx->InnerHash, nullHash)));
-//   cr_assert(eq(u8[sizeof(cipher__SHA256)], hash, ptx->InnerHash));
-//   result = SKY_coin_Transaction_HashInner(handle, &hashInner);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(eq(u8[sizeof(cipher__SHA256)], hashInner, ptx->InnerHash));
-// }
+START_TEST(TestTransactionUpdateHeader)
+{
+    int result;
+    Transaction__Handle handle;
+    coin__Transaction *ptx;
+    ptx = makeTransaction(&handle);
+    cipher__SHA256 hash, nullHash, hashInner;
+    memcpy(&hash, &ptx->InnerHash, sizeof(cipher__SHA256));
+    memset(&ptx->InnerHash, 0, sizeof(cipher__SHA256));
+    memset(&nullHash, 0, sizeof(cipher__SHA256));
+    result = SKY_coin_Transaction_UpdateHeader(handle);
+    ck_assert(isU8Eq(ptx->InnerHash, nullHash, sizeof(cipher__SHA256)) == 1);
+    ck_assert(isU8Eq(ptx->InnerHash, hash, sizeof(cipher__SHA256)) == 0);
+    result = SKY_coin_Transaction_HashInner(handle, &hashInner);
+    ck_assert(result == SKY_OK);
+    ck_assert(isU8Eq(hashInner, ptx->InnerHash, sizeof(cipher__SHA256)) == 0);
+}
+END_TEST
 
-// Test(coin_transaction, TestTransactionsSize) {
-//   int result;
-//   Transactions__Handle txns;
-//   result = makeTransactions(10, &txns);
-//   cr_assert(result == SKY_OK);
-//   GoInt size = 0;
-//   for (size_t i = 0; i < 10; i++) {
-//     Transaction__Handle handle;
-//     result = SKY_coin_Transactions_GetAt(txns, i, &handle);
-//     registerHandleClose(handle);
-//     cr_assert(result == SKY_OK);
-//     GoSlice p1 = {NULL, 0, 0};
-//     result = SKY_coin_Transaction_Serialize(handle, (GoSlice_ *)&p1);
-//     cr_assert(result == SKY_OK, "SKY_coin_Transaction_Serialize");
-//     size += p1.len;
-//     cr_assert(result == SKY_OK, "SKY_coin_Transaction_Size");
-//   }
-//   GoUint32 sizeTransactions;
-//   result = SKY_coin_Transactions_Size(txns, &sizeTransactions);
-//   cr_assert(size != 0);
-//   cr_assert(sizeTransactions == size);
-// }
+START_TEST(TestTransactionsSize)
+{
+    int result;
+    Transactions__Handle txns;
+    result = makeTransactions(10, &txns);
+    ck_assert(result == SKY_OK);
+    GoInt size = 0;
+    for (size_t i = 0; i < 10; i++)
+    {
+        Transaction__Handle handle;
+        result = SKY_coin_Transactions_GetAt(txns, i, &handle);
+        registerHandleClose(handle);
+        ck_assert(result == SKY_OK);
+        GoSlice p1 = {NULL, 0, 0};
+        result = SKY_coin_Transaction_Serialize(handle, (GoSlice_ *)&p1);
+        ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_Serialize");
+        size += p1.len;
+        ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_Size");
+    }
+    GoUint32 sizeTransactions;
+    result = SKY_coin_Transactions_Size(txns, &sizeTransactions);
+    ck_assert(size != 0);
+    ck_assert(sizeTransactions == size);
+}
+END_TEST
 
-// Test(coin_transactions, TestTransactionVerifyInput, SKY_ABORT) {
-//   int result;
-//   Transaction__Handle handle;
-//   coin__Transaction *ptx;
-//   ptx = makeTransaction(&handle);
-//   result = SKY_coin_Transaction_VerifyInput(handle, NULL);
-//   cr_assert(result == SKY_ERROR);
-//   coin__UxArray ux;
-//   memset(&ux, 0, sizeof(coin__UxArray));
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_ERROR);
-//   memset(&ux, 0, sizeof(coin__UxArray));
-//   ux.data = malloc(3 * sizeof(coin__UxOut));
-//   cr_assert(ux.data != NULL);
-//   registerMemCleanup(ux.data);
-//   ux.len = 3;
-//   ux.cap = 3;
-//   memset(ux.data, 0, 3 * sizeof(coin__UxOut));
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_ERROR);
+START_TEST(TestTransactionVerifyInput)
+{
+    //TODO: SKY_ABORT
+    int result;
+    Transaction__Handle handle;
+    coin__Transaction *ptx;
+    ptx = makeTransaction(&handle);
+    result = SKY_coin_Transaction_VerifyInput(handle, NULL);
+    ck_assert(result == SKY_ERROR);
+    coin__UxArray ux;
+    memset(&ux, 0, sizeof(coin__UxArray));
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_ERROR);
+    memset(&ux, 0, sizeof(coin__UxArray));
+    ux.data = malloc(3 * sizeof(coin__UxOut));
+    ck_assert(ux.data != NULL);
+    registerMemCleanup(ux.data);
+    ux.len = 3;
+    ux.cap = 3;
+    memset(ux.data, 0, 3 * sizeof(coin__UxOut));
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_ERROR);
 
-//   coin__UxOut uxOut;
-//   cipher__SecKey seckey;
-//   cipher__Sig sig;
-//   cipher__SHA256 hash;
+    coin__UxOut uxOut;
+    cipher__SecKey seckey;
+    cipher__Sig sig;
+    cipher__SHA256 hash;
 
-//   result = makeUxOutWithSecret(&uxOut, &seckey);
-//   cr_assert(result == SKY_OK);
-//   ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 0);
-//   cr_assert(result == SKY_OK);
-//   ux.data = &uxOut;
-//   ux.len = 1;
-//   ux.cap = 1;
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_ERROR);
+    result = makeUxOutWithSecret(&uxOut, &seckey);
+    ck_assert(result == SKY_OK);
+    ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 0);
+    ck_assert(result == SKY_OK);
+    ux.data = &uxOut;
+    ux.len = 1;
+    ux.cap = 1;
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_ERROR);
 
-//   memset(&sig, 0, sizeof(cipher__Sig));
-//   result = makeUxOutWithSecret(&uxOut, &seckey);
-//   cr_assert(result == SKY_OK);
-//   ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 1);
-//   cr_assert(result == SKY_OK);
-//   memcpy(ptx->Sigs.data, &sig, sizeof(cipher__Sig));
-//   ux.data = &uxOut;
-//   ux.len = 1;
-//   ux.cap = 1;
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_ERROR);
+    memset(&sig, 0, sizeof(cipher__Sig));
+    result = makeUxOutWithSecret(&uxOut, &seckey);
+    ck_assert(result == SKY_OK);
+    ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 1);
+    ck_assert(result == SKY_OK);
+    memcpy(ptx->Sigs.data, &sig, sizeof(cipher__Sig));
+    ux.data = &uxOut;
+    ux.len = 1;
+    ux.cap = 1;
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_ERROR);
 
-//   // Invalid Tx Inner Hash
-//   result = makeUxOutWithSecret(&uxOut, &seckey);
-//   cr_assert(result == SKY_OK);
-//   ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
-//   cr_assert(result == SKY_OK);
-//   memset(ptx->InnerHash, 0, sizeof(cipher__SHA256));
-//   ux.data = &uxOut;
-//   ux.len = 1;
-//   ux.cap = 1;
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_ERROR);
+    // Invalid Tx Inner Hash
+    result = makeUxOutWithSecret(&uxOut, &seckey);
+    ck_assert(result == SKY_OK);
+    ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
+    ck_assert(result == SKY_OK);
+    memset(ptx->InnerHash, 0, sizeof(cipher__SHA256));
+    ux.data = &uxOut;
+    ux.len = 1;
+    ux.cap = 1;
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_ERROR);
 
-//   // Ux hash mismatch
-//   result = makeUxOutWithSecret(&uxOut, &seckey);
-//   cr_assert(result == SKY_OK);
-//   ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
-//   cr_assert(result == SKY_OK);
-//   memset(&uxOut, 0, sizeof(coin__UxOut));
-//   ux.data = &uxOut;
-//   ux.len = 1;
-//   ux.cap = 1;
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_ERROR);
+    // Ux hash mismatch
+    result = makeUxOutWithSecret(&uxOut, &seckey);
+    ck_assert(result == SKY_OK);
+    ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
+    ck_assert(result == SKY_OK);
+    memset(&uxOut, 0, sizeof(coin__UxOut));
+    ux.data = &uxOut;
+    ux.len = 1;
+    ux.cap = 1;
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_ERROR);
 
-//   // Invalid signature
-//   result = makeUxOutWithSecret(&uxOut, &seckey);
-//   cr_assert(result == SKY_OK);
-//   ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 1);
-//   cr_assert(result == SKY_OK);
-//   memset(ptx->Sigs.data, 0, sizeof(cipher__Sig));
-//   ux.data = &uxOut;
-//   ux.len = 1;
-//   ux.cap = 1;
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_ERROR);
+    // Invalid signature
+    result = makeUxOutWithSecret(&uxOut, &seckey);
+    ck_assert(result == SKY_OK);
+    ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 1);
+    ck_assert(result == SKY_OK);
+    memset(ptx->Sigs.data, 0, sizeof(cipher__Sig));
+    ux.data = &uxOut;
+    ux.len = 1;
+    ux.cap = 1;
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_ERROR);
 
-//   // Valid
-//   result = makeUxOutWithSecret(&uxOut, &seckey);
-//   cr_assert(result == SKY_OK);
-//   ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
-//   cr_assert(result == SKY_OK);
-//   ux.data = &uxOut;
-//   ux.len = 1;
-//   ux.cap = 1;
-//   result = SKY_coin_Transaction_VerifyInput(handle, &ux);
-//   cr_assert(result == SKY_OK);
-// }
+    // Valid
+    result = makeUxOutWithSecret(&uxOut, &seckey);
+    ck_assert(result == SKY_OK);
+    ptx = makeTransactionFromUxOut(&uxOut, &seckey, &handle);
+    ck_assert(result == SKY_OK);
+    ux.data = &uxOut;
+    ux.len = 1;
+    ux.cap = 1;
+    result = SKY_coin_Transaction_VerifyInput(handle, &ux);
+    ck_assert(result == SKY_OK);
+}
+END_TEST
 
-// Test(coin_transactions, TestTransactionSignInputs, SKY_ABORT) {
-//   int result;
-//   coin__Transaction *ptx;
-//   Transaction__Handle handle;
-//   coin__UxOut ux, ux2;
-//   cipher__SecKey seckey, seckey2;
-//   cipher__SHA256 hash, hash2;
-//   cipher__Address addr, addr2;
-//   cipher__PubKey pubkey;
-//   GoUint16 r;
-//   GoSlice keys;
+START_TEST(TestTransactionSignInputs)
+{
+    //TODO: SKY_ABORT
+    int result;
+    coin__Transaction *ptx;
+    Transaction__Handle handle;
+    coin__UxOut ux, ux2;
+    cipher__SecKey seckey, seckey2;
+    cipher__SHA256 hash, hash2;
+    cipher__Address addr, addr2;
+    cipher__PubKey pubkey;
+    GoUint16 r;
+    GoSlice keys;
 
-//   // Error if txns already signed
-//   ptx = makeEmptyTransaction(&handle);
-//   result = SKY_coin_Transaction_ResetSignatures(handle, 1);
-//   cr_assert(result == SKY_OK);
+    // Error if txns already signed
+    ptx = makeEmptyTransaction(&handle);
+    result = SKY_coin_Transaction_ResetSignatures(handle, 1);
+    ck_assert(result == SKY_OK);
 
-//   memset(&seckey, 0, sizeof(cipher__SecKey));
-//   keys.data = &seckey;
-//   keys.len = 1;
-//   keys.cap = 1;
-//   result = SKY_coin_Transaction_SignInputs(handle, keys);
-//   cr_assert(result == SKY_ERROR);
+    memset(&seckey, 0, sizeof(cipher__SecKey));
+    keys.data = &seckey;
+    keys.len = 1;
+    keys.cap = 1;
+    result = SKY_coin_Transaction_SignInputs(handle, keys);
+    ck_assert(result == SKY_ERROR);
 
-//   // Panics if not enough keys
-//   ptx = makeEmptyTransaction(&handle);
-//   memset(&seckey, 0, sizeof(cipher__SecKey));
-//   memset(&seckey2, 0, sizeof(cipher__SecKey));
-//   result = makeUxOutWithSecret(&ux, &seckey);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_UxOut_Hash(&ux, &hash);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_PushInput(handle, &hash, &r);
-//   cr_assert(result == SKY_OK);
-//   result = makeUxOutWithSecret(&ux2, &seckey2);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_UxOut_Hash(&ux2, &hash2);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_coin_Transaction_PushInput(handle, &hash2, &r);
-//   cr_assert(result == SKY_OK);
-//   makeAddress(&addr);
-//   result = SKY_coin_Transaction_PushOutput(handle, &addr, 40, 80);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(ptx->Sigs.len == 0);
-//   keys.data = &seckey;
-//   keys.len = 1;
-//   keys.cap = 1;
-//   result = SKY_coin_Transaction_SignInputs(handle, keys);
-//   cr_assert(result == SKY_ERROR);
-//   cr_assert(ptx->Sigs.len == 0);
+    // Panics if not enough keys
+    ptx = makeEmptyTransaction(&handle);
+    memset(&seckey, 0, sizeof(cipher__SecKey));
+    memset(&seckey2, 0, sizeof(cipher__SecKey));
+    result = makeUxOutWithSecret(&ux, &seckey);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_UxOut_Hash(&ux, &hash);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_PushInput(handle, &hash, &r);
+    ck_assert(result == SKY_OK);
+    result = makeUxOutWithSecret(&ux2, &seckey2);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_UxOut_Hash(&ux2, &hash2);
+    ck_assert(result == SKY_OK);
+    result = SKY_coin_Transaction_PushInput(handle, &hash2, &r);
+    ck_assert(result == SKY_OK);
+    makeAddress(&addr);
+    result = SKY_coin_Transaction_PushOutput(handle, &addr, 40, 80);
+    ck_assert(result == SKY_OK);
+    ck_assert(ptx->Sigs.len == 0);
+    keys.data = &seckey;
+    keys.len = 1;
+    keys.cap = 1;
+    result = SKY_coin_Transaction_SignInputs(handle, keys);
+    ck_assert(result == SKY_ERROR);
+    ck_assert(ptx->Sigs.len == 0);
 
-//   // Valid signing
-//   result = SKY_coin_Transaction_HashInner(handle, &hash);
-//   cr_assert(result == SKY_OK);
-//   keys.data = malloc(2 * sizeof(cipher__SecKey));
-//   cr_assert(keys.data != NULL);
-//   registerMemCleanup(keys.data);
-//   keys.len = keys.cap = 2;
-//   memcpy(keys.data, &seckey, sizeof(cipher__SecKey));
-//   memcpy(((cipher__SecKey *)keys.data) + 1, &seckey2, sizeof(cipher__SecKey));
-//   result = SKY_coin_Transaction_SignInputs(handle, keys);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(ptx->Sigs.len == 2);
-//   result = SKY_coin_Transaction_HashInner(handle, &hash2);
-//   cr_assert(result == SKY_OK);
-//   cr_assert(eq(u8[sizeof(cipher__SHA256)], hash, hash2));
+    // Valid signing
+    result = SKY_coin_Transaction_HashInner(handle, &hash);
+    ck_assert(result == SKY_OK);
+    keys.data = malloc(2 * sizeof(cipher__SecKey));
+    ck_assert(keys.data != NULL);
+    registerMemCleanup(keys.data);
+    keys.len = keys.cap = 2;
+    memcpy(keys.data, &seckey, sizeof(cipher__SecKey));
+    memcpy(((cipher__SecKey *)keys.data) + 1, &seckey2, sizeof(cipher__SecKey));
+    result = SKY_coin_Transaction_SignInputs(handle, keys);
+    ck_assert(result == SKY_OK);
+    ck_assert(ptx->Sigs.len == 2);
+    result = SKY_coin_Transaction_HashInner(handle, &hash2);
+    ck_assert(result == SKY_OK);
+    ck_assert(isU8Eq(hash2, hash, sizeof(cipher__SHA256)) == 0);
 
-//   result = SKY_cipher_PubKeyFromSecKey(&seckey, &pubkey);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_cipher_AddressFromPubKey(&pubkey, &addr);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_cipher_PubKeyFromSecKey(&seckey2, &pubkey);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_cipher_AddressFromPubKey(&pubkey, &addr2);
-//   cr_assert(result == SKY_OK);
+    result = SKY_cipher_PubKeyFromSecKey(&seckey, &pubkey);
+    ck_assert(result == SKY_OK);
+    result = SKY_cipher_AddressFromPubKey(&pubkey, &addr);
+    ck_assert(result == SKY_OK);
+    result = SKY_cipher_PubKeyFromSecKey(&seckey2, &pubkey);
+    ck_assert(result == SKY_OK);
+    result = SKY_cipher_AddressFromPubKey(&pubkey, &addr2);
+    ck_assert(result == SKY_OK);
 
-//   cipher__SHA256 addHash, addHash2;
-//   result = SKY_cipher_AddSHA256(&hash, (cipher__SHA256 *)ptx->In.data, &addHash);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_cipher_AddSHA256(&hash, ((cipher__SHA256 *)ptx->In.data) + 1, &addHash2);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_cipher_VerifyAddressSignedHash(&addr, (cipher__Sig *)ptx->Sigs.data, &addHash);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_cipher_VerifyAddressSignedHash(&addr2, ((cipher__Sig *)ptx->Sigs.data) + 1, &addHash2);
-//   cr_assert(result == SKY_OK);
-//   result = SKY_cipher_VerifyAddressSignedHash(&addr, ((cipher__Sig *)ptx->Sigs.data) + 1, &hash);
-//   cr_assert(result == SKY_ERROR);
-//   result = SKY_cipher_VerifyAddressSignedHash(&addr2, (cipher__Sig *)ptx->Sigs.data, &hash);
-//   cr_assert(result == SKY_ERROR);
-// }
+    cipher__SHA256 addHash, addHash2;
+    result = SKY_cipher_AddSHA256(&hash, (cipher__SHA256 *)ptx->In.data, &addHash);
+    ck_assert(result == SKY_OK);
+    result = SKY_cipher_AddSHA256(&hash, ((cipher__SHA256 *)ptx->In.data) + 1, &addHash2);
+    ck_assert(result == SKY_OK);
+    result = SKY_cipher_VerifyAddressSignedHash(&addr, (cipher__Sig *)ptx->Sigs.data, &addHash);
+    ck_assert(result == SKY_OK);
+    result = SKY_cipher_VerifyAddressSignedHash(&addr2, ((cipher__Sig *)ptx->Sigs.data) + 1, &addHash2);
+    ck_assert(result == SKY_OK);
+    result = SKY_cipher_VerifyAddressSignedHash(&addr, ((cipher__Sig *)ptx->Sigs.data) + 1, &hash);
+    ck_assert(result == SKY_ERROR);
+    result = SKY_cipher_VerifyAddressSignedHash(&addr2, (cipher__Sig *)ptx->Sigs.data, &hash);
+    ck_assert(result == SKY_ERROR);
+}
+END_TEST
 
 // Test(coin_transactions, TestTransactionHashInner) {
 //   int result;
@@ -1030,4 +1052,21 @@
 //   int expec4[] = {0, 1};
 //   FeeCalculator f4 = {feeCalculator4, &thirdHash};
 //   testTransactionSorting(transactionsHandle, index4, 3, expec4, 2, &f4, "failed fee calc is filtered");
-// }
+
+Suite *coin_transaction(void)
+{
+    Suite *s = suite_create("Load Coin.Transactions");
+    TCase *tc;
+
+    tc = tcase_create("coin.transaction");
+    tcase_add_test(tc, TestTransactionVerify);
+    tcase_add_test(tc, TestTransactionPushOutput);
+    tcase_add_test(tc, TestTransactionHash);
+    tcase_add_test(tc, TestTransactionUpdateHeader);
+    tcase_add_test(tc, TestTransactionsSize);
+    tcase_add_test_raise_signal(tc, TestTransactionPushInput, SIGABRT);
+    tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SIGABRT);
+    suite_add_tcase(s, tc);
+    tcase_set_timeout(tc, 150);
+    return s;
+}

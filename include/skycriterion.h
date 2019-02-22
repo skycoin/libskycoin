@@ -40,7 +40,7 @@ extern int cr_user_coin__BlockBody_eq(coin__BlockBody *b1, coin__BlockBody *b2);
 extern int cr_user_coin__BlockBody_noteq(coin__BlockBody *b1, coin__BlockBody *b2);
 extern char *cr_user_coin__BlockBody_tostr(coin__BlockBody *b);
 
-extern int cr_user_coin__UxOut_eq(coin__UxOut *x1, coin__UxOut *x2);
+extern int isUxOutEq(coin__UxOut *x1, coin__UxOut *x2);
 extern int cr_user_coin__UxOut_noteq(coin__UxOut *x1, coin__UxOut *x2);
 extern char *cr_user_coin__UxOut_tostr(coin__UxOut *x1);
 
@@ -56,7 +56,7 @@ extern int isTransactionsEq(coin__Transactions *x1, coin__Transactions *x2);
 extern int cr_user_coin__Transactions_noteq(coin__Transactions *x1, coin__Transactions *x2);
 extern char *cr_user_coin__Transactions_tostr(coin__Transactions *x1);
 
-extern int cr_user_coin__TransactionOutput_eq(coin__TransactionOutput *x1, coin__TransactionOutput *x2);
+extern int isTransactionOutputEq(coin__TransactionOutput *x1, coin__TransactionOutput *x2);
 extern int cr_user_coin__TransactionOutput_noteq(coin__TransactionOutput *x1, coin__TransactionOutput *x2);
 extern char *cr_user_coin__TransactionOutput_tostr(coin__TransactionOutput *x1);
 

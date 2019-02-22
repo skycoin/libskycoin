@@ -250,7 +250,7 @@ END_TEST
 // define test suite and cases
 Suite *cipher_address(void)
 {
-  Suite *s = suite_create("LibSkycoin");
+  Suite *s = suite_create("Load cipher.address");
   TCase *tc;
 
   tc = tcase_create("cipher.address");

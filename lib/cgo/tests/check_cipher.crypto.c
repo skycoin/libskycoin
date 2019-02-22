@@ -858,7 +858,7 @@ END_TEST
 
 Suite *cipher_crypto(void)
 {
-  Suite *s = suite_create("");
+  Suite *s = suite_create("Load cipher.crypto");
   TCase *tc;
 
   tc = tcase_create("cipher.crypto");

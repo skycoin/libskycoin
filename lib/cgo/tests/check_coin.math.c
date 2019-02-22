@@ -65,7 +65,7 @@ START_TEST(TestUint64ToInt64)
 
 Suite *coin_math(void)
 {
-    Suite *s = suite_create("");
+    Suite *s = suite_create("Load coin.math");
     TCase *tc;
 
     tc = tcase_create("coin.math");

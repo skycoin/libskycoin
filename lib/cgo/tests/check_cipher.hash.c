@@ -377,7 +377,7 @@ END_TEST
 
 Suite *cipher_hash(void)
 {
-    Suite *s = suite_create("");
+    Suite *s = suite_create("Load cipher.hash");
     TCase *tc;
 
     tc = tcase_create("cipher.hash");

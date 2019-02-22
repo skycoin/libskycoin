@@ -158,7 +158,7 @@ END_TEST
 // define test suite and cases
 Suite *cipher_bitcoin(void)
 {
-  Suite *s = suite_create("");
+  Suite *s = suite_create("Load cipher.bitcoin");
   TCase *tc;
 
   tc = tcase_create("cipher.bitcoin");

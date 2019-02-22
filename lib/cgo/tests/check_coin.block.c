@@ -326,7 +326,7 @@ END_TEST
 
 Suite *coin_blocks(void)
 {
-    Suite *s = suite_create("");
+    Suite *s = suite_create("Load coin.block");
     TCase *tc;
 
     tc = tcase_create("coin.block");

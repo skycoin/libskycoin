@@ -98,7 +98,7 @@ START_TEST(TestCrypto2)
 END_TEST
 Suite *coin_coin(void)
 {
-    Suite *s = suite_create("");
+    Suite *s = suite_create("Load coin.coin");
     TCase *tc;
 
     tc = tcase_create("coin.coin");
