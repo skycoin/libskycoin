@@ -30,6 +30,7 @@ install:
   - go get github.com/gz-c/gox
   - go get -t ./...
   - make install-linters
+  - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
   # - make install-deps-libc
 

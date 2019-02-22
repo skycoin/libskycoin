@@ -1064,8 +1064,19 @@ Suite *coin_transaction(void)
     tcase_add_test(tc, TestTransactionHash);
     tcase_add_test(tc, TestTransactionUpdateHeader);
     tcase_add_test(tc, TestTransactionsSize);
-    tcase_add_test_raise_signal(tc, TestTransactionPushInput, SIGABRT);
-    tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SIGABRT);
+    suite_add_tcase(s, tc);
+    tcase_set_timeout(tc, 150);
+    return s;
+}
+
+Suite *coin_transaction_fork(void)
+{
+    Suite *s = suite_create("Load Coin.Transactions FORK");
+    TCase *tc;
+
+    tc = tcase_create("coin.transaction_fork");
+    tcase_add_test_raise_signal(tc, TestTransactionPushInput, SKY_ABORT);
+    tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SKY_ABORT);
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 150);
     return s;

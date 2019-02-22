@@ -22,5 +22,6 @@ Suite *coin_coin(void);
 Suite *coin_math(void);
 Suite *coin_output(void);
 Suite *coin_transaction(void);
+Suite *coin_transaction_fork(void);
 
 #endif
