@@ -160,3 +160,5 @@ addresses.txt
 seeds.csv
 
 histogram
+# Ignore compilator by qemu
+qemu_*
