@@ -12,10 +12,10 @@ This API is generated from [OpenAPI v3](https://github.com/OAI/OpenAPI-Specifica
 
 ## Source code generation
 
-In order to generate liskycoin-curl from swagger spec, install `swagger2openapi` as follows
+In order to generate liskycoin-curl from swagger spec, install deps as follows
 
 ``` sh
-    $ npm install swagger2openapi -g
+    $ make install-deps-swagger
 ```
 
 To Generate a Client from swagger spec, just type:
