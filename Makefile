@@ -164,7 +164,7 @@ install-deps-libc: configure-build ## Install locally dependencies for testing l
 
 install-deps-swagger: ## Install swagger
 	go get -u github.com/go-swagger/go-swagger/cmd/swagger
-	@npm install openapi-generator -g
+	@npm install @openapitools/openapi-generator-cli@cli-3.3.4 -g
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
