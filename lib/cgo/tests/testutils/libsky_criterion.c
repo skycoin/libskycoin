@@ -3,7 +3,7 @@
 #include "skycriterion.h"
 #include "skystring.h"
 
-int equalSlices(GoSlice_ *slice1, GoSlice_ *slice2, int elem_size)
+int equalSlices(GoSlice *slice1, GoSlice *slice2, int elem_size)
 {
   if (slice1->len != slice2->len)
     return 0;

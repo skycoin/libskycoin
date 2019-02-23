@@ -151,7 +151,7 @@ START_TEST(TestBitcoinWIF)
     bitcoinAddrStr.p = tmp_bitcoinAddrStr.p;
     bitcoinAddrStr.n = tmp_bitcoinAddrStr.n;
     registerMemCleanup((void *)bitcoinAddrStr.p);
-    ck_assert(isGoStringEq(&addr[i], &buff_bitcoinAddrStr) == 0);
+    ck_assert(isU8Eq(addr[i].p, buff_bitcoinAddrStr, strlen(addr[i].p)) == 0);
   }
 }
 END_TEST
