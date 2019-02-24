@@ -11,8 +11,6 @@
 #include "inline_response_200_5.h"
 #include "inline_response_200_6.h"
 #include "inline_response_200_7.h"
-#include "inline_response_200_8.h"
-#include "inline_response_200_9.h"
 #include "inline_response_default.h"
 #include "object.h"
 
@@ -52,13 +50,6 @@ DefaultAPI_block(apiClient_t *apiClient,char* hash ,int seq );
 
 
 
-// Returns a block by hash or seq. Note: only one of hash or seq is allowed With verbose.
-//
-object_t*
-DefaultAPI_blockVerbose(apiClient_t *apiClient,char* hash ,int seq );
-
-
-
 // Returns the blockchain metadata.
 //
 object_t*
@@ -84,28 +75,10 @@ DefaultAPI_blocksGet(apiClient_t *apiClient,int start ,int end ,list_t* seqs );
 
 // blocksHandler returns blocks between a start and end point,
 //
-// or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. With verbose.
-//
-object_t*
-DefaultAPI_blocksGetVerbose(apiClient_t *apiClient,int start ,int end ,list_t* seqs );
-
-
-
-// blocksHandler returns blocks between a start and end point,
-//
 // or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. Without verbose
 //
 object_t*
 DefaultAPI_blocksPost(apiClient_t *apiClient,int start ,int end ,list_t* seqs );
-
-
-
-// blocksHandler returns blocks between a start and end point,
-//
-// or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. This is whit verbose
-//
-object_t*
-DefaultAPI_blocksPostVerbose(apiClient_t *apiClient,int start ,int end ,list_t* seqs );
 
 
 
@@ -148,13 +121,6 @@ DefaultAPI_health(apiClient_t *apiClient);
 //
 object_t*
 DefaultAPI_lastBlocks(apiClient_t *apiClient,int num );
-
-
-
-// Returns the most recent N blocks on the blockchain With verbose.
-//
-object_t*
-DefaultAPI_lastBlocksVerbose(apiClient_t *apiClient,int num );
 
 
 
@@ -214,13 +180,6 @@ DefaultAPI_pendingTxs(apiClient_t *apiClient);
 
 
 
-// Returns pending (unconfirmed) transactions with verbose
-//
-list_t*
-DefaultAPI_pendingTxsVerbose(apiClient_t *apiClient);
-
-
-
 // Broadcasts all unconfirmed transactions from the unconfirmed transaction pool
 //
 void
@@ -242,13 +201,6 @@ DefaultAPI_transaction(apiClient_t *apiClient,char* txid ,int encoded );
 
 
 
-// Returns a transaction identified by its txid hash encoded
-//
-object_t*
-DefaultAPI_transactionEncoded(apiClient_t *apiClient,char* txid );
-
-
-
 // Broadcast a hex-encoded, serialized transaction to the network.
 //
 object_t*
@@ -260,13 +212,6 @@ DefaultAPI_transactionInject(apiClient_t *apiClient,char* rawtx );
 //
 object_t*
 DefaultAPI_transactionRaw(apiClient_t *apiClient,char* txid );
-
-
-
-// Returns a transaction identified by its txid hash with Verbose
-//
-object_t*
-DefaultAPI_transactionVerbose(apiClient_t *apiClient,char* txid ,int encoded );
 
 
 
@@ -291,20 +236,6 @@ DefaultAPI_transactionsPost(apiClient_t *apiClient,char* addrs ,char* confirmed 
 
 
 
-// Returns transactions that match the filters with verbose.
-//
-list_t*
-DefaultAPI_transactionsVerboseGet(apiClient_t *apiClient,char* addrs ,char* confirmed );
-
-
-
-// Returns transactions that match the filters with verbose.
-//
-list_t*
-DefaultAPI_transactionsVerbosePost(apiClient_t *apiClient,char* addrs ,char* confirmed );
-
-
-
 // Returns an unspent output by ID.
 //
 object_t*
@@ -314,7 +245,7 @@ DefaultAPI_uxout(apiClient_t *apiClient,char* uxid );
 
 // Verifies a Skycoin address.
 //
-inline_response_200_9_t*
+inline_response_200_7_t*
 DefaultAPI_verifyAddress(apiClient_t *apiClient,char* address );
 
 
@@ -363,7 +294,7 @@ DefaultAPI_walletEncrypt(apiClient_t *apiClient,char* id ,char* password );
 
 // Returns the wallet directory path
 //
-inline_response_200_8_t*
+inline_response_200_6_t*
 DefaultAPI_walletFolder(apiClient_t *apiClient,char* addr );
 
 
@@ -421,13 +352,6 @@ DefaultAPI_walletTransaction(apiClient_t *apiClient,inline_object_t* inline_obje
 //
 object_t*
 DefaultAPI_walletTransactions(apiClient_t *apiClient,char* id );
-
-
-
-// Returns returns all unconfirmed transactions for all addresses in a given wallet verbose
-//
-object_t*
-DefaultAPI_walletTransactionsVerbose(apiClient_t *apiClient,char* id );
 
 
 

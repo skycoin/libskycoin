@@ -9,22 +9,21 @@
 
 #include <string.h>
 #include "cJSON.h"
-#include "apiv1wallets_entries.h"
-#include "apiv1wallets_meta.h"
-#include "list.h"
+#include "inline_response_200_7_data.h"
+#include "object.h"
 
 
 
 
 typedef struct inline_response_200_7_t {
-        list_t *entries; //nonprimitive container
-        apiv1wallets_meta_t *meta; //nonprimitive
+        inline_response_200_7_data_t *data; //nonprimitive
+        object_t *error; //nonprimitive
 
 } inline_response_200_7_t;
 
 inline_response_200_7_t *inline_response_200_7_create(
-        list_t *entries,
-        apiv1wallets_meta_t *meta
+        inline_response_200_7_data_t *data,
+        object_t *error
 );
 
 void inline_response_200_7_free(inline_response_200_7_t *inline_response_200_7);

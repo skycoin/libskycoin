@@ -9,29 +9,22 @@
 
 #include <string.h>
 #include "cJSON.h"
-#include "apiv1pending_txsverbose_transaction.h"
+#include "apiv1wallets_entries.h"
+#include "apiv1wallets_meta.h"
+#include "list.h"
 
-typedef int bool;
-#define true 1
-#define false 0
 
 
 
 typedef struct inline_response_200_5_t {
-        char *announced; //no enum string
-        bool is_valid; //boolean
-        char *checked; //no enum string
-        char *received; //no enum string
-        apiv1pending_txsverbose_transaction_t *transaction; //nonprimitive
+        list_t *entries; //nonprimitive container
+        apiv1wallets_meta_t *meta; //nonprimitive
 
 } inline_response_200_5_t;
 
 inline_response_200_5_t *inline_response_200_5_create(
-        char *announced,
-        bool is_valid,
-        char *checked,
-        char *received,
-        apiv1pending_txsverbose_transaction_t *transaction
+        list_t *entries,
+        apiv1wallets_meta_t *meta
 );
 
 void inline_response_200_5_free(inline_response_200_5_t *inline_response_200_5);

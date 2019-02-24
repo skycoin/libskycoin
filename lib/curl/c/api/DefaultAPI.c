@@ -13,8 +13,6 @@
 #include "inline_response_200_5.h"
 #include "inline_response_200_6.h"
 #include "inline_response_200_7.h"
-#include "inline_response_200_8.h"
-#include "inline_response_200_9.h"
 #include "inline_response_default.h"
 #include "object.h"
 
@@ -381,90 +379,6 @@ end:
 
 }
 
-// Returns a block by hash or seq. Note: only one of hash or seq is allowed With verbose.
-//
-object_t*
-DefaultAPI_blockVerbose(apiClient_t *apiClient, char* hash, int seq) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/block/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/block/verbose");
-
-
-    // query parameters
-    char *keyQuery_hash;
-    char *valueQuery_hash;
-    keyValuePair_t *keyPairQuery_hash = 0;
-    if (hash)
-    {
-    //string
-    keyQuery_hash = strdup("hash");
-    valueQuery_hash = strdup(hash);
-    keyPairQuery_hash = keyValuePair_create(keyQuery_hash, valueQuery_hash);
-    list_addElement(localVarQueryParameters,keyPairQuery_hash);
-    }
-
-    // query parameters
-    char *keyQuery_seq;
-    int valueQuery_seq;
-    keyValuePair_t *keyPairQuery_seq = 0;
-    if (seq)
-    {
-    //not string
-    keyQuery_seq = strdup("seq");
-    valueQuery_seq = seq;
-    keyPairQuery_seq = keyValuePair_create(keyQuery_seq, &valueQuery_seq);
-    list_addElement(localVarQueryParameters,keyPairQuery_seq);
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","BlockVerbose represents a readable block with verbose data.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    //nonprimitive not container
-    object_t *elementToReturn = object_parseFromJSON(apiClient->dataReceived);
-    if(elementToReturn == NULL) {
-        // return 0;
-    }
-
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_hash);
-    free(valueQuery_hash);
-    keyValuePair_free(keyPairQuery_hash);
-    free(keyQuery_seq);
-    keyValuePair_free(keyPairQuery_seq);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
 // Returns the blockchain metadata.
 //
 object_t*
@@ -665,98 +579,6 @@ end:
 
 // blocksHandler returns blocks between a start and end point,
 //
-// or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. With verbose.
-//
-object_t*
-DefaultAPI_blocksGetVerbose(apiClient_t *apiClient, int start, int end, list_t* seqs) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/blocks/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/blocks/verbose");
-
-
-    // query parameters
-    char *keyQuery_start;
-    int valueQuery_start;
-    keyValuePair_t *keyPairQuery_start = 0;
-    if (start)
-    {
-    //not string
-    keyQuery_start = strdup("start");
-    valueQuery_start = start;
-    keyPairQuery_start = keyValuePair_create(keyQuery_start, &valueQuery_start);
-    list_addElement(localVarQueryParameters,keyPairQuery_start);
-    }
-
-    // query parameters
-    char *keyQuery_end;
-    int valueQuery_end;
-    keyValuePair_t *keyPairQuery_end = 0;
-    if (end)
-    {
-    //not string
-    keyQuery_end = strdup("end");
-    valueQuery_end = end;
-    keyPairQuery_end = keyValuePair_create(keyQuery_end, &valueQuery_end);
-    list_addElement(localVarQueryParameters,keyPairQuery_end);
-    }
-
-    // query parameters
-    if (seqs)
-    {
-    //listContainer
-    localVarQueryParameters = seqs;
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns blocks between a start and end point.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    //nonprimitive not container
-    object_t *elementToReturn = object_parseFromJSON(apiClient->dataReceived);
-    if(elementToReturn == NULL) {
-        // return 0;
-    }
-
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_start);
-    keyValuePair_free(keyPairQuery_start);
-    free(keyQuery_end);
-    keyValuePair_free(keyPairQuery_end);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
-// blocksHandler returns blocks between a start and end point,
-//
 // or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. Without verbose
 //
 object_t*
@@ -772,98 +594,6 @@ DefaultAPI_blocksPost(apiClient_t *apiClient, int start, int end, list_t* seqs) 
     long sizeOfPath = strlen("/api/v1/blocks")+1;
     char *localVarPath = malloc(sizeOfPath);
     snprintf(localVarPath, sizeOfPath, "/api/v1/blocks");
-
-
-    // query parameters
-    char *keyQuery_start;
-    int valueQuery_start;
-    keyValuePair_t *keyPairQuery_start = 0;
-    if (start)
-    {
-    //not string
-    keyQuery_start = strdup("start");
-    valueQuery_start = start;
-    keyPairQuery_start = keyValuePair_create(keyQuery_start, &valueQuery_start);
-    list_addElement(localVarQueryParameters,keyPairQuery_start);
-    }
-
-    // query parameters
-    char *keyQuery_end;
-    int valueQuery_end;
-    keyValuePair_t *keyPairQuery_end = 0;
-    if (end)
-    {
-    //not string
-    keyQuery_end = strdup("end");
-    valueQuery_end = end;
-    keyPairQuery_end = keyValuePair_create(keyQuery_end, &valueQuery_end);
-    list_addElement(localVarQueryParameters,keyPairQuery_end);
-    }
-
-    // query parameters
-    if (seqs)
-    {
-    //listContainer
-    localVarQueryParameters = seqs;
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "POST");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns blocks between a start and end point.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    //nonprimitive not container
-    object_t *elementToReturn = object_parseFromJSON(apiClient->dataReceived);
-    if(elementToReturn == NULL) {
-        // return 0;
-    }
-
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_start);
-    keyValuePair_free(keyPairQuery_start);
-    free(keyQuery_end);
-    keyValuePair_free(keyPairQuery_end);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
-// blocksHandler returns blocks between a start and end point,
-//
-// or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. This is whit verbose
-//
-object_t*
-DefaultAPI_blocksPostVerbose(apiClient_t *apiClient, int start, int end, list_t* seqs) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/blocks/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/blocks/verbose");
 
 
     // query parameters
@@ -1241,74 +971,6 @@ DefaultAPI_lastBlocks(apiClient_t *apiClient, int num) {
     long sizeOfPath = strlen("/api/v1/last_blocks")+1;
     char *localVarPath = malloc(sizeOfPath);
     snprintf(localVarPath, sizeOfPath, "/api/v1/last_blocks");
-
-
-    // query parameters
-    char *keyQuery_num;
-    int valueQuery_num;
-    keyValuePair_t *keyPairQuery_num = 0;
-    if (num)
-    {
-    //not string
-    keyQuery_num = strdup("num");
-    valueQuery_num = num;
-    keyPairQuery_num = keyValuePair_create(keyQuery_num, &valueQuery_num);
-    list_addElement(localVarQueryParameters,keyPairQuery_num);
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns the most recent N blocks on the blockchain.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    //nonprimitive not container
-    object_t *elementToReturn = object_parseFromJSON(apiClient->dataReceived);
-    if(elementToReturn == NULL) {
-        // return 0;
-    }
-
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_num);
-    keyValuePair_free(keyPairQuery_num);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
-// Returns the most recent N blocks on the blockchain With verbose.
-//
-object_t*
-DefaultAPI_lastBlocksVerbose(apiClient_t *apiClient, int num) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/last_blocks/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/last_blocks/verbose");
 
 
     // query parameters
@@ -1919,71 +1581,6 @@ end:
 
 }
 
-// Returns pending (unconfirmed) transactions with verbose
-//
-list_t*
-DefaultAPI_pendingTxsVerbose(apiClient_t *apiClient) {
-    list_t    *localVarQueryParameters = NULL;
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/pendingTxs/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/pendingTxs/verbose");
-
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns a transaction identified by its txid hash.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    if(!cJSON_IsArray(DefaultAPIlocalVarJSON)) {
-        return 0;//nonprimitive container
-    }
-    list_t *elementToReturn = list_create();
-    cJSON *VarJSON;
-    cJSON_ArrayForEach(VarJSON, DefaultAPIlocalVarJSON)
-    {
-        if(!cJSON_IsObject(VarJSON))
-        {
-           // return 0;
-        }
-        char *localVarJSONToChar = cJSON_Print(VarJSON);
-        list_addElement(elementToReturn , localVarJSONToChar);
-    }
-
-    cJSON_Delete( DefaultAPIlocalVarJSON);
-    cJSON_Delete( VarJSON);
-    //return type
-    apiClient_free(apiClient);
-    
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
 // Broadcasts all unconfirmed transactions from the unconfirmed transaction pool
 //
 void
@@ -2196,75 +1793,6 @@ end:
 
 }
 
-// Returns a transaction identified by its txid hash encoded
-//
-object_t*
-DefaultAPI_transactionEncoded(apiClient_t *apiClient, char* txid) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/transaction/encoded")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/transaction/encoded");
-
-
-    // query parameters
-    char *keyQuery_txid;
-    char *valueQuery_txid;
-    keyValuePair_t *keyPairQuery_txid = 0;
-    if (txid)
-    {
-    //string
-    keyQuery_txid = strdup("txid");
-    valueQuery_txid = strdup(txid);
-    keyPairQuery_txid = keyValuePair_create(keyQuery_txid, valueQuery_txid);
-    list_addElement(localVarQueryParameters,keyPairQuery_txid);
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns a transaction identified by its txid hash.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    //nonprimitive not container
-    object_t *elementToReturn = object_parseFromJSON(apiClient->dataReceived);
-    if(elementToReturn == NULL) {
-        // return 0;
-    }
-
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_txid);
-    free(valueQuery_txid);
-    keyValuePair_free(keyPairQuery_txid);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
 // Broadcast a hex-encoded, serialized transaction to the network.
 //
 object_t*
@@ -2395,90 +1923,6 @@ DefaultAPI_transactionRaw(apiClient_t *apiClient, char* txid) {
     free(keyQuery_txid);
     free(valueQuery_txid);
     keyValuePair_free(keyPairQuery_txid);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
-// Returns a transaction identified by its txid hash with Verbose
-//
-object_t*
-DefaultAPI_transactionVerbose(apiClient_t *apiClient, char* txid, int encoded) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/transaction/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/transaction/verbose");
-
-
-    // query parameters
-    char *keyQuery_txid;
-    char *valueQuery_txid;
-    keyValuePair_t *keyPairQuery_txid = 0;
-    if (txid)
-    {
-    //string
-    keyQuery_txid = strdup("txid");
-    valueQuery_txid = strdup(txid);
-    keyPairQuery_txid = keyValuePair_create(keyQuery_txid, valueQuery_txid);
-    list_addElement(localVarQueryParameters,keyPairQuery_txid);
-    }
-
-    // query parameters
-    char *keyQuery_encoded;
-    int valueQuery_encoded;
-    keyValuePair_t *keyPairQuery_encoded = 0;
-    if (encoded)
-    {
-    //not string
-    keyQuery_encoded = strdup("encoded");
-    valueQuery_encoded = encoded;
-    keyPairQuery_encoded = keyValuePair_create(keyQuery_encoded, &valueQuery_encoded);
-    list_addElement(localVarQueryParameters,keyPairQuery_encoded);
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns a transaction identified by its txid hash.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    //nonprimitive not container
-    object_t *elementToReturn = object_parseFromJSON(apiClient->dataReceived);
-    if(elementToReturn == NULL) {
-        // return 0;
-    }
-
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_txid);
-    free(valueQuery_txid);
-    keyValuePair_free(keyPairQuery_txid);
-    free(keyQuery_encoded);
-    keyValuePair_free(keyPairQuery_encoded);
     return elementToReturn;
 end:
     return NULL;
@@ -2708,200 +2152,6 @@ end:
 
 }
 
-// Returns transactions that match the filters with verbose.
-//
-list_t*
-DefaultAPI_transactionsVerboseGet(apiClient_t *apiClient, char* addrs, char* confirmed) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/transactions/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/transactions/verbose");
-
-
-    // query parameters
-    char *keyQuery_addrs;
-    char *valueQuery_addrs;
-    keyValuePair_t *keyPairQuery_addrs = 0;
-    if (addrs)
-    {
-    //string
-    keyQuery_addrs = strdup("addrs");
-    valueQuery_addrs = strdup(addrs);
-    keyPairQuery_addrs = keyValuePair_create(keyQuery_addrs, valueQuery_addrs);
-    list_addElement(localVarQueryParameters,keyPairQuery_addrs);
-    }
-
-    // query parameters
-    char *keyQuery_confirmed;
-    char *valueQuery_confirmed;
-    keyValuePair_t *keyPairQuery_confirmed = 0;
-    if (confirmed)
-    {
-    //string
-    keyQuery_confirmed = strdup("confirmed");
-    valueQuery_confirmed = strdup(confirmed);
-    keyPairQuery_confirmed = keyValuePair_create(keyQuery_confirmed, valueQuery_confirmed);
-    list_addElement(localVarQueryParameters,keyPairQuery_confirmed);
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns transactions that match the filters.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    if(!cJSON_IsArray(DefaultAPIlocalVarJSON)) {
-        return 0;//nonprimitive container
-    }
-    list_t *elementToReturn = list_create();
-    cJSON *VarJSON;
-    cJSON_ArrayForEach(VarJSON, DefaultAPIlocalVarJSON)
-    {
-        if(!cJSON_IsObject(VarJSON))
-        {
-           // return 0;
-        }
-        char *localVarJSONToChar = cJSON_Print(VarJSON);
-        list_addElement(elementToReturn , localVarJSONToChar);
-    }
-
-    cJSON_Delete( DefaultAPIlocalVarJSON);
-    cJSON_Delete( VarJSON);
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_addrs);
-    free(valueQuery_addrs);
-    keyValuePair_free(keyPairQuery_addrs);
-    free(keyQuery_confirmed);
-    free(valueQuery_confirmed);
-    keyValuePair_free(keyPairQuery_confirmed);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
-// Returns transactions that match the filters with verbose.
-//
-list_t*
-DefaultAPI_transactionsVerbosePost(apiClient_t *apiClient, char* addrs, char* confirmed) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/transactions/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/transactions/verbose");
-
-
-    // query parameters
-    char *keyQuery_addrs;
-    char *valueQuery_addrs;
-    keyValuePair_t *keyPairQuery_addrs = 0;
-    if (addrs)
-    {
-    //string
-    keyQuery_addrs = strdup("addrs");
-    valueQuery_addrs = strdup(addrs);
-    keyPairQuery_addrs = keyValuePair_create(keyQuery_addrs, valueQuery_addrs);
-    list_addElement(localVarQueryParameters,keyPairQuery_addrs);
-    }
-
-    // query parameters
-    char *keyQuery_confirmed;
-    char *valueQuery_confirmed;
-    keyValuePair_t *keyPairQuery_confirmed = 0;
-    if (confirmed)
-    {
-    //string
-    keyQuery_confirmed = strdup("confirmed");
-    valueQuery_confirmed = strdup(confirmed);
-    keyPairQuery_confirmed = keyValuePair_create(keyQuery_confirmed, valueQuery_confirmed);
-    list_addElement(localVarQueryParameters,keyPairQuery_confirmed);
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "POST");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns transactions that match the filters.");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    if(!cJSON_IsArray(DefaultAPIlocalVarJSON)) {
-        return 0;//nonprimitive container
-    }
-    list_t *elementToReturn = list_create();
-    cJSON *VarJSON;
-    cJSON_ArrayForEach(VarJSON, DefaultAPIlocalVarJSON)
-    {
-        if(!cJSON_IsObject(VarJSON))
-        {
-           // return 0;
-        }
-        char *localVarJSONToChar = cJSON_Print(VarJSON);
-        list_addElement(elementToReturn , localVarJSONToChar);
-    }
-
-    cJSON_Delete( DefaultAPIlocalVarJSON);
-    cJSON_Delete( VarJSON);
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_addrs);
-    free(valueQuery_addrs);
-    keyValuePair_free(keyPairQuery_addrs);
-    free(keyQuery_confirmed);
-    free(valueQuery_confirmed);
-    keyValuePair_free(keyPairQuery_confirmed);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
 // Returns an unspent output by ID.
 //
 object_t*
@@ -2973,7 +2223,7 @@ end:
 
 // Verifies a Skycoin address.
 //
-inline_response_200_9_t*
+inline_response_200_7_t*
 DefaultAPI_verifyAddress(apiClient_t *apiClient, char* address) {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -3018,7 +2268,7 @@ DefaultAPI_verifyAddress(apiClient_t *apiClient, char* address) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
-    inline_response_200_9_t *elementToReturn = inline_response_200_9_parseFromJSON(apiClient->dataReceived);
+    inline_response_200_7_t *elementToReturn = inline_response_200_7_parseFromJSON(apiClient->dataReceived);
     if(elementToReturn == NULL) {
         // return 0;
     }
@@ -3507,7 +2757,7 @@ end:
 
 // Returns the wallet directory path
 //
-inline_response_200_8_t*
+inline_response_200_6_t*
 DefaultAPI_walletFolder(apiClient_t *apiClient, char* addr) {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -3552,7 +2802,7 @@ DefaultAPI_walletFolder(apiClient_t *apiClient, char* addr) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
-    inline_response_200_8_t *elementToReturn = inline_response_200_8_parseFromJSON(apiClient->dataReceived);
+    inline_response_200_6_t *elementToReturn = inline_response_200_6_parseFromJSON(apiClient->dataReceived);
     if(elementToReturn == NULL) {
         // return 0;
     }
@@ -4183,75 +3433,6 @@ DefaultAPI_walletTransactions(apiClient_t *apiClient, char* id) {
     long sizeOfPath = strlen("/api/v1/wallet/transactions")+1;
     char *localVarPath = malloc(sizeOfPath);
     snprintf(localVarPath, sizeOfPath, "/api/v1/wallet/transactions");
-
-
-    // query parameters
-    char *keyQuery_id;
-    char *valueQuery_id;
-    keyValuePair_t *keyPairQuery_id = 0;
-    if (id)
-    {
-    //string
-    keyQuery_id = strdup("id");
-    valueQuery_id = strdup(id);
-    keyPairQuery_id = keyValuePair_create(keyQuery_id, valueQuery_id);
-    list_addElement(localVarQueryParameters,keyPairQuery_id);
-    }
-    list_addElement(localVarHeaderType,"application/json"); //produces
-    apiClient_invoke(apiClient,
-                    localVarPath,
-                    localVarQueryParameters,
-                    localVarHeaderParameters,
-                    localVarFormParameters,
-                    localVarHeaderType,
-                    localVarContentType,
-                    localVarBodyParameters,
-                    "GET");
-
-    if (apiClient->response_code == 200) {
-        printf("%s\n","Returns returns all unconfirmed transactions for all addresses in a given wallet");
-    }
-    if (apiClient->response_code == 0) {
-        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
-    }
-    //nonprimitive not container
-    object_t *elementToReturn = object_parseFromJSON(apiClient->dataReceived);
-    if(elementToReturn == NULL) {
-        // return 0;
-    }
-
-    //return type
-    apiClient_free(apiClient);
-    list_free(localVarQueryParameters);
-    
-    
-    list_free(localVarHeaderType);
-    
-    free(localVarPath);
-    free(keyQuery_id);
-    free(valueQuery_id);
-    keyValuePair_free(keyPairQuery_id);
-    return elementToReturn;
-end:
-    return NULL;
-
-}
-
-// Returns returns all unconfirmed transactions for all addresses in a given wallet verbose
-//
-object_t*
-DefaultAPI_walletTransactionsVerbose(apiClient_t *apiClient, char* id) {
-    list_t    *localVarQueryParameters = list_create();
-    list_t    *localVarHeaderParameters = NULL;
-    list_t    *localVarFormParameters = NULL;
-    list_t *localVarHeaderType = list_create();
-    list_t *localVarContentType = NULL;
-    char      *localVarBodyParameters = NULL;
-
-    // create the path
-    long sizeOfPath = strlen("/api/v1/wallet/transactions/verbose")+1;
-    char *localVarPath = malloc(sizeOfPath);
-    snprintf(localVarPath, sizeOfPath, "/api/v1/wallet/transactions/verbose");
 
 
     // query parameters
