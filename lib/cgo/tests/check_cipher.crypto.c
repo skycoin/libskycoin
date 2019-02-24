@@ -454,7 +454,7 @@ START_TEST(TestNewSig)
   randBytes(&b, 65);
   errorcode = SKY_cipher_NewSig(b, &s);
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(buff, s, 65) == 0);
+  ck_assert(isU8Eq(buff, s, 65));
 }
 END_TEST
 
@@ -494,7 +494,7 @@ START_TEST(TestMustSigFromHex)
   str.n = strlen(str.p);
   errorcode = SKY_cipher_SigFromHex(str, &s2);
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(s2, s, 65) == 0);
+  ck_assert(isU8Eq(s2, s, 65));
 }
 END_TEST
 
@@ -522,15 +522,16 @@ START_TEST(TestSigHex)
   errorcode = SKY_cipher_SigFromHex(str, &s2);
 
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(s, s2, 65) == 0);
+  ck_assert(isU8Eq(s, s2, 65));
 
   char buffer2[100];
   GoString_ tmp_str2 = {buffer, 0};
   SKY_cipher_Sig_Hex(&s2, &tmp_str);
-  str2.p = tmp_str2.p;
-  str2.n = tmp_str2.n;
+  str2.p = tmp_str.p;
+  str2.n = tmp_str.n;
   registerMemCleanup((void *)str2.p);
-  ck_assert(isGoStringEq(str, str2) == 0);
+  // ck_assert(isGoStringEq(str, str2));
+  ck_assert_str_eq(str.p, str2.p);
 }
 END_TEST
 
@@ -597,8 +598,7 @@ START_TEST(TestVerifyAddressSignedHash)
   ck_assert(errorcode == SKY_OK);
   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(sig, sig2, 65) == 1);
-  // cr_assert(not(eq(u8[65], sig, sig2)));
+  ck_assert(!isU8Eq(sig, sig2, 65));
 
   randBytes(&b, 256);
   SKY_cipher_SumSHA256(b, &h);
@@ -608,7 +608,7 @@ START_TEST(TestVerifyAddressSignedHash)
   ck_assert(errorcode == SKY_OK);
   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(sig, sig2, 65) == 1);
+  ck_assert(!isU8Eq(sig, sig2, 65));
 
   // Bad address should be invalid
   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h);
@@ -637,13 +637,13 @@ START_TEST(TestSignHash)
   errorcode = SKY_cipher_SignHash(&h, &sk, &sig);
   ck_assert(errorcode == SKY_OK);
   memset((void *)&sig2, 0, 65);
-  ck_assert(isU8Eq(sig, sig2, 65) == 1);
+  ck_assert(!isU8Eq(sig, sig2, 65));
   errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
   ck_assert(errorcode == SKY_OK);
 
   errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(pk, pk2, 33) == 0);
+  ck_assert(isU8Eq(pk, pk2, 33));
 
   cipher__SecKey empty_sk;
   cipher__Sig temp_sig;
@@ -664,7 +664,7 @@ START_TEST(TestPubKeyFromSecKey)
   SKY_cipher_GenerateKeyPair(&pk, &sk);
   errorcode = SKY_cipher_PubKeyFromSecKey(&sk, &pk2);
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(pk, pk2, 33) == 0);
+  ck_assert(isU8Eq(pk, pk2, 33));
 
   memset(&sk, 0, sizeof(sk));
   errorcode = SKY_cipher_PubKeyFromSecKey(&sk, &pk);
@@ -698,7 +698,7 @@ START_TEST(TestPubKeyFromSig)
   errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);
 
   ck_assert(errorcode == SKY_OK);
-  ck_assert(isU8Eq(pk, pk2, 33) == 0);
+  ck_assert(isU8Eq(pk, pk2, 33));
 
   memset(&sig, 0, sizeof(sig));
   errorcode = SKY_cipher_PubKeyFromSig(&sig, &h, &pk2);

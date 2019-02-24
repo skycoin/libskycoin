@@ -24,7 +24,7 @@ START_TEST(TestUxBodyHash)
     result = SKY_coin_UxBody_Hash(&uxbody, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
     memset(&nullHash, 0, sizeof(cipher__SHA256));
-    ck_assert(isU8Eq(nullHash, hash, sizeof(cipher__SHA256)) == 1);
+    ck_assert(!isU8Eq(nullHash, hash, sizeof(cipher__SHA256)));
 }
 END_TEST
 
@@ -44,14 +44,14 @@ START_TEST(TestUxOutHash)
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
     result = SKY_coin_UxOut_Hash(&uxout, &hashOut);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-    ck_assert(isU8Eq(hashBody, hashOut, sizeof(cipher__SHA256)) == 0);
+    ck_assert(isU8Eq(hashBody, hashOut, sizeof(cipher__SHA256)));
 
     //Head should not affect hash
     uxout.Head.Time = 0;
     uxout.Head.BkSeq = 1;
     result = SKY_coin_UxOut_Hash(&uxout, &hashOut);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-    ck_assert(isU8Eq(hashBody, hashOut, sizeof(cipher__SHA256)) == 0);
+    ck_assert(isU8Eq(hashBody, hashOut, sizeof(cipher__SHA256)));
 }
 END_TEST
 
@@ -68,37 +68,37 @@ START_TEST(TestUxOutSnapshotHash)
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Head.Time = 20;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-    ck_assert_msg(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)) == 1, "SKY_coin_UxOut_SnapshotHash failed");
+    ck_assert_msg(!isU8Eq(hash1, hash2, sizeof(cipher__SHA256)), "SKY_coin_UxOut_SnapshotHash failed");
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Head.BkSeq = 4;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
+    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     makeRandHash(&uxout2.Body.SrcTransaction);
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
+    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     makeAddress(&uxout2.Body.Address);
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
+    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Body.Coins = uxout.Body.Coins * 2;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
+    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Body.Hours = uxout.Body.Hours * 2;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 1, "Snapshot hash must be different");
+    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
 }
 END_TEST
 
@@ -281,7 +281,7 @@ START_TEST(TestUxArrayHashArray)
     {
         result = SKY_coin_UxOut_Hash(pux, &hash);
         ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
-        ck_assert(isU8Eq(hash, *ph, sizeof(cipher__SHA256)) == 0);
+        ck_assert(isU8Eq(hash, *ph, sizeof(cipher__SHA256)));
         pux++;
         ph++;
     }
@@ -341,14 +341,14 @@ START_TEST(TestUxArraySub)
     memset(&uxd, 0, arraySize);
     result = SKY_coin_UxArray_Sub(&uxc, &uxa, &uxd);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
-    ck_assert(isUxArrayEq(&uxd, &uxb) == 0);
+    ck_assert(isUxArrayEq(&uxd, &uxb));
 
     memset(&uxd, 0, arraySize);
     result = SKY_coin_UxArray_Sub(&uxc, &uxb, &uxd);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
     ck_assert_msg(uxd.len == 2, "uxd length must be 2 and it is: %s", uxd.len);
     cutSlice(&uxa, 0, 2, elems_size, &t1);
-    ck_assert(isUxArrayEq(&uxd, &t1) == 0);
+    ck_assert(isUxArrayEq(&uxd, &t1));
 
     // No intersection
     memset(&t1, 0, arraySize);
@@ -357,8 +357,8 @@ START_TEST(TestUxArraySub)
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
     result = SKY_coin_UxArray_Sub(&uxb, &uxa, &t2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Sub failed");
-    ck_assert(isUxArrayEq(&uxa, &t1) == 0);
-    ck_assert(isUxArrayEq(&uxb, &t2) == 0);
+    ck_assert(isUxArrayEq(&uxa, &t1));
+    ck_assert(isUxArrayEq(&uxb, &t2));
 }
 END_TEST
 
@@ -483,18 +483,18 @@ START_TEST(TestUxArraySwap)
 
     result = SKY_coin_UxArray_Swap(&uxa, 0, 1);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Swap failed");
-    ck_assert(isUxOutEq(&uxy, p) == 0);
-    ck_assert(isUxOutEq(&uxx, (p + 1)) == 0);
+    ck_assert(isUxOutEq(&uxy, p));
+    ck_assert(isUxOutEq(&uxx, (p + 1)));
 
     result = SKY_coin_UxArray_Swap(&uxa, 0, 1);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Swap failed");
-    ck_assert(isUxOutEq(&uxy, (p + 1)) == 0);
-    ck_assert(isUxOutEq(&uxx, p) == 0);
+    ck_assert(isUxOutEq(&uxy, (p + 1)));
+    ck_assert(isUxOutEq(&uxx, p));
 
     result = SKY_coin_UxArray_Swap(&uxa, 1, 0);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Swap failed");
-    ck_assert(isUxOutEq(&uxy, p) == 0);
-    ck_assert(isUxOutEq(&uxx, (p + 1)) == 0);
+    ck_assert(isUxOutEq(&uxy, p));
+    ck_assert(isUxOutEq(&uxx, (p + 1)));
 }
 END_TEST
 
@@ -602,7 +602,7 @@ START_TEST(TestAddressUxOutsSub)
     registerMemCleanup(ux3.data);
     ck_assert(ux3.len == 1);
     coin__UxOut *pData2 = ux3.data;
-    ck_assert(isUxOutEq(pData2, (pData + 3)) == 0);
+    ck_assert(isUxOutEq(pData2, (pData + 3)));
 
     memset(&ux2, 0, sizeof(coin__UxArray));
     result = SKY_coin_AddressUxOuts_Get(h3, &pData->Body.Address, &ux2);
@@ -610,7 +610,7 @@ START_TEST(TestAddressUxOutsSub)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 1);
     pData2 = ux2.data;
-    ck_assert(isUxOutEq(pData2, (pData + 1)) == 0);
+    ck_assert(isUxOutEq(pData2, (pData + 1)));
 
     // Originals should be unmodified
     result = SKY_coin_AddressUxOuts_Length(h1, &length);
@@ -691,8 +691,8 @@ START_TEST(TestAddressUxOutsAdd)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 2);
     coin__UxOut *pData2 = ux2.data;
-    ck_assert(isUxOutEq(pData2, pData) == 0);
-    ck_assert(isUxOutEq((pData2 + 1), (pData + 1)) == 0);
+    ck_assert(isUxOutEq(pData2, pData));
+    ck_assert(isUxOutEq((pData2 + 1), (pData + 1)));
 
     memset(&ux2, 0, sizeof(coin__UxArray));
     result = SKY_coin_AddressUxOuts_Get(h3, &(pData + 2)->Body.Address, &ux2);
@@ -700,7 +700,7 @@ START_TEST(TestAddressUxOutsAdd)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 1);
     pData2 = ux2.data;
-    ck_assert(isUxOutEq(pData2, (pData + 2)) == 0);
+    ck_assert(isUxOutEq(pData2, (pData + 2)));
 
     memset(&ux2, 0, sizeof(coin__UxArray));
     result = SKY_coin_AddressUxOuts_Get(h3, &(pData + 3)->Body.Address, &ux2);
@@ -708,7 +708,7 @@ START_TEST(TestAddressUxOutsAdd)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 1);
     pData2 = ux2.data;
-    ck_assert(isUxOutEq(pData2, (pData + 3)) == 0);
+    ck_assert(isUxOutEq(pData2, (pData + 3)));
 
     memset(&ux2, 0, sizeof(coin__UxArray));
     result = SKY_coin_AddressUxOuts_Get(h3, &(pData + 1)->Body.Address, &ux2);
@@ -716,8 +716,8 @@ START_TEST(TestAddressUxOutsAdd)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 2);
     pData2 = ux2.data;
-    ck_assert(isUxOutEq(pData2, pData) == 0);
-    ck_assert(isUxOutEq((pData2 + 1), (pData + 1)) == 0);
+    ck_assert(isUxOutEq(pData2, pData));
+    ck_assert(isUxOutEq((pData2 + 1), (pData + 1)));
 
     // Originals should be unmodified
     result = SKY_coin_AddressUxOuts_Length(h1, &length);
@@ -784,21 +784,21 @@ START_TEST(TestAddressUxOutsFlatten)
     int cmp = memcmp(&pData->Body.Address, &pData2->Body.Address, sizeof(cipher__Address));
     if (cmp == 0)
     {
-        ck_assert(isUxOutEq(pData2, pData) == 0);
-        ck_assert(isUxOutEq((pData2 + 1), (pData + 1)) == 0);
-        ck_assert(isUxOutEq((pData2 + 2), (pData + 2)) == 0);
-        ck_assert(isAddressEqPtr(pData2->Body.Address, pData->Body.Address) == 0);
-        ck_assert(isAddressEqPtr((pData2 + 1)->Body.Address, (pData + 1)->Body.Address) == 0);
-        ck_assert(isAddressEqPtr((pData2 + 2)->Body.Address, (pData + 2)->Body.Address) == 0);
+        ck_assert(isUxOutEq(pData2, pData));
+        ck_assert(isUxOutEq((pData2 + 1), (pData + 1)));
+        ck_assert(isUxOutEq((pData2 + 2), (pData + 2)));
+        ck_assert(isAddressEq(&pData2->Body.Address, &pData->Body.Address));
+        ck_assert(isAddressEq(&(pData2 + 1)->Body.Address, &(pData + 1)->Body.Address));
+        ck_assert(isAddressEq(&(pData2 + 2)->Body.Address, &(pData + 2)->Body.Address));
     }
     else
     {
-        ck_assert(isUxOutEq(pData2, (pData + 1)) == 0);
-        ck_assert(isUxOutEq((pData2 + 1), (pData + 2)) == 0);
-        ck_assert(isUxOutEq((pData2 + 2), (pData)) == 0);
-        ck_assert(isAddressEqPtr(pData2->Body.Address, (pData + 1)->Body.Address) == 0);
-        ck_assert(isAddressEqPtr((pData2 + 1)->Body.Address, (pData + 2)->Body.Address) == 0);
-        ck_assert(isAddressEqPtr((pData2 + 2)->Body.Address, (pData)->Body.Address) == 0);
+        ck_assert(isUxOutEq(pData2, (pData + 1)));
+        ck_assert(isUxOutEq((pData2 + 1), (pData + 2)));
+        ck_assert(isUxOutEq((pData2 + 2), (pData)));
+        ck_assert(isAddressEq(&pData2->Body.Address, &(pData + 1)->Body.Address));
+        ck_assert(isAddressEq(&(pData2 + 1)->Body.Address, &(pData + 2)->Body.Address));
+        ck_assert(isAddressEq(&(pData2 + 2)->Body.Address, &(pData)->Body.Address));
     }
 }
 END_TEST
@@ -828,8 +828,8 @@ START_TEST(TestNewAddressUxOuts)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 2);
     coin__UxOut *pData2 = ux2.data;
-    ck_assert(isUxOutEq((pData2), (pData)) == 0);
-    ck_assert(isUxOutEq((pData2 + 1), (pData + 1)) == 0);
+    ck_assert(isUxOutEq((pData2), (pData)));
+    ck_assert(isUxOutEq((pData2 + 1), (pData + 1)));
 
     memset(&ux2, 0, sizeof(coin__UxArray));
     result = SKY_coin_AddressUxOuts_Get(h, &(pData + 3)->Body.Address, &ux2);
@@ -837,9 +837,9 @@ START_TEST(TestNewAddressUxOuts)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 3);
     pData2 = ux2.data;
-    ck_assert(isUxOutEq((pData2), (pData + 2)) == 0);
-    ck_assert(isUxOutEq((pData2 + 1), (pData + 3)) == 0);
-    ck_assert(isUxOutEq((pData2 + 2), (pData + 4)) == 0);
+    ck_assert(isUxOutEq((pData2), (pData + 2)));
+    ck_assert(isUxOutEq((pData2 + 1), (pData + 3)));
+    ck_assert(isUxOutEq((pData2 + 2), (pData + 4)));
 
     memset(&ux2, 0, sizeof(coin__UxArray));
     result = SKY_coin_AddressUxOuts_Get(h, &(pData + 5)->Body.Address, &ux2);
@@ -847,7 +847,7 @@ START_TEST(TestNewAddressUxOuts)
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 1);
     pData2 = ux2.data;
-    ck_assert(isUxOutEq((pData2), (pData + 5)) == 0);
+    ck_assert(isUxOutEq((pData2), (pData + 5)));
 }
 END_TEST
 Suite *coin_output(void)

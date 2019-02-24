@@ -32,15 +32,15 @@ START_TEST(TestHashRipemd160)
     SKY_cipher_HashRipemd160(slice, &tmp);
     randBytes(&slice, 160);
     SKY_cipher_HashRipemd160(slice, &r);
-    ck_assert(isU8Eq(tmp, r, sizeof(cipher__Ripemd160)) == 1);
+    ck_assert(!isU8Eq(tmp, r, sizeof(cipher__Ripemd160)));
 
     unsigned char buff1[257];
     GoSlice b = {buff1, 0, 257};
     randBytes(&b, 256);
     SKY_cipher_HashRipemd160(b, &r2);
-    ck_assert(isU8Eq(tmp, r2, sizeof(cipher__Ripemd160)) == 1);
+    ck_assert(!isU8Eq(tmp, r2, sizeof(cipher__Ripemd160)));
     freshSumRipemd160(b, &tmp);
-    ck_assert(isU8Eq(tmp, r2, sizeof(cipher__Ripemd160)) == 0);
+    ck_assert(isU8Eq(tmp, r2, sizeof(cipher__Ripemd160)));
 }
 END_TEST
 
@@ -73,7 +73,7 @@ START_TEST(TestRipemd160Set)
     randBytes(&slice, 20);
     error = SKY_cipher_Ripemd160_Set(&h, slice);
     ck_assert(error == SKY_OK);
-    ck_assert(isU8Eq(h, buff, 20) == 0);
+    ck_assert(isU8Eq(h, buff, 20));
 }
 END_TEST
 
@@ -104,7 +104,7 @@ START_TEST(TestSHA256Set)
     randBytes(&slice, 32);
     error = SKY_cipher_SHA256_Set(&h, slice);
     ck_assert(error == SKY_OK);
-    ck_assert(isU8Eq(h, slice.data, 32) == 0);
+    ck_assert(isU8Eq(h, slice.data, 32));
 }
 END_TEST
 
@@ -128,13 +128,13 @@ START_TEST(TestSHA256Hex)
 
     error = SKY_cipher_SHA256FromHex(s, &h2);
     ck_assert(error == SKY_OK);
-    ck_assert(isU8Eq(h, h2, 32) == 0);
+    ck_assert(isU8Eq(h, h2, 32));
 
     GoString s2;
 
     SKY_cipher_SHA256_Hex(&h2, (GoString_ *)&s2);
     registerMemCleanup((void *)s2.p);
-    ck_assert(isGoStringEq(s, s2) == 0);
+    ck_assert(isGoStringEq(s, s2));
 }
 END_TEST
 
@@ -193,15 +193,15 @@ START_TEST(TestSumSHA256)
     randBytes(&b, 256);
     SKY_cipher_SumSHA256(b, &h1);
     cipher__SHA256 tmp;
-    ck_assert(isU8Eq(h1, tmp, 32) == 1);
+    ck_assert(!isU8Eq(h1, tmp, 32));
     GoSlice c = {cbuff, 0, 257};
     randBytes(&c, 256);
     cipher__SHA256 h2;
     SKY_cipher_SumSHA256(c, &h2);
-    ck_assert(isU8Eq(h1, tmp, 32) == 1);
+    ck_assert(!isU8Eq(h1, tmp, 32));
     cipher__SHA256 tmp_h2;
     freshSumSHA256(c, &tmp_h2);
-    ck_assert(isU8Eq(h2, tmp_h2, 32) == 0);
+    ck_assert(isU8Eq(h2, tmp_h2, 32));
 }
 END_TEST
 
@@ -232,7 +232,7 @@ START_TEST(TestSHA256FromHex)
     cipher__SHA256 h2;
     error = SKY_cipher_SHA256FromHex((*((GoString *)&s2)), &h2);
     ck_assert(error == SKY_OK);
-    ck_assert(isU8Eq(h, h2, 32) == 0);
+    ck_assert(isU8Eq(h, h2, 32));
 }
 END_TEST
 
@@ -244,9 +244,9 @@ START_TEST(TestDoubleSHA256)
     cipher__SHA256 h;
     cipher__SHA256 tmp;
     SKY_cipher_DoubleSHA256(b, &h);
-    ck_assert(isU8Eq(tmp, h, 32) == 1);
+    ck_assert(!isU8Eq(tmp, h, 32));
     freshSumSHA256(b, &tmp);
-    ck_assert(isU8Eq(tmp, h, 32) == 1);
+    ck_assert(!isU8Eq(tmp, h, 32));
 }
 END_TEST
 
@@ -269,9 +269,9 @@ START_TEST(TestAddSHA256)
     cipher__SHA256 tmp;
 
     SKY_cipher_AddSHA256(&h, &i, &add);
-    ck_assert(isU8Eq(add, tmp, 32) == 1);
-    ck_assert(isU8Eq(add, h, 32) == 1);
-    ck_assert(isU8Eq(add, i, 32) == 1);
+    ck_assert(!isU8Eq(add, tmp, 32));
+    ck_assert(!isU8Eq(add, h, 32));
+    ck_assert(!isU8Eq(add, i, 32));
 }
 END_TEST
 
@@ -294,10 +294,10 @@ START_TEST(TestXorSHA256)
 
     SKY_cipher_SHA256_Xor(&h, &i, &tmp_xor1);
     SKY_cipher_SHA256_Xor(&i, &h, &tmp_xor2);
-    ck_assert(isU8Eq(tmp_xor1, h, 32) == 1);
-    ck_assert(isU8Eq(tmp_xor1, i, 32) == 1);
-    ck_assert(isU8Eq(tmp_xor1, tmp, 32) == 1);
-    ck_assert(isU8Eq(tmp_xor1, tmp_xor2, 32) == 0);
+    ck_assert(!isU8Eq(tmp_xor1, h, 32));
+    ck_assert(!isU8Eq(tmp_xor1, i, 32));
+    ck_assert(!isU8Eq(tmp_xor1, tmp, 32));
+    ck_assert(isU8Eq(tmp_xor1, tmp_xor2, 32));
 }
 END_TEST
 
@@ -320,13 +320,13 @@ START_TEST(TestMerkle)
     // Single hash input returns hash
     hashes.len = 1;
     SKY_cipher_Merkle(&hashes, &h);
-    ck_assert(isU8Eq(hashlist[0], h, 32) == 0);
+    ck_assert(isU8Eq(hashlist[0], h, 32));
 
     // 2 hashes should be Addcipher__SHA256 of them
     hashes.len = 2;
     SKY_cipher_AddSHA256(&hashlist[0], &hashlist[1], &out);
     SKY_cipher_Merkle(&hashes, &h);
-    ck_assert(isU8Eq(out, h, 32) == 0);
+    ck_assert(isU8Eq(out, h, 32));
 
     // 3 hashes should be Add(Add())
     hashes.len = 3;
@@ -334,7 +334,7 @@ START_TEST(TestMerkle)
     SKY_cipher_AddSHA256(&hashlist[2], &zero, &out2);
     SKY_cipher_AddSHA256(&out1, &out2, &out);
     SKY_cipher_Merkle(&hashes, &h);
-    ck_assert(isU8Eq(out, h, 32) == 0);
+    ck_assert(isU8Eq(out, h, 32));
 
     // 4 hashes should be Add(Add())
     hashes.len = 4;
@@ -342,7 +342,7 @@ START_TEST(TestMerkle)
     SKY_cipher_AddSHA256(&hashlist[2], &hashlist[3], &out2);
     SKY_cipher_AddSHA256(&out1, &out2, &out);
     SKY_cipher_Merkle(&hashes, &h);
-    ck_assert(isU8Eq(out, h, 32) == 0);
+    ck_assert(isU8Eq(out, h, 32));
 
     // 5 hashes
     hashes.len = 5;
@@ -354,7 +354,7 @@ START_TEST(TestMerkle)
     SKY_cipher_AddSHA256(&out1, &out2, &out4);
     SKY_cipher_AddSHA256(&out3, &out4, &out);
     SKY_cipher_Merkle(&hashes, &h);
-    ck_assert(isU8Eq(out, h, 32) == 0);
+    ck_assert(isU8Eq(out, h, 32));
 }
 END_TEST
 

@@ -119,11 +119,11 @@ START_TEST(TestNewBlock)
     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockObject failed");
     coin__Transactions *pTransactions = NULL;
     SKY_coin_GetTransactionsObject(transactions, &pTransactions);
-    ck_assert(isTransactionsEq(&pNewBlock->Body.Transactions, pTransactions) == 0);
+    ck_assert(isTransactionsEq(&pNewBlock->Body.Transactions, pTransactions));
     ck_assert(pNewBlock->Head.Fee == fee * (GoUint64)(pTransactions->len));
     ck_assert(pNewBlock->Head.Time == currentTime);
     ck_assert(pNewBlock->Head.BkSeq == (pPrevBlock->Head.BkSeq + 1));
-    ck_assert(isU8Eq(pNewBlock->Head.UxHash, hash, sizeof(cipher__SHA256)) == 0);
+    ck_assert(isU8Eq(pNewBlock->Head.UxHash, hash, sizeof(cipher__SHA256)));
 }
 END_TEST
 
@@ -151,9 +151,9 @@ START_TEST(TestBlockHashHeader)
     ck_assert_msg(result == SKY_OK, "SKY_coin_Block_HashHeader failed");
     result = SKY_coin_BlockHeader_Hash(&pBlock->Head, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_Hash failed");
-    ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)) == 0);
+    ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
     memset(&hash2, 0, sizeof(cipher__SHA256));
-    ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)) == 1);
+    ck_assert(!isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
 }
 END_TEST
 
@@ -181,7 +181,7 @@ START_TEST(TestBlockHashBody)
     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockBody failed");
     result = SKY_coin_BlockBody_Hash(blockBody, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_BlockBody_Hash failed");
-    ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)) == 0);
+    ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
 }
 END_TEST
 
@@ -205,12 +205,12 @@ START_TEST(TestNewGenesisBlock)
 
     cipher__SHA256 nullHash;
     memset(&nullHash, 0, sizeof(cipher__SHA256));
-    ck_assert(isU8Eq(nullHash, pBlock->Head.PrevHash, sizeof(cipher__SHA256)) == 0);
+    ck_assert(isU8Eq(nullHash, pBlock->Head.PrevHash, sizeof(cipher__SHA256)));
     ck_assert(genTime == pBlock->Head.Time);
     ck_assert(0 == pBlock->Head.BkSeq);
     ck_assert(0 == pBlock->Head.Version);
     ck_assert(0 == pBlock->Head.Fee);
-    ck_assert(isU8Eq(nullHash, pBlock->Head.UxHash, sizeof(cipher__SHA256)) == 0);
+    ck_assert(isU8Eq(nullHash, pBlock->Head.UxHash, sizeof(cipher__SHA256)));
 
     ck_assert(1 == pBlock->Body.Transactions.len);
     coin__Transaction *ptransaction = (coin__Transaction *)pBlock->Body.Transactions.data;
@@ -219,7 +219,7 @@ START_TEST(TestNewGenesisBlock)
     ck_assert(1 == ptransaction->Out.len);
 
     coin__TransactionOutput *poutput = (coin__TransactionOutput *)ptransaction->Out.data;
-    ck_assert(isAddressEq(&address, &poutput->Address) == 0);
+    ck_assert(isAddressEq(&address, &poutput->Address));
     ck_assert(genCoins == poutput->Coins);
     ck_assert(genCoins == poutput->Hours);
 }
@@ -272,10 +272,10 @@ START_TEST(TestCreateUnspent)
         ck_assert(bh.BkSeq == ux.Head.BkSeq);
         result = SKY_coin_Transaction_Hash(handle, &hash);
         ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_Hash failed");
-        ck_assert(isU8Eq(hash, ux.Body.SrcTransaction, sizeof(cipher__SHA256)) == 0);
+        ck_assert(isU8Eq(hash, ux.Body.SrcTransaction, sizeof(cipher__SHA256)));
         ck_assert(t[i].index < ptx->Out.len);
         coin__TransactionOutput *poutput = (coin__TransactionOutput *)ptx->Out.data;
-        ck_assert(isAddressEq(&ux.Body.Address, &poutput->Address) == 0);
+        ck_assert(isAddressEq(&ux.Body.Address, &poutput->Address));
         ck_assert(ux.Body.Coins == poutput->Coins);
         ck_assert(ux.Body.Hours == poutput->Hours);
     }
@@ -314,8 +314,8 @@ START_TEST(TestCreateUnspents)
         ck_assert(bh.BkSeq == pout->Head.BkSeq);
         result = SKY_coin_Transaction_Hash(handle, &hash);
         ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_Hash failed");
-        ck_assert(isU8Eq(hash, pout->Body.SrcTransaction, sizeof(cipher__SHA256)) == 0);
-        ck_assert(isAddressEqPtr(pout->Body.Address, ptxout->Address) == 0);
+        ck_assert(isU8Eq(hash, pout->Body.SrcTransaction, sizeof(cipher__SHA256)));
+        ck_assert(isAddressEq(&pout->Body.Address, &ptxout->Address));
         ck_assert(pout->Body.Coins == ptxout->Coins);
         ck_assert(pout->Body.Hours == ptxout->Hours);
         pout++;

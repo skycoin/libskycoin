@@ -7,7 +7,14 @@ int equalSlices(GoSlice *slice1, GoSlice *slice2, int elem_size)
 {
   if (slice1->len != slice2->len)
     return 0;
-  return memcmp(slice1->data, slice2->data, slice1->len * elem_size) == 0;
+  return (memcmp(slice1->data, slice2->data, slice1->len * elem_size) == 0);
+}
+
+int equalSlices_(GoSlice_ *slice1, GoSlice_ *slice2, int elem_size)
+{
+  if (slice1->len != slice2->len)
+    return 0;
+  return (memcmp(slice1->data, slice2->data, slice1->len * elem_size) == 0);
 }
 
 int equalTransactions(coin__Transactions *pTxs1, coin__Transactions *pTxs2)
@@ -16,7 +23,8 @@ int equalTransactions(coin__Transactions *pTxs1, coin__Transactions *pTxs2)
     return 0;
   coin__Transaction *pTx1 = pTxs1->data;
   coin__Transaction *pTx2 = pTxs2->data;
-  for (int i = 0; i < pTxs1->len; i++)
+  int i;
+  for (i = 0; i < pTxs1->len; i++)
   {
     if (!isTransactionEq(pTx1, pTx2))
       return 0;
@@ -28,16 +36,7 @@ int equalTransactions(coin__Transactions *pTxs1, coin__Transactions *pTxs2)
 
 int isAddressEq(cipher__Address *addr1, cipher__Address *addr2)
 {
-  if (addr1->Version != addr2->Version)
-    return 0;
-  return memcmp((void *)addr1, (void *)addr2, sizeof(cipher__Address)) == 0;
-}
-
-int isAddressEqPtr(cipher__Address addr1, cipher__Address addr2)
-{
-  if (addr1.Version != addr2.Version)
-    return 0;
-  return memcmp((void *)&addr1, (void *)&addr2, sizeof(cipher__Address)) == 0;
+  return (addr1->Version == addr2->Version && memcmp((void *)addr1, (void *)addr2, sizeof(cipher__Address)) == 0);
 }
 
 int isGoStringEq(GoString string1, GoString string2)
@@ -59,7 +58,7 @@ int isSecKeyEq(cipher__SecKey *seckey1, cipher__SecKey *seckey2)
 
 int isPubKeyEq(cipher__PubKey *pubkey1, cipher__PubKey *pubkey2)
 {
-  return memcmp((void *)pubkey1, (void *)pubkey2, sizeof(cipher__PubKey)) == 0;
+  return (memcmp((void *)pubkey1, (void *)pubkey2, sizeof(cipher__PubKey)) == 0);
 }
 
 int isSigEq(cipher__Sig *sig1, cipher__Sig *sig2)
@@ -73,16 +72,16 @@ int isU8Eq(unsigned char p1[], unsigned char p2[], int len)
   {
     if (p1[i] != p2[i])
     {
-      return 1;
+      return 0;
     }
   }
 
-  return 0;
+  return 1;
 }
 
 int isSHA256Eq(cipher__SHA256 *sh1, cipher__SHA256 *sh2)
 {
-  return memcmp((void *)sh1, (void *)sh1, sizeof(cipher__SHA256)) == 0;
+  return (memcmp((void *)sh1, (void *)sh1, sizeof(cipher__SHA256)) == 0);
 }
 
 int isGoSliceEq(GoSlice *slice1, GoSlice *slice2)
@@ -116,11 +115,11 @@ int isTransactionEq(coin__Transaction *x1, coin__Transaction *x2)
   }
   if (!isSHA256Eq(&x1->InnerHash, &x2->InnerHash))
     return 0;
-  if (!equalSlices((GoSlice *)&x1->Sigs, (GoSlice *)&x2->Sigs, sizeof(cipher__Sig)))
+  if (!equalSlices_(&x1->Sigs, &x2->Sigs, sizeof(cipher__Sig)))
     return 0;
-  if (!equalSlices((GoSlice *)&x1->In, (GoSlice *)&x2->In, sizeof(cipher__SHA256)))
+  if (!equalSlices_(&x1->In, &x2->In, sizeof(cipher__SHA256)))
     return 0;
-  if (!equalSlices((GoSlice *)&x1->Out, (GoSlice *)&x2->Out, sizeof(coin__TransactionOutput)))
+  if (!equalSlices_(&x1->Out, &x2->Out, sizeof(coin__TransactionOutput)))
     return 0;
   return 1;
 }

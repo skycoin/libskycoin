@@ -200,7 +200,7 @@ START_TEST(TestScryptChacha20poly1305Decrypt)
     errcode = SKY_encrypt_ScryptChacha20poly1305_Decrypt(&encrypt, encrypted, password2, &result);
     ck_assert_msg(errcode == SKY_OK, "SKY_encrypt_ScryptChacha20poly1305_Decrypt failed");
     registerMemCleanup((void *)result.data);
-    ck_assert_msg(isGoSlice_Eq(&text, &result) == 0, "Values this %d y %d, %s y %s", text.len, tmp_result.len, text.data, tmp_result.data);
+    ck_assert(isGoSlice_Eq(&text, &result));
     result.cap = result.len = 0;
     errcode = SKY_encrypt_ScryptChacha20poly1305_Decrypt(&encrypt, encrypted, wrong_password, &tmp_result);
     ck_assert_msg(errcode == SKY_ERROR, "SKY_encrypt_ScryptChacha20poly1305_Decrypt decrypted with wrong password.");

@@ -15,7 +15,7 @@
 #define JSON_FILE_SIZE      4096
 #define JSON_BIG_FILE_SIZE  32768
 
-// FIXME: Does not work on e.g. Windowa
+// FIXME: Does not work on e.g. Windows
 #define FILEPATH_SEPARATOR      "/"
 #define TEST_DATA_DIR           "vendor/github.com/skycoin/skycoin/src/cipher/testsuite/testdata/"
 #define MANY_ADDRESSES_FILENAME "many-addresses.golden"
@@ -71,6 +71,25 @@ typedef struct {
   GoSlice Keys;
 } SeedTestData;
 
+struct cr_mem
+{
+  const void *data;
+  size_t size;
+
+#ifdef __cplusplus
+  template <typename T, size_t N>
+  constexpr cr_mem(const T (&arr)[N])
+      : data(static_cast<const void *>(&arr)), size(N)
+  {
+  }
+
+  template <typename T>
+  constexpr cr_mem(const T *arr, size_t n)
+      : data(static_cast<const void *>(arr)), size(n)
+  {
+  }
+#endif /* !__cplusplus */
+};
 //------------------------------------------------------------------------------
 // Functions
 //------------------------------------------------------------------------------
