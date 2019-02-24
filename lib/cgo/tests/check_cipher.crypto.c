@@ -123,7 +123,7 @@ START_TEST(TestPubKeyHex)
   s4.p = s4.p;
   registerMemCleanup((void *)s4.p);
   // // TODO: Translate into cr_assert(eq(type(GoString), s3, s4));
-  ck_assert(isGoStringEq(&s3, &s4) == 0);
+  ck_assert(isGoStringEq(s3, s4) == 0);
 }
 END_TEST
 
@@ -530,7 +530,7 @@ START_TEST(TestSigHex)
   str2.p = tmp_str2.p;
   str2.n = tmp_str2.n;
   registerMemCleanup((void *)str2.p);
-  ck_assert(isGoStringEq(&str, &str2) == 0);
+  ck_assert(isGoStringEq(str, str2) == 0);
 }
 END_TEST
 

@@ -224,7 +224,7 @@ START_TEST(TestToString)
         if (tc.e == SKY_OK)
         {
             ck_assert(err == SKY_OK);
-            ck_assert(isGoStringEq(&tc.s, &s) == 0);
+            ck_assert(isGoStringEq(tc.s, s) == 0);
         }
         else
         {

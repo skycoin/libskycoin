@@ -53,16 +53,13 @@ START_TEST(TestBitcoinAddress)
     SKY_cipher_BitcoinAddress_String(&btcAddr, &str);
     registerMemCleanup((void *)str.p);
     GoString tmpStr = {str.p, str.n};
-    ck_assert(isGoStringEq(&tmpStr, addrStr));
+    ck_assert_str_eq(str.p, addrStr->p);
 
     error = SKY_cipher_BitcoinAddressFromSecKey(&seckey, &btcAddr);
     ck_assert(error == SKY_OK);
     GoString_ tmpstr = {buff, 0};
     SKY_cipher_BitcoinAddress_String(&btcAddr, &tmpstr);
-    GoString str1;
-    str1.p = tmpstr.p;
-    str1.n = tmpstr.n;
-    ck_assert(isGoStringEq(&str1, addrStr));
+    ck_assert_str_eq(tmpStr.p, addrStr->p);
   }
 }
 END_TEST
@@ -96,8 +93,8 @@ START_TEST(TestBitcoinWIFRoundTrip)
   GoString_ seckeyhex2;
   SKY_cipher_SecKey_Hex(&seckey, &seckeyhex1);
   SKY_cipher_SecKey_Hex(&seckey2, &seckeyhex2);
-  ck_assert(isGoString_Eq(&(seckeyhex1), &(seckeyhex2)));
-  ck_assert(isGoString_Eq(&(tmp_wip1), &(wip2)));
+  ck_assert_str_eq((seckeyhex1.p), (seckeyhex2.p));
+  ck_assert_str_eq((tmp_wip1.p), (wip2.p));
 }
 END_TEST
 
@@ -141,7 +138,7 @@ START_TEST(TestBitcoinWIF)
     GoString_ string;
     err = SKY_cipher_PubKey_Hex(&pubkey, &string);
     ck_assert(err == SKY_OK);
-    ck_assert(isGoString_Eq(&string, &pub[i]));
+    ck_assert_str_eq(string.p, pub[i].p);
     cipher__BitcoinAddress bitcoinAddr;
     GoString bitcoinAddrStr;
     SKY_cipher_BitcoinAddressFromPubKey(&pubkey, &bitcoinAddr);
@@ -151,7 +148,7 @@ START_TEST(TestBitcoinWIF)
     bitcoinAddrStr.p = tmp_bitcoinAddrStr.p;
     bitcoinAddrStr.n = tmp_bitcoinAddrStr.n;
     registerMemCleanup((void *)bitcoinAddrStr.p);
-    ck_assert(isU8Eq(addr[i].p, buff_bitcoinAddrStr, strlen(addr[i].p)) == 0);
+    ck_assert_msg(addr[i].p, bitcoinAddrStr.p);
   }
 }
 END_TEST

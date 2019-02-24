@@ -34,7 +34,7 @@ START_TEST(TestDistributionAddressArrays)
         // Check no duplicate address in distribution addresses
         for (j = i + 1, jStr = iStr + 1; j < all.len; ++j, ++jStr)
         {
-            ck_assert(isGoStringEq(iStr, jStr) == 1);
+            ck_assert(isGoStringEq(*iStr, *jStr) == 1);
         }
     }
 
@@ -43,13 +43,13 @@ START_TEST(TestDistributionAddressArrays)
         // Check no duplicate address in unlocked addresses
         for (j = i + 1, jStr = iStr + 1; j < unlocked.len; ++j, ++jStr)
         {
-            ck_assert(isGoStringEq(iStr, jStr) == 1);
+            ck_assert(isGoStringEq(*iStr, *jStr) == 1);
         }
 
         // Check unlocked address in set of all addresses
         for (k = 0, notfound = 1, kStr = (GoString *)all.data; notfound && (k < all.len); ++k, ++kStr)
         {
-            notfound = isGoStringEq(iStr, kStr);
+            notfound = isGoStringEq(*iStr, *kStr);
         }
         ck_assert(notfound == 0);
     }
@@ -59,20 +59,20 @@ START_TEST(TestDistributionAddressArrays)
         // Check no duplicate address in locked addresses
         for (j = i + 1, jStr = iStr + 1; j < locked.len; ++j, ++jStr)
         {
-            ck_assert(isGoStringEq(iStr, jStr) == 1);
+            ck_assert(isGoStringEq(*iStr, *jStr) == 1);
         }
 
         // Check locked address in set of all addresses
         for (k = 0, notfound = 1, kStr = (GoString *)all.data; notfound && k < all.len; ++k, ++kStr)
         {
-            notfound = isGoStringEq(iStr, kStr);
+            notfound = isGoStringEq(*iStr, *kStr);
         }
         ck_assert(notfound == 0);
 
         // Check locked address not in set of unlocked addresses
         for (k = 0, notfound = 1, kStr = (GoString *)unlocked.data; notfound && k < unlocked.len; ++k, ++kStr)
         {
-            ck_assert(isGoStringEq(iStr, kStr) == 1);
+            ck_assert(isGoStringEq(*iStr, *kStr) == 1);
         }
     }
 }

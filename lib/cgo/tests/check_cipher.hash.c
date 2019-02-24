@@ -134,7 +134,7 @@ START_TEST(TestSHA256Hex)
 
     SKY_cipher_SHA256_Hex(&h2, (GoString_ *)&s2);
     registerMemCleanup((void *)s2.p);
-    ck_assert(isGoStringEq(&s, &s2) == 0);
+    ck_assert(isGoStringEq(s, s2) == 0);
 }
 END_TEST
 

@@ -83,11 +83,11 @@ START_TEST(TestDecodeBase58Address)
   int len_b = b.len;
   char bufferHead[1024];
   GoString h = {bufferHead, 0};
-  b.len = (int)(len_b / 2);
+  b.len = (GoInt)(len_b / 2);
   errorcode = SKY_base58_Hex2Base58(b, &h);
   ck_assert(errorcode == SKY_OK);
   errorcode = SKY_cipher_DecodeBase58Address(h, &addr);
-  ck_assert(errorcode == SKY_ErrAddressInvalidLength);
+  ck_assert_msg(errorcode == SKY_ErrAddressInvalidLength, "Fail %X", err);
 
   b.len = len_b;
   errorcode = SKY_base58_Hex2Base58(b, &h);
@@ -167,13 +167,13 @@ START_TEST(TestAddressString)
   cipher__PubKey pk;
   cipher__SecKey sk;
   cipher__Address addr, addr2, addr3;
-  GoString str = {buff,0};
+  GoString str = {buff, 0};
 
   GoUint32 err = SKY_cipher_GenerateKeyPair(&pk, &sk);
   ck_assert(err == SKY_OK);
   err = SKY_cipher_AddressFromPubKey(&pk, &addr);
   ck_assert(err == SKY_OK);
-  GoString_ tmpstr = {str.p,str.n};
+  GoString_ tmpstr = {str.p, str.n};
 
   err = SKY_cipher_Address_String(&addr, &tmpstr);
   ck_assert(err == SKY_OK);
