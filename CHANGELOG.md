@@ -22,6 +22,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
+## [0.25.1] - 2018-12-19
+
+### Added
+- C client for Skycoin Api at `lib/curl`. For next versions a form of automatically generating the C client will be included in the Makefile.
+- In this version we only support the client at `lib/curl`
+
+### Fixed
+
+### Changed
+
+### Removed
+
 ## [0.25.0] - 2018-12-19
 
 ### Upcoming deprecated method removal notice

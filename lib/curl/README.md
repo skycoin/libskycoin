@@ -10,18 +10,12 @@ functions for implementing third-party applications.
 
 This API is generated from [OpenAPI v3](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) specifications with [openapi-generator](https://github.com/OpenAPITools/openapi-generator). The library has [libcurl](https://curl.haxx.se/libcurl/c/) as its only dependency.
 
-## Source code generation
+## Current Version
 
-In order to generate liskycoin-curl from swagger spec, install deps as follows
+The C client for Skycoin Api at `lib/curl/c` is generated for v0.25.1
 
-``` sh
-    $ make install-deps-swagger
-```
+In this version we only support the client at `lib/curl`
 
-To Generate a Client from swagger spec, just type:
+## Next Version
 
-``` sh
-    $ make swagger-client
-```
-This command will generate a C client in `lib/curl/cClient`.
-
+For next versions a form of automatically generating the C client will be included in the Makefile.
