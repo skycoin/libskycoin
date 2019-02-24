@@ -1132,8 +1132,13 @@ Suite *coin_transaction_fork(void)
     TCase *tc;
 
     tc = tcase_create("coin.transaction_fork");
+#if __linux__
     tcase_add_test_raise_signal(tc, TestTransactionPushInput, SKY_ABORT);
     tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SKY_ABORT);
+#elif __APPLE__
+    tcase_add_exit_test(tc, TestTransactionPushInput, SKY_ABORT);
+    tcase_add_exit_test(tc, TestTransactionSignInputs, SKY_ABORT);
+#endif
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 150);
     return s;
