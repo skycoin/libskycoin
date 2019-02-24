@@ -8,7 +8,7 @@
 #define SKY_ABORT  SIGABRT
 #elif __APPLE__
 #if TARGET_OS_MAC
-#define SKY_ABORT SIGABRT
+#define SKY_ABORT SIGINT
 #endif
 #endif
 
