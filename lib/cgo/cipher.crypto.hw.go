@@ -101,12 +101,12 @@ func SKY_cipher_ECDH(_pub *C.cipher__PubKey, _sec *C.cipher__SecKey, _arg2 *C.Go
 	return
 }
 
-//export SKY_cipher_DoubleSHA256
-func SKY_cipher_DoubleSHA256(_b []byte, _arg1 *C.cipher__SHA256) (____error_code uint32) {
-	h := cipher.DoubleSHA256(_b)
-	copyToBuffer(reflect.ValueOf(h[:]), unsafe.Pointer(_arg1), uint(SizeofSHA256))
-	return
-}
+// //export SKY_cipher_DoubleSHA256
+// func SKY_cipher_DoubleSHA256(_b []byte, _arg1 *C.cipher__SHA256) (____error_code uint32) {
+// 	h := cipher.DoubleSHA256(_b)
+// 	copyToBuffer(reflect.ValueOf(h[:]), unsafe.Pointer(_arg1), uint(SizeofSHA256))
+// 	return
+// }
 
 //export SKY_handle_copy
 func SKY_handle_copy(handle C.Handle, copy *C.Handle) uint32 {
