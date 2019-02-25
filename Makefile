@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
-.PHONY: install-linters format
+.PHONY: install-linters format clean-libc
 
 COIN ?= skycoin
 
@@ -37,10 +37,11 @@ LIBDOC_DIR = $(DOC_DIR)/libc
 # Compilation flags for libskycoin
 CC_VERSION = $(shell $(CC) -dumpversion)
 STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): print('-std=C99'")
-LIBC_LIBS = -lcriterion
+LIBC_LIBS = `pkg-config --cflags --libs check`
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
+CGO_ENABLED=1
 
 ifeq ($(shell uname -s),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
@@ -108,7 +109,7 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 	$(CC) -o $(BIN_DIR)/test_libskycoin_shared $(LIB_DIR)/cgo/tests/*.c $(LIB_DIR)/cgo/tests/testutils/*.c -lskycoin                    $(LDLIBS) $(LDFLAGS)
 	$(CC) -o $(BIN_DIR)/test_libskycoin_static $(LIB_DIR)/cgo/tests/*.c $(LIB_DIR)/cgo/tests/testutils/*.c $(BUILDLIB_DIR)/libskycoin.a $(LDLIBS) $(LDFLAGS)
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib:$(BUILDLIB_DIR)" $(BIN_DIR)/test_libskycoin_shared
-	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"                 $(BIN_DIR)/test_libskycoin_static
+	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"         $(BIN_DIR)/test_libskycoin_static
 
 docs-libc:
 	doxygen ./.Doxyfile
@@ -133,13 +134,24 @@ install-linters: ## Install linters
 
 install-deps-libc: configure-build ## Install locally dependencies for testing libskycoin
 	git clone --recursive https://github.com/skycoin/Criterion $(BUILD_DIR)/usr/tmp/Criterion
-	mkdir $(BUILD_DIR)/usr/tmp/Criterion/build
+	mkdir -p $(BUILD_DIR)/usr/tmp/Criterion/build
 	cd    $(BUILD_DIR)/usr/tmp/Criterion/build && cmake .. && cmake --build .
 	mv    $(BUILD_DIR)/usr/tmp/Criterion/build/libcriterion.* $(BUILD_DIR)/usr/lib/
 	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
 
+install-googletest-libc: configure-build ##Install googletest in debian && ubuntu
+	$(BUILD_DIR)/usr/tmp/ && wget -c https://github.com/google/googletest/archive/release-1.8.1.tar.gz && tar -xzvf release-1.8.1.tar.gz
+	cd $(BUILD_DIR)/usr/tmp/googletest-release-1.8.1 && mkdir mybuild && cd mybuild && cmake -G"Unix Makefiles" .. && make
+	cd /usr/src/gtest && sudo cmake CMakeLists.txt &&	sudo make && sudo cp *.a /usr/lib
+ 		
+
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
+
+clean-libc: ## Clean files generate by library
+	rm -rfv $(BUILDLIB_DIR)/libskycoin.so
+	rm -rfv $(BUILDLIB_DIR)/libskycoin.a
+	rm -rfv qemu_test_libskycoin*
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

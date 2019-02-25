@@ -91,3 +91,11 @@ func SKY_cipher_BitcoinAddress_Checksum(_addr *C.cipher__BitcoinAddress, _arg0 *
 	cs := addr.Checksum()
 	C.memcpy(unsafe.Pointer(_arg0), unsafe.Pointer(&cs[0]), C.size_t(len(cs)))
 }
+
+//export SKY_cipher_BitcoinPubKeyRipemd160
+func SKY_cipher_BitcoinPubKeyRipemd160(_pubKey *C.cipher__PubKey, _arg0 *C.cipher__Ripemd160) {
+	pubkey := *(*cipher.PubKey)(unsafe.Pointer(_pubKey))
+	r160 := cipher.BitcoinPubKeyRipemd160(pubkey)
+	C.memcpy(unsafe.Pointer(_arg0), unsafe.Pointer(&r160[0]), C.size_t(len(r160)))
+
+}

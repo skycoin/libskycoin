@@ -11,8 +11,6 @@ package main
 import "C"
 
 import (
-	"hash"
-
 	"github.com/spf13/cobra"
 
 	"github.com/skycoin/skycoin/src/api"
@@ -96,16 +94,6 @@ func lookupReadableWalletHandle(handle C.ReadableWallet__Handle) (*wallet.Readab
 
 func registerReadableEntryHandle(obj *wallet.ReadableEntry) C.ReadableEntry__Handle {
 	return (C.ReadableEntry__Handle)(registerHandle(obj))
-}
-
-func lookupReadableEntryHandle(handle C.ReadableEntry__Handle) (*wallet.ReadableEntry, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*wallet.ReadableEntry); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
 }
 
 func registerOptionsHandle(obj *wallet.Options) C.Options__Handle {
@@ -192,10 +180,6 @@ func lookupWalletResponseHandle(handle C.WalletResponse__Handle) (*api.WalletRes
 	return nil, false
 }
 
-func registerCreateTransactionRequestHandle(obj *api.CreateTransactionRequest) C.CreateTransactionRequest__Handle {
-	return (C.CreateTransactionRequest__Handle)(registerHandle(obj))
-}
-
 func lookupCreateTransactionRequestHandle(handle C.CreateTransactionRequest__Handle) (*api.CreateTransactionRequest, bool) {
 	obj, ok := lookupHandle(C.Handle(handle))
 	if ok {
@@ -262,20 +246,6 @@ func lookupBlockHandle(handle C.Block__Handle) (*coin.Block, bool) {
 	return nil, false
 }
 
-func registerSignedBlockHandle(obj *coin.SignedBlock) C.SignedBlock__Handle {
-	return (C.SignedBlock__Handle)(registerHandle(obj))
-}
-
-func lookupSignedBlockHandle(handle C.SignedBlock__Handle) (*coin.SignedBlock, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*coin.SignedBlock); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
 func registerBlockBodyHandle(obj *coin.BlockBody) C.BlockBody__Handle {
 	return (C.BlockBody__Handle)(registerHandle(obj))
 }
@@ -308,84 +278,24 @@ func registerCreatedTransactionOutputHandle(obj *api.CreatedTransactionOutput) C
 	return (C.CreatedTransactionOutput__Handle)(registerHandle(obj))
 }
 
-func lookupCreatedTransactionOutputHandle(handle C.CreatedTransactionOutput__Handle) (*api.CreatedTransactionOutput, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*api.CreatedTransactionOutput); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
 func registerCreatedTransactionInputHandle(obj *api.CreatedTransactionInput) C.CreatedTransactionInput__Handle {
 	return (C.CreatedTransactionInput__Handle)(registerHandle(obj))
-}
-
-func lookupCreatedTransactionInputHandle(handle C.CreatedTransactionInput__Handle) (*api.CreatedTransactionInput, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*api.CreatedTransactionInput); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
 }
 
 func registerCreateTransactionResponseHandle(obj *api.CreateTransactionResponse) C.CreateTransactionResponse__Handle {
 	return (C.CreateTransactionResponse__Handle)(registerHandle(obj))
 }
 
-func lookupCreateTransactionResponseHandle(handle C.CreateTransactionResponse__Handle) (*api.CreateTransactionResponse, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*api.CreateTransactionResponse); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
 func registerBalanceResultHandle(obj *cli.BalanceResult) C.BalanceResult_Handle {
 	return (C.BalanceResult_Handle)(registerHandle(obj))
-}
-
-func lookupBalanceResultHandle(handle C.BalanceResult_Handle) (*cli.BalanceResult, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*cli.BalanceResult); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
 }
 
 func registerSpendResultHandle(obj *api.SpendResult) C.SpendResult_Handle {
 	return (C.SpendResult_Handle)(registerHandle(obj))
 }
 
-func lookupSpendResultHandle(handle C.SpendResult_Handle) (*api.SpendResult, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*api.SpendResult); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
 func registerTransactionResultHandle(obj *webrpc.TxnResult) C.TransactionResult_Handle {
 	return (C.TransactionResult_Handle)(registerHandle(obj))
-}
-
-func lookupTransactionResultHandle(handle C.TransactionResult_Handle) (*webrpc.TxnResult, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*webrpc.TxnResult); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
 }
 
 func registerSortableTransactiontHandle(obj *coin.SortableTransactions) C.SortableTransactionResult_Handle {
@@ -402,32 +312,8 @@ func lookupSortableTransactionHandle(handle C.SortableTransactionResult_Handle) 
 	return nil, false
 }
 
-func registerOutputsResultHandle(obj *webrpc.OutputsResult) C.OutputsResult_Handle {
-	return (C.OutputsResult_Handle)(registerHandle(obj))
-}
-
-func lookupOutputsResultHandle(handle C.OutputsResult_Handle) (*webrpc.OutputsResult, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*webrpc.OutputsResult); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
 func registerStatusResultHandle(obj *webrpc.StatusResult) C.StatusResult_Handle {
 	return (C.StatusResult_Handle)(registerHandle(obj))
-}
-
-func lookupStatusResultHandle(handle C.StatusResult_Handle) (*webrpc.StatusResult, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*webrpc.StatusResult); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
 }
 
 func registerAddressUxOutHandle(obj *coin.AddressUxOuts) C.AddressUxOuts_Handle {
@@ -438,20 +324,6 @@ func lookupAddressUxOutHandle(handle C.AddressUxOuts_Handle) (*coin.AddressUxOut
 	obj, ok := lookupHandle(C.Handle(handle))
 	if ok {
 		if obj, isOK := (obj).(*coin.AddressUxOuts); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
-func registerHashHandle(obj *hash.Hash) C.Hash_Handle {
-	return (C.Hash_Handle)(registerHandle(obj))
-}
-
-func lookupHashHandle(handle C.Hash_Handle) (*hash.Hash, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*hash.Hash); isOK {
 			return obj, true
 		}
 	}
@@ -471,16 +343,6 @@ func registerReadableUnspentOutputsSummaryHandle(obj *readable.UnspentOutputsSum
 	return (C.ReadableUnspentOutputsSummary_Handle)(registerHandle(obj))
 }
 
-func lookupReadableUnspentOutputsSummaryHandle(handle C.ReadableUnspentOutputsSummary_Handle) (*readable.UnspentOutputsSummary, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*readable.UnspentOutputsSummary); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
 func registerBuildInfoHandle(obj *readable.BuildInfo) C.BuildInfo_Handle {
 	return (C.BuildInfo_Handle)(registerHandle(obj))
 }
@@ -489,6 +351,22 @@ func lookupBuildInfoHandle(handle C.BuildInfo_Handle) (*readable.BuildInfo, bool
 	obj, ok := lookupHandle(C.Handle(handle))
 	if ok {
 		if obj, isOK := (obj).(*readable.BuildInfo); isOK {
+			return obj, true
+		}
+	}
+	return nil, false
+}
+
+// CreateTransactionParams
+
+func registerCreateTransactionParamsHandle(obj *wallet.CreateTransactionParams) C.CreateTransactionParams__Handle {
+	return (C.CreateTransactionParams__Handle)(registerHandle(obj))
+}
+
+func lookupCreateTransactionParamsHandle(handle C.CreateTransactionParams__Handle) (*wallet.CreateTransactionParams, bool) {
+	obj, ok := lookupHandle(C.Handle(handle))
+	if ok {
+		if obj, isOK := (obj).(*wallet.CreateTransactionParams); isOK {
 			return obj, true
 		}
 	}

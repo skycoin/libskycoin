@@ -5,10 +5,10 @@
 #endif
 
 #if __linux__
-#define SKY_ABORT .signal = SIGABRT
+#define SKY_ABORT  SIGABRT
 #elif __APPLE__
 #if TARGET_OS_MAC
-#define SKY_ABORT .exit_code = 2
+#define SKY_ABORT 2
 #endif
 #endif
 
