@@ -28,13 +28,8 @@ env:
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
     - CGO_ENABLED: 1
+    - PKG_CLANG_FORMAT: clang-format
 
-before_install:
-  # Ubuntu Trusty official package name is clang-format-3.4
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-    PKG_CLANG_FORMAT=clang-format-7 ; else
-    PKG_CLANG_FORMAT=clang-format ;
-    fi
 
 install:
   # Install gox
