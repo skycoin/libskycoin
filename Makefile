@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
-.PHONY: install-linters format clean-libc
+.PHONY: install-linters format clean-libc format-libc
 
 COIN ?= skycoin
 
@@ -45,6 +45,7 @@ UNAME_S = $(shell uname -s)
 CGO_ENABLED=1
 
 PKG_CLANG_FORMAT ?= clang-format
+PKG_LIB_TEST ?= check
 
 ifeq ($(UNAME_S),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
@@ -120,7 +121,7 @@ lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
 	# lib/cgo needs separate linting rules
 	golangci-lint run -c .golangci.libcgo.yml ./lib/cgo/...
-	clang-format
+	# clang-format
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
@@ -132,24 +133,20 @@ install-linters-Linux: ## Install linters on GNU/Linux
 install-linters-Darwin: ## Install linters on Mac OSX
 	brew install $(PKG_CLANG_FORMAT)
 
+install-deps-Linux: ## Install linters on GNU/Linux
+	sudo apt-get install $(PKG_LIB_TEST)
+
+install-deps-Darwin: ## Install linters on Mac OSX
+	brew install $(PKG_LIB_TEST)
+
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
 	# However, they suggest `curl ... | bash` which we should not do
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
-install-deps-libc: configure-build ## Install locally dependencies for testing libskycoin
-	git clone --recursive https://github.com/skycoin/Criterion $(BUILD_DIR)/usr/tmp/Criterion
-	mkdir -p $(BUILD_DIR)/usr/tmp/Criterion/build
-	cd    $(BUILD_DIR)/usr/tmp/Criterion/build && cmake .. && cmake --build .
-	mv    $(BUILD_DIR)/usr/tmp/Criterion/build/libcriterion.* $(BUILD_DIR)/usr/lib/
-	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
+install-deps-libc: install-deps-$(UNAME_S) configure-build ## Install locally dependencies for testing libskycoin
 
-install-googletest-libc: configure-build ##Install googletest in debian && ubuntu
-	$(BUILD_DIR)/usr/tmp/ && wget -c https://github.com/google/googletest/archive/release-1.8.1.tar.gz && tar -xzvf release-1.8.1.tar.gz
-	cd $(BUILD_DIR)/usr/tmp/googletest-release-1.8.1 && mkdir mybuild && cd mybuild && cmake -G"Unix Makefiles" .. && make
-	cd /usr/src/gtest && sudo cmake CMakeLists.txt &&	sudo make && sudo cp *.a /usr/lib
- 		
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
