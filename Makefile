@@ -159,5 +159,9 @@ clean-libc: ## Clean files generate by library
 	rm -rfv $(BUILDLIB_DIR)/libskycoin.a
 	rm -rfv qemu_test_libskycoin*
 
+format-libc:
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format lib/cgo/tests/*.c
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format include/*.h
+
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
