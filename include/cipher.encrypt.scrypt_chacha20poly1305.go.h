@@ -1,4 +1,4 @@
-typedef struct{
+typedef struct {
     GoInt_ N;
     GoInt_ R;
     GoInt_ P;
