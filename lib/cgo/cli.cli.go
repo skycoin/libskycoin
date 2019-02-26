@@ -72,6 +72,7 @@ func SKY_cli_NewCLI(_cfg C.Config__Handle, _arg1 *C.CLI__Handle) (____error_code
 	return
 }
 
+//export SKY_cli_NewPasswordReader
 func SKY_cli_NewPasswordReader(_password []byte, passwordReader *C.PasswordReader__Handle) {
 	password := *(*[]byte)(unsafe.Pointer(&_password))
 	pr := cli.NewPasswordReader(password)
