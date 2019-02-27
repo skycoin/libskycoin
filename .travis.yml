@@ -39,6 +39,7 @@ install:
   - make install-deps-libc
 
 script:
+  - make format-libc
   - make lint
   # libskycoin tests
   - CC=gcc-6 make test-libc

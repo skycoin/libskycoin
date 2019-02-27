@@ -117,7 +117,7 @@ docs-libc:
 
 docs: docs-libc
 
-lint: ## Run linters. Use make install-linters first.
+lint: format-libc ## Run linters. Use make install-linters first.
 	vendorcheck ./...
 	# lib/cgo needs separate linting rules
 	golangci-lint run -c .golangci.libcgo.yml ./lib/cgo/...
