@@ -45,6 +45,7 @@ UNAME_S = $(shell uname -s)
 CGO_ENABLED=1
 
 PKG_CLANG_FORMAT = clang-format
+PKG_CLANG_LINTER = clang-tidy
 PKG_LIB_TEST = check
 
 ifeq ($(UNAME_S),Linux)
@@ -122,7 +123,7 @@ lint: format-libc ## Run linters. Use make install-linters first.
 	# lib/cgo needs separate linting rules
 	golangci-lint run -c .golangci.libcgo.yml ./lib/cgo/...
 	# Linter LIBC
-	clang-check  lib/cgo/tests/*.c -- $(LIBC_FLAGS)
+	clang-tidy  lib/cgo/tests/*.c -- $(LIBC_FLAGS)
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
@@ -130,9 +131,11 @@ check: lint test-libc ## Run tests and linters
 
 install-linters-Linux: ## Install linters on GNU/Linux
 	sudo apt-get install $(PKG_CLANG_FORMAT)
+	sudo apt-get install $(PKG_CLANG_LINTER)
 
 install-linters-Darwin: ## Install linters on Mac OSX
 	brew install $(PKG_CLANG_FORMAT)
+	brew install $(PKG_CLANG_LINTER)
 
 install-deps-Linux: ## Install deps on GNU/Linux
 	sudo apt-get install $(PKG_LIB_TEST)
