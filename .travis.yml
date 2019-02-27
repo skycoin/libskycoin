@@ -9,7 +9,7 @@ matrix:
     - os: linux
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode9.4
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
 
 before_install:
@@ -32,6 +32,7 @@ install:
   - go get -t ./...
   # Install linters
   - make install-linters
+  - make install-deps-libc
 
 script:
   - make format-libc

@@ -145,6 +145,7 @@ install-linters: install-linters-$(UNAME_S) ## Install linters
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
 	# However, they suggest `curl ... | bash` which we should not do
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
 
 install-deps-libc: install-deps-$(UNAME_S) configure-build ## Install locally dependencies for testing libskycoin
 
