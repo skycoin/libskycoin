@@ -121,7 +121,8 @@ lint: format-libc ## Run linters. Use make install-linters first.
 	vendorcheck ./...
 	# lib/cgo needs separate linting rules
 	golangci-lint run -c .golangci.libcgo.yml ./lib/cgo/...
-	# clang-format
+	# Linter LIBC
+	clang-check  lib/cgo/tests/*.c -- $(LIBC_FLAGS)
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
