@@ -157,7 +157,7 @@ clean-libc: ## Clean files generate by library
 	rm -rfv $(BUILDLIB_DIR)/libskycoin.a
 	rm -rfv qemu_test_libskycoin*
 
-format-libc:
+format-libc: build-libc
 	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format lib/cgo/tests/*.c
 	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format include/*.h
 
