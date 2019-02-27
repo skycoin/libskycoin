@@ -133,6 +133,7 @@ install-linters-Linux: ## Install linters on GNU/Linux
 
 install-linters-Darwin: ## Install linters on Mac OSX
 	brew install $(PKG_CLANG_FORMAT)
+	brew install clang
 
 install-deps-Linux: ## Install deps on GNU/Linux
 	sudo apt-get install $(PKG_LIB_TEST)
