@@ -128,18 +128,6 @@ lint: format-libc ## Run linters. Use make install-linters first.
 
 check: lint test-libc ## Run tests and linters
 
-install-linters-Linux: ## Install linters on GNU/Linux
-	sudo apt-get install $(PKG_CLANG_FORMAT)
-
-install-linters-Darwin: ## Install linters on Mac OSX
-	brew install $(PKG_CLANG_FORMAT)
-
-install-deps-Linux: ## Install deps on GNU/Linux
-	sudo apt-get install $(PKG_LIB_TEST)
-
-install-deps-Darwin: ## Install deps on Mac OSX
-	brew install $(PKG_LIB_TEST)
-
 install-linters: ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install

@@ -5,6 +5,7 @@
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
   sudo apt-get install -qq gcc-6 g++-6
   sudo apt install clang-format
+  sudo apt install check
 fi
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
@@ -19,6 +20,7 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
   brew install gcc\@6 || brew link --overwrite gcc\@6
   echo 'Installing clang-format'
   brew install clang-format
+  brew install check
 fi
 
 cd $TRAVIS_BUILD_DIR

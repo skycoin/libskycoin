@@ -9,7 +9,7 @@ matrix:
     - os: linux
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode9
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
 
 before_install:
@@ -35,8 +35,6 @@ install:
   - make install-linters
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
-  # Install pinned golangci-lint, overriding the latest version install by make install-linters
-  - make install-deps-libc
 
 script:
   - make format-libc
