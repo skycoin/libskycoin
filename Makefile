@@ -44,8 +44,8 @@ OSNAME  = $(TRAVIS_OS_NAME)
 UNAME_S = $(shell uname -s)
 CGO_ENABLED=1
 
-PKG_CLANG_FORMAT ?= clang-format
-PKG_LIB_TEST ?= check
+PKG_CLANG_FORMAT = clang-format
+PKG_LIB_TEST = check
 
 ifeq ($(UNAME_S),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
@@ -128,7 +128,19 @@ lint: format-libc ## Run linters. Use make install-linters first.
 
 check: lint test-libc ## Run tests and linters
 
-install-linters: ## Install linters
+install-linters-Linux: ## Install linters on GNU/Linux
+	sudo apt-get install $(PKG_CLANG_FORMAT)
+
+install-linters-Darwin: ## Install linters on Mac OSX
+	brew install $(PKG_CLANG_FORMAT)
+
+install-deps-Linux: ## Install deps on GNU/Linux
+	sudo apt-get install $(PKG_LIB_TEST)
+
+install-deps-Darwin: ## Install deps on Mac OSX
+	brew install $(PKG_LIB_TEST)
+
+install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
 	# However, they suggest `curl ... | bash` which we should not do
