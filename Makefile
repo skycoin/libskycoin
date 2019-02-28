@@ -135,7 +135,7 @@ install-linters-Linux: ## Install linters on GNU/Linux
 
 install-linters-Darwin: ## Install linters on Mac OSX
 	# brew install $(PKG_CLANG_FORMAT)
-	brew install llvm --with-toolchain
+	brew install llvm
 	ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
 	ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 
