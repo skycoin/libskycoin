@@ -34,7 +34,7 @@ install:
   - make install-linters
 
 script:
-  - CC=gcc-6 make check
+  - make check
 
 
 
