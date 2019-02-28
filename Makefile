@@ -134,8 +134,10 @@ install-linters-Linux: ## Install linters on GNU/Linux
 	sudo apt-get install $(PKG_CLANG_LINTER)
 
 install-linters-Darwin: ## Install linters on Mac OSX
-	brew install $(PKG_CLANG_FORMAT)
-	brew install $(PKG_CLANG_LINTER)
+	# brew install $(PKG_CLANG_FORMAT)
+	brew install llvm --with-toolchain
+	ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
+	ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 
 install-deps-Linux: ## Install deps on GNU/Linux
 	sudo apt-get install $(PKG_LIB_TEST)
