@@ -30,14 +30,12 @@ install:
   # Install gox
   - go get github.com/gz-c/gox
   - go get -t ./...
-  # Install linters
-  - make install-linters
-  - make install-deps-libc
 
 script:
+  - make install-deps-libc
   # libskycoin tests
   - CC=gcc-6 make test-libc
-  - make format-libc
+  - make install-linters
   - make lint
 
 
