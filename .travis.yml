@@ -3,9 +3,6 @@ dist: xenial
 language: go
 go:
   - "1.11.x"
-compiler:
-  - clang
-  - gcc
   
 matrix:
   include:
