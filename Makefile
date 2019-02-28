@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
-.PHONY: install-linters format clean-libc format-libc
+.PHONY: install-linters format clean-libc format-libc lint-libc
 
 COIN ?= skycoin
 
@@ -105,7 +105,7 @@ build-libc-dbg: configure-build build-libc-static build-libc-shared
 	$(CC) -g -o $(BIN_DIR)/test_libskycoin_shared $(LIB_DIR)/cgo/tests/*.c -lskycoin                    $(LDLIBS) $(LDFLAGS)
 	$(CC) -g -o $(BIN_DIR)/test_libskycoin_static $(LIB_DIR)/cgo/tests/*.c $(BUILDLIB_DIR)/libskycoin.a $(LDLIBS) $(LDFLAGS)
 
-test-libc: build-libc ## Run tests for libskycoin C client library
+test-libc: ## Run tests for libskycoin C client library
 	echo "Compiling with $(CC) $(CC_VERSION) $(STDC_FLAG)"
 	$(CC) -o $(BIN_DIR)/test_libskycoin_shared $(LIB_DIR)/cgo/tests/*.c $(LIB_DIR)/cgo/tests/testutils/*.c -lskycoin                    $(LDLIBS) $(LDFLAGS)
 	$(CC) -o $(BIN_DIR)/test_libskycoin_static $(LIB_DIR)/cgo/tests/*.c $(LIB_DIR)/cgo/tests/testutils/*.c $(BUILDLIB_DIR)/libskycoin.a $(LDLIBS) $(LDFLAGS)
@@ -118,16 +118,19 @@ docs-libc:
 
 docs: docs-libc
 
-lint: format-libc ## Run linters. Use make install-linters first.
+lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
 	# lib/cgo needs separate linting rules
 	golangci-lint run -c .golangci.libcgo.yml ./lib/cgo/...
-	# Linter LIBC
-	clang-tidy  lib/cgo/tests/*.c -- $(LIBC_FLAGS)
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
-check: lint test-libc ## Run tests and linters
+lint-libc: format-libc
+	# Linter LIBC
+	clang-tidy  lib/cgo/tests/*.c -- $(LIBC_FLAGS) -Wincompatible-pointer-types
+
+
+check: lint test-libc lint-libc ## Run tests and linters
 
 install-linters-Linux: ## Install linters on GNU/Linux
 	sudo apt-get install $(PKG_CLANG_FORMAT)

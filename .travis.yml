@@ -34,10 +34,10 @@ install:
   - make install-linters
 
 script:
-  - make build-libc
   - make lint
   # libskycoin tests
   - CC=gcc-6 make test-libc
+  - make lint-libc
 
 
 
