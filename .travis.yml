@@ -28,7 +28,7 @@ install:
   - if [[ ! -d $GOPATH/src/github.com/skycoin/skycoin ]]; then mkdir -p $GOPATH/src/github.com/skycoin; ln -s $TRAVIS_BUILD_DIR $GOPATH/src/github.com/skycoin/libskycoin; fi
   - cd $GOPATH/src/github.com/skycoin/libskycoin
   - echo $GOPATH
-  - go get -t ./...
+  - go get -t -mod=vendor ./...
   - make install-linters
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
