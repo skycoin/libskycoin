@@ -25,7 +25,7 @@ env:
 install:
   # Install gox
   - go get github.com/gz-c/gox
-  - echo "$GOPATH"
+  - echo $GOPATH
   - go get -t ./...
   - make install-linters
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
