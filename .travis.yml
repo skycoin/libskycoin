@@ -25,6 +25,9 @@ env:
 install:
   # Install gox
   - go get github.com/gz-c/gox
+  - export GOPATH="${TRAVIS_BUILD_DIR}/Godeps/_workspace:$GOPATH"
+  - export PATH="${TRAVIS_BUILD_DIR}/Godeps/_workspace/bin:$PATH"
+  - govendor update +v
   - echo $GOPATH
   - go get -t ./...
   - make install-linters
