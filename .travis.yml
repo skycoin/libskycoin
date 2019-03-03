@@ -25,8 +25,8 @@ env:
 install:
   # Install gox
   - go get github.com/gz-c/gox
-  - cd $GOPATH/src/github.com/skycoin/libskycoin
-  - govendor update +v
+  - if [[ ! -d $GOPATH/src/github.com/simelo/libskycoin ]]; then mkdir -p $GOPATH/src/github.com/simelo; ln -s $TRAVIS_BUILD_DIR $GOPATH/src/github.com/simelo/libskycoin; fi
+  - cd $GOPATH/src/github.com/simelo/libskycoin
   - echo $GOPATH
   - go get -t ./...
   - make install-linters
