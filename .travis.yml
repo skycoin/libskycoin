@@ -25,10 +25,10 @@ env:
 install:
   # Install gox
   - go get github.com/gz-c/gox
-  - if [[ ! -d $GOPATH/src/github.com/skycoin/skycoin ]]; then mkdir -p $GOPATH/src/github.com/skycoin; ln -s $TRAVIS_BUILD_DIR $GOPATH/src/github.com/skycoin/libskycoin; fi
-  - cd $GOPATH/src/github.com/skycoin/libskycoin
+  - export GOPATH="${TRAVIS_BUILD_DIR}/Godeps/_workspace:$GOPATH"
+  - export PATH="${TRAVIS_BUILD_DIR}/Godeps/_workspace/bin:$PATH"
   - echo $GOPATH
-  - go get -t -mod=vendor ./...
+  - go get -t ./...
   - make install-linters
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
