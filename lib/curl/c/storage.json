@@ -1,0 +1,12 @@
+{
+    "telemetry.machineId": "0afb7b2c002cc592587fb83f286214b90c2f5c0a0339689556bc6b6609baf11e",
+    "theme": "vs-dark",
+    "themeBackground": "#1e1e1e",
+    "pickerWorkingDir": "/home/maceo/goeg/src/github.com/skycoin/libskycoin/lib/curl",
+    "openedPathsList": {
+        "workspaces2": [
+            "file:///home/maceo/goeg/src/github.com/skycoin/libskycoin/lib/curl/c"
+        ],
+        "files2": []
+    }
+}

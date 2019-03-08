@@ -768,7 +768,7 @@ end:
 
 // defaultConnectionsHandler returns the list of default hardcoded bootstrap addresses.\\n They are not necessarily connected to.
 //
-list
+list_t *
 DefaultAPI_defaultConnections(apiClient_t *apiClient) {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
@@ -1254,7 +1254,7 @@ end:    apiClient_free(apiClient);
 
 // This endpoint returns all connections found through peer exchange
 //
-list
+list_t*
 DefaultAPI_networkConnectionsExchange(apiClient_t *apiClient) {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
@@ -1310,7 +1310,7 @@ end:
 
 // trustConnectionsHandler returns all trusted connections.\\n They are not necessarily connected to. In the default configuration, these will be a subset of the default hardcoded bootstrap addresses.
 //
-list
+list_t*
 DefaultAPI_networkConnectionsTrust(apiClient_t *apiClient) {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
