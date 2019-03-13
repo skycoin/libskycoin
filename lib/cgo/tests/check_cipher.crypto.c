@@ -266,7 +266,7 @@ START_TEST(TestSecKeyFromHex)
 
   // Invalid hex length
   GoSlice b = {buff, 0, 50};
-  SKY_cipher_RandByte(32, &b);
+  randBytes(&b, 32);
   cipher__SecKey p;
   err = SKY_cipher_NewSecKey(b, &p);
   ck_assert(err == SKY_OK);
