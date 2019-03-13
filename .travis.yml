@@ -1,4 +1,6 @@
 sudo: required
+services:
+  - docker
 dist: trusty
 language: go
 go:
@@ -17,6 +19,8 @@ before_install:
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   - ./ci-scripts/install-travis-gcc.sh
   - eval "CC=gcc-6 && CXX=g++-6"
+  # Install docker if Linux
+ # - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then bash ./.travis/install_docker.sh ; fi
 
 env:
   global:
@@ -38,6 +42,7 @@ script:
   - make lint
   # libskycoin tests
   - CC=gcc-6 make test-libc
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build  . -t skydev-test ; fi
 
 notifications:
   email: false
