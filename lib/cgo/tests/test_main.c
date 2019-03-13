@@ -19,7 +19,7 @@ int main(void)
     // srunner_add_suite(sr, coin_transaction());
     srunner_add_suite(sr, param_distribution()); //ok
     srunner_add_suite(sr, util_droplet()); //ok
-    // srunner_add_suite(sr, util_fee());
+    srunner_add_suite(sr, util_fee()); //ok
     srunner_set_fork_status(sr, CK_NOFORK);
     srunner_set_fork_status(sr_fork, CK_FORK);
     srunner_run_all(sr, CK_VERBOSE);
