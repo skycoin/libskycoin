@@ -64,24 +64,34 @@ START_TEST(TestDecodeBase58Address) {
   errorcode = SKY_cipher_AddressFromPubKey(&p, &a);
   ck_assert(errorcode == SKY_OK);
   GoSlice b;
-  b.data = buff;
-  b.len = 0;
-  b.cap = sizeof(buff);
-  errorcode = SKY_cipher_Address_Bytes(&addr, &b);
+  coin__UxArray Cub;
+  Cub.data = buff;
+  Cub.len = 0;
+  Cub.cap = sizeof(buff);
+  errorcode = SKY_cipher_Address_Bytes(&addr, &Cub);
   ck_assert_msg(errorcode == SKY_OK, "Fail SKY_cipher_Address_Bytes");
+  b.cap = Cub.cap;
+  b.data = Cub.data;
+  b.len = Cub.len;
+
   int len_b = b.len;
   char bufferHead[1024];
-  GoString h = {bufferHead, 0};
+  GoString_ h = {bufferHead, 0};
   b.len = (GoInt)(len_b / 2);
   errorcode = SKY_base58_Hex2Base58(b, &h);
   ck_assert(errorcode == SKY_OK);
-  errorcode = SKY_cipher_DecodeBase58Address(h, &addr);
+  char bufferHeadTmp[1024];
+  GoString tmph = {bufferHeadTmp, 0};
+  tmph.n = h.n;
+  tmph.p = h.p;
+  errorcode = SKY_cipher_DecodeBase58Address(tmph, &addr);
   ck_assert_msg(errorcode == SKY_ErrAddressInvalidLength, "Fail %X", errorcode);
-
   b.len = len_b;
   errorcode = SKY_base58_Hex2Base58(b, &h);
   ck_assert(errorcode == SKY_OK);
-  errorcode = SKY_cipher_DecodeBase58Address(h, &addr);
+  tmph.n = h.n;
+  tmph.p = h.p;
+  errorcode = SKY_cipher_DecodeBase58Address(tmph, &addr);
   ck_assert_msg(errorcode == SKY_OK, "Fail %X", errorcode);
 }
 END_TEST
