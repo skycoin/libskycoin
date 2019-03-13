@@ -128,16 +128,15 @@ START_TEST(TestAddressFromBytes) {
 
   bytes.len = bytes_len;
   ((char *)bytes.data)[bytes.len - 1] = '2';
-  ck_assert_msg(SKY_cipher_AddressFromBytes(bytes, &addr2) ==
-                    SKY_ErrAddressInvalidChecksum,
-                "no SKY address due to corrupted bytes");
+  err = SKY_cipher_AddressFromBytes(bytes, &addr2);
+  ck_assert_msg(err == SKY_ErrAddressInvalidChecksum,
+                "no SKY address due to corrupted bytes %X", err);
 
   addr.Version = 2;
   SKY_cipher_Address_Bytes(&addr, &tempBytes);
   copyGoSlice_toGoSlice(&bytes, &tempBytes, tempBytes.len);
-  ck_assert_msg(SKY_cipher_AddressFromBytes(bytes, &addr2) ==
-                    SKY_ErrAddressInvalidVersion,
-                "Invalid version");
+  err = SKY_cipher_AddressFromBytes(bytes, &addr2);
+  ck_assert_msg(err == SKY_ErrAddressInvalidVersion, "Invalid version");
 }
 END_TEST
 
