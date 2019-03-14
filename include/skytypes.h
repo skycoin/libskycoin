@@ -63,11 +63,19 @@ typedef double GoFloat64_;
 /**
  * Instances of Go `complex` type.
  */
-typedef struct{float real; float imaginary;} GoComplex64_;
+typedef struct
+{
+  float real;
+  float imaginary;
+} GoComplex64_;
 /**
  * Instances of Go `complex` type.
  */
-typedef struct{double real; double imaginary;} GoComplex128_;
+typedef struct
+{
+  double real;
+  double imaginary;
+} GoComplex128_;
 typedef unsigned int BOOL;
 typedef unsigned int error;
 
@@ -75,20 +83,18 @@ typedef unsigned int error;
   static assertion to make sure the file is being used on architecture
   at least with matching size of GoInt._
 */
-#if __GNUC__
 #if __x86_64__ || __ppc64__
-typedef char _check_for_64_bit_pointer_matchingGoInt[sizeof(void*)==64/8 ? 1:-1];
+typedef char _check_for_64_bit_pointer_matchingGoInt[sizeof(void *) == 64 / 8 ? 1 : -1];
 #endif
-#endif
-
 
 /**
  * Instances of Go `string` type.
  */
-typedef struct {
-  const char *p;    ///< Pointer to string characters buffer.
-  GoInt_ n;         ///< String size not counting trailing `\0` char
-                    ///< if at all included.
+typedef struct
+{
+  const char *p; ///< Pointer to string characters buffer.
+  GoInt_ n;      ///< String size not counting trailing `\0` char
+                 ///< if at all included.
 } GoString_;
 /**
  * Instances of Go `map` type.
@@ -131,7 +137,6 @@ typedef Handle ReadableEntry__Handle;
  * Options Handle
 */
 typedef Handle Options__Handle;
-
 
 /**
  * Config Handle
@@ -183,33 +188,36 @@ typedef Handle ReadableOutputSet_Handle;
  */
 typedef Handle CreateTransactionParams__Handle;
 
-    /**
+/**
  * Instances of Go interface types.
  */
-    typedef struct
+typedef struct
 {
-  void *t;      ///< Pointer to the information of the concrete Go type
-                ///< bound to this interface reference.
-  void *v;      ///< Pointer to the data corresponding to the value
-                ///< bound to this interface type.
+  void *t; ///< Pointer to the information of the concrete Go type
+           ///< bound to this interface reference.
+  void *v; ///< Pointer to the data corresponding to the value
+           ///< bound to this interface type.
 } GoInterface_;
 /**
  * Instances of Go slices
  */
-typedef struct {
-  void *data;   ///< Pointer to buffer containing slice data.
-  GoInt_ len;   ///< Number of items stored in slice buffer
-  GoInt_ cap;   ///< Maximum number of items that fits in this slice
-                ///< considering allocated memory and item type's
-                ///< size.
+typedef struct
+{
+  void *data; ///< Pointer to buffer containing slice data.
+  GoInt_ len; ///< Number of items stored in slice buffer
+  GoInt_ cap; ///< Maximum number of items that fits in this slice
+              ///< considering allocated memory and item type's
+              ///< size.
 } GoSlice_;
 
-typedef struct {
-  BOOL     neg;
-  GoSlice_   nat;
+typedef struct
+{
+  BOOL neg;
+  GoSlice_ nat;
 } Number;
 
-typedef struct {
+typedef struct
+{
   //TODO: stdevEclipse Define Signature
   Number R;
   Number S;
@@ -220,13 +228,14 @@ typedef struct {
 /**
  * Internal representation of a Skycoin wallet.
  */
-typedef struct {
-  GoMap_ Meta;        ///< Records items that are not deterministic, like filename, lable, wallet type, secrets, etc.
-  GoSlice_ Entries;   ///< Entries field stores the address entries that are deterministically generated from seed.
+typedef struct
+{
+  GoMap_ Meta;      ///< Records items that are not deterministic, like filename, lable, wallet type, secrets, etc.
+  GoSlice_ Entries; ///< Entries field stores the address entries that are deterministically generated from seed.
 } Wallet;
 
-typedef GoUint8_  poly1305__Mac[16];
-typedef GoUint8_  poly1305__Key[32];
+typedef GoUint8_ poly1305__Mac[16];
+typedef GoUint8_ poly1305__Key[32];
 
 /**
  * Memory handle for internal object retrieving password to read
@@ -305,7 +314,6 @@ typedef Handle BlockBody__Handle;
 
 typedef Handle BalanceResult_Handle;
 
-
 /**
  * Memory handle to access to api.SpendResult
  */
@@ -327,7 +335,6 @@ typedef Handle SortableTransactionResult_Handle;
 /**
  * Memory handle to access to wallet.Notes
  */
-
 
 /**
  * Memory handle to access to wallet.ReadableNotes
@@ -387,11 +394,12 @@ typedef Handle Signature_Handle;
  * */
 typedef Handle UnspentOutputsSummary_Handle;
 
-typedef GoUint32_ (*FeeCalcFunc)(Transaction__Handle handle, GoUint64_* pFee, void* context);
+typedef GoUint32_ (*FeeCalcFunc)(Transaction__Handle handle, GoUint64_ *pFee, void *context);
 
-typedef struct {
+typedef struct
+{
   FeeCalcFunc callback;
-  void* context;
-} FeeCalculator ;
+  void *context;
+} FeeCalculator;
 
 #endif
