@@ -38,7 +38,7 @@ LIBDOC_DIR = $(DOC_DIR)/libc
 CC_VERSION = $(shell $(CC) -dumpversion)
 STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): print('-std=C99'")
 LIBC_LIBS = `pkg-config --cflags --libs check`
-LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
+LIBC_FLAGS = -Wincompatible-pointer-types -Wimplicit-function-declaration -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
 # Platform specific checks
 OSNAME = $(TRAVIS_OS_NAME)
 CGO_ENABLED=1
