@@ -10,8 +10,8 @@ int main(void)
     srunner_add_suite(sr, cipher_bitcoin()); //ok
     // srunner_add_suite(sr, cipher_testsuite());
     srunner_add_suite(sr, cipher_crypto()); //ok
-    // srunner_add_suite(sr, cipher_encrypt_scrypt_chacha20poly1305());
-    // srunner_add_suite(sr, cipher_hash());
+    // srunner_add_suite(sr, cipher_encrypt_scrypt_chacha20poly1305()); //error in armv7 
+    srunner_add_suite(sr, cipher_hash()); //ok
     // srunner_add_suite(sr, coin_blocks());
     srunner_add_suite(sr, coin_coin()); //ok
     srunner_add_suite(sr, coin_math()); //ok

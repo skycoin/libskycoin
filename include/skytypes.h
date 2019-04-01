@@ -1,4 +1,5 @@
-
+#include <stdint.h>
+#include <stdbool.h>
 #ifndef SKYTYPES_H
 #define SKYTYPES_H
 
@@ -9,35 +10,37 @@
 /**
  * Go 8-bit signed integer values.
  */
-typedef signed char GoInt8_;
+typedef int_least8_t GoInt8_;
 /**
  * Go 8-bit unsigned integer values.
  */
-typedef unsigned char GoUint8_;
+typedef uint_least8_t GoUint8_;
 /**
  * Go 16-bit signed integer values.
  */
-typedef short GoInt16_;
+typedef int_least16_t GoInt16_;
 /**
  * Go 16-bit unsigned integer values.
  */
-typedef unsigned short GoUint16_;
+typedef uint_least16_t GoUint16_;
 /**
  * Go 32-bit signed integer values.
  */
-typedef int GoInt32_;
+typedef int_least32_t GoInt32_;
 /**
  * Go 32-bit unsigned integer values.
  */
-typedef unsigned int GoUint32_;
+typedef uint_least32_t GoUint32_;
 /**
  * Go 64-bit signed integer values.
  */
-typedef long long GoInt64_;
+typedef int_least64_t GoInt64_;
+
 /**
  * Go 64-bit unsigned integer values.
  */
-typedef unsigned long long GoUint64_;
+typedef uint_least64_t GoUint64_;
+
 /**
  * Go integer values aligned to the word size of the underlying architecture.
  */
@@ -76,7 +79,7 @@ typedef struct
   double real;
   double imaginary;
 } GoComplex128_;
-typedef unsigned int BOOL;
+typedef bool BOOL;
 typedef unsigned int error;
 
 /*

@@ -1114,13 +1114,12 @@ Suite *coin_transaction_fork(void) {
   tcase_add_checked_fixture(tc, setup, teardown);
 #if __linux__
 #if __x86_64__
-  // tcase_add_test_raise_signal(tc, TestTransactionPushInput, SKY_ABORT);
-  tcase_add_test_raise_signal(tc, TestTransactionVerifyInput, SKY_ABORT);
+  tcase_add_test_raise_signal(tc, TestTransactionPushInput, SKY_ABORT);
 #else
-  // tcase_add_exit_test(tc, TestTransactionPushInput, 1);
+  tcase_add_exit_test(tc, TestTransactionPushInput, 1);
 #endif
-  tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SKY_ABORT);
   tcase_add_test_raise_signal(tc, TestTransactionVerifyInput, SKY_ABORT);
+  tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SKY_ABORT);
 #elif __APPLE__
   tcase_add_exit_test(tc, TestTransactionPushInput, SKY_ABORT);
   tcase_add_exit_test(tc, TestTransactionSignInputs, SKY_ABORT);
