@@ -132,10 +132,15 @@ install-linters: ## Install linters
 	# However, they suggest `curl ... | bash` which we should not do
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
-install-deps-libc: configure-build ## Install locally dependencies for testing libskycoin
+install-deps-libc: install-deps-libc-$(OSNAME)
+
+install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
 	tar -xzvf check-0.12.0.tar.gz
-	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install	
+	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
+
+install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
+	brew install check
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
