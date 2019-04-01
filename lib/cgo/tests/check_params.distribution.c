@@ -86,6 +86,7 @@ Suite *param_distribution(void)
     TCase *tc;
 
     tc = tcase_create("params.distribution");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestDistributionAddressArrays);
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 150);

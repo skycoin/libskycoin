@@ -862,6 +862,7 @@ Suite *cipher_crypto(void)
   TCase *tc;
 
   tc = tcase_create("cipher.crypto");
+  tcase_add_checked_fixture(tc, setup, teardown);
   tcase_add_test(tc, TestNewPubKey);
   tcase_add_test(tc, TestPubKeyFromHex);
   tcase_add_test(tc, TestPubKeyHex);

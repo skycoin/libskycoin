@@ -330,6 +330,7 @@ Suite *coin_blocks(void)
     TCase *tc;
 
     tc = tcase_create("coin.block");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestNewBlock);
     tcase_add_test(tc, TestBlockHashHeader);
     tcase_add_test(tc, TestBlockHashBody);

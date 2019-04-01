@@ -256,6 +256,7 @@ Suite *cipher_address(void) {
   TCase *tc;
 
   tc = tcase_create("cipher.address");
+  tcase_add_checked_fixture(tc, setup, teardown);
   tcase_add_test(tc, TestDecodeBase58Address);
   tcase_add_test(tc, TestAddressFromBytes);
   tcase_add_test(tc, TestAddressVerify);

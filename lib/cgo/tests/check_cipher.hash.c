@@ -381,6 +381,7 @@ Suite *cipher_hash(void)
     TCase *tc;
 
     tc = tcase_create("cipher.hash");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestHashRipemd160);
     tcase_add_test(tc, TestRipemd160Set);
     tcase_add_test(tc, TestSHA256Set);

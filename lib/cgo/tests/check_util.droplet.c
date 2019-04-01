@@ -240,6 +240,7 @@ Suite *util_droplet(void)
     TCase *tc;
 
     tc = tcase_create("util.droplet");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestFromString);
     tcase_add_test(tc, TestToString);
     suite_add_tcase(s, tc);

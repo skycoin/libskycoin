@@ -277,6 +277,7 @@ Suite *util_fee(void) {
   TCase *tc;
 
   tc = tcase_create("util.fee");
+  tcase_add_checked_fixture(tc, setup, teardown);
   tcase_add_test(tc, TestVerifyTransactionFee);
   tcase_add_test(tc, TestRequiredFee);
   tcase_add_test(tc, TestTransactionFee);
