@@ -1127,6 +1127,6 @@ Suite *coin_transaction_fork(void) {
   tcase_add_exit_test(tc, TestTransactionVerifyInput, SKY_ABORT);
 #endif
   suite_add_tcase(s, tc);
-  tcase_set_timeout(tc, 150);
+  tcase_set_timeout(tc, 200);
   return s;
 }
