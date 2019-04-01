@@ -41,7 +41,7 @@ install:
 script:
   - make lint
   # libskycoin tests
-  - CC=gcc-6 make test-libc
+  - make test-libc
   - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build  . -t skydev-test ; fi
 
 notifications:
