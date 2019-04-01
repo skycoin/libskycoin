@@ -133,17 +133,9 @@ install-linters: ## Install linters
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
 install-deps-libc: configure-build ## Install locally dependencies for testing libskycoin
-	git clone --recursive https://github.com/skycoin/Criterion $(BUILD_DIR)/usr/tmp/Criterion
-	mkdir -p $(BUILD_DIR)/usr/tmp/Criterion/build
-	cd    $(BUILD_DIR)/usr/tmp/Criterion/build && cmake .. && cmake --build .
-	mv    $(BUILD_DIR)/usr/tmp/Criterion/build/libcriterion.* $(BUILD_DIR)/usr/lib/
-	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
-
-install-googletest-libc: configure-build ##Install googletest in debian && ubuntu
-	$(BUILD_DIR)/usr/tmp/ && wget -c https://github.com/google/googletest/archive/release-1.8.1.tar.gz && tar -xzvf release-1.8.1.tar.gz
-	cd $(BUILD_DIR)/usr/tmp/googletest-release-1.8.1 && mkdir mybuild && cd mybuild && cmake -G"Unix Makefiles" .. && make
-	cd /usr/src/gtest && sudo cmake CMakeLists.txt &&	sudo make && sudo cp *.a /usr/lib
- 		
+	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
+	tar -xzvf check-0.12.0.tar.gz
+	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && make install	
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
