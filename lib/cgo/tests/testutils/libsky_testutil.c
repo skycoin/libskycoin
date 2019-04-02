@@ -187,7 +187,7 @@ void cleanupMem() {
   void **ptr;
   for (i = MEMPOOLIDX, ptr = MEMPOOL; i; --i) {
   if( *ptr )
-    free(*ptr);
+    memset(ptr, 0, sizeof(void *));
   ptr++;
   }
   for (i = JSONPOOLIDX, ptr = (void*)JSON_POOL; i; --i) {
@@ -238,7 +238,7 @@ json_value* loadJsonFile(const char* filename){
 void setup(void) { srand(time(NULL)); }
 
 void teardown(void) {
-  // cleanupMem();
+  cleanupMem();
 }
 
 // TODO: Move to libsky_io.c

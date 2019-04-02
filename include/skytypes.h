@@ -34,12 +34,12 @@ typedef uint_least32_t GoUint32_;
 /**
  * Go 64-bit signed integer values.
  */
-typedef int_fast64_t GoInt64_;
+typedef int_least64_t GoInt64_;
 
 /**
  * Go 64-bit unsigned integer values.
  */
-typedef uint_fast64_t GoUint64_;
+typedef uint_least64_t GoUint64_;
 
 /**
  * Go integer values aligned to the word size of the underlying architecture.

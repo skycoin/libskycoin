@@ -210,7 +210,7 @@ START_TEST(TestToString)
         {.s = {"0.000999", 8}, .n = 999, .e = SKY_OK},
         {.s = {"999.000000", 10}, .n = 999000000, .e = SKY_OK},
         {.s = {"123.000456", 10}, .n = 123000456, .e = SKY_OK},
-        {.s = {bufferNull, 0}, .n = 9223372036854775808, .e = SKY_ErrTooLarge},
+        {.s = {bufferNull, 0}, .n = 9223372036854775808U, .e = SKY_ErrTooLarge},
     };
     int len = (sizeof(cases) / sizeof(tmpstruct));
 

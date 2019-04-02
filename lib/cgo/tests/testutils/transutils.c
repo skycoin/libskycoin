@@ -29,6 +29,7 @@ int makeKeysAndAddress(cipher__PubKey *ppubkey, cipher__SecKey *pseckey,
 
 int makeUxBodyWithSecret(coin__UxBody *puxBody, cipher__SecKey *pseckey)
 {
+  printf("Entrado a makeUxBodyWithSecret \n");
   cipher__PubKey pubkey;
   cipher__Address address;
   int result;
@@ -49,23 +50,31 @@ int makeUxBodyWithSecret(coin__UxBody *puxBody, cipher__SecKey *pseckey)
 
   randBytes(&slice, 128);
   registerMemCleanup(slice.data);
-  ck_assert_msg(result == SKY_OK, "SKY_cipher_RandByte failed");
   result = SKY_cipher_SumSHA256(slice, &puxBody->SrcTransaction);
   ck_assert_msg(result == SKY_OK, "SKY_cipher_SumSHA256 failed");
 
   result = SKY_cipher_AddressFromPubKey(&pubkey, &puxBody->Address);
   ck_assert_msg(result == SKY_OK, "SKY_cipher_AddressFromPubKey failed");
+  result = SKY_cipher_Address_Verify(&puxBody->Address,&pubkey);
+  ck_assert_msg(result == SKY_OK, "SKY_cipher_Address_Verify failed");
+  printf("Saliendo a makeUxBodyWithSecret \n");
   return result;
 }
 
 int makeUxOutWithSecret(coin__UxOut *puxOut, cipher__SecKey *pseckey)
 {
+  printf("Entrado a makeUxOutWithSecret \n");
   int result;
   memset(puxOut, 0, sizeof(coin__UxOut));
   result = makeUxBodyWithSecret(&puxOut->Body, pseckey);
   puxOut->Head.Time = 100;
   puxOut->Head.BkSeq = 2;
+  printf("Asignado puxOut->Head.Time = %lld y puxOut->Head.BkSeq = %lld \n", puxOut->Head.Time, puxOut->Head.BkSeq);
+  result = SKY_cipher_SecKey_Verify(pseckey);
+  ck_assert_msg(result == SKY_OK, "SKY_cipher_SecKey_Verify failed");
+  printf("Saliendo de makeUxOutWithSecret \n");
   return result;
+  
 }
 
 int makeUxBody(coin__UxBody *puxBody)
@@ -99,12 +108,14 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
                                             cipher__SecKey *pseckey,
                                             Transaction__Handle *handle)
 {
+  printf("Entrado a  makeTransactionFromUxOut \n");
   int result;
   coin__Transaction *ptransaction;
   memset(&ptransaction,0,sizeof(coin__Transaction));
   result = SKY_coin_Create_Transaction(handle);
   ck_assert_msg(result == SKY_OK, "SKY_coin_Create_Transaction failed");
   registerHandleClose(*handle);
+  
   cipher__SHA256 sha256;
   result = SKY_coin_UxOut_Hash(puxOut, &sha256);
   ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
@@ -131,17 +142,22 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
   result = SKY_coin_GetTransactionObject(*handle, &ptransaction);
   ck_assert_msg(result == SKY_OK, "SKY_coin_GetTransactionObject failed");
   registerMemCleanup(ptransaction);
+  printf("Saliendo de  makeTransactionFromUxOut \n");
   return ptransaction;
 }
 
 coin__Transaction *makeTransaction(Transaction__Handle *handle)
 {
+  printf("Entrado a makeTransaction \n");
   int result;
   coin__UxOut uxOut;
+  memset(&uxOut,0,sizeof(coin__UxOut));
   cipher__SecKey seckey;
   result = makeUxOutWithSecret(&uxOut, &seckey);
   ck_assert_msg(result == SKY_OK, "makeUxOutWithSecret failed");
-  return makeTransactionFromUxOut(&uxOut, &seckey, handle);
+  coin__Transaction *rest = makeTransactionFromUxOut(&uxOut, &seckey, handle);
+  printf("Saliendo de makeTransaction \n");
+  return rest;
 }
 
 coin__Transaction *makeEmptyTransaction(Transaction__Handle *handle)
