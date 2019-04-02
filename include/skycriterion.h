@@ -16,6 +16,9 @@ extern int isU8Eq(unsigned char p1[], unsigned char p2[], int len);
 extern int isGoSliceEq(GoSlice *slice1, GoSlice *slice2);
 extern int isGoSlice_Eq(GoSlice_ *slice1, GoSlice_ *slice2);
 
+extern int isGoString_Eq(GoString_ string1, GoString_ string2);
+extern int isGoStringEq(GoString string1, GoString string2);
+
 extern int isUxOutEq(coin__UxOut *x1, coin__UxOut *x2);
 
 extern int isUxArrayEq(coin__UxArray *x1, coin__UxArray *x2);

@@ -41,11 +41,10 @@ int makeUxBodyWithSecret(coin__UxBody *puxBody, cipher__SecKey *pseckey)
   ck_assert_msg(result == SKY_OK, "SKY_cipher_GenerateKeyPair failed");
   result = SKY_cipher_PubKey_Verify(&pubkey);
   ck_assert_msg(result == SKY_OK, "SKY_cipher_PubKey_Verify failed");
-  result = SKY_cipher_SecKey_Verify(&pseckey);
+  result = SKY_cipher_SecKey_Verify(pseckey);
   ck_assert_msg(result == SKY_OK, "Fail SKY_cipher_SecKey_Verify ");
   char buff[1024];
   GoSlice slice = {buff, 0, 1024};
-  // memset(&slice, 0, sizeof(GoSlice));
   cipher__SHA256 hash;
 
   randBytes(&slice, 128);
