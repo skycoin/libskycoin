@@ -149,6 +149,7 @@ clean-libc: ## Clean files generate by library
 	rm -rfv $(BUILDLIB_DIR)
 	rm -rfv bin
 	rm -rfv qemu_test_libskycoin*
+	rm -rfv include/libskycoin.h
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
