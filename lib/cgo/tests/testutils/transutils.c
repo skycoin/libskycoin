@@ -29,7 +29,6 @@ int makeKeysAndAddress(cipher__PubKey *ppubkey, cipher__SecKey *pseckey,
 
 int makeUxBodyWithSecret(coin__UxBody *puxBody, cipher__SecKey *pseckey)
 {
-  printf("Entrado a makeUxBodyWithSecret \n");
   cipher__PubKey pubkey;
   cipher__Address address;
   int result;
@@ -57,22 +56,18 @@ int makeUxBodyWithSecret(coin__UxBody *puxBody, cipher__SecKey *pseckey)
   ck_assert_msg(result == SKY_OK, "SKY_cipher_AddressFromPubKey failed");
   result = SKY_cipher_Address_Verify(&puxBody->Address,&pubkey);
   ck_assert_msg(result == SKY_OK, "SKY_cipher_Address_Verify failed");
-  printf("Saliendo a makeUxBodyWithSecret \n");
   return result;
 }
 
 int makeUxOutWithSecret(coin__UxOut *puxOut, cipher__SecKey *pseckey)
 {
-  printf("Entrado a makeUxOutWithSecret \n");
   int result;
   memset(puxOut, 0, sizeof(coin__UxOut));
   result = makeUxBodyWithSecret(&puxOut->Body, pseckey);
   puxOut->Head.Time = 100;
   puxOut->Head.BkSeq = 2;
-  printf("Asignado puxOut->Head.Time = %lld y puxOut->Head.BkSeq = %lld \n", puxOut->Head.Time, puxOut->Head.BkSeq);
   result = SKY_cipher_SecKey_Verify(pseckey);
   ck_assert_msg(result == SKY_OK, "SKY_cipher_SecKey_Verify failed");
-  printf("Saliendo de makeUxOutWithSecret \n");
   return result;
   
 }
@@ -108,7 +103,6 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
                                             cipher__SecKey *pseckey,
                                             Transaction__Handle *handle)
 {
-  printf("Entrado a  makeTransactionFromUxOut \n");
   int result;
   coin__Transaction *ptransaction;
   memset(&ptransaction,0,sizeof(coin__Transaction));
@@ -142,13 +136,11 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
   result = SKY_coin_GetTransactionObject(*handle, &ptransaction);
   ck_assert_msg(result == SKY_OK, "SKY_coin_GetTransactionObject failed");
   registerMemCleanup(ptransaction);
-  printf("Saliendo de  makeTransactionFromUxOut \n");
   return ptransaction;
 }
 
 coin__Transaction *makeTransaction(Transaction__Handle *handle)
 {
-  printf("Entrado a makeTransaction \n");
   int result;
   coin__UxOut uxOut;
   memset(&uxOut,0,sizeof(coin__UxOut));
@@ -156,7 +148,6 @@ coin__Transaction *makeTransaction(Transaction__Handle *handle)
   result = makeUxOutWithSecret(&uxOut, &seckey);
   ck_assert_msg(result == SKY_OK, "makeUxOutWithSecret failed");
   coin__Transaction *rest = makeTransactionFromUxOut(&uxOut, &seckey, handle);
-  printf("Saliendo de makeTransaction \n");
   return rest;
 }
 

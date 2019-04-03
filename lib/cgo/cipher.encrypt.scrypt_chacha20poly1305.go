@@ -20,12 +20,8 @@ import "C"
 func SKY_encrypt_ScryptChacha20poly1305_Encrypt(_s *C.encrypt__ScryptChacha20poly1305, _data []byte, _password []byte, _arg1 *C.GoSlice_) (____error_code uint32) {
 
 	s := *(*encrypt.ScryptChacha20poly1305)(unsafe.Pointer(_s))
-	println("SHOW s.N, s.R, s.P, s.KeyLen")
-	println(" ", s.N, " ", s.R, " ", s.P, " ", s.KeyLen)
 	data := *(*[]byte)(unsafe.Pointer(&_data))
 	password := *(*[]byte)(unsafe.Pointer(&_password))
-	println(len(data))
-	println(len(password))
 	__arg1, ____return_err := s.Encrypt(data, password)
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {

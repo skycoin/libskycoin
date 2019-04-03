@@ -118,8 +118,7 @@ START_TEST(TestScryptChacha20poly1305Encrypt)
 
     GoUint32 errcode;
     unsigned int metalength;
-    // encrypt__ScryptChacha20poly1305 encrypt = {0, 1 << 0, 1 << 3, 1 << 5};
-    encrypt__ScryptChacha20poly1305 encrypt = {20, 21, 22, 23};
+    encrypt__ScryptChacha20poly1305 encrypt = {0, 1 << 0, 1 << 3, 1 << 5};
     registerMemCleanup(&encrypt);
     int i;
     for (i = 1; i <= 20; i++)

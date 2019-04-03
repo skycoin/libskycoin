@@ -287,20 +287,24 @@ START_TEST(TestCreateUnspents)
     cipher__PubKey pubkey;
     cipher__SecKey seckey;
     cipher__Address address;
-    int result = makeKeysAndAddress(&pubkey, &seckey, &address);
-
+    GoUint32 result = makeKeysAndAddress(&pubkey, &seckey, &address);
+    ck_assert_msg(result == SKY_OK, "makeKeysAndAddress failed");
+    result = SKY_cipher_Address_Verify(&address, &pubkey);
+    ck_assert_msg(result == SKY_OK, "SKY_cipher_Address_Verify failed");
     cipher__SHA256 hash;
     coin__Transaction *ptx;
     Transaction__Handle handle;
     ptx = makeEmptyTransaction(&handle);
+    result = SKY_coin_Transaction_Verify(handle);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_Verify failed");
     result = SKY_coin_Transaction_PushOutput(handle, &address, 11000000, 255);
     ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_PushOutput failed");
     coin__BlockHeader bh;
     memset(&bh, 0, sizeof(coin__BlockHeader));
     bh.Time = time(0);
     bh.BkSeq = 1;
-
-    coin__UxArray uxs = {NULL, 0, 0};
+    unsigned char bufferUxs[1024];
+    coin__UxArray uxs = {bufferUxs, 0, 1024};
     result = SKY_coin_CreateUnspents(&bh, handle, &uxs);
     ck_assert_msg(result == SKY_OK, "SKY_coin_CreateUnspents failed");
     registerMemCleanup(uxs.data);
@@ -308,16 +312,18 @@ START_TEST(TestCreateUnspents)
     ck_assert_int_eq(uxs.len, ptx->Out.len);
     coin__UxOut *pout = (coin__UxOut *)uxs.data;
     coin__TransactionOutput *ptxout = (coin__TransactionOutput *)ptx->Out.data;
-    for (int i = 0; i < uxs.len; i++)
+    int i;
+    for (i = 0; i < uxs.len; i++)
     {
-        ck_assert(bh.Time == pout->Head.Time);
-        ck_assert(bh.BkSeq == pout->Head.BkSeq);
+        ck_assert_int_eq(bh.Time, pout->Head.Time);
+        ck_assert_int_eq(bh.BkSeq, pout->Head.BkSeq);
         result = SKY_coin_Transaction_Hash(handle, &hash);
         ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_Hash failed");
-        ck_assert(isU8Eq(hash, pout->Body.SrcTransaction, sizeof(cipher__SHA256)));
+        ck_assert(
+            isU8Eq(hash, pout->Body.SrcTransaction, sizeof(cipher__SHA256)));
         ck_assert(isAddressEq(&pout->Body.Address, &ptxout->Address));
-        ck_assert(pout->Body.Coins == ptxout->Coins);
-        ck_assert(pout->Body.Hours == ptxout->Hours);
+        ck_assert_int_eq(pout->Body.Coins, ptxout->Coins);
+        ck_assert_int_eq(pout->Body.Hours, ptxout->Hours);
         pout++;
         ptxout++;
     }
