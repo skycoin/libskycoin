@@ -1091,11 +1091,11 @@ Suite *coin_transaction(void) {
   tcase_add_checked_fixture(tc, setup, teardown);
   // tcase_add_test(tc, TestTransactionVerify);
   // tcase_add_test(tc, TestTransactionPushOutput);
-//   tcase_add_test(tc, TestTransactionHash); //ok
-//   tcase_add_test(tc, TestTransactionUpdateHeader); /ok
-//   tcase_add_test(tc, TestTransactionsSize); //ok
-  // tcase_add_test(tc, TestTransactionHashInner); //ok
-  tcase_add_test(tc, TestTransactionSerialization); 
+  tcase_add_test(tc, TestTransactionHash); //ok
+  tcase_add_test(tc, TestTransactionUpdateHeader); //ok
+  tcase_add_test(tc, TestTransactionsSize); //ok
+  tcase_add_test(tc, TestTransactionHashInner); //ok
+  // tcase_add_test(tc, TestTransactionSerialization); 
   // tcase_add_test(tc, TestTransactionOutputHours);
   // tcase_add_test(tc, TestTransactionsHashes);
   // tcase_add_test(tc, TestTransactionsTruncateBytesTo);
