@@ -217,7 +217,7 @@ Suite *cipher_encrypt_scrypt_chacha20poly1305(void)
     tc = tcase_create("cipher.encrypt.scrypt.chacha20poly1305");
     tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestScryptChacha20poly1305Encrypt);
-    // tcase_add_test(tc, TestScryptChacha20poly1305Decrypt); //ok
+    tcase_add_test(tc, TestScryptChacha20poly1305Decrypt);
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 150);
 
