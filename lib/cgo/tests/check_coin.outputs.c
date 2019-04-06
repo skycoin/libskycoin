@@ -57,7 +57,7 @@ END_TEST
 
 START_TEST(TestUxOutSnapshotHash)
 {
-    int result;
+    GoUint32 result;
     coin__UxOut uxout, uxout2;
     result = makeUxOut(&uxout);
     ck_assert_msg(result == SKY_OK, "makeUxOut failed");
@@ -856,6 +856,7 @@ Suite *coin_output(void)
     TCase *tc;
 
     tc = tcase_create("coin.output");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestUxBodyHash);
     tcase_add_test(tc, TestUxOutHash);
     tcase_add_test(tc, TestUxOutSnapshotHash);

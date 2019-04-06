@@ -250,8 +250,6 @@ void makeRandHash(cipher__SHA256 *phash)
 {
   char buff[1024];
   GoSlice slice = {buff, 0, 1024};
-  memset(&slice, 0, sizeof(GoSlice));
-
   randBytes(&slice, 128);
   registerMemCleanup(slice.data);
   GoUint32_ result = SKY_cipher_SumSHA256(slice, phash);
