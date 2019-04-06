@@ -574,18 +574,16 @@ START_TEST(TestTransactionHashInner) {
 END_TEST
 
 START_TEST(TestTransactionSerialization) {
-  int result;
-  coin__Transaction *ptx;
-  Transaction__Handle handle;
-  makeEmptyTransaction(&handle);
-  makeTransaction(&handle);
+  GoUint32 result;
+  Transaction__Handle handle = 0;
+  coin__Transaction *ptx = makeTransaction(&handle);
   unsigned char buffer[1024];
-  GoSlice_ data = {buffer,0,1024};
+  coin__UxArray data = {buffer,0,1024};
   result = SKY_coin_Transaction_Serialize(handle, &data);
   ck_assert(result == SKY_OK);
   registerMemCleanup(data.data);
-  coin__Transaction *ptx2;
-  Transaction__Handle handle2;
+  coin__Transaction *ptx2 = NULL;
+  Transaction__Handle handle2 = 0;
   GoSlice d = {data.data, data.len, data.cap};
   result = SKY_coin_TransactionDeserialize(d, &handle2);
   ck_assert(result == SKY_OK);
@@ -956,29 +954,36 @@ void testTransactionSorting(Transactions__Handle hTrans, int *original_indexes,
                             int expected_indexes_count, FeeCalculator *feeCalc,
                             char *testName) {
 
-  int result;
-  Transactions__Handle transactionsHandle, sortedTxnsHandle;
-  Transaction__Handle handle;
-  makeTransactions(0, &transactionsHandle);
-  for (int i = 0; i < original_indexes_count; i++) {
+  GoUint32 result;
+  Transactions__Handle transactionsHandle = 0, sortedTxnsHandle = 0;
+  Transaction__Handle handle = 0;
+  result = makeTransactions(0, &transactionsHandle);
+  ck_assert_msg(result == SKY_OK, "makeTransactions failed");
+  GoInt i;
+  for (i = 0; i < original_indexes_count; i++) {
     result = SKY_coin_Transactions_GetAt(hTrans, original_indexes[i], &handle);
-    ck_assert(result == SKY_OK);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_Transactions_GetAt failed iter %d",i);
     registerHandleClose(handle);
     result = SKY_coin_Transactions_Add(transactionsHandle, handle);
-    ck_assert(result == SKY_OK);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_Transactions_Add failed iter %d",
+                  i);
   }
   result =
       SKY_coin_SortTransactions(transactionsHandle, feeCalc, &sortedTxnsHandle);
   ck_assert_msg(result == SKY_OK, "SKY_coin_SortTransactions");
   registerHandleClose(sortedTxnsHandle);
-  Transaction__Handle h1, h2;
-  for (int i = 0; i < expected_indexes_count; i++) {
+  Transaction__Handle h1 = 0, h2 = 0;
+  for (i = 0; i < expected_indexes_count; i++) {
     int expected_index = expected_indexes[i];
     result = SKY_coin_Transactions_GetAt(sortedTxnsHandle, i, &h1);
-    ck_assert(result == SKY_OK);
+    ck_assert_int_eq(result,SKY_OK);
+    ck_assert_msg(
+        result == SKY_OK,
+        "SKY_coin_Transactions_GetAt in sortedTxnsHandle failed iter %d", i);
     registerHandleClose(h1);
     result = SKY_coin_Transactions_GetAt(hTrans, expected_index, &h2);
-    ck_assert(result == SKY_OK);
+    ck_assert_msg(result == SKY_OK,
+                  "SKY_coin_Transactions_GetAt failed iter %d", i);
     registerHandleClose(h2);
     assertTransactionsHandleEqual(h1, h2, testName);
   }
@@ -1027,7 +1032,7 @@ GoUint32_ feeCalculator4(Transaction__Handle handle, GoUint64_ *pFee,
 START_TEST(TestSortTransactions) {
   int n = 6;
   int i;
-  int result;
+  GoUint32 result;
 
   Transactions__Handle transactionsHandle = 0;
   Transactions__Handle transactionsHandle2 = 0;
@@ -1037,19 +1042,23 @@ START_TEST(TestSortTransactions) {
   cipher__Address addr;
   makeTransactions(0, &transactionsHandle);
   cipher__SHA256 thirdHash;
-  for (i = 0; i < 6; i++) {
+  for (i = 0; i < n; i++) {
     makeEmptyTransaction(&transactionHandle);
     makeAddress(&addr);
     result = SKY_coin_Transaction_PushOutput(transactionHandle, &addr, 1000000,
                                              i * 1000);
-    ck_assert(result == SKY_OK);
+    ck_assert_msg(result == SKY_OK,
+                  "SKY_coin_Transaction_PushOutput failed in ite %d", i);
     result = SKY_coin_Transaction_UpdateHeader(transactionHandle);
-    ck_assert(result == SKY_OK);
+    ck_assert_msg(result == SKY_OK,
+                  "SKY_coin_Transaction_UpdateHeader failed in ite %d", i);
     result = SKY_coin_Transactions_Add(transactionsHandle, transactionHandle);
-    ck_assert(result == SKY_OK);
+    ck_assert_msg(result == SKY_OK,
+                  "SKY_coin_Transactions_Add failed in ite %d", i);
     if (i == 2) {
       result = SKY_coin_Transaction_Hash(transactionHandle, &thirdHash);
-      ck_assert(result == SKY_OK);
+      ck_assert_msg(result == SKY_OK,
+                    "SKY_coin_Transaction_Hash failed in ite %d", i);
     }
   }
   sortTransactions(transactionsHandle, &hashSortedTxnsHandle);
@@ -1095,7 +1104,7 @@ Suite *coin_transaction(void) {
   tcase_add_test(tc, TestTransactionUpdateHeader); //ok
   tcase_add_test(tc, TestTransactionsSize); //ok
   tcase_add_test(tc, TestTransactionHashInner); //ok
-  // tcase_add_test(tc, TestTransactionSerialization); 
+  tcase_add_test(tc, TestTransactionSerialization); //ok
   tcase_add_test(tc, TestTransactionOutputHours); //ok
   tcase_add_test(tc, TestTransactionsHashes); //ok
   tcase_add_test(tc, TestTransactionsTruncateBytesTo); //ok
@@ -1118,7 +1127,7 @@ Suite *coin_transaction_fork(void) {
   tcase_add_test_raise_signal(tc, TestTransactionVerifyInput, SKY_ABORT);
   tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SKY_ABORT);
 #elif __APPLE__
-  tcase_add_exit_test(tc, TestTransactionPushInput, SKY_ABORT);
+  // tcase_add_exit_test(tc, TestTransactionPushInput, SKY_ABORT);
   tcase_add_exit_test(tc, TestTransactionSignInputs, SKY_ABORT);
   tcase_add_test_raise_signal(tc, TestTransactionVerifyInput, 6);
 #endif

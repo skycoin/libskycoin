@@ -137,6 +137,7 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
 coin__Transaction *makeTransaction(Transaction__Handle *handle)
 {
   GoUint32_ result;
+  *handle = 0;
   coin__UxOut uxOut;
   memset(&uxOut,0,sizeof(coin__UxOut));
   cipher__SecKey seckey;
@@ -150,6 +151,7 @@ coin__Transaction *makeEmptyTransaction(Transaction__Handle *handle)
 {
   GoUint32_ result;
   coin__Transaction *ptransaction = NULL;
+  *handle = 0;
   result = SKY_coin_Create_Transaction(handle);
   ck_assert_msg(result == SKY_OK, "SKY_coin_Create_Transaction failed");
   registerHandleClose(*handle);
