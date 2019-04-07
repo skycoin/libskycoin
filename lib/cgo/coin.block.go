@@ -264,6 +264,8 @@ func SKY_coin_BlockBody_Bytes(_bb C.BlockBody__Handle, _arg0 *C.GoSlice_) (____e
 //export SKY_coin_CreateUnspents
 func SKY_coin_CreateUnspents(_bh *C.coin__BlockHeader, _tx C.Transaction__Handle, _arg2 *C.coin__UxArray) (____error_code uint32) {
 	bh := *(*coin.BlockHeader)(unsafe.Pointer(_bh))
+	bh.Time = uint64(_bh.Time)
+	bh.BkSeq = uint64(_bh.BkSeq)
 	tx, ok := lookupTransactionHandle(_tx)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE

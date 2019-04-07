@@ -2,8 +2,10 @@
 #ifndef SKYTYPES_H
 #define SKYTYPES_H
 
+
+#include <inttypes.h>
 #ifndef __SIZE_TYPE__
-#define __SIZE_TYPE__ unsigned int
+#define __SIZE_TYPE__ uintptr_t
 #endif
 
 /**
