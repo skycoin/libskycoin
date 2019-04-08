@@ -66,17 +66,15 @@ int isSigEq(cipher__Sig *sig1, cipher__Sig *sig2)
   return memcmp((void *)sig1, (void *)sig2, sizeof(cipher__Sig)) == 0;
 }
 
-int isU8Eq(unsigned char p1[], unsigned char p2[], int len)
+int isU8Eq(unsigned char p1[], unsigned char p2[], size_t len)
 {
-  for (size_t i = 0; i < len; i++)
-  {
-    if (p1[i] != p2[i])
-    {
-      return 0;
-    }
-  }
+   if (strncmp(p1, p2, len) == 0){
+     return 1;
+   }
+     printf("p1 '%s'\n",p1);
+     printf("p2 '%s'\n",p2);
 
-  return 1;
+     return 0;
 }
 
 int isSHA256Eq(cipher__SHA256 *sh1, cipher__SHA256 *sh2)

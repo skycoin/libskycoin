@@ -186,8 +186,8 @@ func SKY_coin_Block_GetTransaction(_b C.Block__Handle, _txHash *C.cipher__SHA256
 func SKY_coin_NewBlockHeader(_prev *C.coin__BlockHeader, _uxHash *C.cipher__SHA256, _currentTime, _fee uint64, _body C.BlockBody__Handle, _arg4 *C.coin__BlockHeader) (____error_code uint32) {
 	prev := *(*coin.BlockHeader)(unsafe.Pointer(_prev))
 	uxHash := *(*cipher.SHA256)(unsafe.Pointer(_uxHash))
-	currentTime := _currentTime
-	fee := _fee
+	currentTime := uint64(_currentTime)
+	fee := uint64(_fee)
 	body, ok := lookupBlockBodyHandle(_body)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE
@@ -266,6 +266,7 @@ func SKY_coin_CreateUnspents(_bh *C.coin__BlockHeader, _tx C.Transaction__Handle
 	bh := *(*coin.BlockHeader)(unsafe.Pointer(_bh))
 	bh.Time = uint64(_bh.Time)
 	bh.BkSeq = uint64(_bh.BkSeq)
+	bh.Fee = uint64(_bh.Fee)
 	tx, ok := lookupTransactionHandle(_tx)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE
@@ -279,6 +280,8 @@ func SKY_coin_CreateUnspents(_bh *C.coin__BlockHeader, _tx C.Transaction__Handle
 //export SKY_coin_CreateUnspent
 func SKY_coin_CreateUnspent(_bh *C.coin__BlockHeader, _tx C.Transaction__Handle, _outIndex int, _arg3 *C.coin__UxOut) (____error_code uint32) {
 	bh := *(*coin.BlockHeader)(unsafe.Pointer(_bh))
+	bh.Time = uint64(_bh.Time)
+	bh.BkSeq = uint64(_bh.BkSeq)
 	tx, ok := lookupTransactionHandle(_tx)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE
