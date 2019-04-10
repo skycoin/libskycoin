@@ -75,7 +75,6 @@ START_TEST(TestNewBlock)
     result = SKY_coin_NewEmptyBlock(transactions, &prevBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_NewEmptyBlock failed");
     registerHandleClose(prevBlock);
-    coin__Block *pBlock;
     result = SKY_coin_GetBlockObject(prevBlock, &pPrevBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockObject failed");
     unsigned char bufferSlice[1024];
@@ -324,21 +323,20 @@ START_TEST(TestCreateUnspents)
 }
 END_TEST
 
-Suite *coin_blocks(void)
-{
-    Suite *s = suite_create("Load coin.block");
-    TCase *tc;
+Suite *coin_blocks(void) {
+  Suite *s = suite_create("Load coin.block");
+  TCase *tc;
 
-    tc = tcase_create("coin.block");
-    tcase_add_checked_fixture(tc, setup, teardown);
-//    tcase_add_test(tc, TestNewBlock);
-    tcase_add_test(tc, TestBlockHashHeader); //ok
- tcase_add_test(tc, TestBlockHashBody); //ok
-//  tcase_add_test(tc, TestNewGenesisBlock);
-tcase_add_test(tc, TestCreateUnspent); //ok
-tcase_add_test(tc, TestCreateUnspents); //ok
-    suite_add_tcase(s, tc);
-    tcase_set_timeout(tc, 150);
+  tc = tcase_create("coin.block");
+  tcase_add_checked_fixture(tc, setup, teardown);
+  tcase_add_test(tc, TestNewBlock);
+  tcase_add_test(tc, TestBlockHashHeader); // ok
+  tcase_add_test(tc, TestBlockHashBody);   // ok
+  //  tcase_add_test(tc, TestNewGenesisBlock);
+  tcase_add_test(tc, TestCreateUnspent);  // ok
+  tcase_add_test(tc, TestCreateUnspents); // ok
+  suite_add_tcase(s, tc);
+  tcase_set_timeout(tc, 150);
 
-    return s;
+  return s;
 }
