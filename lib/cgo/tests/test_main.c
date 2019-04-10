@@ -19,11 +19,11 @@ int main(void)
     srunner_add_suite(sr, param_distribution()); //ok
     srunner_add_suite(sr, util_droplet()); //ok
     srunner_add_suite(sr, util_fee()); //ok
-    // srunner_add_suite(sr, cipher_testsuite());
+    srunner_add_suite(sr, cipher_testsuite());
     srunner_set_fork_status(sr, CK_NOFORK);
     srunner_set_fork_status(sr_fork, CK_FORK);
     srunner_run_all(sr, CK_VERBOSE);
-    //srunner_run_all(sr_fork, CK_VERBOSE);
+    srunner_run_all(sr_fork, CK_VERBOSE);
     number_failed = srunner_ntests_failed(sr);
     number_failed_fork = srunner_ntests_failed(sr_fork);
     srunner_free(sr);

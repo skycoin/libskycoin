@@ -17,7 +17,7 @@
 GoUint64 Million = 1000000;
 
 START_TEST(TestTransactionVerify) {
-  printf("Load TestTransactionVerify");
+  printf("Load TestTransactionVerify\n");
    unsigned long long MaxUint64 =
       0xFFFFFFFFFFFFFFFF;
   unsigned int MaxUint16 = 0xFFFF;
@@ -176,7 +176,7 @@ START_TEST(TestTransactionVerify) {
 END_TEST
 
 START_TEST(TestTransactionPushInput) {
-  printf("Load TestTransactionPushInput");
+  printf("Load TestTransactionPushInput\n");
   unsigned long long MaxUint64 = 0xFFFFFFFFFFFFFFFF;
   unsigned int MaxUint16 = 0xFFFF;
   int result;
@@ -214,7 +214,7 @@ START_TEST(TestTransactionPushInput) {
 END_TEST
 
 START_TEST(TestTransactionPushOutput) {
-  printf("Load TestTransactionPushOutput");
+  printf("Load TestTransactionPushOutput\n");
   GoUint32 result;
   Transaction__Handle handle;
   coin__Transaction *ptx;
@@ -247,7 +247,7 @@ START_TEST(TestTransactionPushOutput) {
 END_TEST
 
 START_TEST(TestTransactionHash) {
-  printf("Load TestTransactionHash");
+  printf("Load TestTransactionHash\n");
   GoUint32 result;
   Transaction__Handle handle;
   coin__Transaction *ptx;
@@ -265,7 +265,7 @@ START_TEST(TestTransactionHash) {
 END_TEST
 
 START_TEST(TestTransactionUpdateHeader) {
-  printf("Load TestTransactionUpdateHeader");
+  printf("Load TestTransactionUpdateHeader\n");
   GoUint32 result;
   Transaction__Handle handle;
   coin__Transaction *ptx;
@@ -284,7 +284,7 @@ START_TEST(TestTransactionUpdateHeader) {
 END_TEST
 
 START_TEST(TestTransactionsSize) {
-  printf("Load TestTransactionsSize");
+  printf("Load TestTransactionsSize\n");
   GoUint32 result;
   Transactions__Handle txns;
   result = makeTransactions(10, &txns);
@@ -309,7 +309,7 @@ START_TEST(TestTransactionsSize) {
 END_TEST
 
 START_TEST(TestTransactionVerifyInput) {
-  printf("Load TestTransactionVerifyInput");
+  printf("Load TestTransactionVerifyInput\n");
   GoUint32 result;
   Transaction__Handle handle;
   coin__Transaction *ptx;
@@ -413,7 +413,7 @@ START_TEST(TestTransactionVerifyInput) {
 END_TEST
 
 START_TEST(TestTransactionSignInputs) {
-  printf("Load TestTransactionSignInputs");
+  printf("Load TestTransactionSignInputs\n");
   GoUint32 result;
   coin__Transaction *ptx;
   Transaction__Handle handle;
@@ -512,8 +512,8 @@ START_TEST(TestTransactionSignInputs) {
 END_TEST
 
 START_TEST(TestTransactionHashInner) {
-  printf("Load TestTransactionHashInner");
-   GoUint32 result;
+  printf("Load TestTransactionHashInner\n");
+  GoUint32 result;
   Transaction__Handle handle1 = 0, handle2 = 0;
     coin__Transaction *ptx = NULL;
     coin__Transaction *ptx2 = NULL;
@@ -582,7 +582,7 @@ START_TEST(TestTransactionHashInner) {
 END_TEST
 
 START_TEST(TestTransactionSerialization) {
-  printf("Load TestTransactionSerialization");
+  printf("Load TestTransactionSerialization\n");
   GoUint32 result;
   Transaction__Handle handle = 0;
   coin__Transaction *ptx = makeTransaction(&handle);
@@ -603,7 +603,7 @@ START_TEST(TestTransactionSerialization) {
 END_TEST
 
 START_TEST(TestTransactionOutputHours) {
-  printf("Load TestTransactionOutputHours");
+  printf("Load TestTransactionOutputHours\n");
   coin__Transaction *ptx;
   Transaction__Handle handle;
   ptx = makeEmptyTransaction(&handle);
@@ -634,7 +634,7 @@ START_TEST(TestTransactionOutputHours) {
 END_TEST
 
 START_TEST(TestTransactionsHashes) {
-  printf("Load TestTransactionsHashes");
+  printf("Load TestTransactionsHashes\n");
   GoUint32 result;
   GoSlice_ hashes = {NULL, 0, 0};
   Transactions__Handle hTxns;
@@ -660,7 +660,7 @@ START_TEST(TestTransactionsHashes) {
 END_TEST
 
 START_TEST(TestTransactionsTruncateBytesTo) {
-  printf("Load TestTransactionsTruncateBytesTo");
+  printf("Load TestTransactionsTruncateBytesTo\n");
   GoUint32 result;
   Transactions__Handle h1, h2;
   result = makeTransactions(10, &h1);
@@ -749,7 +749,7 @@ int makeTestCaseArrays(test_ux *elems, int size, coin__UxArray *pArray) {
 }
 
 START_TEST(TestVerifyTransactionCoinsSpending) {
-  printf("Load TestVerifyTransactionCoinsSpending");
+  printf("Load TestVerifyTransactionCoinsSpending\n");
   unsigned long long MaxUint64 = 0xFFFFFFFFFFFFFFFF;
   unsigned int MaxUint16 = 0xFFFF;
   // Input coins overflow
@@ -802,7 +802,7 @@ START_TEST(TestVerifyTransactionCoinsSpending) {
 END_TEST
 
 START_TEST(TestVerifyTransactionHoursSpending) {
-  printf("Load TestVerifyTransactionHoursSpending");
+  printf("Load TestVerifyTransactionHoursSpending\n");
   GoUint64 Million = 1000000;
   unsigned long long MaxUint64 = 0xFFFFFFFFFFFFFFFF;
   unsigned int MaxUint16 = 0xFFFF;
@@ -897,7 +897,7 @@ GoUint32_ overflowFeeCalculator(Transaction__Handle handle, GoUint64_ *pFee,
 }
 
 START_TEST(TestTransactionsFees) {
-  printf("Load TestTransactionsFees");
+  printf("Load TestTransactionsFees\n");
   GoUint64 fee;
   GoUint32 result;
   Transactions__Handle transactionsHandle = 0;
