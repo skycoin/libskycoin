@@ -291,7 +291,7 @@ START_TEST(TestTransactionsSize) {
   ck_assert(result == SKY_OK);
   GoInt size = 0;
   for (size_t i = 0; i < 10; i++) {
-    Transaction__Handle handle;
+    Transaction__Handle handle =0 ;
     result = SKY_coin_Transactions_GetAt(txns, i, &handle);
     registerHandleClose(handle);
     ck_assert(result == SKY_OK);
@@ -1112,10 +1112,10 @@ Suite *coin_transaction(void) {
 
   tc = tcase_create("coin.transaction");
   tcase_add_checked_fixture(tc, setup, teardown);
-  // tcase_add_test(tc, TestTransactionVerify); //ok
+  tcase_add_test(tc, TestTransactionVerify); //ok
   tcase_add_test(tc, TestTransactionPushOutput); //ok
   tcase_add_test(tc, TestTransactionHash); //ok
-  // tcase_add_test(tc, TestTransactionUpdateHeader); //ok
+  tcase_add_test(tc, TestTransactionUpdateHeader); //ok
   tcase_add_test(tc, TestTransactionsSize); //ok
   tcase_add_test(tc, TestTransactionHashInner); //ok
   tcase_add_test(tc, TestTransactionSerialization); //ok

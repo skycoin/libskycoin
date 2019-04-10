@@ -167,7 +167,7 @@ GoUint32_ makeTransactions(GoInt32 n, Transactions__Handle *handle) {
   int i;
   for (i = 0; i < n; i++)
   {
-    Transaction__Handle thandle;
+    Transaction__Handle thandle = 0 ;
     makeTransaction(&thandle);
     registerHandleClose(thandle);
     result = SKY_coin_Transactions_Add(*handle, thandle);
