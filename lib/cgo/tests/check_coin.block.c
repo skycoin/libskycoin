@@ -329,7 +329,7 @@ Suite *coin_blocks(void) {
 
   tc = tcase_create("coin.block");
   tcase_add_checked_fixture(tc, setup, teardown);
-  tcase_add_test(tc, TestNewBlock);
+//   tcase_add_test(tc, TestNewBlock);
   tcase_add_test(tc, TestBlockHashHeader); // ok
   tcase_add_test(tc, TestBlockHashBody);   // ok
   //  tcase_add_test(tc, TestNewGenesisBlock);

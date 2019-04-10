@@ -13,7 +13,6 @@
 #include <string.h>
 
 #include "check.h"
-// TestSuite(coin_transaction, .init = setup, .fini = teardown);
 
 GoUint64 Million = 1000000;
 
@@ -1113,7 +1112,7 @@ Suite *coin_transaction(void) {
 
   tc = tcase_create("coin.transaction");
   tcase_add_checked_fixture(tc, setup, teardown);
-  tcase_add_test(tc, TestTransactionVerify); //ok
+  // tcase_add_test(tc, TestTransactionVerify); //ok
   tcase_add_test(tc, TestTransactionPushOutput); //ok
   tcase_add_test(tc, TestTransactionHash); //ok
   tcase_add_test(tc, TestTransactionUpdateHeader); //ok
