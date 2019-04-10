@@ -111,14 +111,14 @@ int isTransactionEq(coin__Transaction *x1, coin__Transaction *x2)
   {
     return 0;
   }
-  // if (!isSHA256Eq(&x1->InnerHash, &x2->InnerHash))
-  //   return 0;
-  // if (!equalSlices_(&x1->Sigs, &x2->Sigs, sizeof(cipher__Sig)))
-  //   return 0;
-  // if (!equalSlices_(&x1->In, &x2->In, sizeof(cipher__SHA256)))
-  //   return 0;
-  // if (!equalSlices_(&x1->Out, &x2->Out, sizeof(coin__TransactionOutput)))
-  //   return 0;
+  if (!isSHA256Eq(&x1->InnerHash, &x2->InnerHash))
+    return 0;
+  if (!equalSlices_(&x1->Sigs, &x2->Sigs, sizeof(cipher__Sig)))
+    return 0;
+  if (!equalSlices_(&x1->In, &x2->In, sizeof(cipher__SHA256)))
+    return 0;
+  if (!equalSlices_(&x1->Out, &x2->Out, sizeof(coin__TransactionOutput)))
+    return 0;
   return 1;
 }
 

@@ -71,11 +71,12 @@ func SKY_coin_SignedBlock_VerifySignature(_b *C.coin__SignedBlock, _pubkey *C.ci
 //export SKY_coin_NewGenesisBlock
 func SKY_coin_NewGenesisBlock(_genesisAddr *C.cipher__Address, _genesisCoins, _timestamp uint64, _arg2 *C.Block__Handle) (____error_code uint32) {
 	genesisAddr := *(*cipher.Address)(unsafe.Pointer(_genesisAddr))
-	genesisCoins := _genesisCoins
-	timestamp := _timestamp
+	genesisCoins := uint64(_genesisCoins)
+	timestamp := uint64(_timestamp)
 	__arg2, ____return_err := coin.NewGenesisBlock(genesisAddr, genesisCoins, timestamp)
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {
+		__arg2.Head.Time = timestamp
 		*_arg2 = registerBlockHandle(__arg2)
 	}
 	return
