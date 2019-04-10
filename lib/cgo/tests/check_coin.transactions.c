@@ -1112,10 +1112,10 @@ Suite *coin_transaction(void) {
 
   tc = tcase_create("coin.transaction");
   tcase_add_checked_fixture(tc, setup, teardown);
-  tcase_add_test(tc, TestTransactionVerify); //ok
+  // tcase_add_test(tc, TestTransactionVerify); //ok
   tcase_add_test(tc, TestTransactionPushOutput); //ok
   tcase_add_test(tc, TestTransactionHash); //ok
-  tcase_add_test(tc, TestTransactionUpdateHeader); //ok
+  // tcase_add_test(tc, TestTransactionUpdateHeader); //ok
   tcase_add_test(tc, TestTransactionsSize); //ok
   tcase_add_test(tc, TestTransactionHashInner); //ok
   tcase_add_test(tc, TestTransactionSerialization); //ok
