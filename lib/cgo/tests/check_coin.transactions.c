@@ -518,10 +518,9 @@ START_TEST(TestTransactionHashInner) {
     coin__Transaction *ptx = NULL;
     coin__Transaction *ptx2 = NULL;
     ptx = makeTransaction(&handle1);
-    cipher__SHA256 hash, nullHash;
+    cipher__SHA256 hash, nullHash = "";
     result = SKY_coin_Transaction_HashInner(handle1, &hash);
     ck_assert(result == SKY_OK);
-    memset(&nullHash, 0, sizeof(cipher__SHA256));
     ck_assert(!isU8Eq(nullHash, hash, sizeof(cipher__SHA256)));
 
   // If tx.In is changed, hash should change

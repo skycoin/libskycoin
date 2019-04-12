@@ -114,14 +114,40 @@ START_TEST(TestNewBlock)
     result = SKY_coin_GetBlockObject(newBlock, &pNewBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockObject failed");
     coin__UxArray *pTransactions = NULL;
-    SKY_coin_GetTransactionsObject(transactions, &pTransactions);
-    // ck_assert(isTransactionsEq(&pNewBlock->Body.Transactions, pTransactions));
-    ck_assert_msg(result == SKY_OK, "SKY_coin_Block_GetTransaction failed");
-    ck_assert_int_eq(pNewBlock->Head.Fee ,
-                     fee * (GoUint64)(pTransactions->len));
-    ck_assert_int_eq(pNewBlock->Head.Time , currentTime);
-    ck_assert_int_eq(pNewBlock->Head.BkSeq, (pPrevBlock->Head.BkSeq + 1));
-    ck_assert(isU8Eq(pNewBlock->Head.UxHash, hash, sizeof(cipher__SHA256)));
+    result = SKY_coin_GetTransactionsObject(transactions, &pTransactions);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_GetTransactionsObject failed");
+    BlockBody__Handle pBlockBody_Han = 0;
+    result = SKY_coin_GetBlockBody(newBlock, &pBlockBody_Han);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockBody failed");
+    Transactions__Handle Trans_Handle =0;
+     result = SKY_coin_BlockBody_Transactions(pBlockBody_Han, &Trans_Handle);
+     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockBody failed");
+     coin__UxArray *pTrans = NULL;
+    result = SKY_coin_GetTransactionsObject(Trans_Handle,&pTrans);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_GetTransactionsObject failed");
+    ck_assert(isTransactionsEq(pTrans, pTransactions));
+    BlockHeader__Handle pBlockHeader_Han = 0;
+    result = SKY_coin_Block_GetBlockHeader(newBlock, &pBlockHeader_Han);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_Block_GetBlockHeader failed");
+    GoUint64 pValue, pPrevValue;
+    result = SKY_coin_BlockHeader_Fee(pBlockHeader_Han,&pValue);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_Fee failed");
+    ck_assert_int_eq(pValue, fee * (GoUint64)(pTransactions->len));
+    result = SKY_coin_BlockHeader_Time(pBlockHeader_Han, &pValue);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_Time failed");
+    ck_assert_int_eq(pValue, currentTime);
+    result = SKY_coin_BlockHeader_BkSeq(pBlockHeader_Han, &pValue);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_BkSeq failed");
+    BlockHeader__Handle pPrevBlockHeader_Han = 0;
+    result = SKY_coin_Block_GetBlockHeader(prevBlock, &pPrevBlockHeader_Han);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_Block_GetBlockHeader failed");
+    result = SKY_coin_BlockHeader_BkSeq(pPrevBlockHeader_Han, &pPrevValue);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_BkSeq failed");
+    ck_assert_int_eq(pValue, (pPrevValue + 1));
+    cipher__SHA256 pHash = "";
+    result = SKY_coin_BlockHeader_UxHash(pBlockHeader_Han, &pHash);
+    ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_UxHash failed");
+    ck_assert(isU8Eq(pHash, hash, sizeof(cipher__SHA256)));
 }
 END_TEST
 
@@ -356,12 +382,12 @@ Suite *coin_blocks(void) {
 
   tc = tcase_create("coin.block");
   tcase_add_checked_fixture(tc, setup, teardown);
-//   tcase_add_test(tc, TestNewBlock);
-//   tcase_add_test(tc, TestBlockHashHeader); // ok
-//   tcase_add_test(tc, TestBlockHashBody);   // ok
+  tcase_add_test(tc, TestNewBlock); //ok
+  tcase_add_test(tc, TestBlockHashHeader); // ok
+  tcase_add_test(tc, TestBlockHashBody);   // ok
    tcase_add_test(tc, TestNewGenesisBlock); //ok
-//   tcase_add_test(tc, TestCreateUnspent);  // ok
-//   tcase_add_test(tc, TestCreateUnspents); // ok
+  tcase_add_test(tc, TestCreateUnspent);  // ok
+  tcase_add_test(tc, TestCreateUnspents); // ok
   suite_add_tcase(s, tc);
   tcase_set_timeout(tc, 150);
 

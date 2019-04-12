@@ -11,7 +11,7 @@ int main(void)
     srunner_add_suite(sr, cipher_crypto()); //ok
     srunner_add_suite(sr, cipher_encrypt_scrypt_chacha20poly1305()); //ok
     srunner_add_suite(sr, cipher_hash()); //ok
-    srunner_add_suite(sr, coin_blocks());
+    srunner_add_suite(sr, coin_blocks()); //ok
     srunner_add_suite(sr, coin_coin()); //ok
     srunner_add_suite(sr, coin_math()); //ok
     srunner_add_suite(sr, coin_output()); //ok

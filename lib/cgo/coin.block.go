@@ -398,6 +398,17 @@ func SKY_coin_BlockHeader_UxHash(_b C.BlockHeader__Handle, _arg0 *C.cipher__SHA2
 	return
 }
 
+//export SKY_coin_BlockHeader_Fee
+func SKY_coin_BlockHeader_Fee(_b C.BlockHeader__Handle, _arg0 *uint64) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_arg0 = uint64(b.Fee)
+	}
+	return
+}
+
 //export SKY_coin_BlockBody_Transactions
 func SKY_coin_BlockBody_Transactions(_bb C.BlockBody__Handle, _arg0 *C.Transactions__Handle) (____error_code uint32) {
 	bb, ok := lookupBlockBodyHandle(_bb)
