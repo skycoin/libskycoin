@@ -10,9 +10,9 @@ matrix:
   include:
     - os: linux
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
-    # - os: osx
-      # osx_image: xcode8
-      # env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
+    - os: osx
+      osx_image: xcode8
+      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
