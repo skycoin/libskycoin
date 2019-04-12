@@ -1131,8 +1131,8 @@ Suite *coin_transaction(void) {
   tcase_add_test(tc, TestTransactionsTruncateBytesTo); //ok
   tcase_add_test(tc, TestVerifyTransactionCoinsSpending); //ok
   tcase_add_test(tc, TestVerifyTransactionHoursSpending); //ok
-  tcase_add_test(tc, TestTransactionsFees); //ok
   tcase_add_test(tc, TestSortTransactions); //ok
+  tcase_add_test(tc, TestTransactionsFees); // ok
   suite_add_tcase(s, tc);
   return s;
 }

@@ -154,7 +154,6 @@ coin__Transaction *makeEmptyTransaction(Transaction__Handle *handle)
   *handle = 0;
   result = SKY_coin_Create_Transaction(handle);
   ck_assert_msg(result == SKY_OK, "SKY_coin_Create_Transaction failed");
-  registerHandleClose(*handle);
   result = SKY_coin_GetTransactionObject(*handle, &ptransaction);
   ck_assert_msg(result == SKY_OK, "SKY_coin_GetTransactionObject failed");
   return ptransaction;
@@ -163,7 +162,6 @@ coin__Transaction *makeEmptyTransaction(Transaction__Handle *handle)
 GoUint32_ makeTransactions(GoInt32 n, Transactions__Handle *handle) {
   GoUint32_ result = SKY_coin_Create_Transactions(handle);
   ck_assert(result == SKY_OK);
-  registerHandleClose(*handle);
   GoInt32 i;
   for (i = 0; i < n; i++)
   {
