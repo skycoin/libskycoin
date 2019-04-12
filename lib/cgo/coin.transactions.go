@@ -236,8 +236,6 @@ func SKY_coin_Transaction_Verify(handle C.Transaction__Handle) (____error_code u
 	}
 	____return_err := txn.Verify()
 	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-	}
 	return
 }
 
