@@ -314,6 +314,10 @@ typedef Handle SignedBlock__Handle;
 typedef Handle BlockBody__Handle;
 
 /**
+ * Memory handle to access to coin.BlockHeader
+ */
+typedef Handle BlockHeader__Handle;
+/**
  * Memory handle to access to cli.BalanceResult
  */
 

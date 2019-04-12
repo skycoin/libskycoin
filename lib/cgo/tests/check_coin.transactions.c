@@ -954,7 +954,7 @@ void assertTransactionsHandleEqual(Transaction__Handle h1,
                                    Transaction__Handle h2, char *testName) {
   coin__Transaction *pTx1;
   coin__Transaction *pTx2;
-  int result;
+  GoUint32 result;
   result = SKY_coin_GetTransactionObject(h1, &pTx1);
   ck_assert(result == SKY_OK);
   result = SKY_coin_GetTransactionObject(h2, &pTx2);
