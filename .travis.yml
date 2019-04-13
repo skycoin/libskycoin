@@ -8,8 +8,8 @@ go:
 
 matrix:
   include:
-    - os: linux
-      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
+#    - os: linux
+#      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
     - os: osx
       osx_image: xcode8
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
