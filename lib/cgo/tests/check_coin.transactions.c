@@ -1150,9 +1150,9 @@ Suite *coin_transaction_fork(void) {
   tcase_add_test_raise_signal(tc, TestTransactionVerifyInput, SKY_ABORT);
   tcase_add_test_raise_signal(tc, TestTransactionSignInputs, SKY_ABORT);
 #elif __APPLE__
-  // tcase_add_exit_test(tc, TestTransactionPushInput, SKY_ABORT);
+  tcase_add_exit_test(tc, TestTransactionPushInput, SKY_ABORT);
   tcase_add_exit_test(tc, TestTransactionSignInputs, SKY_ABORT);
-  tcase_add_test_raise_signal(tc, TestTransactionVerifyInput, 6);
+  tcase_add_exit_test(tc, TestTransactionSignInputs, SKY_ABORT);
 #endif
   suite_add_tcase(s, tc);
   tcase_set_timeout(tc, 150);
