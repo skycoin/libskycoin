@@ -20,10 +20,9 @@ START_TEST(TestUxBodyHash)
     coin__UxBody uxbody;
     result = makeUxBody(&uxbody);
     ck_assert_msg(result == SKY_OK, "makeUxBody failed");
-    cipher__SHA256 hash, nullHash;
+    cipher__SHA256 hash, nullHash = "";
     result = SKY_coin_UxBody_Hash(&uxbody, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
-    memset(&nullHash, 0, sizeof(cipher__SHA256));
     ck_assert(!isU8Eq(nullHash, hash, sizeof(cipher__SHA256)));
 }
 END_TEST
