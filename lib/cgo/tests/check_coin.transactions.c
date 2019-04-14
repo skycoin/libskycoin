@@ -25,16 +25,13 @@ START_TEST(TestTransactionVerify) {
   
   coin__Transaction *ptx;
   Transaction__Handle handle;
-  printf("Finalize definitin in var \n");
   // Mismatch header hash
-  printf("Enter in Mismatch header hash\n");
   ptx = makeTransaction(&handle);
   memset(ptx->InnerHash, 0, sizeof(cipher__SHA256));
   result = SKY_coin_Transaction_Verify(handle);
   ck_assert(result == SKY_ERROR);
 
   // No inputs
-  printf("Enter in No inputs hash\n");
   ptx = makeTransaction(&handle);
   result = SKY_coin_Transaction_ResetInputs(handle, 0);
   ck_assert(result == SKY_OK);
@@ -44,7 +41,6 @@ START_TEST(TestTransactionVerify) {
   ck_assert(result == SKY_ERROR);
 
   // No outputs
-  printf("Enter in No outputs\n");
   ptx = makeTransaction(&handle);
   result = SKY_coin_Transaction_ResetOutputs(handle, 0);
   ck_assert(result == SKY_OK);
@@ -54,7 +50,6 @@ START_TEST(TestTransactionVerify) {
   ck_assert(result == SKY_ERROR);
 
   // Invalid number of Sigs
-  printf("Enter in Invalid number of Sigs\n");
   ptx = makeTransaction(&handle);
   result = SKY_coin_Transaction_ResetSignatures(handle, 0);
   ck_assert(result == SKY_OK);
@@ -70,7 +65,6 @@ START_TEST(TestTransactionVerify) {
   ck_assert(result == SKY_ERROR);
 
   // Too many sigs & inputs
-  printf("Enter in Too many sigs & inputs\n");
   ptx = makeTransaction(&handle);
   result = SKY_coin_Transaction_ResetSignatures(handle, MaxUint16);
   ck_assert(result == SKY_OK);
@@ -82,7 +76,6 @@ START_TEST(TestTransactionVerify) {
   ck_assert(result == SKY_ERROR);
 
   // Duplicate inputs
-  printf("Enter in Duplicate inputs\n");
   coin__UxOut ux;
   cipher__SecKey seckey;
   memset(&ux, 0, sizeof(coin__UxOut));
@@ -113,7 +106,6 @@ START_TEST(TestTransactionVerify) {
 #endif
 
   // Duplicate outputs
-  printf("Enter in Duplicate outputs\n");
   ptx = makeTransaction(&handle);
   coin__TransactionOutput *pOutput = ptx->Out.data;
   cipher__Address addr;
@@ -127,14 +119,12 @@ START_TEST(TestTransactionVerify) {
   ck_assert(result == SKY_ERROR);
 
   // Invalid signature, empty
-   printf("Enter in Invalid signature, empty\n");
   ptx = makeTransaction(&handle);
   memset(ptx->Sigs.data, 0, sizeof(cipher__Sig));
   result = SKY_coin_Transaction_Verify(handle);
   ck_assert(result == SKY_ErrInvalidSigPubKeyRecovery);
 
   // Output coins are 0
-  printf("Enter in Output coins are 0\n");
   ptx = makeTransaction(&handle);
   pOutput = ptx->Out.data;
   pOutput->Coins = 0;
@@ -144,7 +134,6 @@ START_TEST(TestTransactionVerify) {
   ck_assert(result == SKY_ERROR);
 
   // Output coin overflow
-   printf("Enter in Output coin overflow\n");
   ptx = makeTransaction(&handle);
   pOutput = ptx->Out.data;
   pOutput->Coins = MaxUint64 - 3000000;
@@ -155,7 +144,6 @@ START_TEST(TestTransactionVerify) {
 
   // Output coins are not multiples of 1e6 (valid, decimal restriction is not
   // enforced here)
-  printf("Enter in  Output coins are not multiples of 1e6 (valid, decimal restriction is not enforced here)\n");
   ptx = makeTransaction(&handle);
   pOutput = ptx->Out.data;
   pOutput->Coins += 10;
@@ -176,7 +164,6 @@ START_TEST(TestTransactionVerify) {
   ck_assert(result == SKY_OK);
 
   // Valid
-  printf("Enter in  Valid\n");
   ptx = makeTransaction(&handle);
   pOutput = ptx->Out.data;
   pOutput->Coins = 10000000;
