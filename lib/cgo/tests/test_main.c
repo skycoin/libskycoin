@@ -29,5 +29,5 @@ int main(void) {
   srunner_free(sr_fork);
   sr = NULL;
   sr_fork = NULL;
-  return (number_failed == 0 && number_failed_fork ==0 ) ? EXIT_SUCCESS : EXIT_FAILURE;
+  return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
