@@ -28,7 +28,7 @@ GoUint32_ makeKeysAndAddress(cipher__PubKey *ppubkey, cipher__SecKey *pseckey,
 }
 
 GoUint32_ makeUxBodyWithSecret(coin__UxBody *puxBody, cipher__SecKey *pseckey) {
-  printf("Enter in makeUxBodyWithSecret");
+  printf("Enter in makeUxBodyWithSecret\n");
   cipher__PubKey pubkey;
   cipher__Address address;
   GoUint32_ result;
@@ -56,12 +56,12 @@ GoUint32_ makeUxBodyWithSecret(coin__UxBody *puxBody, cipher__SecKey *pseckey) {
   ck_assert_msg(result == SKY_OK, "SKY_cipher_AddressFromPubKey failed");
   result = SKY_cipher_Address_Verify(&puxBody->Address,&pubkey);
   ck_assert_msg(result == SKY_OK, "SKY_cipher_Address_Verify failed");
-  printf("Enter in makeUxBodyWithSecret");
+  printf("Enter in makeUxBodyWithSecret\n");
   return result;
 }
 
 GoUint32_ makeUxOutWithSecret(coin__UxOut *puxOut, cipher__SecKey *pseckey) {
-  printf("Enter in makeUxOutWithSecret");
+  printf("Enter in makeUxOutWithSecret\n");
   GoUint32_ result;
   memset(puxOut, 0, sizeof(coin__UxOut));
   result = makeUxBodyWithSecret(&puxOut->Body, pseckey);
@@ -69,7 +69,7 @@ GoUint32_ makeUxOutWithSecret(coin__UxOut *puxOut, cipher__SecKey *pseckey) {
   puxOut->Head.BkSeq = 2;
   result = SKY_cipher_SecKey_Verify(pseckey);
   ck_assert_msg(result == SKY_OK, "SKY_cipher_SecKey_Verify failed");
-  printf("Exit in makeUxOutWithSecret");
+  printf("Exit in makeUxOutWithSecret\n");
   return result;
   
 }
