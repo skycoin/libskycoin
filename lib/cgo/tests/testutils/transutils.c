@@ -102,9 +102,10 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
                                             cipher__SecKey *pseckey,
                                             Transaction__Handle *handle)
 {
-  GoUint32_ result;
-  coin__Transaction *ptransaction;
-  memset(&ptransaction,0,sizeof(coin__Transaction));
+  printf("Enter in makeTransactionFromUxOut\n");
+   GoUint32_ result;
+  coin__Transaction *ptransaction = NULL;
+  *handle = 0;
   result = SKY_coin_Create_Transaction(handle);
   ck_assert_msg(result == SKY_OK, "SKY_coin_Create_Transaction failed");
   registerHandleClose(*handle);
@@ -135,6 +136,7 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
   result = SKY_coin_GetTransactionObject(*handle, &ptransaction);
   ck_assert_msg(result == SKY_OK, "SKY_coin_GetTransactionObject failed");
   registerMemCleanup(ptransaction);
+  printf("Exit in makeTransactionFromUxOut\n");
   return ptransaction;
 }
 
