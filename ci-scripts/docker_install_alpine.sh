@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 apk update
-apk add build-base curl wget check-dev alpine-sdk
+apk add build-base gcc git curl wget check-dev alpine-sdk make g++ zlib-dev
