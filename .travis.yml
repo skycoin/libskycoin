@@ -53,7 +53,7 @@ install:
   # - make install-deps-libc
 
 script:
-  - make lint
+  # - make lint
   # # libskycoin tests
   # - CC=gcc-6 make test-libc
   - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build --build-arg HW_EMU --build-arg OS_EMU . -t skydev-test ; fi
