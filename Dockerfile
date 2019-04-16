@@ -1,14 +1,13 @@
 ARG OS_EMU
 ARG HW_EMU
 
-FROM balenalib/${HW_EMU}-ubuntu-golang
+FROM balenalib/${HW_EMU}-${OS_EMU}-golang
 
 ADD . $GOPATH/src/github.com/skycoin/libskycoin/
 
 RUN [ "cross-build-start" ]
 
-RUN apt-get update
-RUN apt-get install gcc-6 g++-6 curl wget -y
+RUN sh $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/docker_install_${OS_EMU}
 RUN go get github.com/gz-c/gox
 RUN go get -t ./...
 ENV CGO_ENABLED=1
