@@ -39,16 +39,16 @@ env:
 install:
   # Install gox
   - go get github.com/gz-c/gox
-  - go get -t ./...
-  - make install-linters
-  - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
+  # - go get -t ./...
+  # - make install-linters
+  # - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
-  - make install-deps-libc
+  # - make install-deps-libc
 
 script:
-  - make lint
-  # libskycoin tests
-  - CC=gcc-6 make test-libc
+  # - make lint
+  # # libskycoin tests
+  # - CC=gcc-6 make test-libc
   - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build --build-arg HW_EMU --build-arg OS_EMU --build-arg OS-EMU . -t skydev-test ; fi
 
 notifications:
