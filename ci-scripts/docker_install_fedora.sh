@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 dnf update
-dnf install gcc-c++ gcc curl wget check-devel make -y
+dnf install check-devel -y
+yum groupinstall "Development Tools" "Development Libraries"

@@ -8,18 +8,18 @@ go:
 
 matrix:
   include:
-    - os: linux
-      env: 
-       - HW_EMU=orangepi-plus2
-       - OS_EMU=debian
-    - os: linux
-      env: 
-       - HW_EMU=orangepi-plus2
-       - OS_EMU=ubuntu
-    - os: linux
-      env: 
-       - HW_EMU=orangepi-plus2
-       - OS_EMU=alpine
+    # - os: linux
+      # env: 
+      #  - HW_EMU=orangepi-plus2
+      #  - OS_EMU=debian
+    # - os: linux
+      # env: 
+      #  - HW_EMU=orangepi-plus2
+      #  - OS_EMU=ubuntu
+    # - os: linux
+      # env: 
+      #  - HW_EMU=orangepi-plus2
+      #  - OS_EMU=alpine
     - os: linux
       env: 
        - HW_EMU=orangepi-plus2
