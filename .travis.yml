@@ -16,8 +16,8 @@ matrix:
       env: 
        - HW_EMU=orangepi-plus2
        - OS_EMU=ubuntu
-    - os: osx
-      osx_image: xcode8
+    # - os: osx
+      # osx_image: xcode8
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi

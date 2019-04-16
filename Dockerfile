@@ -3,7 +3,7 @@ ARG HW_EMU
 FROM balenalib/${HW_EMU}-${OS_EMU}-golang
 ARG OS-EMU=${OS_EMU}
 ADD . $GOPATH/src/github.com/skycoin/libskycoin/
-RUN env
+
 RUN [ "cross-build-start" ]
 RUN sh $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/docker_install_${OS-EMU}.sh
 RUN go get github.com/gz-c/gox
