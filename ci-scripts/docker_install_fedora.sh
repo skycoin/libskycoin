@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 dnf update
-dnf install gcc curl wget 
+dnf install gcc curl wget check-devel

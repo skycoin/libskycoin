@@ -10,7 +10,6 @@ RUN go get github.com/gz-c/gox
 RUN go get -t ./...
 ENV CGO_ENABLED=1
 RUN cd $GOPATH/src/github.com/skycoin/libskycoin && make clean-libc
-RUN cd $GOPATH/src/github.com/skycoin/libskycoin && make install-deps-libc-linux
 RUN cd $GOPATH/src/github.com/skycoin/libskycoin && make test-libc 
 
 RUN [ "cross-build-end" ]  
