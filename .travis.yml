@@ -9,7 +9,9 @@ go:
 matrix:
   include:
     - os: linux
-      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
+      env: 
+       - VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
+       - HW_EMU=orangepi-plus2
     - os: osx
       osx_image: xcode8
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
@@ -41,7 +43,7 @@ script:
   - make lint
   # libskycoin tests
   - CC=gcc-6 make test-libc
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build  . -t skydev-test ; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build --build-arg HW_EMU=$HW_EMU . -t skydev-test ; fi
 
 notifications:
   email: false
