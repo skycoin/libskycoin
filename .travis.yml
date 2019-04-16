@@ -48,7 +48,7 @@ script:
   - make lint
   # libskycoin tests
   - CC=gcc-6 make test-libc
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build --build-arg HW_EMU=$HW_EMU --build-arg OS_EMU=$OS_EMU . -t skydev-test ; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build --build-arg HW_EMU=$HW_EMU --build-arg OS_EMU=$OS_EMU --build-arg OS-EMU=$OS_EMU . -t skydev-test ; fi
 
 notifications:
   email: false
