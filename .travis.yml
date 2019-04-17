@@ -57,7 +57,7 @@ script:
   - make lint
   # # libskycoin tests
   - CC=gcc-6 make test-libc
-  - if [[ ! "$HW_EMU" == 'X86' ]]; then docker build --build-arg HW_EMU --build-arg OS_EMU . -t skydev-test ; fi
+  - if [[  "$HW_EMU" != "X86" ]]; then docker build --build-arg HW_EMU --build-arg OS_EMU . -t skydev-test ; fi
 
 notifications:
   email: false
