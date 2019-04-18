@@ -10,10 +10,6 @@ matrix:
   include:
     - os: linux
       env: 
-       - HW_EMU=X86
-       - EMU=no
-    - os: linux
-      env: 
        - HW_EMU=orangepi-plus2
        - OS_EMU=debian
        - EMU=yes
@@ -29,9 +25,6 @@ matrix:
        - EMU=yes
     - os: osx
       osx_image: xcode8
-      env:
-       - HW_EMU=x86
-       - EMU=no
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
@@ -62,7 +55,7 @@ script:
   - make lint
   # # libskycoin tests
   - CC=gcc-6 make test-libc
-  - if [[  "$EMU" == "no" ]]; then docker build --build-arg HW_EMU --build-arg OS_EMU . -t skydev-test ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker build --build-arg HW_EMU --build-arg OS_EMU . -t skydev-test ; fi
 
 notifications:
   email: false
