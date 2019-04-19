@@ -23,6 +23,15 @@ matrix:
     - os: linux
       env:
         - HW_EMU=asus-tinker-board
+    - os: linux
+      env:
+        - HW_EMU=bananapi-m1-plus
+    - os: linux
+      env:
+        - HW_EMU=odroid-xu4
+    - os: linux
+      env:
+        - HW_EMU=stem-x86-32
     - os: osx
       osx_image: xcode8
 
