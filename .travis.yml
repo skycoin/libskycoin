@@ -152,6 +152,7 @@ install:
   - go get github.com/gz-c/gox
   - go get -t ./...
   - make install-linters
+  - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   - make install-deps-libc
 
 script:
