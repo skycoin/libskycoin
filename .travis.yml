@@ -32,6 +32,12 @@ matrix:
     - os: linux
       env:
         - HW_EMU=stem-x86-32
+    - os: linux
+      env:
+        - HW_EMU=odroid-c1
+    - os: linux
+      env:
+        - HW_EMU=odroid-xu4
     - os: osx
       osx_image: xcode8
 
