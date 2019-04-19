@@ -14,9 +14,9 @@ matrix:
     - os: linux
       env:
         - HW_EMU=raspberry-pi2
-    - os: linux
-      env:
-        - HW_EMU=raspberry-pi3
+#    - os: linux
+#      env:
+#        - HW_EMU=raspberry-pi3
     - os: linux
       env:
         - HW_EMU=beaglebone-black
