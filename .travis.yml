@@ -13,14 +13,14 @@ matrix:
       env:
         - QEMU_PLATFORM=orangepi-plus2
         - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=orangepi-plus2
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=orangepi-plus2
-    #     - QEMU_OS=fedora
+    - os: linux
+      env:
+        - QEMU_PLATFORM=orangepi-plus2
+        - QEMU_OS=debian
+    - os: linux
+      env:
+        - QEMU_PLATFORM=orangepi-plus2
+        - QEMU_OS=fedora
     # - os: linux
     #   env:
     #     - QEMU_PLATFORM=raspberry-pi2
