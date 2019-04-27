@@ -48,7 +48,8 @@ START_TEST(TestUint64ToInt64)
         //{maxUint64 + 1, 0, 1},
     };
     int tests_count = sizeof(tests) / sizeof(math_tests);
-    for (int i = 0; i < tests_count; i++)
+    int i;
+    for (i = 0; i < tests_count; i++)
     {
         result = SKY_coin_Uint64ToInt64(tests[i].a, &r);
         if (tests[i].failure)

@@ -28,55 +28,42 @@ void parseJsonMetaData(char *metadata, int *n, int *r, int *p, int *keyLen)
     int keysCount = 4;
     int keyIndex = -1;
     int startNumber = -1;
-    for (int i = 0; i < length; i++)
-    {
-        if (metadata[i] == '\"')
-        {
-            startNumber = -1;
-            if (openingQuote >= 0)
-            {
-                keyIndex = -1;
-                metadata[i] = 0;
-                for (int k = 0; k < keysCount; k++)
-                {
-                    if (strcmp(metadata + openingQuote + 1, keys[k]) == 0)
-                    {
-                        keyIndex = k;
-                    }
-                }
-                openingQuote = -1;
+    int i;
+    for (i= 0; i < length; i++) {
+      if (metadata[i] == '\"') {
+        startNumber = -1;
+        if (openingQuote >= 0) {
+          keyIndex = -1;
+          metadata[i] = 0;
+          for (int k = 0; k < keysCount; k++) {
+            if (strcmp(metadata + openingQuote + 1, keys[k]) == 0) {
+              keyIndex = k;
             }
-            else
-            {
-                openingQuote = i;
-            }
+          }
+          openingQuote = -1;
+        } else {
+          openingQuote = i;
         }
-        else if (metadata[i] >= '0' && metadata[i] <= '9')
-        {
-            if (startNumber < 0)
-                startNumber = i;
+      } else if (metadata[i] >= '0' && metadata[i] <= '9') {
+        if (startNumber < 0)
+          startNumber = i;
+      } else if (metadata[i] == ',') {
+        if (startNumber >= 0) {
+          metadata[i] = 0;
+          int number = atoi(metadata + startNumber);
+          startNumber = -1;
+          if (keyIndex == 0)
+            *n = number;
+          else if (keyIndex == 1)
+            *r = number;
+          else if (keyIndex == 2)
+            *p = number;
+          else if (keyIndex == 3)
+            *keyLen = number;
         }
-        else if (metadata[i] == ',')
-        {
-            if (startNumber >= 0)
-            {
-                metadata[i] = 0;
-                int number = atoi(metadata + startNumber);
-                startNumber = -1;
-                if (keyIndex == 0)
-                    *n = number;
-                else if (keyIndex == 1)
-                    *r = number;
-                else if (keyIndex == 2)
-                    *p = number;
-                else if (keyIndex == 3)
-                    *keyLen = number;
-            }
-        }
-        else
-        {
-            startNumber = -1;
-        }
+      } else {
+        startNumber = -1;
+      }
     }
 }
 

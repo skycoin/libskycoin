@@ -215,7 +215,8 @@ START_TEST(TestToString)
     int len = (sizeof(cases) / sizeof(tmpstruct));
 
     GoString nullStr = {bufferNull, 0};
-    for (int i = 0; i < len; i++)
+    int i;
+    for (i = 0; i < len; i++)
     {
         tmpstruct tc = cases[i];
 

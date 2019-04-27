@@ -40,9 +40,8 @@ START_TEST(TestBitcoinAddress)
   GoString *secKeyStr = secKeys;
   GoString *pubKeyStr = pubKeys;
   GoString *addrStr = addrs;
-
-  for (int i = 0; i < 3; ++i, ++secKeyStr, ++pubKeyStr, ++addrStr)
-  {
+  int i;
+   for (i = 0; i < 3; ++i, ++secKeyStr, ++pubKeyStr, ++addrStr) {
     error = SKY_cipher_SecKeyFromHex(*secKeyStr, &seckey);
     ck_assert_msg(error == SKY_OK, "Create SecKey from Hex"); // (seckeyFailMsg));
     error = SKY_cipher_PubKeyFromHex(*pubKeyStr, &pubkey);
