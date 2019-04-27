@@ -268,7 +268,8 @@ START_TEST(TestTransactionFee)
       tmpstruct tc = cases[i];
       Transaction__Handle tx;
       makeEmptyTransaction(&tx);
-      for (int k = 0; k < tc.lens[1]; k++) {
+      int k;
+      for (k = 0; k < tc.lens[1]; k++) {
         GoInt64 h = tc.out[k];
         err = SKY_coin_Transaction_PushOutput(tx, &addr, 0, h);
         ck_assert(err == SKY_OK);
@@ -277,7 +278,8 @@ START_TEST(TestTransactionFee)
       coin__UxArray inUxs;
       makeUxArray(&inUxs, tc.lens[0]);
       coin__UxOut *tmpOut = (coin__UxOut *)inUxs.data;
-      for (int j = 0; j < tc.lens[0]; j++) {
+      int j;
+      for (j = 0; j < tc.lens[0]; j++) {
         uxInput b = tc.in[j];
         tmpOut->Head.Time = b.times;
         tmpOut->Body.Coins = b.coins;

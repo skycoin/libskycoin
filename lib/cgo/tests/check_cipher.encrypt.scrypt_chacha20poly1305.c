@@ -35,7 +35,8 @@ void parseJsonMetaData(char *metadata, int *n, int *r, int *p, int *keyLen)
         if (openingQuote >= 0) {
           keyIndex = -1;
           metadata[i] = 0;
-          for (int k = 0; k < keysCount; k++) {
+          int k;
+          for (k = 0; k < keysCount; k++) {
             if (strcmp(metadata + openingQuote + 1, keys[k]) == 0) {
               keyIndex = k;
             }
@@ -123,7 +124,8 @@ START_TEST(TestScryptChacha20poly1305Encrypt)
         ck_assert_msg(decode_len >= SCRYPTCHACHA20METALENGTHSIZE, "base64_decode_string failed");
         ck_assert_msg(decode_len < BUFFER_SIZE, "base64_decode_string failed, buffer overflow");
         metalength = (unsigned int)str[0];
-        for (int m = 1; m < SCRYPTCHACHA20METALENGTHSIZE; m++)
+        int m;
+        for (m = 1; m < SCRYPTCHACHA20METALENGTHSIZE; m++)
         {
             if (str[m] > 0)
             {

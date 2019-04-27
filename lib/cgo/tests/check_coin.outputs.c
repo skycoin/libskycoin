@@ -374,7 +374,8 @@ int isUxArraySorted(coin__UxArray *uxa)
     cipher__SHA256 *currentHash = NULL;
 
     int result;
-    for (int i = 1; i < n; i++)
+    int i;
+    for (i = 1; i < n; i++)
     {
         if (prevHash == NULL)
         {
@@ -524,7 +525,8 @@ START_TEST(TestAddressUxOutsKeys)
     {
         //Check if every key matches uxout
         int found = 0;
-        for (int j = 0; j < test_count; j++)
+        int j;
+        for (j = 0; j < test_count; j++)
         {
             if (memcmp(pKey, &uxs[j].Body.Address, sizeof(cipher__Address)) == 0)
             {
@@ -536,7 +538,7 @@ START_TEST(TestAddressUxOutsKeys)
         if (i < test_count - 1)
         {
             cipher__Address *pKey2 = pKey;
-            for (int j = i + 1; j < test_count; j++)
+            for (j = i + 1; j < test_count; j++)
             {
                 pKey2++;
                 if (memcmp(pKey, pKey2, sizeof(cipher__Address)) == 0)

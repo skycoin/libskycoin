@@ -225,7 +225,8 @@ START_TEST(TestTransactionPushOutput)
     output.Coins = 100;
     output.Hours = 150;
     ck_assert(isTransactionOutputEq(&output, pOutput));
-    for (int i = 1; i < 20; i++)
+    int i;
+    for (i = 1; i < 20; i++)
     {
         makeAddress(&addr);
         result = SKY_coin_Transaction_PushOutput(handle, &addr, i * 100, i * 50);

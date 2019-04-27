@@ -145,7 +145,8 @@ int makeTransactions(int n, Transactions__Handle* handle){
   int result = SKY_coin_Create_Transactions(handle);
   ck_assert(result == SKY_OK);
   registerHandleClose(*handle);
-  for(int i = 0; i < n; i++){
+  int i;
+  for(i = 0; i < n; i++){
     Transaction__Handle thandle;
     makeTransaction(&thandle);
     registerHandleClose(thandle);
@@ -233,7 +234,8 @@ int makeUxArray(coin__UxArray* parray, int n){
   parray->cap = parray->len = n;
   coin__UxOut* p = (coin__UxOut*)parray->data;
   int result = SKY_OK;
-  for(int i = 0; i < n; i++){
+  int i;
+  for(i = 0; i < n; i++){
     result = makeUxOut(p);
     if( result != SKY_OK )
       break;
