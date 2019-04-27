@@ -36,9 +36,7 @@ install:
   - make install-deps-libc
 
 script:
-  - make lint
-  # libskycoin tests
-  - make test-libc
+  - make check
 
 notifications:
   email: false
