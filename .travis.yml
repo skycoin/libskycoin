@@ -16,7 +16,6 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   - ./ci-scripts/install-travis-gcc.sh
-  - eval "CC=gcc-6 && CXX=g++-6"
 
 env:
   global:
@@ -24,6 +23,8 @@ env:
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
     - CGO_ENABLED: 1
+    - CC: gcc-6
+    - CXX: g++-6
 
 install:
   # Install gox
@@ -37,7 +38,7 @@ install:
 script:
   - make lint
   # libskycoin tests
-  - CC=gcc-6 make test-libc
+  - make test-libc
 
 notifications:
   email: false
