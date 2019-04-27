@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+### Added
+
+- Add CLI `addressTransactions` command
+- Add `/api/v2/wallet/seed/verify` to verify if seed is a valid bip39 mnemonic seed
 - Add function `SKY_base58_Hex2Base58`
 - Add function `SKY_base58_Encode`
 - Add function `SKY_base58_Decode`
@@ -21,7 +26,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add function `SKY_httphelper_SHA256_UnmarshalJSON`
 - Add function `SKY_httphelper_SHA256_MarshalJSON`
 - Add data type `httphelper__SHA256`
-- Delete function `SKY_base58_String2Hex`
 - Add function `SKY_wallet_Entry_SkycoinAddress`
 - Add function `SKY_wallet_Entry_BitcoinAddress`
 - Add function `SKY_wallet_ResolveCoinType`
@@ -33,21 +37,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add function `CreateTransactionParams_Handle`
 - Add function `SKY_wallet_Wallet_CreateAndSignTransactionAdvanced`
 
-### Added
-- Add CLI `addressTransactions` command
-- Add `/api/v2/wallet/seed/verify` to verify if seed is a valid bip39 mnemonic seed
-
 ### Fixed
 
 - `/api/v1/health` will return correct build info when running Docker containers based on `skycoin/skycoin` mainnet image.
 
 ### Changed
-- Switch `skycoin-cli` from `urfave/cli` to `spf13/cobra`.
-  Now all options of a cli command must only use `--` prefix instead of a mix of `--` and `-` prefixes.
-  `-` prefix is only allowed when using shorthand notation.
 
+- Switch `skycoin-cli` from `urfave/cli` to `spf13/cobra`.
 
 ### Removed
+
+- Delete function `SKY_base58_String2Hex`
 
 ## [0.25.0] - 2018-12-19
 
