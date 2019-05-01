@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ### Added
+
 - Add function `SKY_base58_Hex2Base58`
 - Add function `SKY_base58_Encode`
 - Add function `SKY_base58_Decode`
@@ -42,12 +43,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `/api/v1/health` will return correct build info when running Docker containers based on `skycoin/skycoin` mainnet image.
 
 ### Changed
+
 - Switch `skycoin-cli` from `urfave/cli` to `spf13/cobra`.
   Now all options of a cli command must only use `--` prefix instead of a mix of `--` and `-` prefixes.
   `-` prefix is only allowed when using shorthand notation.
 
 
 ### Removed
+
 - Function `SKY_base58_String2Hex`
 
 ## [0.25.0] - 2018-12-19

@@ -4,7 +4,7 @@
 #include <check.h>
 #include "libskycoin.h"
 #include "skyerrors.h"
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skystring.h"
 #include "skytest.h"
 #include "base64.h"

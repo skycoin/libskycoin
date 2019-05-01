@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "json.h"
 #include "skytypes.h"
- #include "skycriterion.h"
+ #include "skyassert.h"
  #include "libskycoin.h"
 
 #ifndef LIBSKY_TESTING_H

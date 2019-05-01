@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #include "libskycoin.h"
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"

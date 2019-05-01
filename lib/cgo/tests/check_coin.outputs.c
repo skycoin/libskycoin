@@ -9,7 +9,7 @@
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skytxn.h"
 
 // TestSuite(coin_outputs, .init = setup, .fini = teardown);
