@@ -15,7 +15,6 @@
 #define JSON_FILE_SIZE      4096
 #define JSON_BIG_FILE_SIZE  32768
 
-// FIXME: Does not work on e.g. Windows
 #define FILEPATH_SEPARATOR      "/"
 #define TEST_DATA_DIR           "vendor/github.com/skycoin/skycoin/src/cipher/testsuite/testdata/"
 #define MANY_ADDRESSES_FILENAME "many-addresses.golden"
