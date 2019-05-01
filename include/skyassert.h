@@ -1,5 +1,5 @@
-#ifndef LIBCRITERION_H
-#define LIBCRITERION_H
+#ifndef LIBSKY_ASSERT_H
+#define LIBSKY_ASSERT_H
 
 #include "libskycoin.h"
 #include "skyerrors.h"
@@ -26,4 +26,4 @@ extern int isTransactionsEq(coin__Transactions *x1, coin__Transactions *x2);
 
 extern int isTransactionOutputEq(coin__TransactionOutput *x1, coin__TransactionOutput *x2);
 
-#endif //LIBCRITERION_H
+#endif // LIBSKY_ASSERT_H
