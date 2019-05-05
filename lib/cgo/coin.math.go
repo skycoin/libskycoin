@@ -11,18 +11,6 @@ import coin "github.com/skycoin/skycoin/src/coin"
 */
 import "C"
 
-//export SKY_coin_MultUint64
-func SKY_coin_MultUint64(_a, _b uint64, _arg1 *uint64) (____error_code uint32) {
-	a := _a
-	b := _b
-	__arg1, ____return_err := coin.MultUint64(a, b)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-		*_arg1 = __arg1
-	}
-	return
-}
-
 //export SKY_coin_AddUint64
 func SKY_coin_AddUint64(_a, _b uint64, _arg1 *uint64) (____error_code uint32) {
 	a := _a
