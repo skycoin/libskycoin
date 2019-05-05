@@ -2,8 +2,6 @@
 #ifndef CIPHER_TESTSUITE_TESTSUITE
 #define CIPHER_TESTSUITE_TESTSUITE
 
-#include <criterion/criterion.h>
-#include <criterion/new/assert.h>
 
 #include "base64.h"
 #include "json.h"
@@ -17,7 +15,6 @@
 #define JSON_FILE_SIZE      4096
 #define JSON_BIG_FILE_SIZE  32768
 
-// FIXME: Does not work on e.g. Windowa
 #define FILEPATH_SEPARATOR      "/"
 #define TEST_DATA_DIR           "vendor/github.com/skycoin/skycoin/src/cipher/testsuite/testdata/"
 #define MANY_ADDRESSES_FILENAME "many-addresses.golden"
@@ -73,6 +70,25 @@ typedef struct {
   GoSlice Keys;
 } SeedTestData;
 
+struct cr_mem
+{
+  const void *data;
+  size_t size;
+
+#ifdef __cplusplus
+  template <typename T, size_t N>
+  constexpr cr_mem(const T (&arr)[N])
+      : data(static_cast<const void *>(&arr)), size(N)
+  {
+  }
+
+  template <typename T>
+  constexpr cr_mem(const T *arr, size_t n)
+      : data(static_cast<const void *>(arr)), size(n)
+  {
+  }
+#endif /* !__cplusplus */
+};
 //------------------------------------------------------------------------------
 // Functions
 //------------------------------------------------------------------------------
@@ -94,6 +110,7 @@ SeedTestDataJSON* registerSeedTestDataJSONCleanup(SeedTestDataJSON* input_data);
 void SeedTestDataToJson(SeedTestData* input_data, SeedTestDataJSON* json_data);
 GoUint32 SeedTestDataFromJSON(SeedTestDataJSON* json_data, SeedTestData* input_data);
 void ValidateSeedData(SeedTestData* seedData, InputTestData* inputData);
+int isGoldenFile(const char *filename);
 
 #endif
 

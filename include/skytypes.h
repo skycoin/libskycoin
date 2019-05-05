@@ -75,7 +75,12 @@ typedef unsigned int error;
   static assertion to make sure the file is being used on architecture
   at least with matching size of GoInt._
 */
+#if __GNUC__
+#if __x86_64__ || __ppc64__
 typedef char _check_for_64_bit_pointer_matchingGoInt[sizeof(void*)==64/8 ? 1:-1];
+#endif
+#endif
+
 
 /**
  * Instances of Go `string` type.
@@ -172,10 +177,17 @@ typedef Handle Wallets__Handle;
  *  ReadableOutputSet Handle
  * */
 typedef Handle ReadableOutputSet_Handle;
+
 /**
+ *  CreateTransactionParams wallet.CreateTransactionParams
+ */
+typedef Handle CreateTransactionParams__Handle;
+
+    /**
  * Instances of Go interface types.
  */
-typedef struct {
+    typedef struct
+{
   void *t;      ///< Pointer to the information of the concrete Go type
                 ///< bound to this interface reference.
   void *v;      ///< Pointer to the data corresponding to the value
