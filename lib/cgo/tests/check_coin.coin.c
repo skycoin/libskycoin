@@ -58,8 +58,7 @@ START_TEST(TestCrypto1)
     cipher__SecKey seckey;
     int result;
     int i;
-    for (i = 0; i < 10; i++)
-    {
+    for (i = 0; i < 10; i++) {
         result = SKY_cipher_GenerateKeyPair(&pubkey, &seckey);
         ck_assert_msg(result == SKY_OK, "SKY_cipher_GenerateKeyPair failed");
         result = SKY_cipher_CheckSecKey(&seckey);

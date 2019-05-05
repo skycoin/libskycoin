@@ -128,14 +128,14 @@ START_TEST(TestVerifyTransactionFee)
 
     int i;
     for (i = 0; i < len; i++) {
-      makeEmptyTransaction(&txn);
-      verifyTxFeeTestCase tc = cases[i];
-      err = SKY_coin_Transaction_PushOutput(txn, &addr, 0, tc.outputHours);
-      ck_assert(err == SKY_OK);
-      ck_assert(tc.inputHours >= tc.outputHours);
-      err = SKY_fee_VerifyTransactionFee(txn, (tc.inputHours - tc.outputHours),
-                                         2);
-      ck_assert_msg(tc.err == err, "Iter %d is %x != %x", i, tc.err, err);
+        makeEmptyTransaction(&txn);
+        verifyTxFeeTestCase tc = cases[i];
+        err = SKY_coin_Transaction_PushOutput(txn, &addr, 0, tc.outputHours);
+        ck_assert(err == SKY_OK);
+        ck_assert(tc.inputHours >= tc.outputHours);
+        err = SKY_fee_VerifyTransactionFee(txn, (tc.inputHours - tc.outputHours),
+            2);
+        ck_assert_msg(tc.err == err, "Iter %d is %x != %x", i, tc.err, err);
     }
 }
 END_TEST
@@ -166,16 +166,16 @@ START_TEST(TestRequiredFee)
     int len = (sizeof(cases1) / sizeof(requiredFeeTestCase));
     int i;
     for (i = 0; i < len; i++) {
-      requiredFeeTestCase tc = cases1[i];
-      GoUint64 fee;
-      GoUint64 err = SKY_fee_RequiredFee(tc.hours, 2, &fee);
-      ck_assert(err == SKY_OK);
-      ck_assert(tc.fee == fee);
+        requiredFeeTestCase tc = cases1[i];
+        GoUint64 fee;
+        GoUint64 err = SKY_fee_RequiredFee(tc.hours, 2, &fee);
+        ck_assert(err == SKY_OK);
+        ck_assert(tc.fee == fee);
 
-      GoUint64 remainingHours;
-      err = SKY_fee_RemainingHours(tc.hours, 2, &remainingHours);
-      ck_assert(err == SKY_OK);
-      ck_assert_uint_eq((tc.hours - fee), remainingHours);
+        GoUint64 remainingHours;
+        err = SKY_fee_RemainingHours(tc.hours, 2, &remainingHours);
+        ck_assert(err == SKY_OK);
+        ck_assert_uint_eq((tc.hours - fee), remainingHours);
     }
 }
 END_TEST
@@ -265,36 +265,36 @@ START_TEST(TestTransactionFee)
     makeAddress(&addr);
     int i;
     for (i = 0; i < len; i++) {
-      tmpstruct tc = cases[i];
-      Transaction__Handle tx;
-      makeEmptyTransaction(&tx);
-      int k;
-      for (k = 0; k < tc.lens[1]; k++) {
-        GoInt64 h = tc.out[k];
-        err = SKY_coin_Transaction_PushOutput(tx, &addr, 0, h);
-        ck_assert(err == SKY_OK);
-      }
+        tmpstruct tc = cases[i];
+        Transaction__Handle tx;
+        makeEmptyTransaction(&tx);
+        int k;
+        for (k = 0; k < tc.lens[1]; k++) {
+            GoInt64 h = tc.out[k];
+            err = SKY_coin_Transaction_PushOutput(tx, &addr, 0, h);
+            ck_assert(err == SKY_OK);
+        }
 
-      coin__UxArray inUxs;
-      makeUxArray(&inUxs, tc.lens[0]);
-      coin__UxOut *tmpOut = (coin__UxOut *)inUxs.data;
-      int j;
-      for (j = 0; j < tc.lens[0]; j++) {
-        uxInput b = tc.in[j];
-        tmpOut->Head.Time = b.times;
-        tmpOut->Body.Coins = b.coins;
-        tmpOut->Body.Hours = b.hours;
-        tmpOut++;
-      }
-      GoUint64 fee;
-      err = SKY_fee_TransactionFee(tx, tc.headTime, &inUxs, &fee);
-      ck_assert(err == tc.err);
-      if (err != SKY_OK) {
-        ck_assert_msg(fee != 0, "Failed %d != %d in Iter %d", fee, tc.fee, i);
-      } else {
-        ck_assert_msg(fee == tc.fee, "Failed %d != %d in Iter %d", fee, tc.fee,
-                      i);
-      }
+        coin__UxArray inUxs;
+        makeUxArray(&inUxs, tc.lens[0]);
+        coin__UxOut* tmpOut = (coin__UxOut*)inUxs.data;
+        int j;
+        for (j = 0; j < tc.lens[0]; j++) {
+            uxInput b = tc.in[j];
+            tmpOut->Head.Time = b.times;
+            tmpOut->Body.Coins = b.coins;
+            tmpOut->Body.Hours = b.hours;
+            tmpOut++;
+        }
+        GoUint64 fee;
+        err = SKY_fee_TransactionFee(tx, tc.headTime, &inUxs, &fee);
+        ck_assert(err == tc.err);
+        if (err != SKY_OK) {
+            ck_assert_msg(fee != 0, "Failed %d != %d in Iter %d", fee, tc.fee, i);
+        } else {
+            ck_assert_msg(fee == tc.fee, "Failed %d != %d in Iter %d", fee, tc.fee,
+                i);
+        }
     }
 }
 END_TEST

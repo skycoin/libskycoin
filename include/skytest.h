@@ -1,9 +1,9 @@
 
 #include "json.h"
 #include "libskycoin.h"
+#include "libskycoin.h"
+#include "skyassert.h"
 #include "skytypes.h"
- #include "skyassert.h"
- #include "libskycoin.h"
 
 #ifndef LIBSKY_TEST_H
 #define LIBSKY_TEST_H

@@ -211,8 +211,7 @@ START_TEST(TestToString)
 
     GoString nullStr = {bufferNull, 0};
     int i;
-    for (i = 0; i < len; i++)
-    {
+    for (i = 0; i < len; i++) {
         tmpstruct tc = cases[i];
 
         int err = SKY_droplet_ToString(tc.n, (GoString_*)&s);

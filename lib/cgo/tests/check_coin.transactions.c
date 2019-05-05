@@ -226,8 +226,7 @@ START_TEST(TestTransactionPushOutput)
     output.Hours = 150;
     ck_assert(isTransactionOutputEq(&output, pOutput));
     int i;
-    for (i = 1; i < 20; i++)
-    {
+    for (i = 1; i < 20; i++) {
         makeAddress(&addr);
         result = SKY_coin_Transaction_PushOutput(handle, &addr, i * 100, i * 50);
         ck_assert(result == SKY_OK);
@@ -639,8 +638,7 @@ START_TEST(TestTransactionsHashes)
     cipher__SHA256* ph = hashes.data;
     cipher__SHA256 hash;
     int i;
-    for (i = 0; i < 4; i++)
-    {
+    for (i = 0; i < 4; i++) {
         Transaction__Handle handle;
         result = SKY_coin_Transactions_GetAt(hTxns, i, &handle);
         ck_assert(result == SKY_OK);
@@ -664,8 +662,7 @@ START_TEST(TestTransactionsTruncateBytesTo)
     int trunc = 0;
     GoUint32 size;
     int i;
-    for (i = 0; i < length / 2; i++)
-    {
+    for (i = 0; i < length / 2; i++) {
         Transaction__Handle handle;
         result = SKY_coin_Transactions_GetAt(h1, i, &handle);
         registerHandleClose(handle);
@@ -735,10 +732,9 @@ int makeTestCaseArrays(test_ux* elems, int size, coin__UxArray* pArray)
     pArray->data = data;
     pArray->len = size;
     pArray->cap = size;
-    coin__UxOut *p = data;
+    coin__UxOut* p = data;
     int i;
-    for (i = 0; i < size; i++)
-    {
+    for (i = 0; i < size; i++) {
         p->Body.Coins = elems[i].coins;
         p->Body.Hours = elems[i].hours;
         p++;
@@ -784,8 +780,7 @@ START_TEST(TestVerifyTransactionCoinsSpending)
     int result;
     int count = sizeof(tests) / sizeof(tests[0]);
     int i;
-    for (i = 0; i < count; i++)
-    {
+    for (i = 0; i < count; i++) {
         result = makeTestCaseArrays(tests[i].inUxs, tests[i].sizeIn, &inArray);
         ck_assert(result == SKY_OK);
         result = makeTestCaseArrays(tests[i].outUxs, tests[i].sizeOut, &outArray);
@@ -860,8 +855,7 @@ START_TEST(TestVerifyTransactionHoursSpending)
     int result;
     int count = sizeof(tests) / sizeof(tests[0]);
     int i;
-    for (i = 0; i < count; i++)
-    {
+    for (i = 0; i < count; i++) {
         result = makeTestCaseArrays(tests[i].inUxs, tests[i].sizeIn, &inArray);
         ck_assert(result == SKY_OK);
         result = makeTestCaseArrays(tests[i].outUxs, tests[i].sizeOut, &outArray);
@@ -970,8 +964,7 @@ void testTransactionSorting(Transactions__Handle hTrans, int* original_indexes, 
     Transaction__Handle handle;
     makeTransactions(0, &transactionsHandle);
     int i;
-    for (i = 0; i < original_indexes_count; i++)
-    {
+    for (i = 0; i < original_indexes_count; i++) {
         result = SKY_coin_Transactions_GetAt(hTrans, original_indexes[i], &handle);
         ck_assert(result == SKY_OK);
         registerHandleClose(handle);
@@ -982,8 +975,7 @@ void testTransactionSorting(Transactions__Handle hTrans, int* original_indexes, 
     ck_assert_msg(result == SKY_OK, "SKY_coin_SortTransactions");
     registerHandleClose(sortedTxnsHandle);
     Transaction__Handle h1, h2;
-    for (i = 0; i < expected_indexes_count; i++)
-    {
+    for (i = 0; i < expected_indexes_count; i++) {
         int expected_index = expected_indexes[i];
         result = SKY_coin_Transactions_GetAt(sortedTxnsHandle, i, &h1);
         ck_assert(result == SKY_OK);

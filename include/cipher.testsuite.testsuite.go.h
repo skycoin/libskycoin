@@ -15,8 +15,8 @@
 #define JSON_FILE_SIZE 4096
 #define JSON_BIG_FILE_SIZE 32768
 
-#define FILEPATH_SEPARATOR      "/"
-#define TEST_DATA_DIR           "vendor/github.com/skycoin/skycoin/src/cipher/testsuite/testdata/"
+#define FILEPATH_SEPARATOR "/"
+#define TEST_DATA_DIR "vendor/github.com/skycoin/skycoin/src/cipher/testsuite/testdata/"
 #define MANY_ADDRESSES_FILENAME "many-addresses.golden"
 #define INPUT_HASHES_FILENAME "input-hashes.golden"
 #define SEED_FILE_REGEX "seed-\d+.golden"
