@@ -5,7 +5,7 @@ consumes:
 host: 127.0.0.1:6420
 info:
   contact:
-    email: skycoin.doe@example.com
+    email: contact@skycoin.com
     name: Skycoin project
     url: http://127.0.0.1:6420
   description: Skycoin is a next-generation cryptocurrency.
