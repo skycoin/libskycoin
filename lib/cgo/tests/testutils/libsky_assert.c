@@ -1,6 +1,6 @@
 
 #include <string.h>
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skystring.h"
 
 int equalSlices(GoSlice *slice1, GoSlice *slice2, int elem_size)
@@ -68,8 +68,8 @@ int isSigEq(cipher__Sig *sig1, cipher__Sig *sig2)
 
 int isU8Eq(unsigned char p1[], unsigned char p2[], int len)
 {
-  for (size_t i = 0; i < len; i++)
-  {
+  size_t i;
+   for (i= 0; i < len; i++) {
     if (p1[i] != p2[i])
     {
       return 0;

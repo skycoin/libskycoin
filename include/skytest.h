@@ -1,12 +1,12 @@
 
 #include "json.h"
 #include "libskycoin.h"
-#include "skycriterion.h"
 #include "skytypes.h"
-#include <stdio.h>
+ #include "skyassert.h"
+ #include "libskycoin.h"
 
-#ifndef LIBSKY_TESTING_H
-#define LIBSKY_TESTING_H
+#ifndef LIBSKY_TEST_H
+#define LIBSKY_TEST_H
 
 /*----------------------------------------------------------------------
  * I/O

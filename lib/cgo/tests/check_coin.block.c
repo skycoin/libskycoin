@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 #include "libskycoin.h"
-#include "skycriterion.h"
 #include "skyerrors.h"
+#include "skyassert.h"
 #include "skystring.h"
 #include "skytest.h"
 #include "skytxn.h"
@@ -255,7 +255,9 @@ START_TEST(TestCreateUnspent)
     };
     coin__UxOut ux;
     int tests_count = sizeof(t) / sizeof(testcase_unspent);
-    for (int i = 0; i < tests_count; i++) {
+    int i;
+    for (i = 0; i < tests_count; i++)
+    {
         memset(&ux, 0, sizeof(coin__UxOut));
         result = SKY_coin_CreateUnspent(&bh, handle, t[i].index, &ux);
         if (t[i].failure) {
@@ -302,9 +304,11 @@ START_TEST(TestCreateUnspents)
     registerMemCleanup(uxs.data);
     ck_assert(uxs.len == 1);
     ck_assert(uxs.len == ptx->Out.len);
-    coin__UxOut* pout = (coin__UxOut*)uxs.data;
-    coin__TransactionOutput* ptxout = (coin__TransactionOutput*)ptx->Out.data;
-    for (int i = 0; i < uxs.len; i++) {
+    coin__UxOut *pout = (coin__UxOut *)uxs.data;
+    coin__TransactionOutput *ptxout = (coin__TransactionOutput *)ptx->Out.data;
+    int i;
+    for (i = 0; i < uxs.len; i++)
+    {
         ck_assert(bh.Time == pout->Head.Time);
         ck_assert(bh.BkSeq == pout->Head.BkSeq);
         result = SKY_coin_Transaction_Hash(handle, &hash);

@@ -15,22 +15,6 @@ import (
 */
 import "C"
 
-//export SKY_wallet_Entry_SkycoinAddress
-func SKY_wallet_Entry_SkycoinAddress(_we *C.wallet__Entry, _arg0 *C.cipher__Address) (____error_code uint32) {
-	we := (*wallet.Entry)(unsafe.Pointer(_we))
-	addr := we.SkycoinAddress()
-	*_arg0 = *(*C.cipher__Address)(unsafe.Pointer(&addr))
-	return
-}
-
-//export SKY_wallet_Entry_BitcoinAddress
-func SKY_wallet_Entry_BitcoinAddress(_we *C.wallet__Entry, _arg0 *C.cipher__BitcoinAddress) (____error_code uint32) {
-	we := (*wallet.Entry)(unsafe.Pointer(_we))
-	addr := we.BitcoinAddress()
-	*_arg0 = *(*C.cipher__BitcoinAddress)(unsafe.Pointer(&addr))
-	return
-}
-
 //export SKY_wallet_Entry_Verify
 func SKY_wallet_Entry_Verify(_we *C.wallet__Entry) (____error_code uint32) {
 	we := (*wallet.Entry)(unsafe.Pointer(_we))

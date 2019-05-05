@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 #include "libskycoin.h"
-#include "skycriterion.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
+#include "skyassert.h"
 #include <check.h>
 
 // TestSuite(params_distribution, .init = setup, .fini = teardown);

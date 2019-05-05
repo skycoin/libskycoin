@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "libskycoin.h"
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
@@ -210,7 +210,9 @@ START_TEST(TestToString)
     int len = (sizeof(cases) / sizeof(tmpstruct));
 
     GoString nullStr = {bufferNull, 0};
-    for (int i = 0; i < len; i++) {
+    int i;
+    for (i = 0; i < len; i++)
+    {
         tmpstruct tc = cases[i];
 
         int err = SKY_droplet_ToString(tc.n, (GoString_*)&s);

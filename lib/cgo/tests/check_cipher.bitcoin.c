@@ -37,15 +37,15 @@ START_TEST(TestBitcoinAddress)
         {"19ck9VKC6KjGxR9LJg4DNMRc45qFrJguvV", 34}};
     unsigned int error;
 
-    GoString* secKeyStr = secKeys;
-    GoString* pubKeyStr = pubKeys;
-    GoString* addrStr = addrs;
-
-    for (int i = 0; i < 3; ++i, ++secKeyStr, ++pubKeyStr, ++addrStr) {
-        error = SKY_cipher_SecKeyFromHex(*secKeyStr, &seckey);
-        ck_assert_msg(error == SKY_OK, "Create SecKey from Hex"); // (seckeyFailMsg));
-        error = SKY_cipher_PubKeyFromHex(*pubKeyStr, &pubkey);
-        ck_assert_msg(error == SKY_OK, "Create PubKey from Hex");
+  GoString *secKeyStr = secKeys;
+  GoString *pubKeyStr = pubKeys;
+  GoString *addrStr = addrs;
+  int i;
+   for (i = 0; i < 3; ++i, ++secKeyStr, ++pubKeyStr, ++addrStr) {
+    error = SKY_cipher_SecKeyFromHex(*secKeyStr, &seckey);
+    ck_assert_msg(error == SKY_OK, "Create SecKey from Hex"); // (seckeyFailMsg));
+    error = SKY_cipher_PubKeyFromHex(*pubKeyStr, &pubkey);
+    ck_assert_msg(error == SKY_OK, "Create PubKey from Hex");
 
         GoString_ str = {NULL, 0};
         SKY_cipher_BitcoinAddressFromPubKey(&pubkey, &btcAddr);

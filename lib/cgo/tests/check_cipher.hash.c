@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 #include "libskycoin.h"
-#include "skycriterion.h"
 #include "skyerrors.h"
+#include "skyassert.h"
 #include "skystring.h"
 #include "skytest.h"
 #include <check.h>
@@ -156,8 +156,9 @@ START_TEST(TestSHA256KnownValue)
     vals[2].input = "hello world asd awd awd awdapodawpokawpod ";
     vals[2].output =
         "99d71f95cafe05ea2dddebc35b6083bd5af0e44850c9dc5139b4476c99950be4";
-
-    for (int i = 0; i < 3; ++i) {
+    int i;
+    for (i = 0; i < 3; ++i)
+    {
         GoSlice slice_input;
         GoSlice slice_output;
 

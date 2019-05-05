@@ -6,10 +6,10 @@
 #include <check.h>
 
 #include "libskycoin.h"
-#include "skycriterion.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
+#include "skyassert.h"
 #include "skytxn.h"
 
 // TestSuite(coin_outputs, .init = setup, .fini = teardown);
@@ -277,7 +277,9 @@ START_TEST(TestUxArrayHashArray)
     coin__UxOut* pux = (coin__UxOut*)uxs.data;
     cipher__SHA256* ph = (cipher__SHA256*)hashes.data;
     cipher__SHA256 hash;
-    for (int i = 0; i < hashes.len; i++) {
+    int i;
+    for (i = 0; i < hashes.len; i++)
+    {
         result = SKY_coin_UxOut_Hash(pux, &hash);
         ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
         ck_assert(isU8Eq(hash, *ph, sizeof(cipher__SHA256)));
@@ -371,8 +373,11 @@ int isUxArraySorted(coin__UxArray* uxa)
     cipher__SHA256* currentHash = NULL;
 
     int result;
-    for (int i = 1; i < n; i++) {
-        if (prevHash == NULL) {
+    int i;
+    for (i = 1; i < n; i++)
+    {
+        if (prevHash == NULL)
+        {
             result = SKY_coin_UxOut_Hash(prev, &hash1);
             ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
             prevHash = &hash1;
@@ -494,7 +499,9 @@ START_TEST(TestAddressUxOutsKeys)
     int result;
     int test_count = 3;
     coin__UxOut uxs[test_count];
-    for (int i = 0; i < 3; i++) {
+    int i;
+    for (i = 0; i < 3; i++)
+    {
         makeUxOut(&uxs[i]);
     }
 
@@ -511,16 +518,20 @@ START_TEST(TestAddressUxOutsKeys)
     for (int i = 0; i < test_count; i++) {
         //Check if every key matches uxout
         int found = 0;
-        for (int j = 0; j < test_count; j++) {
-            if (memcmp(pKey, &uxs[j].Body.Address, sizeof(cipher__Address)) == 0) {
+        int j;
+        for (j = 0; j < test_count; j++)
+        {
+            if (memcmp(pKey, &uxs[j].Body.Address, sizeof(cipher__Address)) == 0)
+            {
                 found = 1;
             }
         }
-        ck_assert_msg(found == 1, "Invalid key received from SKY_coin_AddressUxOuts_Keys");
         found = 0;
-        if (i < test_count - 1) {
-            cipher__Address* pKey2 = pKey;
-            for (int j = i + 1; j < test_count; j++) {
+        if (i < test_count - 1)
+        {
+            cipher__Address *pKey2 = pKey;
+            for (j = i + 1; j < test_count; j++)
+            {
                 pKey2++;
                 if (memcmp(pKey, pKey2, sizeof(cipher__Address)) == 0) {
                     found = 1;
@@ -758,8 +769,10 @@ START_TEST(TestAddressUxOutsFlatten)
     registerMemCleanup(flatArray.data);
     ck_assert(flatArray.len == 3);
     // emptyAddr should not be in the array
-    coin__UxOut* pData2 = flatArray.data;
-    for (int i = 0; i < flatArray.len; pData2++, i++) {
+    coin__UxOut *pData2 = flatArray.data;
+    int i;
+    for (i = 0; i < flatArray.len; pData2++, i++)
+    {
         int cmp = memcmp(&emptyAddr, &pData2->Body.Address, sizeof(cipher__Address));
         ck_assert(cmp != 0);
     }

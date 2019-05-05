@@ -2,11 +2,9 @@
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
+#include "testutils/criteiun_wrapper_calls.h"
+#include "shared_tests.h"
 #include <check.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #define SKYCOIN_ADDRESS_VALID "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv"
 
 //TestSuite(cipher_address, .init = setup, .fini = teardown);

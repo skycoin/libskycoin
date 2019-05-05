@@ -6,37 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added
-
-- Add CLI `addressTransactions` command
-- Add `/api/v2/wallet/seed/verify` to verify if seed is a valid bip39 mnemonic seed
-- Add function `SKY_base58_Hex2Base58`
-- Add function `SKY_base58_Encode`
-- Add function `SKY_base58_Decode`
-- Add function `SKY_api_Client_RecoverWallet`
-- Add function `SKY_api_Client_Disconnect`
-- Add function `SKY_cipher_BitcoinPubKeyRipemd160`
-- Add function `SKY_cipher_Ripemd160FromBytes`
-- Add function `SKY_cipher_SHA256FromBytes`
-- Add function `SKY_coin_MultUint64`
-- Add function `SKY_params_GetDistributionAddressesDecoded`
-- Add function `SKY_params_GetUnlockedDistributionAddressesDecoded`
-- Add function `SKY_params_GetLockedDistributionAddressesDecoded`
-- Add function `SKY_testutil_MakePubKey`
-- Add function `SKY_httphelper_SHA256_UnmarshalJSON`
-- Add function `SKY_httphelper_SHA256_MarshalJSON`
-- Add data type `httphelper__SHA256`
-- Add function `SKY_wallet_Entry_SkycoinAddress`
-- Add function `SKY_wallet_Entry_BitcoinAddress`
-- Add function `SKY_wallet_ResolveCoinType`
-- Add function `SKY_wallet_NewWalletFilename`
-- Add function `SKY_wallet_Wallet_GetAddress`
-- Add function `SKY_wallet_Wallet_GetSkycoinAddresses`
-- Add function `SKY_wallet_Wallet_GetEntry`
-- Add function `SKY_wallet_Wallet_CreateAndSignTransaction`
-- Add function `CreateTransactionParams_Handle`
-- Add function `SKY_wallet_Wallet_CreateAndSignTransactionAdvanced`
-
 ### Fixed
 
 - `/api/v1/health` will return correct build info when running Docker containers based on `skycoin/skycoin` mainnet image.

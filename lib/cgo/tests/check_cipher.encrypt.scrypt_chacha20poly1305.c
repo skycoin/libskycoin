@@ -3,8 +3,8 @@
 
 #include "base64.h"
 #include "libskycoin.h"
-#include "skycriterion.h"
 #include "skyerrors.h"
+#include "skyassert.h"
 #include "skystring.h"
 #include "skytest.h"
 #include <check.h>
@@ -28,41 +28,43 @@ void parseJsonMetaData(char* metadata, int* n, int* r, int* p, int* keyLen)
     int keysCount = 4;
     int keyIndex = -1;
     int startNumber = -1;
-    for (int i = 0; i < length; i++) {
-        if (metadata[i] == '\"') {
-            startNumber = -1;
-            if (openingQuote >= 0) {
-                keyIndex = -1;
-                metadata[i] = 0;
-                for (int k = 0; k < keysCount; k++) {
-                    if (strcmp(metadata + openingQuote + 1, keys[k]) == 0) {
-                        keyIndex = k;
-                    }
-                }
-                openingQuote = -1;
-            } else {
-                openingQuote = i;
+    int i;
+    for (i= 0; i < length; i++) {
+      if (metadata[i] == '\"') {
+        startNumber = -1;
+        if (openingQuote >= 0) {
+          keyIndex = -1;
+          metadata[i] = 0;
+          int k;
+          for (k = 0; k < keysCount; k++) {
+            if (strcmp(metadata + openingQuote + 1, keys[k]) == 0) {
+              keyIndex = k;
             }
-        } else if (metadata[i] >= '0' && metadata[i] <= '9') {
-            if (startNumber < 0)
-                startNumber = i;
-        } else if (metadata[i] == ',') {
-            if (startNumber >= 0) {
-                metadata[i] = 0;
-                int number = atoi(metadata + startNumber);
-                startNumber = -1;
-                if (keyIndex == 0)
-                    *n = number;
-                else if (keyIndex == 1)
-                    *r = number;
-                else if (keyIndex == 2)
-                    *p = number;
-                else if (keyIndex == 3)
-                    *keyLen = number;
-            }
+          }
+          openingQuote = -1;
         } else {
-            startNumber = -1;
+          openingQuote = i;
         }
+      } else if (metadata[i] >= '0' && metadata[i] <= '9') {
+        if (startNumber < 0)
+          startNumber = i;
+      } else if (metadata[i] == ',') {
+        if (startNumber >= 0) {
+          metadata[i] = 0;
+          int number = atoi(metadata + startNumber);
+          startNumber = -1;
+          if (keyIndex == 0)
+            *n = number;
+          else if (keyIndex == 1)
+            *r = number;
+          else if (keyIndex == 2)
+            *p = number;
+          else if (keyIndex == 3)
+            *keyLen = number;
+        }
+      } else {
+        startNumber = -1;
+      }
     }
 }
 
@@ -120,8 +122,11 @@ START_TEST(TestScryptChacha20poly1305Encrypt)
         ck_assert_msg(decode_len >= SCRYPTCHACHA20METALENGTHSIZE, "base64_decode_string failed");
         ck_assert_msg(decode_len < BUFFER_SIZE, "base64_decode_string failed, buffer overflow");
         metalength = (unsigned int)str[0];
-        for (int m = 1; m < SCRYPTCHACHA20METALENGTHSIZE; m++) {
-            if (str[m] > 0) {
+        int m;
+        for (m = 1; m < SCRYPTCHACHA20METALENGTHSIZE; m++)
+        {
+            if (str[m] > 0)
+            {
                 metalength += (((unsigned int)str[m]) << (m * 8));
             }
         }
