@@ -108,30 +108,29 @@ END_TEST
 
 START_TEST(TestSHA256Hex)
 {
+    cipher__SHA256 h;
+    unsigned char buff[101];
+    GoSlice slice = {buff, 0, 101};
+    int error;
 
-  cipher__SHA256 h;
-  unsigned char buff[101];
-  GoSlice slice = {buff, 0, 101};
-  int error;
+    memset(&h, 0, sizeof(h));
+    randBytes(&slice, 32);
+    SKY_cipher_SHA256_Set(&h, slice);
+    GoString_ s;
 
-  memset(&h, 0, sizeof(h));
-  randBytes(&slice, 32);
-  SKY_cipher_SHA256_Set(&h, slice);
-  GoString_ s;
+    SKY_cipher_SHA256_Hex(&h, &s);
+    registerMemCleanup((void*)s.p);
 
-  SKY_cipher_SHA256_Hex(&h, &s);
-  registerMemCleanup((void *)s.p);
+    cipher__SHA256 h2;
+    GoString tmpS = {s.p, s.n};
+    error = SKY_cipher_SHA256FromHex(tmpS, &h2);
+    ck_assert(error == SKY_OK);
+    ck_assert(isU8Eq(h, h2, 32));
 
-  cipher__SHA256 h2;
-  GoString tmpS = {s.p, s.n};
-  error = SKY_cipher_SHA256FromHex(tmpS, &h2);
-  ck_assert(error == SKY_OK);
-  ck_assert(isU8Eq(h, h2, 32));
-
-  GoString_ s2;
-  SKY_cipher_SHA256_Hex(&h2, &s2);
-  registerMemCleanup((void *)s2.p);
-  ck_assert_str_eq(s.p, s2.p);
+    GoString_ s2;
+    SKY_cipher_SHA256_Hex(&h2, &s2);
+    registerMemCleanup((void*)s2.p);
+    ck_assert_str_eq(s.p, s2.p);
 }
 END_TEST
 
@@ -221,7 +220,7 @@ START_TEST(TestSHA256FromHex)
 
     // Valid hex hash
     GoString_ s2;
-    memset(&s2,0,sizeof(GoString_));
+    memset(&s2, 0, sizeof(GoString_));
     SKY_cipher_SHA256_Hex(&h, &s2);
     registerMemCleanup((void*)s2.p);
     cipher__SHA256 h2;

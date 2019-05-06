@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <check.h>
 #include "libskycoin.h"
-#include "skyerrors.h"
 #include "skyassert.h"
+#include "skyerrors.h"
 #include "skystring.h"
-#include "skytxn.h"
 #include "skytest.h"
+#include "skytxn.h"
 #include "time.h"
+#include <check.h>
 
 Transactions__Handle makeTestTransactions()
 {
@@ -26,7 +26,7 @@ Transactions__Handle makeTestTransactions()
     return transactions;
 }
 
-int makeNewBlock(cipher__SHA256 *uxHash, Block__Handle *newBlock)
+int makeNewBlock(cipher__SHA256* uxHash, Block__Handle* newBlock)
 {
     int result;
     cipher__SHA256 bodyhash;
@@ -36,7 +36,7 @@ int makeNewBlock(cipher__SHA256 *uxHash, Block__Handle *newBlock)
     result = SKY_coin_NewEmptyBlock(transactions, &block);
     ck_assert_msg(result == SKY_OK, "SKY_coin_NewEmptyBlock failed");
     registerHandleClose(block);
-    coin__Block *pBlock;
+    coin__Block* pBlock;
     result = SKY_coin_GetBlockObject(block, &pBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_Get_Block_Object failed");
 
@@ -56,7 +56,7 @@ int makeNewBlock(cipher__SHA256 *uxHash, Block__Handle *newBlock)
     return result;
 }
 
-GoUint32_ fix121FeeCalculator(Transaction__Handle handle, GoUint64_ *pFee, void *context)
+GoUint32_ fix121FeeCalculator(Transaction__Handle handle, GoUint64_* pFee, void* context)
 {
     *pFee = 121;
     return SKY_OK;
@@ -66,15 +66,15 @@ START_TEST(TestNewBlock)
 {
     Block__Handle prevBlock = 0;
     Block__Handle newBlock = 0;
-    coin__Block *pPrevBlock = NULL;
-    coin__Block *pNewBlock = NULL;
+    coin__Block* pPrevBlock = NULL;
+    coin__Block* pNewBlock = NULL;
     int result = 0;
 
     Transactions__Handle transactions = makeTestTransactions();
     result = SKY_coin_NewEmptyBlock(transactions, &prevBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_NewEmptyBlock failed");
     registerHandleClose(prevBlock);
-    coin__Block *pBlock;
+    coin__Block* pBlock;
     result = SKY_coin_GetBlockObject(prevBlock, &pPrevBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockObject failed");
 
@@ -86,7 +86,7 @@ START_TEST(TestNewBlock)
     memset(&slice, 0, sizeof(GoSlice));
     cipher__SHA256 hash;
 
-    result = SKY_cipher_RandByte(128, (coin__UxArray *)&slice);
+    result = SKY_cipher_RandByte(128, (coin__UxArray*)&slice);
     ck_assert_msg(result == SKY_OK, "SKY_cipher_RandByte failed");
     registerMemCleanup(slice.data);
     result = SKY_cipher_SumSHA256(slice, &hash);
@@ -115,7 +115,7 @@ START_TEST(TestNewBlock)
     registerHandleClose(newBlock);
     result = SKY_coin_GetBlockObject(newBlock, &pNewBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockObject failed");
-    coin__Transactions *pTransactions = NULL;
+    coin__Transactions* pTransactions = NULL;
     SKY_coin_GetTransactionsObject(transactions, &pTransactions);
     ck_assert(isTransactionsEq(&pNewBlock->Body.Transactions, pTransactions));
     ck_assert(pNewBlock->Head.Fee == fee * (GoUint64)(pTransactions->len));
@@ -129,12 +129,12 @@ START_TEST(TestBlockHashHeader)
 {
     int result;
     Block__Handle block = 0;
-    coin__Block *pBlock = NULL;
+    coin__Block* pBlock = NULL;
     GoSlice slice;
     memset(&slice, 0, sizeof(GoSlice));
     cipher__SHA256 hash;
 
-    result = SKY_cipher_RandByte(128, (coin__UxArray *)&slice);
+    result = SKY_cipher_RandByte(128, (coin__UxArray*)&slice);
     ck_assert_msg(result == SKY_OK, "SKY_cipher_RandByte failed");
     registerMemCleanup(slice.data);
     result = SKY_cipher_SumSHA256(slice, &hash);
@@ -163,7 +163,7 @@ START_TEST(TestBlockHashBody)
     memset(&slice, 0, sizeof(GoSlice));
     cipher__SHA256 hash;
 
-    result = SKY_cipher_RandByte(128, (coin__UxArray *)&slice);
+    result = SKY_cipher_RandByte(128, (coin__UxArray*)&slice);
     ck_assert_msg(result == SKY_OK, "SKY_cipher_RandByte failed");
     registerMemCleanup(slice.data);
     result = SKY_cipher_SumSHA256(slice, &hash);
@@ -192,7 +192,7 @@ START_TEST(TestNewGenesisBlock)
     GoUint64 genCoins = 1000 * 1000 * 1000;
     GoUint64 genCoinHours = 1000 * 1000;
     Block__Handle block = 0;
-    coin__Block *pBlock = NULL;
+    coin__Block* pBlock = NULL;
 
     int result = makeKeysAndAddress(&pubkey, &seckey, &address);
     ck_assert_msg(result == SKY_OK, "makeKeysAndAddress failed");
@@ -211,12 +211,12 @@ START_TEST(TestNewGenesisBlock)
     ck_assert(isU8Eq(nullHash, pBlock->Head.UxHash, sizeof(cipher__SHA256)));
 
     ck_assert(1 == pBlock->Body.Transactions.len);
-    coin__Transaction *ptransaction = (coin__Transaction *)pBlock->Body.Transactions.data;
+    coin__Transaction* ptransaction = (coin__Transaction*)pBlock->Body.Transactions.data;
     ck_assert(0 == ptransaction->In.len);
     ck_assert(0 == ptransaction->Sigs.len);
     ck_assert(1 == ptransaction->Out.len);
 
-    coin__TransactionOutput *poutput = (coin__TransactionOutput *)ptransaction->Out.data;
+    coin__TransactionOutput* poutput = (coin__TransactionOutput*)ptransaction->Out.data;
     ck_assert(isAddressEq(&address, &poutput->Address));
     ck_assert(genCoins == poutput->Coins);
     ck_assert(genCoins == poutput->Hours);
@@ -237,7 +237,7 @@ START_TEST(TestCreateUnspent)
     int result = makeKeysAndAddress(&pubkey, &seckey, &address);
 
     cipher__SHA256 hash;
-    coin__Transaction *ptx;
+    coin__Transaction* ptx;
     Transaction__Handle handle;
     ptx = makeEmptyTransaction(&handle);
     result = SKY_coin_Transaction_PushOutput(handle, &address, 11000000, 255);
@@ -253,17 +253,13 @@ START_TEST(TestCreateUnspent)
     };
     coin__UxOut ux;
     int tests_count = sizeof(t) / sizeof(testcase_unspent);
-    for (int i = 0; i < tests_count; i++)
-    {
+    for (int i = 0; i < tests_count; i++) {
         memset(&ux, 0, sizeof(coin__UxOut));
         result = SKY_coin_CreateUnspent(&bh, handle, t[i].index, &ux);
-        if (t[i].failure)
-        {
+        if (t[i].failure) {
             ck_assert_msg(result == SKY_ERROR, "SKY_coin_CreateUnspent should have failed");
             continue;
-        }
-        else
-        {
+        } else {
             ck_assert_msg(result == SKY_OK, "SKY_coin_CreateUnspent failed");
         }
         ck_assert(bh.Time == ux.Head.Time);
@@ -272,7 +268,7 @@ START_TEST(TestCreateUnspent)
         ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_Hash failed");
         ck_assert(isU8Eq(hash, ux.Body.SrcTransaction, sizeof(cipher__SHA256)));
         ck_assert(t[i].index < ptx->Out.len);
-        coin__TransactionOutput *poutput = (coin__TransactionOutput *)ptx->Out.data;
+        coin__TransactionOutput* poutput = (coin__TransactionOutput*)ptx->Out.data;
         ck_assert(isAddressEq(&ux.Body.Address, &poutput->Address));
         ck_assert(ux.Body.Coins == poutput->Coins);
         ck_assert(ux.Body.Hours == poutput->Hours);
@@ -288,7 +284,7 @@ START_TEST(TestCreateUnspents)
     int result = makeKeysAndAddress(&pubkey, &seckey, &address);
 
     cipher__SHA256 hash;
-    coin__Transaction *ptx;
+    coin__Transaction* ptx;
     Transaction__Handle handle;
     ptx = makeEmptyTransaction(&handle);
     result = SKY_coin_Transaction_PushOutput(handle, &address, 11000000, 255);
@@ -304,10 +300,9 @@ START_TEST(TestCreateUnspents)
     registerMemCleanup(uxs.data);
     ck_assert(uxs.len == 1);
     ck_assert_int_eq(uxs.len, ptx->Out.len);
-    coin__UxOut *pout = (coin__UxOut *)uxs.data;
-    coin__TransactionOutput *ptxout = (coin__TransactionOutput *)ptx->Out.data;
-    for (int i = 0; i < uxs.len; i++)
-    {
+    coin__UxOut* pout = (coin__UxOut*)uxs.data;
+    coin__TransactionOutput* ptxout = (coin__TransactionOutput*)ptx->Out.data;
+    for (int i = 0; i < uxs.len; i++) {
         ck_assert(bh.Time == pout->Head.Time);
         ck_assert(bh.BkSeq == pout->Head.BkSeq);
         result = SKY_coin_Transaction_Hash(handle, &hash);
@@ -322,10 +317,10 @@ START_TEST(TestCreateUnspents)
 }
 END_TEST
 
-Suite *coin_blocks(void)
+Suite* coin_blocks(void)
 {
-    Suite *s = suite_create("Load coin.block");
-    TCase *tc;
+    Suite* s = suite_create("Load coin.block");
+    TCase* tc;
 
     tc = tcase_create("coin.block");
     tcase_add_checked_fixture(tc, setup, teardown);

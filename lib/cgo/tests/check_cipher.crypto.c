@@ -250,26 +250,26 @@ END_TEST
 
 START_TEST(TestSecKeyFromHex)
 {
-  unsigned char buff[50];
-  cipher__SecKey sk;
-  GoString str = {buff, 0};
-  // Invalid hex
-  GoUint32 err = SKY_cipher_SecKeyFromHex(str, &sk);
-  ck_assert_msg(err == SKY_ErrInvalidLengthSecKey);
-  str.p = "cascs";
-  str.n = strlen(str.p);
-  err = SKY_cipher_SecKeyFromHex(str, &sk);
-  ck_assert_msg(err == SKY_ErrInvalidSecKey);
+    unsigned char buff[50];
+    cipher__SecKey sk;
+    GoString str = {buff, 0};
+    // Invalid hex
+    GoUint32 err = SKY_cipher_SecKeyFromHex(str, &sk);
+    ck_assert_msg(err == SKY_ErrInvalidLengthSecKey);
+    str.p = "cascs";
+    str.n = strlen(str.p);
+    err = SKY_cipher_SecKeyFromHex(str, &sk);
+    ck_assert_msg(err == SKY_ErrInvalidSecKey);
 
-  // Invalid hex length
-  GoSlice b = {buff, 0, 50};
-  randBytes(&b, 32);
-  cipher__SecKey p;
-  err = SKY_cipher_NewSecKey(b, &p);
-  ck_assert(err == SKY_OK);
-  int len_b = b.len;
-  b.len = (int)(len_b / 2);
-  //TODO: NOt implement
+    // Invalid hex length
+    GoSlice b = {buff, 0, 50};
+    randBytes(&b, 32);
+    cipher__SecKey p;
+    err = SKY_cipher_NewSecKey(b, &p);
+    ck_assert(err == SKY_OK);
+    int len_b = b.len;
+    b.len = (int)(len_b / 2);
+    //TODO: NOt implement
 }
 END_TEST
 
@@ -853,38 +853,38 @@ END_TEST
 
 Suite* cipher_crypto(void)
 {
-  Suite *s = suite_create("Load cipher.crypto");
-  TCase *tc;
+    Suite* s = suite_create("Load cipher.crypto");
+    TCase* tc;
 
-  tc = tcase_create("cipher.crypto");
-  tcase_add_checked_fixture(tc, setup, teardown);
-  tcase_add_test(tc, TestNewPubKey);
-  tcase_add_test(tc, TestPubKeyFromHex);
-  tcase_add_test(tc, TestPubKeyHex);
-  tcase_add_test(tc, TestPubKeyVerify);
-  tcase_add_test(tc, TestPubKeyVerifyNil);
-  tcase_add_test(tc, TestPubKeyVerifyDefault1);
-  tcase_add_test(tc, TestPubKeyRipemd160);
-  tcase_add_test(tc, TestPubKeyToAddress2);
-  tcase_add_test(tc, TestSecKeyFromHex);
-  tcase_add_test(tc, TestMustSecKeyFromHex);
-  tcase_add_test(tc, TestSecKeyVerify);
-  tcase_add_test(tc, TestECDHonce);
-  tcase_add_test(tc, TestECDHloop);
-  tcase_add_test(tc, TestNewSig);
-  tcase_add_test(tc, TestMustSigFromHex);
-  tcase_add_test(tc, TestSigHex);
-  tcase_add_test(tc, TestVerifyAddressSignedHash);
-  tcase_add_test(tc, TestPubKeyFromSecKey);
-  tcase_add_test(tc, TestPubKeyFromSig);
-  tcase_add_test(tc, TestVerifyPubKeySignedHash);
-  tcase_add_test(tc, TestVerifySignedHash);
-  tcase_add_test(tc, TestGenerateDeterministicKeyPair);
-  tcase_add_test(tc, TestSecKeTest);
-  tcase_add_test(tc, TestSecKeyHashTest);
-  tcase_add_test(tc, TestGenerateKeyPair);
-  suite_add_tcase(s, tc);
-  tcase_set_timeout(tc, 150);
+    tc = tcase_create("cipher.crypto");
+    tcase_add_checked_fixture(tc, setup, teardown);
+    tcase_add_test(tc, TestNewPubKey);
+    tcase_add_test(tc, TestPubKeyFromHex);
+    tcase_add_test(tc, TestPubKeyHex);
+    tcase_add_test(tc, TestPubKeyVerify);
+    tcase_add_test(tc, TestPubKeyVerifyNil);
+    tcase_add_test(tc, TestPubKeyVerifyDefault1);
+    tcase_add_test(tc, TestPubKeyRipemd160);
+    tcase_add_test(tc, TestPubKeyToAddress2);
+    tcase_add_test(tc, TestSecKeyFromHex);
+    tcase_add_test(tc, TestMustSecKeyFromHex);
+    tcase_add_test(tc, TestSecKeyVerify);
+    tcase_add_test(tc, TestECDHonce);
+    tcase_add_test(tc, TestECDHloop);
+    tcase_add_test(tc, TestNewSig);
+    tcase_add_test(tc, TestMustSigFromHex);
+    tcase_add_test(tc, TestSigHex);
+    tcase_add_test(tc, TestVerifyAddressSignedHash);
+    tcase_add_test(tc, TestPubKeyFromSecKey);
+    tcase_add_test(tc, TestPubKeyFromSig);
+    tcase_add_test(tc, TestVerifyPubKeySignedHash);
+    tcase_add_test(tc, TestVerifySignedHash);
+    tcase_add_test(tc, TestGenerateDeterministicKeyPair);
+    tcase_add_test(tc, TestSecKeTest);
+    tcase_add_test(tc, TestSecKeyHashTest);
+    tcase_add_test(tc, TestGenerateKeyPair);
+    suite_add_tcase(s, tc);
+    tcase_set_timeout(tc, 150);
 
-  return s;
+    return s;
 }

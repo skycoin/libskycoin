@@ -92,12 +92,12 @@ Suite* cipher_testsuite(void)
     Suite* s = suite_create("Load cipher.suite");
     TCase* tc;
 
-  tc = tcase_create("cipher.testsuite");
-  tcase_add_checked_fixture(tc, setup, teardown);
-  tcase_add_test(tc, TestManyAddresses);
-  // tcase_add_test(tc, TestSeedSignatures);
-  suite_add_tcase(s, tc);
-  tcase_set_timeout(tc, 150);
+    tc = tcase_create("cipher.testsuite");
+    tcase_add_checked_fixture(tc, setup, teardown);
+    tcase_add_test(tc, TestManyAddresses);
+    // tcase_add_test(tc, TestSeedSignatures);
+    suite_add_tcase(s, tc);
+    tcase_set_timeout(tc, 150);
 
     return s;
 }
