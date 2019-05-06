@@ -1,16 +1,15 @@
-#include <criterion/criterion.h>
-#include <criterion/new/assert.h>
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "libskycoin.h"
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
+#include <check.h>
 
-TestSuite(util_droplet, .init = setup, .fini = teardown);
+// TestSuite(util_droplet, .init = setup, .fini = teardown);
 #define BUFFER_SIZE 1024
 typedef struct
 {
@@ -18,9 +17,8 @@ typedef struct
     GoUint64 n;
     GoUint64 e;
 } tmpstruct;
-Test(util_droplet, TestFromString)
+START_TEST(TestFromString)
 {
-
     tmpstruct cases[BUFFER_SIZE];
 
     cases[0].s.p = "0";
@@ -174,29 +172,27 @@ Test(util_droplet, TestFromString)
     cases[29].e = SKY_ErrTooManyDecimals;
 
     int len = 30;
-    for (int i = 0; i < len; i++)
-    {
+    int i;
+    for (i = 0; i < len; i++) {
         tmpstruct tc = cases[i];
         GoUint64 n;
         int err = SKY_droplet_FromString(tc.s, &n);
 
-        if (tc.e == SKY_OK)
-        {
-            cr_assert(err == SKY_OK, "SKY_droplet_FromString %d in iter %d and %d",
-                      err, i, len);
-            cr_assert(tc.n == n, , "result %d in interation %d", n, i);
-        }
-        else
-        {
-            cr_assert(err != SKY_OK, "SKY_droplet_FromString %d in iter %d and %d",
-                      err, i, len);
-            cr_assert(err == tc.e, "Not equal %X != %X in iteration %d", err, tc.e,
-                      i);
+        if (tc.e == SKY_OK) {
+            ck_assert_msg(err == SKY_OK, "SKY_droplet_FromString %d in iter %d and %d",
+                err, i, len);
+            ck_assert_msg(tc.n == n, "result %d in interation %d", n, i);
+        } else {
+            ck_assert_msg(err != SKY_OK, "SKY_droplet_FromString %d in iter %d and %d",
+                err, i, len);
+            ck_assert_msg(err == tc.e, "Not equal %X != %X in iteration %d", err, tc.e,
+                i);
         }
     }
 }
+END_TEST
 
-Test(util_droplet, TestToString)
+START_TEST(TestToString)
 {
     char buffer[BUFFER_SIZE];
     char bufferNull[BUFFER_SIZE];
@@ -214,20 +210,31 @@ Test(util_droplet, TestToString)
     int len = (sizeof(cases) / sizeof(tmpstruct));
 
     GoString nullStr = {bufferNull, 0};
-    for (int i = 0; i < len; i++)
-    {
+    int i;
+    for (i = 0; i < len; i++) {
         tmpstruct tc = cases[i];
 
-        int err = SKY_droplet_ToString(tc.n, (GoString_ *) &s);
+        int err = SKY_droplet_ToString(tc.n, (GoString_*)&s);
 
-        if (tc.e == SKY_OK)
-        {
-            cr_assert(err == SKY_OK);
-            cr_assert(eq(type(GoString), tc.s, s));
-        }
-        else
-        {
-            cr_assert(err == tc.e);
+        if (tc.e == SKY_OK) {
+            ck_assert(err == SKY_OK);
+            ck_assert_str_eq(tc.s.p, s.p);
+        } else {
+            ck_assert(err == tc.e);
         }
     }
+}
+END_TEST
+
+Suite* util_droplet(void)
+{
+    Suite* s = suite_create("Load util.Droplet");
+    TCase* tc;
+
+    tc = tcase_create("util.droplet");
+    tcase_add_test(tc, TestFromString);
+    tcase_add_test(tc, TestToString);
+    suite_add_tcase(s, tc);
+    tcase_set_timeout(tc, 150);
+    return s;
 }
