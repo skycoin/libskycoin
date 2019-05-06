@@ -40,7 +40,7 @@ install:
 
 script:
   - make check
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build  . -t skydev-test ; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build -t sky-test --file docker/images/test-arm/Dockerfile --build-arg $PATH_ROOT . ; fi
 
 notifications:
   email: false

@@ -1,11 +1,13 @@
-
+ARG PATH_ROOT
 ARG IMAGE_FROM=balenalib/armv7hf-ubuntu-golang
 FROM $IMAGE_FROM
+ARG PATH_ROOT
 
-ADD . $GOPATH/src/github.com/skycoin/libskycoin/
+ADD $PATH_ROOT $GOPATH/src/github.com/skycoin/libskycoin/
 
 RUN [ "cross-build-start" ]
 
+RUN ls -oa $GOPATH/src/github.com/skycoin/libskycoin/
 RUN apt-get update
 RUN apt-get install gcc-6 g++-6 curl wget -y
 RUN go get github.com/gz-c/gox
