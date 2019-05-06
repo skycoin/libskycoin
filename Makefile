@@ -181,7 +181,6 @@ install-deps-libc-linux: configure-build ## Install locally dependencies for tes
 	tar -xzf check-0.12.0.tar.gz
 	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
 
-install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).

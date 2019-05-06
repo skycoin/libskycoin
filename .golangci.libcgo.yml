@@ -147,6 +147,7 @@ linters:
     - errcheck
     - gosimple
     - staticcheck
+    - unused
     - ineffassign
     - typecheck
     - gosec
