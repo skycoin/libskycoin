@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
-.PHONY: install-linters format clean-libc
+.PHONY: install-linters format clean-libc format-libc lint-libc
 
 COIN ?= skycoin
 
@@ -40,21 +40,22 @@ STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): 
 LIBC_LIBS = `pkg-config --cflags --libs check`
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
 # Platform specific checks
-OSNAME = $(TRAVIS_OS_NAME)
+OSNAME  = $(TRAVIS_OS_NAME)
+UNAME_S = $(shell uname -s)
 CGO_ENABLED=1
 
-ifeq ($(shell uname -s),Linux)
+PKG_CLANG_FORMAT = clang-format
+PKG_CLANG_LINTER = clang-tidy
+PKG_LIB_TEST = check
+
+ifeq ($(UNAME_S),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
   LDPATH=$(shell printenv LD_LIBRARY_PATH)
   LDPATHVAR=LD_LIBRARY_PATH
   LDFLAGS=$(LIBC_FLAGS) $(STDC_FLAG)
-ifndef OSNAME
-  OSNAME = linux
-endif
-else ifeq ($(shell uname -s),Darwin)
-ifndef OSNAME
-  OSNAME = osx
-endif
+  OSNAME ?= linux
+else ifeq ($(UNAME_S),Darwin)
+  OSNAME ?= osx
   LDLIBS = $(LIBC_LIBS)
   LDPATH=$(shell printenv DYLD_LIBRARY_PATH)
   LDPATHVAR=DYLD_LIBRARY_PATH
@@ -124,13 +125,35 @@ lint: ## Run linters. Use make install-linters first.
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
-check: lint test-libc ## Run tests and linters
+lint-libc: format-libc
+	# Linter LIBC
+	clang-tidy  lib/cgo/tests/*.c -- $(LIBC_FLAGS) -Wincompatible-pointer-types
 
-install-linters: ## Install linters
+
+check: lint test-libc lint-libc ## Run tests and linters
+
+install-linters-Linux: ## Install linters on GNU/Linux
+	sudo apt-get install $(PKG_CLANG_FORMAT)
+	sudo apt-get install $(PKG_CLANG_LINTER)
+
+install-linters-Darwin: ## Install linters on Mac OSX
+	# brew install $(PKG_CLANG_FORMAT)
+	brew install llvm
+	ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
+	ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+
+install-deps-Linux: ## Install deps on GNU/Linux
+	sudo apt-get install $(PKG_LIB_TEST)
+
+install-deps-Darwin: ## Install deps on Mac OSX
+	brew install $(PKG_LIB_TEST)
+
+install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
 	# However, they suggest `curl ... | bash` which we should not do
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
@@ -150,6 +173,10 @@ clean-libc: ## Clean files generate by library
 	rm -rfv bin
 	rm -rfv qemu_test_libskycoin*
 	rm -rfv include/libskycoin.h
+
+format-libc:
+	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format lib/cgo/tests/*.c
+	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format include/*.h
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

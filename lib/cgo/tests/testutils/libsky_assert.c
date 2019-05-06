@@ -1,6 +1,6 @@
 
 #include <string.h>
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skystring.h"
 
 GoInt_ equalSlices(GoSlice *slice1, GoSlice *slice2, int elem_size) {

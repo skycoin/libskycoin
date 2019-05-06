@@ -41,12 +41,14 @@ int compareJsonObjects(json_value* value1, json_value* value2,
   int length2 = value2->u.object.length;
   /*if( length1 != length2 )
     return 0;*/
-  for (int x = 0; x < length1; x++) {
+    int x;
+  for (x = 0; x < length1; x++) {
     char* name = value1->u.object.values[x].name;
     if( ignore != NULL && strcmp( ignore, name ) == 0)
       continue;
     int found = 0;
-    for( int y = 0; y < length2; y++){
+    int y;
+    for(y = 0; y < length2; y++){
       if( strcmp( value2->u.object.values[y].name, name ) == 0){
         if( !_compareJsonValues( value1->u.object.values[x].value,
                 value2->u.object.values[y].value, ignore )  )
@@ -66,7 +68,8 @@ int compareJsonArrays(json_value* value1, json_value* value2, const char* ignore
   int length2 = value2->u.array.length;
   if( length1 != length2 )
     return 0;
-  for (int x = 0; x < length1; x++) {
+  int x;
+  for (x = 0; x < length1; x++) {
     if( !_compareJsonValues(value1->u.array.values[x], 
         value2->u.array.values[x], ignore) )
       return 0;
@@ -121,7 +124,8 @@ json_value* get_json_value_not_strict(json_value* node, const char* path,
     n = p - path;
   if( n > 0 ) {
     if( node->type == json_object){
-      for (int x = 0; x < node->u.object.length; x++) {
+      int x;
+      for (x = 0; x < node->u.object.length; x++) {
         json_object_entry * entry = &node->u.object.values[x];
         char* name = entry->name;
         json_value* value = entry->value;

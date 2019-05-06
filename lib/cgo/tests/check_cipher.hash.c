@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <check.h>
 #include "libskycoin.h"
+#include "skyassert.h"
 #include "skyerrors.h"
-#include "skycriterion.h"
 #include "skystring.h"
 #include "skytest.h"
+#include <check.h>
 
 // TestSuite(cipher_hash, .init = setup, .fini = teardown);
 
-void freshSumRipemd160(GoSlice bytes, cipher__Ripemd160 *rp160)
+void freshSumRipemd160(GoSlice bytes, cipher__Ripemd160* rp160)
 {
     SKY_cipher_HashRipemd160(bytes, rp160);
 }
 
-void freshSumSHA256(GoSlice bytes, cipher__SHA256 *sha256)
+void freshSumSHA256(GoSlice bytes, cipher__SHA256* sha256)
 {
     SKY_cipher_SumSHA256(bytes, sha256);
 }
@@ -46,7 +46,6 @@ END_TEST
 
 START_TEST(TestRipemd160Set)
 {
-
     cipher__Ripemd160 h;
     unsigned char buff[101];
     GoSlice slice = {buff, 0, 101};
@@ -79,7 +78,6 @@ END_TEST
 
 START_TEST(TestSHA256Set)
 {
-
     cipher__SHA256 h;
     unsigned char buff[101];
     GoSlice slice = {buff, 0, 101};
@@ -110,40 +108,38 @@ END_TEST
 
 START_TEST(TestSHA256Hex)
 {
+    cipher__SHA256 h;
+    unsigned char buff[101];
+    GoSlice slice = {buff, 0, 101};
+    int error;
 
-  cipher__SHA256 h;
-  unsigned char buff[101];
-  GoSlice slice = {buff, 0, 101};
-  int error;
+    memset(&h, 0, sizeof(h));
+    randBytes(&slice, 32);
+    SKY_cipher_SHA256_Set(&h, slice);
+    GoString_ s;
 
-  memset(&h, 0, sizeof(h));
-  randBytes(&slice, 32);
-  SKY_cipher_SHA256_Set(&h, slice);
-  GoString_ s;
+    SKY_cipher_SHA256_Hex(&h, &s);
+    registerMemCleanup((void*)s.p);
 
-  SKY_cipher_SHA256_Hex(&h, &s);
-  registerMemCleanup((void *)s.p);
+    cipher__SHA256 h2;
+    GoString tmpS = {s.p, s.n};
+    error = SKY_cipher_SHA256FromHex(tmpS, &h2);
+    ck_assert(error == SKY_OK);
+    ck_assert(isU8Eq(h, h2, 32));
 
-  cipher__SHA256 h2;
-  GoString tmpS = {s.p, s.n};
-  error = SKY_cipher_SHA256FromHex(tmpS, &h2);
-  ck_assert(error == SKY_OK);
-  ck_assert(isU8Eq(h, h2, 32));
-
-  GoString_ s2;
-  SKY_cipher_SHA256_Hex(&h2, &s2);
-  registerMemCleanup((void *)s2.p);
-  ck_assert_str_eq(s.p, s2.p);
+    GoString_ s2;
+    SKY_cipher_SHA256_Hex(&h2, &s2);
+    registerMemCleanup((void*)s2.p);
+    ck_assert_str_eq(s.p, s2.p);
 }
 END_TEST
 
 START_TEST(TestSHA256KnownValue)
 {
-
     typedef struct
     {
-        char *input;
-        char *output;
+        char* input;
+        char* output;
     } tmpstruct;
 
     tmpstruct vals[3];
@@ -159,9 +155,8 @@ START_TEST(TestSHA256KnownValue)
     vals[2].input = "hello world asd awd awd awdapodawpokawpod ";
     vals[2].output =
         "99d71f95cafe05ea2dddebc35b6083bd5af0e44850c9dc5139b4476c99950be4";
-
-    for (int i = 0; i < 3; ++i)
-    {
+    int i;
+    for (i = 0; i < 3; ++i) {
         GoSlice slice_input;
         GoSlice slice_output;
 
@@ -176,7 +171,7 @@ START_TEST(TestSHA256KnownValue)
         GoString_ tmp_output;
 
         SKY_cipher_SHA256_Hex(&sha, &tmp_output);
-        registerMemCleanup((void *)tmp_output.p);
+        registerMemCleanup((void*)tmp_output.p);
 
         ck_assert(strcmp(tmp_output.p, vals[i].output) == SKY_OK);
     }
@@ -185,7 +180,6 @@ END_TEST
 
 START_TEST(TestSumSHA256)
 {
-
     unsigned char bbuff[257], cbuff[257];
     GoSlice b = {bbuff, 0, 257};
     cipher__SHA256 h1;
@@ -226,9 +220,9 @@ START_TEST(TestSHA256FromHex)
 
     // Valid hex hash
     GoString_ s2;
-    memset(&s2,0,sizeof(GoString_));
+    memset(&s2, 0, sizeof(GoString_));
     SKY_cipher_SHA256_Hex(&h, &s2);
-    registerMemCleanup((void *)s2.p);
+    registerMemCleanup((void*)s2.p);
     cipher__SHA256 h2;
     GoString tmps2 = {s2.p, s2.n};
     error = SKY_cipher_SHA256FromHex(tmps2, &h2);
@@ -253,7 +247,6 @@ END_TEST
 
 START_TEST(TestAddSHA256)
 {
-
     unsigned char bbuff[130];
     GoSlice b = {bbuff, 0, 130};
     randBytes(&b, 128);
@@ -278,7 +271,6 @@ END_TEST
 
 START_TEST(TestXorSHA256)
 {
-
     unsigned char bbuff[129], cbuff[129];
     GoSlice b = {bbuff, 0, 129};
     GoSlice c = {cbuff, 0, 129};
@@ -312,8 +304,7 @@ START_TEST(TestMerkle)
 
     memset(zero, 0, sizeof(zero));
 
-    for (i = 0; i < 5; i++)
-    {
+    for (i = 0; i < 5; i++) {
         randBytes(&b, 128);
         SKY_cipher_SumSHA256(b, &hashlist[i]);
     }
@@ -376,10 +367,10 @@ START_TEST(TestSHA256Null)
 }
 END_TEST
 
-Suite *cipher_hash(void)
+Suite* cipher_hash(void)
 {
-    Suite *s = suite_create("Load cipher.hash");
-    TCase *tc;
+    Suite* s = suite_create("Load cipher.hash");
+    TCase* tc;
 
     tc = tcase_create("cipher.hash");
     tcase_add_checked_fixture(tc, setup, teardown);

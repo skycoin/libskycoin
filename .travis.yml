@@ -1,11 +1,10 @@
 sudo: required
 services:
   - docker
-dist: trusty
 language: go
 go:
   - "1.11.x"
-
+  
 matrix:
   include:
     - os: linux
@@ -118,11 +117,12 @@ matrix:
     #     - QEMU_PLATFORM=odroid-xu4
     #     - QEMU_OS=fedora
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode8.3
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
   - ./ci-scripts/install-travis-gcc.sh
+  - eval "CC=gcc-6 && CXX=g++-6"
 
 env:
   global:
@@ -130,9 +130,8 @@ env:
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
     - CGO_ENABLED: 1
-    - CC: gcc-6
-    - CXX: g++-6
     - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 60s
+    - PATH_ROOT: $TRAVIS_BUILD_DIR
 
 
 install:
@@ -144,10 +143,8 @@ install:
   - if [[ -z "$QEMU_PLATFORM" ]]; then make install-deps-libc ; fi
 
 script:
-  - if [[ -z "$QEMU_PLATFORM" ]]; then make lint ; fi
-  # # libskycoin tests
-  - if [[ -z "$QEMU_PLATFORM" ]]; then CC=gcc-6 make test-libc ; fi
-  - if [[ "$QEMU_PLATFORM" ]]; then docker build --build-arg QEMU_PLATFORM --build-arg QEMU_OS . -t skydev-test ; fi
+  - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
+  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg PATH_ROOT $PATH_ROOT  ; fi
 
 notifications:
   email: false

@@ -25,17 +25,6 @@ func SKY_cipher_Ripemd160_Set(_rd *C.cipher__Ripemd160, _b []byte) (____error_co
 	return
 }
 
-//export SKY_cipher_Ripemd160FromBytes
-func SKY_cipher_Ripemd160FromBytes(_data []byte, _arg1 *C.cipher__Ripemd160) (____error_code uint32) {
-	rd, __return_err := cipher.Ripemd160FromBytes(_data)
-
-	if __return_err != nil {
-		copyToBuffer(reflect.ValueOf(rd[:]), unsafe.Pointer(_arg1), uint(SizeofRipemd160))
-	}
-	____error_code = libErrorCode(__return_err)
-	return
-}
-
 //export SKY_cipher_HashRipemd160
 func SKY_cipher_HashRipemd160(_data []byte, _arg1 *C.cipher__Ripemd160) (____error_code uint32) {
 	rd := cipher.HashRipemd160(_data)
@@ -84,16 +73,6 @@ func SKY_cipher_SHA256FromHex(_hs string, _arg1 *C.cipher__SHA256) (____error_co
 	____error_code = libErrorCode(err)
 	if err == nil {
 		copyToBuffer(reflect.ValueOf(h[:]), unsafe.Pointer(_arg1), uint(SizeofSHA256))
-	}
-	return
-}
-
-//export SKY_cipher_SHA256FromBytes
-func SKY_cipher_SHA256FromBytes(_data []byte, _arg1 *C.cipher__SHA256) (____error_code uint32) {
-	sha, err := cipher.SHA256FromBytes(_data)
-	____error_code = libErrorCode(err)
-	if err != nil {
-		copyToBuffer(reflect.ValueOf(sha[:]), unsafe.Pointer(_arg1), uint(SizeofSHA256))
 	}
 	return
 }

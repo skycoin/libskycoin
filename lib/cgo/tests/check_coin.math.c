@@ -3,11 +3,11 @@
 
 // #include <criterion/criterion.h>
 // #include <criterion/new/assert.h>
-#include <check.h>
 #include "libskycoin.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
+#include <check.h>
 
 // TestSuite(coin_math, .init = setup, .fini = teardown);
 
@@ -48,25 +48,23 @@ START_TEST(TestUint64ToInt64)
         //{maxUint64 + 1, 0, 1},
     };
     int tests_count = sizeof(tests) / sizeof(math_tests);
-    for (int i = 0; i < tests_count; i++)
-    {
+    int i;
+    for (i = 0; i < tests_count; i++) {
         result = SKY_coin_Uint64ToInt64(tests[i].a, &r);
-        if (tests[i].failure)
-        {
+        if (tests[i].failure) {
             ck_assert_msg(result == SKY_ErrUint64OverflowsInt64, "Failed test # %d", i + 1);
-        }
-        else
-        {
+        } else {
             ck_assert_msg(result == SKY_OK, "Failed test # %d", i + 1);
             ck_assert(tests[i].b == r);
         }
     }
-}END_TEST
+}
+END_TEST
 
-Suite *coin_math(void)
+Suite* coin_math(void)
 {
-    Suite *s = suite_create("Load coin.math");
-    TCase *tc;
+    Suite* s = suite_create("Load coin.math");
+    TCase* tc;
 
     tc = tcase_create("coin.math");
     tcase_add_checked_fixture(tc, setup, teardown);
