@@ -26,6 +26,7 @@ env:
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
     - CGO_ENABLED: 1
+    - PATH_ROOT: $TRAVIS_BUILD_DIR
 
 
 install:
@@ -40,7 +41,7 @@ install:
 
 script:
   - make check
-  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg PATH_ROOT=$TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR ; fi
+  - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg $PATH_ROOT $PATH_ROOT ; fi
 
 notifications:
   email: false
