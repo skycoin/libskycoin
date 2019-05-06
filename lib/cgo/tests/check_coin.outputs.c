@@ -6,10 +6,10 @@
 #include <check.h>
 
 #include "libskycoin.h"
+#include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
-#include "skyassert.h"
 #include "skytxn.h"
 
 // TestSuite(coin_outputs, .init = setup, .fini = teardown);
@@ -225,7 +225,7 @@ START_TEST(TestUxArrayCoins)
     result = SKY_coin_UxArray_Coins(&uxs, &coins);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Coins failed");
     ck_assert(coins == 4000000);
-    coin__UxOut *p = (coin__UxOut *)uxs.data;
+    coin__UxOut* p = (coin__UxOut*)uxs.data;
     p += 2;
     p->Body.Coins = 0xFFFFFFFFFFFFFFFF - 1000000;
     result = SKY_coin_UxArray_Coins(&uxs, &coins);
@@ -238,7 +238,7 @@ START_TEST(TestUxArrayCoinHours)
     coin__UxArray uxs;
     int result = makeUxArray(&uxs, 4);
     ck_assert_msg(result == SKY_OK, "makeUxArray failed");
-    coin__UxOut *p = (coin__UxOut *)uxs.data;
+    coin__UxOut* p = (coin__UxOut*)uxs.data;
     GoUint64 n;
 
     result = SKY_coin_UxArray_CoinHours(&uxs, p->Head.Time, &n);
@@ -267,19 +267,18 @@ START_TEST(TestUxArrayHashArray)
     coin__UxArray uxs;
     int result = makeUxArray(&uxs, 4);
     ck_assert_msg(result == SKY_OK, "makeUxArray failed");
-    coin__UxOut *p = (coin__UxOut *)uxs.data;
+    coin__UxOut* p = (coin__UxOut*)uxs.data;
 
     GoSlice_ hashes = {NULL, 0, 0};
     result = SKY_coin_UxArray_Hashes(&uxs, &hashes);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_Hashes failed");
     registerMemCleanup(hashes.data);
     ck_assert(hashes.len == uxs.len);
-    coin__UxOut *pux = (coin__UxOut *)uxs.data;
-    cipher__SHA256 *ph = (cipher__SHA256 *)hashes.data;
+    coin__UxOut* pux = (coin__UxOut*)uxs.data;
+    cipher__SHA256* ph = (cipher__SHA256*)hashes.data;
     cipher__SHA256 hash;
     int i;
-    for (i = 0; i < hashes.len; i++)
-    {
+    for (i = 0; i < hashes.len; i++) {
         result = SKY_coin_UxOut_Hash(pux, &hash);
         ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
         ck_assert(isU8Eq(hash, *ph, sizeof(cipher__SHA256)));
@@ -298,7 +297,7 @@ START_TEST(TestUxArrayHasDupes)
     result = SKY_coin_UxArray_HasDupes(&uxs, &hasDupes);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxArray_HasDupes failed");
     ck_assert(hasDupes == 0);
-    coin__UxOut *p = (coin__UxOut *)uxs.data;
+    coin__UxOut* p = (coin__UxOut*)uxs.data;
     p++;
     memcpy(uxs.data, p, sizeof(coin__UxOut));
     result = SKY_coin_UxArray_HasDupes(&uxs, &hasDupes);
@@ -309,7 +308,6 @@ END_TEST
 
 START_TEST(TestUxArraySub)
 {
-
     int result, equal;
     coin__UxArray uxa, uxb, uxc, uxd;
     coin__UxArray t1, t2, t3, t4;
@@ -363,22 +361,20 @@ START_TEST(TestUxArraySub)
 }
 END_TEST
 
-int isUxArraySorted(coin__UxArray *uxa)
+int isUxArraySorted(coin__UxArray* uxa)
 {
     int n = uxa->len;
-    coin__UxOut *prev = uxa->data;
-    coin__UxOut *current = prev;
+    coin__UxOut* prev = uxa->data;
+    coin__UxOut* current = prev;
     current++;
     cipher__SHA256 hash1, hash2;
-    cipher__SHA256 *prevHash = NULL;
-    cipher__SHA256 *currentHash = NULL;
+    cipher__SHA256* prevHash = NULL;
+    cipher__SHA256* currentHash = NULL;
 
     int result;
     int i;
-    for (i = 1; i < n; i++)
-    {
-        if (prevHash == NULL)
-        {
+    for (i = 1; i < n; i++) {
+        if (prevHash == NULL) {
             result = SKY_coin_UxOut_Hash(prev, &hash1);
             ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
             prevHash = &hash1;
@@ -389,13 +385,10 @@ int isUxArraySorted(coin__UxArray *uxa)
         ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
         if (memcmp(prevHash, currentHash, sizeof(cipher__SHA256)) > 0)
             return 0; //Array is not sorted
-        if (i % 2 != 0)
-        {
+        if (i % 2 != 0) {
             prevHash = &hash2;
             currentHash = &hash1;
-        }
-        else
-        {
+        } else {
             prevHash = &hash1;
             currentHash = &hash2;
         }
@@ -407,16 +400,14 @@ int isUxArraySorted(coin__UxArray *uxa)
 
 START_TEST(TestUxArraySorting)
 {
-
     int result;
     coin__UxArray uxa;
     result = makeUxArray(&uxa, 4);
     ck_assert_msg(result == SKY_OK, "makeUxArray failed");
     int isSorted = isUxArraySorted(&uxa);
-    if (isSorted)
-    { //If already sorted then break the order
+    if (isSorted) { //If already sorted then break the order
         coin__UxOut temp;
-        coin__UxOut *p = uxa.data;
+        coin__UxOut* p = uxa.data;
         memcpy(&temp, p, sizeof(coin__UxOut));
         memcpy(p, p + 1, sizeof(coin__UxOut));
         memcpy(p + 1, &temp, sizeof(coin__UxOut));
@@ -451,7 +442,7 @@ START_TEST(TestUxArrayLess)
     result = makeUxArray(&uxa, 2);
     ck_assert_msg(result == SKY_OK, "makeUxArray failed");
     cipher__SHA256 hashes[2];
-    coin__UxOut *p = uxa.data;
+    coin__UxOut* p = uxa.data;
     result = SKY_coin_UxOut_Hash(p, &hashes[0]);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
     p++;
@@ -479,7 +470,7 @@ START_TEST(TestUxArraySwap)
     result = makeUxArray(&uxa, 2);
     ck_assert_msg(result == SKY_OK, "makeUxArray failed");
     coin__UxOut uxx, uxy;
-    coin__UxOut *p = uxa.data;
+    coin__UxOut* p = uxa.data;
     memcpy(&uxx, p, sizeof(coin__UxOut));
     memcpy(&uxy, p + 1, sizeof(coin__UxOut));
 
@@ -506,8 +497,7 @@ START_TEST(TestAddressUxOutsKeys)
     int test_count = 3;
     coin__UxOut uxs[test_count];
     int i;
-    for (i = 0; i < 3; i++)
-    {
+    for (i = 0; i < 3; i++) {
         makeUxOut(&uxs[i]);
     }
 
@@ -520,29 +510,22 @@ START_TEST(TestAddressUxOutsKeys)
     ck_assert_msg(result == SKY_OK, "SKY_coin_AddressUxOuts_Keys failed");
     registerMemCleanup(keys.data);
     ck_assert(keys.len == test_count);
-    cipher__Address *pKey = keys.data;
-    for (i = 0; i < test_count; i++)
-    {
+    cipher__Address* pKey = keys.data;
+    for (int i = 0; i < test_count; i++) {
         //Check if every key matches uxout
         int found = 0;
         int j;
-        for (j = 0; j < test_count; j++)
-        {
-            if (memcmp(pKey, &uxs[j].Body.Address, sizeof(cipher__Address)) == 0)
-            {
+        for (j = 0; j < test_count; j++) {
+            if (memcmp(pKey, &uxs[j].Body.Address, sizeof(cipher__Address)) == 0) {
                 found = 1;
             }
         }
-        ck_assert_msg(found == 1, "Invalid key received from SKY_coin_AddressUxOuts_Keys");
         found = 0;
-        if (i < test_count - 1)
-        {
-            cipher__Address *pKey2 = pKey;
-            for (j = i + 1; j < test_count; j++)
-            {
+        if (i < test_count - 1) {
+            cipher__Address* pKey2 = pKey;
+            for (j = i + 1; j < test_count; j++) {
                 pKey2++;
-                if (memcmp(pKey, pKey2, sizeof(cipher__Address)) == 0)
-                {
+                if (memcmp(pKey, pKey2, sizeof(cipher__Address)) == 0) {
                     found = 1;
                 }
             }
@@ -558,7 +541,7 @@ START_TEST(TestAddressUxOutsSub)
     int result;
     coin__UxArray uxa, empty;
     makeUxArray(&uxa, 4);
-    coin__UxOut *pData = uxa.data;
+    coin__UxOut* pData = uxa.data;
     memset(&empty, 0, sizeof(coin__UxArray));
     AddressUxOuts_Handle h1, h2, h3;
     result = SKY_coin_NewAddressUxOuts(&empty, &h1);
@@ -605,7 +588,7 @@ START_TEST(TestAddressUxOutsSub)
     ck_assert_msg(result == SKY_OK, "SKY_coin_AddressUxOuts_Get failed");
     registerMemCleanup(ux3.data);
     ck_assert(ux3.len == 1);
-    coin__UxOut *pData2 = ux3.data;
+    coin__UxOut* pData2 = ux3.data;
     ck_assert(isUxOutEq(pData2, (pData + 3)));
 
     memset(&ux2, 0, sizeof(coin__UxArray));
@@ -647,7 +630,7 @@ START_TEST(TestAddressUxOutsAdd)
     int result;
     coin__UxArray uxa, empty;
     makeUxArray(&uxa, 4);
-    coin__UxOut *pData = uxa.data;
+    coin__UxOut* pData = uxa.data;
     memset(&empty, 0, sizeof(coin__UxArray));
     AddressUxOuts_Handle h1, h2, h3;
     result = SKY_coin_NewAddressUxOuts(&empty, &h1);
@@ -694,7 +677,7 @@ START_TEST(TestAddressUxOutsAdd)
     ck_assert_msg(result == SKY_OK, "SKY_coin_AddressUxOuts_Get failed");
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 2);
-    coin__UxOut *pData2 = ux2.data;
+    coin__UxOut* pData2 = ux2.data;
     ck_assert(isUxOutEq(pData2, pData));
     ck_assert(isUxOutEq((pData2 + 1), (pData + 1)));
 
@@ -753,7 +736,7 @@ START_TEST(TestAddressUxOutsFlatten)
     int result;
     coin__UxArray uxa, emptyArray;
     makeUxArray(&uxa, 3);
-    coin__UxOut *pData = uxa.data;
+    coin__UxOut* pData = uxa.data;
     memcpy(&(pData + 2)->Body.Address, &(pData + 1)->Body.Address, sizeof(cipher__Address));
     memset(&emptyArray, 0, sizeof(coin__UxArray));
     AddressUxOuts_Handle h;
@@ -778,26 +761,22 @@ START_TEST(TestAddressUxOutsFlatten)
     registerMemCleanup(flatArray.data);
     ck_assert(flatArray.len == 3);
     // emptyAddr should not be in the array
-    coin__UxOut *pData2 = flatArray.data;
+    coin__UxOut* pData2 = flatArray.data;
     int i;
-    for (i = 0; i < flatArray.len; pData2++, i++)
-    {
+    for (i = 0; i < flatArray.len; pData2++, i++) {
         int cmp = memcmp(&emptyAddr, &pData2->Body.Address, sizeof(cipher__Address));
         ck_assert(cmp != 0);
     }
     pData2 = flatArray.data;
     int cmp = memcmp(&pData->Body.Address, &pData2->Body.Address, sizeof(cipher__Address));
-    if (cmp == 0)
-    {
+    if (cmp == 0) {
         ck_assert(isUxOutEq(pData2, pData));
         ck_assert(isUxOutEq((pData2 + 1), (pData + 1)));
         ck_assert(isUxOutEq((pData2 + 2), (pData + 2)));
         ck_assert(isAddressEq(&pData2->Body.Address, &pData->Body.Address));
         ck_assert(isAddressEq(&(pData2 + 1)->Body.Address, &(pData + 1)->Body.Address));
         ck_assert(isAddressEq(&(pData2 + 2)->Body.Address, &(pData + 2)->Body.Address));
-    }
-    else
-    {
+    } else {
         ck_assert(isUxOutEq(pData2, (pData + 1)));
         ck_assert(isUxOutEq((pData2 + 1), (pData + 2)));
         ck_assert(isUxOutEq((pData2 + 2), (pData)));
@@ -813,7 +792,7 @@ START_TEST(TestNewAddressUxOuts)
     int result;
     coin__UxArray uxa, ux2;
     makeUxArray(&uxa, 6);
-    coin__UxOut *pData = uxa.data;
+    coin__UxOut* pData = uxa.data;
     memcpy(&(pData + 1)->Body.Address, &(pData)->Body.Address, sizeof(cipher__Address));
     memcpy(&(pData + 3)->Body.Address, &(pData + 2)->Body.Address, sizeof(cipher__Address));
     memcpy(&(pData + 4)->Body.Address, &(pData + 2)->Body.Address, sizeof(cipher__Address));
@@ -832,7 +811,7 @@ START_TEST(TestNewAddressUxOuts)
     ck_assert_msg(result == SKY_OK, "SKY_coin_AddressUxOuts_Get failed");
     registerMemCleanup(ux2.data);
     ck_assert(ux2.len == 2);
-    coin__UxOut *pData2 = ux2.data;
+    coin__UxOut* pData2 = ux2.data;
     ck_assert(isUxOutEq((pData2), (pData)));
     ck_assert(isUxOutEq((pData2 + 1), (pData + 1)));
 
@@ -855,10 +834,10 @@ START_TEST(TestNewAddressUxOuts)
     ck_assert(isUxOutEq((pData2), (pData + 5)));
 }
 END_TEST
-Suite *coin_output(void)
+Suite* coin_output(void)
 {
-    Suite *s = suite_create("Load coin.output");
-    TCase *tc;
+    Suite* s = suite_create("Load coin.output");
+    TCase* tc;
 
     tc = tcase_create("coin.output");
     tcase_add_test(tc, TestUxBodyHash);
