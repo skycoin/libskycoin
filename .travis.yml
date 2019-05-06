@@ -1,17 +1,17 @@
 sudo: required
 services:
   - docker
-dist: trusty
 language: go
 go:
   - "1.11.x"
-
+  
 matrix:
   include:
     - os: linux
+      dist: xenial
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
     - os: osx
-      osx_image: xcode8
+      osx_image: xcode8.3
       env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
 
 before_install:
@@ -28,19 +28,19 @@ env:
     - CC: gcc-6
     - CXX: g++-6
 
+
 install:
   # Install gox
   - go get github.com/gz-c/gox
   - go get -t ./...
+  - make install-deps-libc
   - make install-linters
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
   - make install-deps-libc
 
 script:
-  - make lint
-  # libskycoin tests
-  - CC=gcc-6 make test-libc
+  - make check
   - if [[ "$TRAVIS_OS_NAME" == 'linux' ]]; then docker build  . -t skydev-test ; fi
 
 notifications:

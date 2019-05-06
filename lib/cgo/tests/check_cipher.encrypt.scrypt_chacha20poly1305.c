@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <check.h>
+#include "base64.h"
 #include "libskycoin.h"
+#include "skyassert.h"
 #include "skyerrors.h"
-#include "skycriterion.h"
 #include "skystring.h"
 #include "skytest.h"
-#include "base64.h"
+#include <check.h>
 
 #define PLAINTEXT "plaintext"
 #define PASSWORD "password"
@@ -18,47 +18,37 @@
 #define SCRYPTCHACHA20METALENGTHSIZE 2
 
 
-void parseJsonMetaData(char *metadata, int *n, int *r, int *p, int *keyLen)
+void parseJsonMetaData(char* metadata, int* n, int* r, int* p, int* keyLen)
 {
     *n = *r = *p = *keyLen = 0;
     int length = strlen(metadata);
     int openingQuote = -1;
-    const char *keys[] = {"n", "r", "p", "keyLen"};
+    const char* keys[] = {"n", "r", "p", "keyLen"};
     int keysCount = 4;
     int keyIndex = -1;
     int startNumber = -1;
-    for (int i = 0; i < length; i++)
-    {
-        if (metadata[i] == '\"')
-        {
+    int i;
+    for (i = 0; i < length; i++) {
+        if (metadata[i] == '\"') {
             startNumber = -1;
-            if (openingQuote >= 0)
-            {
+            if (openingQuote >= 0) {
                 keyIndex = -1;
                 metadata[i] = 0;
-                for (int k = 0; k < keysCount; k++)
-                {
-                    if (strcmp(metadata + openingQuote + 1, keys[k]) == 0)
-                    {
+                int k;
+                for (k = 0; k < keysCount; k++) {
+                    if (strcmp(metadata + openingQuote + 1, keys[k]) == 0) {
                         keyIndex = k;
                     }
                 }
                 openingQuote = -1;
-            }
-            else
-            {
+            } else {
                 openingQuote = i;
             }
-        }
-        else if (metadata[i] >= '0' && metadata[i] <= '9')
-        {
+        } else if (metadata[i] >= '0' && metadata[i] <= '9') {
             if (startNumber < 0)
                 startNumber = i;
-        }
-        else if (metadata[i] == ',')
-        {
-            if (startNumber >= 0)
-            {
+        } else if (metadata[i] == ',') {
+            if (startNumber >= 0) {
                 metadata[i] = 0;
                 int number = atoi(metadata + startNumber);
                 startNumber = -1;
@@ -71,9 +61,7 @@ void parseJsonMetaData(char *metadata, int *n, int *r, int *p, int *keyLen)
                 else if (keyIndex == 3)
                     *keyLen = number;
             }
-        }
-        else
-        {
+        } else {
             startNumber = -1;
         }
     }
@@ -81,7 +69,6 @@ void parseJsonMetaData(char *metadata, int *n, int *r, int *p, int *keyLen)
 
 START_TEST(TestScryptChacha20poly1305Encrypt)
 {
-
     GoSlice nullData;
     GoSlice nullPassword;
     char str[BUFFER_SIZE];
@@ -121,29 +108,27 @@ START_TEST(TestScryptChacha20poly1305Encrypt)
     encrypt__ScryptChacha20poly1305 encrypt = {0, 1 << 0, 1 << 3, 1 << 5};
     registerMemCleanup(&encrypt);
     int i;
-    for (i = 1; i <= 20; i++)
-    {
+    for (i = 1; i <= 20; i++) {
         unsigned char buffer[BUFFER_SIZE];
         GoSlice_ result = {buffer, 0, BUFFER_SIZE};
         encrypt.N = 1 << i;
         errcode = SKY_encrypt_ScryptChacha20poly1305_Encrypt(&encrypt, text, password, &result);
         ck_assert_msg(errcode == SKY_OK, "SKY_encrypt_ScryptChacha20poly1305_Encrypt failed");
-        registerMemCleanup((void *)result.data);
+        registerMemCleanup((void*)result.data);
         ck_assert_msg(result.len > SCRYPTCHACHA20METALENGTHSIZE, "SKY_encrypt_ScryptChacha20poly1305_Encrypt failed, result data length too short");
-        int decode_len = b64_decode((const unsigned char *)result.data,
-                                    result.len, (unsigned char *)str);
+        int decode_len = b64_decode((const unsigned char*)result.data,
+            result.len, (unsigned char*)str);
         ck_assert_msg(decode_len >= SCRYPTCHACHA20METALENGTHSIZE, "base64_decode_string failed");
         ck_assert_msg(decode_len < BUFFER_SIZE, "base64_decode_string failed, buffer overflow");
         metalength = (unsigned int)str[0];
-        for (int m = 1; m < SCRYPTCHACHA20METALENGTHSIZE; m++)
-        {
-            if (str[m] > 0)
-            {
+        int m;
+        for (m = 1; m < SCRYPTCHACHA20METALENGTHSIZE; m++) {
+            if (str[m] > 0) {
                 metalength += (((unsigned int)str[m]) << (m * 8));
             }
         }
         ck_assert_msg(metalength + SCRYPTCHACHA20METALENGTHSIZE < decode_len, "SKY_encrypt_ScryptChacha20poly1305_Encrypt failed. Metadata length greater than result lentgh.");
-        char *meta = str + SCRYPTCHACHA20METALENGTHSIZE;
+        char* meta = str + SCRYPTCHACHA20METALENGTHSIZE;
         meta[metalength] = 0;
         int n, r, p, keyLen;
         parseJsonMetaData(meta, &n, &r, &p, &keyLen);
@@ -198,7 +183,7 @@ START_TEST(TestScryptChacha20poly1305Decrypt)
     GoSlice_ tmp_result = {buffer_result, 0, BUFFER_SIZE};
     errcode = SKY_encrypt_ScryptChacha20poly1305_Decrypt(&encrypt, encrypted, password2, &result);
     ck_assert_msg(errcode == SKY_OK, "SKY_encrypt_ScryptChacha20poly1305_Decrypt failed");
-    registerMemCleanup((void *)result.data);
+    registerMemCleanup((void*)result.data);
     ck_assert(isGoSlice_Eq(&text, &result));
     result.cap = result.len = 0;
     errcode = SKY_encrypt_ScryptChacha20poly1305_Decrypt(&encrypt, encrypted, wrong_password, &tmp_result);
@@ -209,10 +194,10 @@ START_TEST(TestScryptChacha20poly1305Decrypt)
 }
 END_TEST
 
-Suite *cipher_encrypt_scrypt_chacha20poly1305(void)
+Suite* cipher_encrypt_scrypt_chacha20poly1305(void)
 {
-    Suite *s = suite_create("Load cipher.encrypt.scrypt.chacha20poly1305");
-    TCase *tc;
+    Suite* s = suite_create("Load cipher.encrypt.scrypt.chacha20poly1305");
+    TCase* tc;
 
     tc = tcase_create("cipher.encrypt.scrypt.chacha20poly1305");
     tcase_add_checked_fixture(tc, setup, teardown);

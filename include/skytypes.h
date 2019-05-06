@@ -107,12 +107,12 @@ typedef struct {
 /**
  * Instances of Go `map` type.
  */
-typedef void *GoMap_;
+typedef void* GoMap_;
 
 /**
  * Instances of Go `chan` channel types.
  */
-typedef void *GoChan_;
+typedef void* GoChan_;
 
 /**
  * Memory handles returned back to the caller and manipulated

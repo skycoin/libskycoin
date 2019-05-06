@@ -8,7 +8,7 @@
 #include "skytest.h"
 #include "skytypes.h"
 
-GoUint32_ zeroFeeCalculator(Transaction__Handle handle, GoUint64_ *pFee, void* context);
+GoUint32_ zeroFeeCalculator(Transaction__Handle handle, GoUint64_* pFee, void* context);
 
 GoUint32_ makeKeysAndAddress(cipher__PubKey *ppubkey, cipher__SecKey *pseckey, cipher__Address *paddress);
 

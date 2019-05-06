@@ -19,9 +19,9 @@ import "C"
 func SKY_certutil_NewTLSCertPair(organization string, validUntil string, extraHosts []string, _cert *C.GoSlice_, _key *C.GoSlice_) (____error_code uint32) {
 	____time_validUntil, ____return_err := parseTimeValue(validUntil)
 	if ____return_err == nil {
-		certs, key, ____return_err := cert.NewTLSCertPair(organization, ____time_validUntil, extraHosts)
+		cert, key, ____return_err := cert.NewTLSCertPair(organization, ____time_validUntil, extraHosts)
 		if ____return_err == nil {
-			copyToGoSlice(reflect.ValueOf(certs), _cert)
+			copyToGoSlice(reflect.ValueOf(cert), _cert)
 			copyToGoSlice(reflect.ValueOf(key), _key)
 		}
 	}

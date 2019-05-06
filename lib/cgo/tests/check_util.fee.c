@@ -4,14 +4,13 @@
 
 #include "libskycoin.h"
 #include "math.h"
-#include "skycriterion.h"
+#include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
 #include "skytxn.h"
 #include <check.h>
 
-// TestSuite(util_fee, .init = setup, .fini = teardown);
 #define BUFFER_SIZE 1024
 #define BurnFactor 2
 

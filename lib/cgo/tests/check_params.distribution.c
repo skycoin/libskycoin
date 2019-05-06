@@ -6,9 +6,8 @@
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
-#include "skycriterion.h"
+#include "skyassert.h"
 
-// TestSuite(params_distribution, .init = setup, .fini = teardown);
 
 START_TEST(TestDistributionAddressArrays)
 {
