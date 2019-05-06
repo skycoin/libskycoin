@@ -8,7 +8,7 @@ set(CMAKE_CXX_VISIBILITY_PRESET default)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
-set(pkgName "skycoin_rest_api/")
+set(pkgName "skyapi")
 
 find_package(CURL 7.58.0 REQUIRED)
 if(CURL_FOUND)
