@@ -2,7 +2,7 @@ sudo: required
 language: go
 go:
   - "1.11.x"
-
+  
 matrix:
   include:
     - os: linux
@@ -25,10 +25,12 @@ env:
     - LIB_DIR: lib
     - CGO_ENABLED: 1
 
+
 install:
   # Install gox
   - go get github.com/gz-c/gox
   - go get -t ./...
+  - make install-deps-libc
   - make install-linters
   - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   # Install pinned golangci-lint, overriding the latest version install by make install-linters
