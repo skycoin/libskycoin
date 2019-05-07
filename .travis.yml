@@ -146,7 +146,7 @@ install:
 script:
   - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
   - if [[ "QEMU_PLATFORM" ]]; then echo $PATH_DIR ; fi
-  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg PATH_DIR . ; fi
+  - if [[ "$QEMU_PLATFORM" ]]; then PATH_DIR=$GOPATH/src/github.com/skycoin/libskycoin/ docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg PATH_DIR $PATH_DIR ; fi
 
 notifications:
   email: false
