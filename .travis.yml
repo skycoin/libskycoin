@@ -8,6 +8,7 @@ go:
 matrix:
   include:
     - os: linux
+      dist: xenial
     - os: linux
       env:
         - QEMU_PLATFORM=orangepi-plus2
@@ -144,7 +145,7 @@ install:
 
 script:
   - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
-  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg PATH_ROOT $PATH_ROOT  ; fi
+  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg $PATH_ROOT $PATH_ROOT ; fi
 
 notifications:
   email: false
