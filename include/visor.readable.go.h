@@ -1,1 +1,1 @@
-typedef GoSlice_  visor__ReadableOutputs;
+typedef GoSlice_ visor__ReadableOutputs;

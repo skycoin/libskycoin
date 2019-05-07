@@ -36,9 +36,9 @@ int b64_decode(const unsigned char* in, unsigned int in_len, unsigned char* out)
 // file-version b64_encode
 // Input : filenames
 // returns size of output
-unsigned int b64_encodef(char *InFile, char *OutFile);
+unsigned int b64_encodef(char* InFile, char* OutFile);
 
 // file-version b64_decode
 // Input : filenames
 // returns size of output
-int b64_decodef(char *InFile, char *OutFile);
+int b64_decodef(char* InFile, char* OutFile);

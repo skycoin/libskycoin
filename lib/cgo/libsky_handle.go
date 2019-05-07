@@ -505,3 +505,17 @@ func lookupBuildInfoHandle(handle C.BuildInfo_Handle) (*readable.BuildInfo, bool
 	}
 	return nil, false
 }
+
+func registerBlockHeaderHandle(obj *coin.BlockHeader) C.BlockHeader__Handle {
+	return (C.BlockHeader__Handle)(registerHandle(obj))
+}
+
+func lookupBlockHeaderHandle(handle C.BlockHeader__Handle) (*coin.BlockHeader, bool) {
+	obj, ok := lookupHandle(C.Handle(handle))
+	if ok {
+		if obj, isOK := (obj).(*coin.BlockHeader); isOK {
+			return obj, true
+		}
+	}
+	return nil, false
+}
