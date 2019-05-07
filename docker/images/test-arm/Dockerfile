@@ -5,7 +5,7 @@ FROM balenalib/${QEMU_PLATFORM}-${QEMU_OS}-golang
 ARG QEMU_OS
 ARG PATH_ROOT
 
-ADD $PATH_ROOT $GOPATH/src/github.com/skycoin/libskycoin/
+ADD ${PATH_ROOT} $GOPATH/src/github.com/skycoin/libskycoin/
 
 RUN [ "cross-build-start" ]
 
@@ -17,4 +17,6 @@ ENV CGO_ENABLED=1
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin clean-libc 
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin test-libc
 
-RUN [ "cross-build-end" ]  
+RUN [ "cross-build-end" ]
+
+WORKDIR $GOPATH/src

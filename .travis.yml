@@ -7,20 +7,20 @@ go:
   
 matrix:
   include:
-    - os: linux
-      dist: xenial
+    # - os: linux
+      # dist: xenial
     - os: linux
       env:
         - QEMU_PLATFORM=orangepi-plus2
         - QEMU_OS=ubuntu
-    - os: linux
-      env:
-        - QEMU_PLATFORM=orangepi-plus2
-        - QEMU_OS=debian
-    - os: linux
-      env:
-        - QEMU_PLATFORM=orangepi-plus2
-        - QEMU_OS=fedora
+    # - os: linux
+      # env:
+        # - QEMU_PLATFORM=orangepi-plus2
+        # - QEMU_OS=debian
+    # - os: linux
+      # env:
+        # - QEMU_PLATFORM=orangepi-plus2
+        # - QEMU_OS=fedora
     # - os: linux
     #   env:
     #     - QEMU_PLATFORM=raspberry-pi2
@@ -117,8 +117,8 @@ matrix:
     #   env:
     #     - QEMU_PLATFORM=odroid-xu4
     #     - QEMU_OS=fedora
-    - os: osx
-      osx_image: xcode8.3
+    # - os: osx
+      # osx_image: xcode8.3
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
@@ -145,7 +145,7 @@ install:
 
 script:
   - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
-  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg $PATH_ROOT $PATH_ROOT ; fi
+  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg PATH_ROOT . ; fi
 
 notifications:
   email: false
