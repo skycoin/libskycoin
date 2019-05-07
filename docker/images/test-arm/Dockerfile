@@ -1,11 +1,10 @@
 ARG QEMU_OS
 ARG QEMU_PLATFORM
-ARG PATH_ROOT
 FROM balenalib/${QEMU_PLATFORM}-${QEMU_OS}-golang
 ARG QEMU_OS
-ARG PATH_ROOT
+ARG PATH_DIR
 
-ADD ${PATH_ROOT} $GOPATH/src/github.com/skycoin/libskycoin/
+ADD ${PATH_DIR} $GOPATH/src/github.com/skycoin/libskycoin/
 
 RUN [ "cross-build-start" ]
 

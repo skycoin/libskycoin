@@ -132,7 +132,7 @@ env:
     - LIB_DIR: lib
     - CGO_ENABLED: 1
     - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 60s
-    - PATH_ROOT: $TRAVIS_BUILD_DIR
+    - PATH_DIR: $GOPATH/src/github.com/skycoin/libskycoin/
 
 
 install:
@@ -145,8 +145,8 @@ install:
 
 script:
   - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
-  - if [[ "QEMU_PLATFORM" ]]; then echo $PATH_ROOT ; fi
-  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg PATH_ROOT $TRAVIS_BUILD_DIR ; fi
+  - if [[ "QEMU_PLATFORM" ]]; then echo $PATH_DIR ; fi
+  - if [[ "$QEMU_PLATFORM" ]]; then docker build -t skydev-test --file docker/images/test-arm/Dockerfile --build-arg QEMU_PLATFORM --build-arg QEMU_OS --build-arg PATH_DIR . ; fi
 
 notifications:
   email: false
