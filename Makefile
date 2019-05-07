@@ -169,9 +169,10 @@ format: ## Formats the code. Must have goimports installed (use make install-lin
 	goimports -w -local github.com/skycoin/skycoin ./lib
 
 clean-libc: ## Clean files generate by library
-	rm -rfv $(BUILDLIB_DIR)/libskycoin.so
-	rm -rfv $(BUILDLIB_DIR)/libskycoin.a
+	rm -rfv $(BUILDLIB_DIR)
+	rm -rfv bin
 	rm -rfv qemu_test_libskycoin*
+	rm -rfv include/libskycoin.h
 
 format-libc:
 	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format lib/cgo/tests/*.c

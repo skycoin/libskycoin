@@ -116,22 +116,21 @@ START_TEST(TestSHA256Hex)
     memset(&h, 0, sizeof(h));
     randBytes(&slice, 32);
     SKY_cipher_SHA256_Set(&h, slice);
-    GoString s;
+    GoString_ s;
 
-    SKY_cipher_SHA256_Hex(&h, (GoString_*)&s);
+    SKY_cipher_SHA256_Hex(&h, &s);
     registerMemCleanup((void*)s.p);
 
     cipher__SHA256 h2;
-
-    error = SKY_cipher_SHA256FromHex(s, &h2);
+    GoString tmpS = {s.p, s.n};
+    error = SKY_cipher_SHA256FromHex(tmpS, &h2);
     ck_assert(error == SKY_OK);
     ck_assert(isU8Eq(h, h2, 32));
 
-    GoString s2;
-
-    SKY_cipher_SHA256_Hex(&h2, (GoString_*)&s2);
+    GoString_ s2;
+    SKY_cipher_SHA256_Hex(&h2, &s2);
     registerMemCleanup((void*)s2.p);
-    ck_assert(isGoStringEq(s, s2));
+    ck_assert_str_eq(s.p, s2.p);
 }
 END_TEST
 
@@ -220,11 +219,13 @@ START_TEST(TestSHA256FromHex)
     ck_assert(error == SKY_ErrInvalidHexLength);
 
     // Valid hex hash
-    GoString_ s2 = {NULL, 0};
+    GoString_ s2;
+    memset(&s2, 0, sizeof(GoString_));
     SKY_cipher_SHA256_Hex(&h, &s2);
     registerMemCleanup((void*)s2.p);
     cipher__SHA256 h2;
-    error = SKY_cipher_SHA256FromHex((*((GoString*)&s2)), &h2);
+    GoString tmps2 = {s2.p, s2.n};
+    error = SKY_cipher_SHA256FromHex(tmps2, &h2);
     ck_assert(error == SKY_OK);
     ck_assert(isU8Eq(h, h2, 32));
 }
@@ -372,6 +373,7 @@ Suite* cipher_hash(void)
     TCase* tc;
 
     tc = tcase_create("cipher.hash");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestHashRipemd160);
     tcase_add_test(tc, TestRipemd160Set);
     tcase_add_test(tc, TestSHA256Set);

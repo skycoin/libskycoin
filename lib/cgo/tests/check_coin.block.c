@@ -10,8 +10,6 @@
 #include "time.h"
 #include <check.h>
 
-// TestSuite(coin_block, .init = setup, .fini = teardown);
-
 Transactions__Handle makeTestTransactions()
 {
     Transactions__Handle transactions;
@@ -255,8 +253,7 @@ START_TEST(TestCreateUnspent)
     };
     coin__UxOut ux;
     int tests_count = sizeof(t) / sizeof(testcase_unspent);
-    int i;
-    for (i = 0; i < tests_count; i++) {
+    for (int i = 0; i < tests_count; i++) {
         memset(&ux, 0, sizeof(coin__UxOut));
         result = SKY_coin_CreateUnspent(&bh, handle, t[i].index, &ux);
         if (t[i].failure) {
@@ -302,11 +299,10 @@ START_TEST(TestCreateUnspents)
     ck_assert_msg(result == SKY_OK, "SKY_coin_CreateUnspents failed");
     registerMemCleanup(uxs.data);
     ck_assert(uxs.len == 1);
-    ck_assert(uxs.len == ptx->Out.len);
+    ck_assert_int_eq(uxs.len, ptx->Out.len);
     coin__UxOut* pout = (coin__UxOut*)uxs.data;
     coin__TransactionOutput* ptxout = (coin__TransactionOutput*)ptx->Out.data;
-    int i;
-    for (i = 0; i < uxs.len; i++) {
+    for (int i = 0; i < uxs.len; i++) {
         ck_assert(bh.Time == pout->Head.Time);
         ck_assert(bh.BkSeq == pout->Head.BkSeq);
         result = SKY_coin_Transaction_Hash(handle, &hash);
@@ -327,11 +323,12 @@ Suite* coin_blocks(void)
     TCase* tc;
 
     tc = tcase_create("coin.block");
-    tcase_add_test(tc, TestNewBlock);
-    tcase_add_test(tc, TestBlockHashHeader);
-    tcase_add_test(tc, TestBlockHashBody);
-    tcase_add_test(tc, TestNewGenesisBlock);
-    tcase_add_test(tc, TestCreateUnspent);
+    tcase_add_checked_fixture(tc, setup, teardown);
+    // tcase_add_test(tc, TestNewBlock);
+    // tcase_add_test(tc, TestBlockHashHeader);
+    // tcase_add_test(tc, TestBlockHashBody);
+    // tcase_add_test(tc, TestNewGenesisBlock);
+    // tcase_add_test(tc, TestCreateUnspent);
     tcase_add_test(tc, TestCreateUnspents);
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 150);

@@ -1,7 +1,6 @@
 
 #include "json.h"
 #include "libskycoin.h"
-#include "libskycoin.h"
 #include "skyassert.h"
 #include "skytypes.h"
 

@@ -2,8 +2,10 @@
 #ifndef SKYTYPES_H
 #define SKYTYPES_H
 
+
+#include <inttypes.h>
 #ifndef __SIZE_TYPE__
-#define __SIZE_TYPE__ unsigned int
+#define __SIZE_TYPE__ uintptr_t
 #endif
 
 /**
@@ -41,12 +43,20 @@ typedef unsigned long long GoUint64_;
 /**
  * Go integer values aligned to the word size of the underlying architecture.
  */
+#if __x86_64__ || __ppc64__
 typedef GoInt64_ GoInt_;
+#else
+typedef GoInt32_ GoInt_;
+#endif
 /**
  * Go unsigned integer values aligned to the word size of the underlying
  * architecture.
  */
+#if __x86_64__ || __ppc64__
 typedef GoUint64_ GoUint_;
+#else
+typedef GoUint32_ GoUint_;
+#endif
 /**
  * Architecture-dependent type representing instances Go `uintptr` type.
  * Used as a generic representation of pointer types.
@@ -81,12 +91,10 @@ typedef unsigned int error;
   static assertion to make sure the file is being used on architecture
   at least with matching size of GoInt._
 */
-#if __GNUC__
 #if __x86_64__ || __ppc64__
-typedef char _check_for_64_bit_pointer_matchingGoInt[sizeof(void*) == 64 / 8 ? 1 : -1];
+typedef char
+    _check_for_64_bit_pointer_matchingGoInt[sizeof(void*) == 64 / 8 ? 1 : -1];
 #endif
-#endif
-
 
 /**
  * Instances of Go `string` type.
@@ -115,58 +123,57 @@ typedef GoInt64_ Handle;
 
 /**
  * Webrpc Client Handle
-*/
+ */
 typedef Handle WebRpcClient__Handle;
 
 /**
  * Wallet Handle
-*/
+ */
 typedef Handle Wallet__Handle;
 
 /**
  * ReadableWallet Handle
-*/
+ */
 typedef Handle ReadableWallet__Handle;
 
 /**
  * ReadableEntry Handle
-*/
+ */
 typedef Handle ReadableEntry__Handle;
 
 /**
  * Options Handle
-*/
+ */
 typedef Handle Options__Handle;
-
 
 /**
  * Config Handle
-*/
+ */
 typedef Handle Config__Handle;
 
 /**
  * CLI Handle
-*/
+ */
 typedef Handle CLI__Handle;
 
 /**
  * API Client Handle
-*/
+ */
 typedef Handle Client__Handle;
 
 /**
  * Wallet Response Handle
-*/
+ */
 typedef Handle WalletResponse__Handle;
 
 /**
  * Create Transaction Request Handle
-*/
+ */
 typedef Handle CreateTransactionRequest__Handle;
 
 /**
  * String Slice Handle
-*/
+ */
 typedef Handle Strings__Handle;
 
 /**
@@ -176,7 +183,7 @@ typedef Handle GoStringMap_;
 
 /**
  * Wallets Handle, slice of Wallet
-*/
+ */
 typedef Handle Wallets__Handle;
 
 /**
@@ -192,8 +199,7 @@ typedef Handle CreateTransactionParams__Handle;
 /**
  * Instances of Go interface types.
  */
-typedef struct
-{
+typedef struct {
     void* t; ///< Pointer to the information of the concrete Go type
              ///< bound to this interface reference.
     void* v; ///< Pointer to the data corresponding to the value
@@ -216,7 +222,7 @@ typedef struct {
 } Number;
 
 typedef struct {
-    //TODO: stdevEclipse Define Signature
+    // TODO: stdevEclipse Define Signature
     Number R;
     Number S;
 } Signature;
@@ -227,8 +233,10 @@ typedef struct {
  * Internal representation of a Skycoin wallet.
  */
 typedef struct {
-    GoMap_ Meta;      ///< Records items that are not deterministic, like filename, lable, wallet type, secrets, etc.
-    GoSlice_ Entries; ///< Entries field stores the address entries that are deterministically generated from seed.
+    GoMap_ Meta;      ///< Records items that are not deterministic, like filename,
+                      ///< lable, wallet type, secrets, etc.
+    GoSlice_ Entries; ///< Entries field stores the address entries that are
+                      ///< deterministically generated from seed.
 } Wallet;
 
 typedef GoUint8_ poly1305__Mac[16];
@@ -253,7 +261,7 @@ typedef Handle Wallet__Handle;
 
 /**
  * Memory handle Options Handle
-*/
+ */
 typedef Handle Options__Handle;
 
 /**
@@ -306,11 +314,14 @@ typedef Handle SignedBlock__Handle;
 typedef Handle BlockBody__Handle;
 
 /**
+ * Memory handle to access to coin.BlockHeader
+ */
+typedef Handle BlockHeader__Handle;
+/**
  * Memory handle to access to cli.BalanceResult
  */
 
 typedef Handle BalanceResult_Handle;
-
 
 /**
  * Memory handle to access to api.SpendResult
@@ -333,7 +344,6 @@ typedef Handle SortableTransactionResult_Handle;
 /**
  * Memory handle to access to wallet.Notes
  */
-
 
 /**
  * Memory handle to access to wallet.ReadableNotes
@@ -366,7 +376,8 @@ typedef Handle AddressUxOuts_Handle;
 typedef Handle BuildInfo_Handle;
 
 /**
- * Memory handle to access to readable.UnspentOutputsSummary (UnspentOutputsSummary)
+ * Memory handle to access to readable.UnspentOutputsSummary
+ * (UnspentOutputsSummary)
  */
 
 typedef Handle ReadableUnspentOutputsSummary_Handle;
@@ -378,14 +389,14 @@ typedef Handle ReadableUnspentOutputsSummary_Handle;
 typedef Handle Hash_Handle;
 
 /**
-* Handle for Number type
-*/
+ * Handle for Number type
+ */
 
 typedef Handle Number_Handle;
 
 /**
-* Handle for Signature type
-*/
+ * Handle for Signature type
+ */
 
 typedef Handle Signature_Handle;
 /**

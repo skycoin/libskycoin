@@ -71,11 +71,12 @@ func SKY_coin_SignedBlock_VerifySignature(_b *C.coin__SignedBlock, _pubkey *C.ci
 //export SKY_coin_NewGenesisBlock
 func SKY_coin_NewGenesisBlock(_genesisAddr *C.cipher__Address, _genesisCoins, _timestamp uint64, _arg2 *C.Block__Handle) (____error_code uint32) {
 	genesisAddr := *(*cipher.Address)(unsafe.Pointer(_genesisAddr))
-	genesisCoins := _genesisCoins
-	timestamp := _timestamp
+	genesisCoins := uint64(_genesisCoins)
+	timestamp := uint64(_timestamp)
 	__arg2, ____return_err := coin.NewGenesisBlock(genesisAddr, genesisCoins, timestamp)
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {
+		__arg2.Head.Time = timestamp
 		*_arg2 = registerBlockHandle(__arg2)
 	}
 	return
@@ -186,8 +187,8 @@ func SKY_coin_Block_GetTransaction(_b C.Block__Handle, _txHash *C.cipher__SHA256
 func SKY_coin_NewBlockHeader(_prev *C.coin__BlockHeader, _uxHash *C.cipher__SHA256, _currentTime, _fee uint64, _body C.BlockBody__Handle, _arg4 *C.coin__BlockHeader) (____error_code uint32) {
 	prev := *(*coin.BlockHeader)(unsafe.Pointer(_prev))
 	uxHash := *(*cipher.SHA256)(unsafe.Pointer(_uxHash))
-	currentTime := _currentTime
-	fee := _fee
+	currentTime := uint64(_currentTime)
+	fee := uint64(_fee)
 	body, ok := lookupBlockBodyHandle(_body)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE
@@ -264,6 +265,9 @@ func SKY_coin_BlockBody_Bytes(_bb C.BlockBody__Handle, _arg0 *C.GoSlice_) (____e
 //export SKY_coin_CreateUnspents
 func SKY_coin_CreateUnspents(_bh *C.coin__BlockHeader, _tx C.Transaction__Handle, _arg2 *C.coin__UxArray) (____error_code uint32) {
 	bh := *(*coin.BlockHeader)(unsafe.Pointer(_bh))
+	bh.Time = uint64(_bh.Time)
+	bh.BkSeq = uint64(_bh.BkSeq)
+	bh.Fee = uint64(_bh.Fee)
 	tx, ok := lookupTransactionHandle(_tx)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE
@@ -277,6 +281,8 @@ func SKY_coin_CreateUnspents(_bh *C.coin__BlockHeader, _tx C.Transaction__Handle
 //export SKY_coin_CreateUnspent
 func SKY_coin_CreateUnspent(_bh *C.coin__BlockHeader, _tx C.Transaction__Handle, _outIndex int, _arg3 *C.coin__UxOut) (____error_code uint32) {
 	bh := *(*coin.BlockHeader)(unsafe.Pointer(_bh))
+	bh.Time = uint64(_bh.Time)
+	bh.BkSeq = uint64(_bh.BkSeq)
 	tx, ok := lookupTransactionHandle(_tx)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE
@@ -334,5 +340,83 @@ func SKY_coin_NewEmptyBlock(_txns C.Transactions__Handle, handle *C.Block__Handl
 			BodyHash: body.Hash(),
 		}}
 	*handle = registerBlockHandle(&block)
+	return
+}
+
+//export SKY_coin_Block_GetBlockHeader
+func SKY_coin_Block_GetBlockHeader(_b C.Block__Handle, _bh *C.BlockHeader__Handle) (____error_code uint32) {
+	b, ok := lookupBlockHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_bh = registerBlockHeaderHandle(&b.Head)
+	}
+	return
+}
+
+//export SKY_coin_GetBlockHeaderObject
+func SKY_coin_GetBlockHeaderObject(_b C.BlockHeader__Handle, _p **C.coin__BlockHeader) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_p = (*C.coin__BlockHeader)(unsafe.Pointer(b))
+	}
+	return
+}
+
+//export SKY_coin_BlockHeader_Time
+func SKY_coin_BlockHeader_Time(_b C.BlockHeader__Handle, _arg0 *uint64) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_arg0 = uint64(b.Time)
+	}
+	return
+}
+
+//export SKY_coin_BlockHeader_BkSeq
+func SKY_coin_BlockHeader_BkSeq(_b C.BlockHeader__Handle, _arg0 *uint64) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_arg0 = uint64(b.BkSeq)
+	}
+	return
+}
+
+//export SKY_coin_BlockHeader_UxHash
+func SKY_coin_BlockHeader_UxHash(_b C.BlockHeader__Handle, _arg0 *C.cipher__SHA256) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_arg0 = *(*C.cipher__SHA256)(unsafe.Pointer(&b.UxHash))
+	}
+	return
+}
+
+//export SKY_coin_BlockHeader_Fee
+func SKY_coin_BlockHeader_Fee(_b C.BlockHeader__Handle, _arg0 *uint64) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_arg0 = uint64(b.Fee)
+	}
+	return
+}
+
+//export SKY_coin_BlockBody_Transactions
+func SKY_coin_BlockBody_Transactions(_bb C.BlockBody__Handle, _arg0 *C.Transactions__Handle) (____error_code uint32) {
+	bb, ok := lookupBlockBodyHandle(_bb)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	__arg0 := bb.Transactions
+	*_arg0 = registerTransactionsHandle(&__arg0)
 	return
 }
