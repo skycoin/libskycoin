@@ -144,8 +144,8 @@ install:
   - if [[ -z "$QEMU_PLATFORM" ]]; then make install-deps-libc ; fi
 
 script:
+  - echo $PWD
   - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
-  - if [[ "QEMU_PLATFORM" ]]; then echo $PWD ; fi
   - if [[ "$QEMU_PLATFORM" ]]; then docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS --file docker/images/test-arm/Dockerfile  . -t skydev-test ; fi
 
 notifications:

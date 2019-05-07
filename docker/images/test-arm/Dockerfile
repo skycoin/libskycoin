@@ -1,7 +1,6 @@
 ARG QEMU_OS
 ARG QEMU_PLATFORM
 FROM balenalib/${QEMU_PLATFORM}-${QEMU_OS}-golang
-ARG QEMU_OS
 
 ADD . $GOPATH/src/github.com/skycoin/libskycoin/
 
