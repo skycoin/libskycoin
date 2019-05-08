@@ -144,13 +144,14 @@ START_TEST(TestBlockHashHeader)
     result = SKY_coin_GetBlockObject(block, &pBlock);
     ck_assert_msg(result == SKY_OK, "SKY_coin_GetBlockObject failed, block handle : %d", block);
 
-    cipher__SHA256 hash1, hash2;
+    cipher__SHA256 hash1 = "";
+    cipher__SHA256 hash2 = "";
     result = SKY_coin_Block_HashHeader(block, &hash1);
     ck_assert_msg(result == SKY_OK, "SKY_coin_Block_HashHeader failed");
     result = SKY_coin_BlockHeader_Hash(&pBlock->Head, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_Hash failed");
     ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
-    memset(&hash2, 0, sizeof(cipher__SHA256));
+    strcpy(hash2,"");
     ck_assert(!isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
 }
 END_TEST
