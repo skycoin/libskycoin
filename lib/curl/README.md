@@ -61,5 +61,5 @@ Note: You dont need to specify includes for models and include folder seperately
 
 ## Author
 
-contact@skycoin.com
+contact@skycoin.net
 
