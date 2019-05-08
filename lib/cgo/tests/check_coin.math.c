@@ -67,6 +67,7 @@ Suite* coin_math(void)
     TCase* tc;
 
     tc = tcase_create("coin.math");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestAddUint64);
     tcase_add_test(tc, TestUint64ToInt64);
     suite_add_tcase(s, tc);

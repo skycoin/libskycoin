@@ -263,7 +263,7 @@ START_TEST(TestSecKeyFromHex)
 
     // Invalid hex length
     GoSlice b = {buff, 0, 50};
-    SKY_cipher_RandByte(32, &b);
+    randBytes(&b, 32);
     cipher__SecKey p;
     err = SKY_cipher_NewSecKey(b, &p);
     ck_assert(err == SKY_OK);
@@ -857,6 +857,7 @@ Suite* cipher_crypto(void)
     TCase* tc;
 
     tc = tcase_create("cipher.crypto");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestNewPubKey);
     tcase_add_test(tc, TestPubKeyFromHex);
     tcase_add_test(tc, TestPubKeyHex);

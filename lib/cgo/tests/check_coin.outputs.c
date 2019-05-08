@@ -16,14 +16,15 @@
 
 START_TEST(TestUxBodyHash)
 {
-    int result;
+    GoUint32 result;
     coin__UxBody uxbody;
     result = makeUxBody(&uxbody);
     ck_assert_msg(result == SKY_OK, "makeUxBody failed");
-    cipher__SHA256 hash, nullHash;
+    cipher__SHA256 hash;
+    memset(&hash,0,sizeof(cipher__SHA256));
     result = SKY_coin_UxBody_Hash(&uxbody, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
-    memset(&nullHash, 0, sizeof(cipher__SHA256));
+    cipher__SHA256 nullHash = "";
     ck_assert(!isU8Eq(nullHash, hash, sizeof(cipher__SHA256)));
 }
 END_TEST
@@ -57,7 +58,7 @@ END_TEST
 
 START_TEST(TestUxOutSnapshotHash)
 {
-    int result;
+    GoUint32 result;
     coin__UxOut uxout, uxout2;
     result = makeUxOut(&uxout);
     ck_assert_msg(result == SKY_OK, "makeUxOut failed");
@@ -840,6 +841,7 @@ Suite* coin_output(void)
     TCase* tc;
 
     tc = tcase_create("coin.output");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestUxBodyHash);
     tcase_add_test(tc, TestUxOutHash);
     tcase_add_test(tc, TestUxOutSnapshotHash);

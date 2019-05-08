@@ -236,8 +236,6 @@ func SKY_coin_Transaction_Verify(handle C.Transaction__Handle) (____error_code u
 	}
 	____return_err := txn.Verify()
 	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-	}
 	return
 }
 
@@ -286,8 +284,8 @@ func SKY_coin_Transaction_PushOutput(handle C.Transaction__Handle, _dst *C.ciphe
 		return
 	}
 	dst := *(*cipher.Address)(unsafe.Pointer(_dst))
-	coins := _coins
-	hours := _hours
+	coins := uint64(_coins)
+	hours := uint64(_hours)
 	txn.PushOutput(dst, coins, hours)
 	return
 }
@@ -685,7 +683,7 @@ func SKY_coin_VerifyTransactionCoinsSpending(_uxIn *C.coin__UxArray, _uxOut *C.c
 
 //export SKY_coin_VerifyTransactionHoursSpending
 func SKY_coin_VerifyTransactionHoursSpending(_headTime uint64, _uxIn *C.coin__UxArray, _uxOut *C.coin__UxArray) (____error_code uint32) {
-	headTime := _headTime
+	headTime := uint64(_headTime)
 	uxIn := *(*coin.UxArray)(unsafe.Pointer(_uxIn))
 	uxOut := *(*coin.UxArray)(unsafe.Pointer(_uxOut))
 	____return_err := coin.VerifyTransactionHoursSpending(headTime, uxIn, uxOut)
