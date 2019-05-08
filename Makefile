@@ -150,10 +150,7 @@ install-deps-Darwin: ## Install deps on Mac OSX
 
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
-	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
-	# However, they suggest `curl ... | bash` which we should not do
-	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
+	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.10.2
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
