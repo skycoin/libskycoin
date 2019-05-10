@@ -17,7 +17,6 @@
 #define BUFFER_SIZE 1024
 #define SCRYPTCHACHA20METALENGTHSIZE 2
 
-// TestSuite(cipher_encrypt_scrypt_chacha20poly1305, .init = setup, .fini = teardown);
 
 void parseJsonMetaData(char* metadata, int* n, int* r, int* p, int* keyLen)
 {
@@ -106,12 +105,12 @@ START_TEST(TestScryptChacha20poly1305Encrypt)
 
     GoUint32 errcode;
     unsigned int metalength;
-    encrypt__ScryptChacha20poly1305 encrypt = {1, 8, 1, 32};
+    encrypt__ScryptChacha20poly1305 encrypt = {0, 1 << 0, 1 << 3, 1 << 5};
+    registerMemCleanup(&encrypt);
     int i;
     for (i = 1; i <= 20; i++) {
         unsigned char buffer[BUFFER_SIZE];
-        coin__UxArray result = {buffer, 0, BUFFER_SIZE};
-        memset(&result, 0, sizeof(coin__UxArray));
+        GoSlice_ result = {buffer, 0, BUFFER_SIZE};
         encrypt.N = 1 << i;
         errcode = SKY_encrypt_ScryptChacha20poly1305_Encrypt(&encrypt, text, password, &result);
         ck_assert_msg(errcode == SKY_OK, "SKY_encrypt_ScryptChacha20poly1305_Encrypt failed");
@@ -201,6 +200,7 @@ Suite* cipher_encrypt_scrypt_chacha20poly1305(void)
     TCase* tc;
 
     tc = tcase_create("cipher.encrypt.scrypt.chacha20poly1305");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestScryptChacha20poly1305Encrypt);
     tcase_add_test(tc, TestScryptChacha20poly1305Decrypt);
     suite_add_tcase(s, tc);

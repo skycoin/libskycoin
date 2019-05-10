@@ -1,22 +1,22 @@
 #include "libskycoin.h"
-#include "shared_tests.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
-#include "testutils/criteiun_wrapper_calls.h"
 #include <check.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define SKYCOIN_ADDRESS_VALID "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv"
 
-//TestSuite(cipher_address, .init = setup, .fini = teardown);
+// TestSuite(cipher_address, .init = setup, .fini = teardown);
 //
 // buffer big enough to hold all kind of data needed by test cases
 unsigned char buff[1024];
 //
 START_TEST(TestDecodeBase58Address)
 {
-    GoString strAddr = {
-        SKYCOIN_ADDRESS_VALID,
-        35};
+    GoString strAddr = {SKYCOIN_ADDRESS_VALID, 35};
     cipher__Address addr;
     GoUint32 err = SKY_cipher_DecodeBase58Address(strAddr, &addr);
     ck_assert_int_eq(err, SKY_OK);
@@ -30,9 +30,7 @@ START_TEST(TestDecodeBase58Address)
     strAddr.p = tempStr;
     strAddr.n = strlen(tempStr);
     errorcode = SKY_cipher_DecodeBase58Address(strAddr, &addr);
-    ck_assert_msg(
-        errorcode == SKY_ERROR,
-        "preceding whitespace is invalid");
+    ck_assert_msg(errorcode == SKY_ERROR, "preceding whitespace is invalid");
 
     // preceding zeroes are invalid
     strcpy(tempStr, "000");
@@ -40,9 +38,7 @@ START_TEST(TestDecodeBase58Address)
     strAddr.p = tempStr;
     strAddr.n = strlen(tempStr);
     errorcode = SKY_cipher_DecodeBase58Address(strAddr, &addr);
-    ck_assert_msg(
-        errorcode == SKY_ERROR,
-        "leading zeroes prefix are invalid");
+    ck_assert_msg(errorcode == SKY_ERROR, "leading zeroes prefix are invalid");
 
     // trailing whitespace is invalid
     strcpy(tempStr, SKYCOIN_ADDRESS_VALID);
@@ -50,9 +46,7 @@ START_TEST(TestDecodeBase58Address)
     strAddr.p = tempStr;
     strAddr.n = strlen(tempStr);
     errorcode = SKY_cipher_DecodeBase58Address(strAddr, &addr);
-    ck_assert_msg(
-        errorcode == SKY_ERROR,
-        "trailing whitespace is invalid");
+    ck_assert_msg(errorcode == SKY_ERROR, "trailing whitespace is invalid");
 
     // trailing zeroes are invalid
     strcpy(tempStr, SKYCOIN_ADDRESS_VALID);
@@ -60,9 +54,7 @@ START_TEST(TestDecodeBase58Address)
     strAddr.p = tempStr;
     strAddr.n = strlen(tempStr);
     errorcode = SKY_cipher_DecodeBase58Address(strAddr, &addr);
-    ck_assert_msg(
-        errorcode == SKY_ERROR,
-        "trailing zeroes suffix are invalid");
+    ck_assert_msg(errorcode == SKY_ERROR, "trailing zeroes suffix are invalid");
 
     cipher__PubKey p;
     cipher__SecKey s;
@@ -72,25 +64,35 @@ START_TEST(TestDecodeBase58Address)
     errorcode = SKY_cipher_AddressFromPubKey(&p, &a);
     ck_assert(errorcode == SKY_OK);
     GoSlice b;
-    b.data = buff;
-    b.len = 0;
-    b.cap = sizeof(buff);
-    errorcode = SKY_cipher_Address_Bytes(&addr, &b);
+    coin__UxArray Cub;
+    Cub.data = buff;
+    Cub.len = 0;
+    Cub.cap = sizeof(buff);
+    errorcode = SKY_cipher_Address_Bytes(&addr, &Cub);
     ck_assert_msg(errorcode == SKY_OK, "Fail SKY_cipher_Address_Bytes");
+    b.cap = Cub.cap;
+    b.data = Cub.data;
+    b.len = Cub.len;
+
     int len_b = b.len;
     char bufferHead[1024];
-    GoString h = {bufferHead, 0};
+    GoString_ h = {bufferHead, 0};
     b.len = (GoInt)(len_b / 2);
     errorcode = SKY_base58_Hex2Base58(b, &h);
     ck_assert(errorcode == SKY_OK);
-    errorcode = SKY_cipher_DecodeBase58Address(h, &addr);
-    ck_assert_msg(errorcode == SKY_ErrAddressInvalidLength, "Fail %X", err);
-
+    char bufferHeadTmp[1024];
+    GoString tmph = {bufferHeadTmp, 0};
+    tmph.n = h.n;
+    tmph.p = h.p;
+    errorcode = SKY_cipher_DecodeBase58Address(tmph, &addr);
+    ck_assert_msg(errorcode == SKY_ErrAddressInvalidLength, "Fail %X", errorcode);
     b.len = len_b;
     errorcode = SKY_base58_Hex2Base58(b, &h);
     ck_assert(errorcode == SKY_OK);
-    errorcode = SKY_cipher_DecodeBase58Address(h, &addr);
-    ck_assert(errorcode == SKY_OK);
+    tmph.n = h.n;
+    tmph.p = h.p;
+    errorcode = SKY_cipher_DecodeBase58Address(tmph, &addr);
+    ck_assert_msg(errorcode == SKY_OK, "Fail %X", errorcode);
 }
 END_TEST
 
@@ -121,16 +123,21 @@ START_TEST(TestAddressFromBytes)
     int bytes_len = bytes.len;
 
     bytes.len = bytes.len - 2;
-    ck_assert_msg(SKY_cipher_AddressFromBytes(bytes, &addr2) == SKY_ErrAddressInvalidLength, "no SKY address due to short bytes length");
+    ck_assert_msg(SKY_cipher_AddressFromBytes(bytes, &addr2) ==
+                      SKY_ErrAddressInvalidLength,
+        "no SKY address due to short bytes length");
 
     bytes.len = bytes_len;
     ((char*)bytes.data)[bytes.len - 1] = '2';
-    ck_assert_msg(SKY_cipher_AddressFromBytes(bytes, &addr2) == SKY_ErrAddressInvalidChecksum, "no SKY address due to corrupted bytes");
+    err = SKY_cipher_AddressFromBytes(bytes, &addr2);
+    ck_assert_msg(err == SKY_ErrAddressInvalidChecksum,
+        "no SKY address due to corrupted bytes %X", err);
 
     addr.Version = 2;
     SKY_cipher_Address_Bytes(&addr, &tempBytes);
     copyGoSlice_toGoSlice(&bytes, &tempBytes, tempBytes.len);
-    ck_assert_msg(SKY_cipher_AddressFromBytes(bytes, &addr2) == SKY_ErrAddressInvalidVersion, "Invalid version");
+    err = SKY_cipher_AddressFromBytes(bytes, &addr2);
+    ck_assert_msg(err == SKY_ErrAddressInvalidVersion, "Invalid version");
 }
 END_TEST
 
@@ -146,15 +153,20 @@ START_TEST(TestAddressVerify)
     SKY_cipher_AddressFromPubKey(&pubkey, &addr);
 
     // Valid pubkey+address
-    ck_assert_msg(SKY_cipher_Address_Verify(&addr, &pubkey) == SKY_OK, "Valid pubkey + address");
+    ck_assert_msg(SKY_cipher_Address_Verify(&addr, &pubkey) == SKY_OK,
+        "Valid pubkey + address");
 
     SKY_cipher_GenerateKeyPair(&pubkey, &seckey2);
     // Invalid pubkey
-    ck_assert_msg(SKY_cipher_Address_Verify(&addr, &pubkey) == SKY_ErrAddressInvalidPubKey, " Invalid pubkey");
+    ck_assert_msg(SKY_cipher_Address_Verify(&addr, &pubkey) ==
+                      SKY_ErrAddressInvalidPubKey,
+        " Invalid pubkey");
 
     // Bad version
     addr.Version = 0x01;
-    ck_assert_msg(SKY_cipher_Address_Verify(&addr, &pubkey) == SKY_ErrAddressInvalidVersion, "  Bad version");
+    ck_assert_msg(SKY_cipher_Address_Verify(&addr, &pubkey) ==
+                      SKY_ErrAddressInvalidVersion,
+        "  Bad version");
 }
 END_TEST
 
@@ -248,6 +260,7 @@ Suite* cipher_address(void)
     TCase* tc;
 
     tc = tcase_create("cipher.address");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestDecodeBase58Address);
     tcase_add_test(tc, TestAddressFromBytes);
     tcase_add_test(tc, TestAddressVerify);

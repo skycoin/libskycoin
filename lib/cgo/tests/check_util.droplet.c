@@ -205,7 +205,7 @@ START_TEST(TestToString)
         {.s = {"0.000999", 8}, .n = 999, .e = SKY_OK},
         {.s = {"999.000000", 10}, .n = 999000000, .e = SKY_OK},
         {.s = {"123.000456", 10}, .n = 123000456, .e = SKY_OK},
-        {.s = {bufferNull, 0}, .n = 9223372036854775808, .e = SKY_ErrTooLarge},
+        {.s = {bufferNull, 0}, .n = 9223372036854775808U, .e = SKY_ErrTooLarge},
     };
     int len = (sizeof(cases) / sizeof(tmpstruct));
 
@@ -232,6 +232,7 @@ Suite* util_droplet(void)
     TCase* tc;
 
     tc = tcase_create("util.droplet");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestFromString);
     tcase_add_test(tc, TestToString);
     suite_add_tcase(s, tc);

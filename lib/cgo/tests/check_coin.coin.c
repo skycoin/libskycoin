@@ -102,6 +102,7 @@ Suite* coin_coin(void)
     TCase* tc;
 
     tc = tcase_create("coin.coin");
+    tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestAddress1);
     tcase_add_test(tc, TestAddress2);
     tcase_add_test(tc, TestCrypto1);
