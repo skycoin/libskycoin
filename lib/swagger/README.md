@@ -17,4 +17,4 @@ In order to generate a client library for a particular programming language, jus
 $ openapi-generator generate -g <supported_Language> --additional-properties=prependFormOrBodyParameters=true -o /path/to/client -i ./lib/swagger/swagger.yml
 ```
 
-For further details in this [Open Api Valid Languagues]( https://openapi-generator.tech/docs/generators)
+For further details consult [OpenApi languague support matrix]( https://openapi-generator.tech/docs/generators)
