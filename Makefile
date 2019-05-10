@@ -152,6 +152,13 @@ install-deps-Linux: ## Install deps on GNU/Linux
 install-deps-Darwin: ## Install deps on Mac OSX
 	brew install $(PKG_LIB_TEST)
 
+install-libraries-deps: ## Install deps on GNU/Linux
+	if [[ "$(UNAME_S)" == "Linux" ]]; then (cd deps && wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz && echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt && md5sum -c cmake_md5.txt && tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null && mv cmake-3.3.2-Linux-x86_64 cmake-install && PATH=$(pwd)/deps/cmake-install:$(pwd)/deps/cmake-install/bin:$PATH ) ; fi
+	(cd build && sudo apt remove curl && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && bash ./configure && make && sudo make install)
+	# install uncrustify
+	(cd build && git clone https://github.com/uncrustify/uncrustify.git)
+	(cd build/uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
+
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
@@ -159,12 +166,21 @@ install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
 
-install-deps-libc: install-deps-libc-$(OSNAME)
+install-deps-libc: install-deps-libc-$(OSNAME) install-libraries-deps
 
 install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
 	tar -xzf check-0.12.0.tar.gz
 	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
+
+install-lib-curl: ## Install Sky Api curl based rest wrapper
+	cd lib/curl
+	mkdir build
+	cd build
+	cmake ..
+	make
+	sudo make install
+	cd ../..
 
 install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
