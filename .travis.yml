@@ -144,7 +144,7 @@ install:
   - if [[ -z "$QEMU_PLATFORM" ]]; then make install-linters ; fi
   - if [[ -z "$QEMU_PLATFORM" ]]; then VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh ; fi
   - if [[ -z "$QEMU_PLATFORM" ]]; then make install-deps-libc ; fi
-  - if [[ -z "$QEMU_PLATFORM" ]]; then install-lib-curl ; fi
+  - if [[ -z "$QEMU_PLATFORM" ]]; then make install-lib-curl ; fi
 
 script:
   - echo $PWD
