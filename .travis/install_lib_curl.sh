@@ -1,6 +1,6 @@
 cd lib/curl
 
-mkdir build
+mkdir -p build
 cd build
 # for normal install use following command
 cmake ..
