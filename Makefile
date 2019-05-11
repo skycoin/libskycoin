@@ -176,7 +176,7 @@ install-deps-libc-linux: configure-build ## Install locally dependencies for tes
 
 install-lib-curl: ## Install Sky Api curl based rest wrapper
 	mkdir -p lib/curl/build
-	(cd lib/curl/build && cmake .. -DCMAKE_CC_COMPILER=gcc && make && sudo make install)
+	(cd lib/curl/build && cmake .. -DCMAKE_C_COMPILER=gcc && make && sudo make install)
 
 install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
