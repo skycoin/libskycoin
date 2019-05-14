@@ -150,7 +150,7 @@ install-deps-Darwin: ## Install deps on Mac OSX
 
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
-	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(go env GOPATH)/bin v1.10.2
+	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(GOPATH)/bin v1.10.2
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
