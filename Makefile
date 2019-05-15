@@ -118,6 +118,7 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 docs-libc:
 	doxygen ./.Doxyfile
 	moxygen -o $(LIBDOC_DIR)/API.md $(LIBDOC_DIR)/xml/
+	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o docs/libc/curl
 
 docs: docs-libc
 

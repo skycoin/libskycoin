@@ -146,7 +146,10 @@ Follow these steps to generate API documentation.
 
 - Install `doxygen` like so: `sudo apt-get install doxygen`
 - Install `moxygen` like so: `npm install moxygen -g`
+- Install `openapi-generator` like so: `npm install openapi-generator -g`
 - At the project top-level folder invoke `make docs-libc` (libskycoin docs only) or `make docs` (all docs).
+
+`doxygen` and `moxygen` generate documentation for cryptographic API, meanwhile `openapi-generator` is used to generate documentation for Skycoin REST API wrapper.
 
 Both `doxygen` and `moxygen` are pre-installed in [`skycoin/skycoindev-cli:develop`](https://hub.docker.com/r/skycoin/skycoindev-cli) Docker image.
 
