@@ -46,8 +46,7 @@ func SKY_cipher_AddressFromPubKey(_pubKey *C.cipher__PubKey, _arg1 *C.cipher__Ad
 
 //export SKY_cipher_AddressFromSecKey
 func SKY_cipher_AddressFromSecKey(_secKey *C.cipher__SecKey, _arg1 *C.cipher__Address) (____error_code uint32) {
-	var secKey cipher.SecKey
-	secKey = *(*cipher.SecKey)(unsafe.Pointer(_secKey))
+	secKey := *(*cipher.SecKey)(unsafe.Pointer(_secKey))
 	addr, err := cipher.AddressFromSecKey(secKey)
 	____error_code = libErrorCode(err)
 	if err == nil {

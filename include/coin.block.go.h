@@ -1,4 +1,4 @@
-typedef struct{
+typedef struct {
     GoUint32_ Version;
     GoUint64_ Time;
     GoUint64_ BkSeq;
@@ -7,15 +7,15 @@ typedef struct{
     cipher__SHA256 BodyHash;
     cipher__SHA256 UxHash;
 } coin__BlockHeader;
-typedef struct{
+typedef struct {
     coin__Transactions Transactions;
 } coin__BlockBody;
-typedef struct{
+typedef struct {
     coin__BlockHeader Head;
     coin__BlockBody Body;
 } coin__Block;
 
-typedef struct{
+typedef struct {
     coin__Block _unnamed;
     cipher__Sig Sig;
 } coin__SignedBlock;

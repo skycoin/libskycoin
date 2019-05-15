@@ -7,7 +7,8 @@
 #include "json.h"
 #include "skytypes.h"
 #include "skytest.h"
-
+#include "skyerrors.h"
+#include "libskycoin.h"
 #define BUFFER_SIZE 1024
 #define stableWalletName "integration-test.wlt"
 #define STRING_SIZE 128
@@ -186,7 +187,7 @@ void cleanupMem() {
   void **ptr;
   for (i = MEMPOOLIDX, ptr = MEMPOOL; i; --i) {
   if( *ptr )
-    free(*ptr);
+    memset(ptr, 0, sizeof(void *));
   ptr++;
   }
   for (i = JSONPOOLIDX, ptr = (void*)JSON_POOL; i; --i) {
@@ -234,10 +235,7 @@ json_value* loadJsonFile(const char* filename){
   return value;
 }
 
-
-void setup(void) {
-  srand ((unsigned int) time (NULL));
-}
+void setup(void) { srand(time(NULL)); }
 
 void teardown(void) {
   cleanupMem();
@@ -266,6 +264,18 @@ int parseBoolean(const char* str, int length){
 }
 
 int copySlice(GoSlice_* pdest, GoSlice_* psource, int elem_size){
+  pdest->len = psource->len;
+  pdest->cap = psource->len;
+  int size = pdest->len * elem_size;
+  pdest->data = malloc(size);
+  if( pdest->data == NULL )
+    return SKY_ERROR;
+  registerMemCleanup( pdest->data );
+  memcpy(pdest->data, psource->data, size );
+  return SKY_OK;
+}
+
+int copyGoSlice_toGoSlice(GoSlice* pdest, GoSlice_* psource, int elem_size){
   pdest->len = psource->len;
   pdest->cap = psource->len;
   int size = pdest->len * elem_size;
@@ -317,4 +327,3 @@ int concatSlices(GoSlice_* slice1, GoSlice_* slice2, int elem_size, GoSlice_* re
   }
   return SKY_OK;
 }
-

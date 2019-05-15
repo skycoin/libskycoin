@@ -1,19 +1,128 @@
 sudo: required
-dist: trusty
+services:
+  - docker
 language: go
 go:
   - "1.11.x"
-
+  
 matrix:
   include:
     - os: linux
-      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
+      dist: xenial
+    - os: linux
+      env:
+        - QEMU_PLATFORM=orangepi-plus2
+        - QEMU_OS=ubuntu
+    - os: linux
+      env:
+        - QEMU_PLATFORM=orangepi-plus2
+        - QEMU_OS=debian
+    - os: linux
+      env:
+        - QEMU_PLATFORM=orangepi-plus2
+        - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberry-pi2
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberry-pi2
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberry-pi2
+    #     - QEMU_OS=fedora
+    - os: linux
+      env:
+        - QEMU_PLATFORM=raspberrypi3
+        - QEMU_OS=ubuntu
+    - os: linux
+      env:
+        - QEMU_PLATFORM=raspberrypi3
+        - QEMU_OS=debian
+    - os: linux
+      env:
+        - QEMU_PLATFORM=raspberrypi3
+        - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=beaglebone-black
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=beaglebone-black
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=beaglebone-black
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=asus-tinker-board
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=asus-tinker-board
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=asus-tinker-board
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=bananapi-m1-plus
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=bananapi-m1-plus
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=bananapi-m1-plus
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-c1
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-c1
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-c1
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=fedora
     - os: osx
-      osx_image: xcode8
-      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
+      osx_image: xcode8.3
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
+  - ./ci-scripts/install-travis-gcc.sh
   - eval "CC=gcc-6 && CXX=g++-6"
 
 env:
@@ -21,27 +130,27 @@ env:
     - BUILD_DIR: build
     - BUILDLIB_DIR: $BUILD_DIR/libskycoin
     - LIB_DIR: lib
+    - CGO_ENABLED: 1
+    - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 60s
+    - PATH_DIR: $GOPATH/src/github.com/skycoin/libskycoin/
+
 
 install:
   # Install gox
-  - go get github.com/gz-c/gox
-  - go get -t ./...
-  - make install-linters
-  # Install pinned golangci-lint, overriding the latest version install by make install-linters
-  - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
-  - ./ci-scripts/install-travis-gcc.sh
-  - make install-deps-libc
+  - if [[ -z "$QEMU_PLATFORM" ]]; then go get github.com/gz-c/gox; fi
+  - if [[ -z "$QEMU_PLATFORM" ]]; then go get -t ./... ; fi
+  - if [[ -z "$QEMU_PLATFORM" ]]; then make install-linters ; fi
+  - if [[ -z "$QEMU_PLATFORM" ]]; then VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh ; fi
+  - if [[ -z "$QEMU_PLATFORM" ]]; then make install-deps-libc ; fi
   - make install-swagger
 
 script:
-  - make lint
-  # libskycoin tests
-  - CC=gcc-6 make test-libc
+  - echo $PWD
+  - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
+  - if [[ "$QEMU_PLATFORM" ]]; then docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS --file docker/images/test-arm/Dockerfile  . -t skydev-test ; fi
   - make generate-swagger-spec
   - make check-swagger
 
 notifications:
-  email:
-    - false
-  # https://github.com/kvld/travisci-telegram TravisCI Telegram Bot integration
+  email: false
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
