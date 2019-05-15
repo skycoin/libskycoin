@@ -26,34 +26,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Response for endpoint /api/v1/address_uxouts
-          schema:
-            items:
-              properties:
-                coins:
-                  format: integer
-                  type: integer
-                hours:
-                  format: int64
-                  type: integer
-                owner_address:
-                  type: string
-                spent_block_seq:
-                  format: in64
-                  type: integer
-                spent_tx:
-                  type: string
-                src_block_seq:
-                  format: int64
-                  type: integer
-                src_tx:
-                  type: string
-                time:
-                  format: int64
-                  type: integer
-                uxid:
-                  type: string
-            type: array
+          $ref: '#/responses/address_uxoutsResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/addresscount:
@@ -63,13 +36,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint Returns the total number of unique address that
-            have coins.
-          schema:
-            properties:
-              count:
-                format: int64
-                type: integer
+          $ref: '#/responses/addressCountResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns the total number of unique address that have coins.
@@ -86,38 +53,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns the balance of one or more addresses
-          schema:
-            properties:
-              addresses:
-                additionalProperties:
-                  properties:
-                    coins:
-                      format: int64
-                      type: integer
-                    hours:
-                      format: int64
-                      type: integer
-                  type: object
-                type: object
-              confirmed:
-                properties:
-                  coins:
-                    format: int64
-                    type: integer
-                  hours:
-                    format: int64
-                    type: integer
-                type: object
-              predicted:
-                properties:
-                  coins:
-                    format: int64
-                    type: integer
-                  hours:
-                    format: int64
-                    type: integer
-                type: object
+          $ref: '#/responses/balanceResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns the balance of one or more addresses, both confirmed and predicted.
@@ -134,38 +70,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns the balance of one or more addresses
-          schema:
-            properties:
-              addresses:
-                additionalProperties:
-                  properties:
-                    coins:
-                      format: int64
-                      type: integer
-                    hours:
-                      format: int64
-                      type: integer
-                  type: object
-                type: object
-              confirmed:
-                properties:
-                  coins:
-                    format: int64
-                    type: integer
-                  hours:
-                    format: int64
-                    type: integer
-                type: object
-              predicted:
-                properties:
-                  coins:
-                    format: int64
-                    type: integer
-                  hours:
-                    format: int64
-                    type: integer
-                type: object
+          $ref: '#/responses/balanceResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -188,76 +93,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: BlockVerbose represents a readable block with verbose data.
-          schema:
-            properties:
-              body:
-                properties:
-                  txns:
-                    items:
-                      properties:
-                        inner_hash:
-                          type: string
-                        inputs:
-                          items:
-                            type: string
-                          type: array
-                        length:
-                          format: int32
-                          type: integer
-                        outputs:
-                          items:
-                            properties:
-                              coins:
-                                type: string
-                              dst:
-                                type: string
-                              hours:
-                                format: int64
-                                type: integer
-                              uxid:
-                                type: string
-                          type: array
-                        sigs:
-                          items:
-                            type: string
-                          type: array
-                        timestamp:
-                          format: int64
-                          type: integer
-                        txid:
-                          type: string
-                        type:
-                          format: int32
-                          type: integer
-                    type: array
-                type: object
-              header:
-                properties:
-                  block_hash:
-                    type: string
-                  fee:
-                    format: int32
-                    type: integer
-                  previous_block_hash:
-                    type: string
-                  seq:
-                    format: int32
-                    type: integer
-                  timestamp:
-                    format: int64
-                    type: integer
-                  tx_body_hash:
-                    type: string
-                  ux_hash:
-                    type: string
-                  version:
-                    format: int32
-                    type: integer
-                type: object
-              size:
-                format: int32
-                type: integer
+          $ref: '#/responses/blockResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/blockchain/metadata:
@@ -267,37 +103,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint returns the blockchain metadata.
-          schema:
-            properties:
-              head:
-                properties:
-                  block_hash:
-                    type: string
-                  fee:
-                    format: int64
-                    type: integer
-                  previous_block_hash:
-                    type: string
-                  seq:
-                    type: string
-                  timestamp:
-                    format: int64
-                    type: integer
-                  tx_body_hash:
-                    type: string
-                  ux_hash:
-                    type: string
-                  version:
-                    format: int64
-                    type: integer
-                type: object
-              unconfirmed:
-                format: int64
-                type: integer
-              unspents:
-                format: int64
-                type: integer
+          $ref: '#/responses/blockchainMetadataResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns the blockchain metadata.
@@ -308,24 +114,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint returns the blockchain sync progress
-          schema:
-            properties:
-              current:
-                format: int64
-                type: integer
-              highest:
-                format: int64
-                type: integer
-              peers:
-                items:
-                  properties:
-                    address:
-                      type: string
-                    height:
-                      format: int64
-                      type: integer
-                type: array
+          $ref: '#/responses/blockchainProgressResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns the blockchain sync progress.
@@ -353,80 +142,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns blocks between a start and end point.
-          schema:
-            properties:
-              blocks:
-                items:
-                  properties:
-                    body:
-                      properties:
-                        txns:
-                          items:
-                            properties:
-                              inner_hash:
-                                type: string
-                              inputs:
-                                items:
-                                  type: string
-                                type: array
-                              length:
-                                format: int32
-                                type: integer
-                              outputs:
-                                items:
-                                  properties:
-                                    coins:
-                                      type: string
-                                    dst:
-                                      type: string
-                                    hours:
-                                      format: int64
-                                      type: integer
-                                    uxid:
-                                      type: string
-                                type: array
-                              sigs:
-                                items:
-                                  type: string
-                                type: array
-                              timestamp:
-                                format: int32
-                                type: integer
-                              txid:
-                                type: string
-                              type:
-                                format: int32
-                                type: integer
-                          type: array
-                      type: object
-                    header:
-                      properties:
-                        block_hash:
-                          type: string
-                        fee:
-                          format: int64
-                          type: integer
-                        previous_block_hash:
-                          type: string
-                        seq:
-                          format: int64
-                          type: integer
-                        timestamp:
-                          format: int64
-                          type: integer
-                        tx_body_hash:
-                          type: string
-                        ux_hash:
-                          type: string
-                        version:
-                          format: int32
-                          type: integer
-                      type: object
-                    size:
-                      format: int32
-                      type: integer
-                type: array
+          $ref: '#/responses/blocksResponse'
         default:
           $ref: '#/responses/genericError'
       summary: blocksHandler returns blocks between a start and end point,
@@ -453,80 +169,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns blocks between a start and end point.
-          schema:
-            properties:
-              blocks:
-                items:
-                  properties:
-                    body:
-                      properties:
-                        txns:
-                          items:
-                            properties:
-                              inner_hash:
-                                type: string
-                              inputs:
-                                items:
-                                  type: string
-                                type: array
-                              length:
-                                format: int32
-                                type: integer
-                              outputs:
-                                items:
-                                  properties:
-                                    coins:
-                                      type: string
-                                    dst:
-                                      type: string
-                                    hours:
-                                      format: int64
-                                      type: integer
-                                    uxid:
-                                      type: string
-                                type: array
-                              sigs:
-                                items:
-                                  type: string
-                                type: array
-                              timestamp:
-                                format: int32
-                                type: integer
-                              txid:
-                                type: string
-                              type:
-                                format: int32
-                                type: integer
-                          type: array
-                      type: object
-                    header:
-                      properties:
-                        block_hash:
-                          type: string
-                        fee:
-                          format: int64
-                          type: integer
-                        previous_block_hash:
-                          type: string
-                        seq:
-                          format: int64
-                          type: integer
-                        timestamp:
-                          format: int64
-                          type: integer
-                        tx_body_hash:
-                          type: string
-                        ux_hash:
-                          type: string
-                        version:
-                          format: int32
-                          type: integer
-                      type: object
-                    size:
-                      format: int32
-                      type: integer
-                type: array
+          $ref: '#/responses/blocksResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -553,12 +196,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Return a csrf Token.
-          schema:
-            properties:
-              csrf_token:
-                type: string
-            type: object
+          $ref: '#/responses/csrfResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Creates a new CSRF token. Previous CSRF tokens are invalidated by this
@@ -576,73 +214,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Response for endpoint /api/v1/explorer/address
-          schema:
-            items:
-              properties:
-                fee:
-                  format: in64
-                  type: integer
-                inner_hash:
-                  type: string
-                inputs:
-                  items:
-                    properties:
-                      calculated_hours:
-                        format: int64
-                        type: integer
-                      coins:
-                        type: string
-                      hours:
-                        format: int64
-                        type: integer
-                      owner:
-                        type: string
-                      uxid:
-                        type: string
-                  type: array
-                length:
-                  format: int64
-                  type: integer
-                outputs:
-                  items:
-                    properties:
-                      coins:
-                        type: string
-                      dst:
-                        type: string
-                      hours:
-                        format: int64
-                        type: integer
-                      uxid:
-                        type: string
-                  type: array
-                sigs:
-                  items:
-                    type: string
-                  type: array
-                status:
-                  properties:
-                    block_seq:
-                      format: int64
-                      type: integer
-                    confirmed:
-                      type: boolean
-                    label:
-                      format: int64
-                      type: integer
-                    unconfirmed:
-                      type: boolean
-                  type: object
-                timestamp:
-                  format: integer
-                  type: integer
-                txid:
-                  type: string
-                type:
-                  format: in64
-                  type: integer
-            type: array
+          $ref: '#/responses/explorerAddressResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/health:
@@ -652,106 +224,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint returns node health data.
-          schema:
-            properties:
-              blockchain:
-                properties:
-                  head:
-                    properties:
-                      block_hash:
-                        type: string
-                      fee:
-                        format: int64
-                        type: integer
-                      previous_block_hash:
-                        type: string
-                      seq:
-                        format: int64
-                        type: integer
-                      timestamp:
-                        format: int64
-                        type: integer
-                      tx_body_hash:
-                        type: string
-                      ux_hash:
-                        type: string
-                      version:
-                        format: int64
-                        type: integer
-                    type: object
-                  time_since_last_block:
-                    type: string
-                  unconfirmed:
-                    format: int64
-                    type: integer
-                  unspents:
-                    format: int64
-                    type: integer
-                type: object
-              coin:
-                type: string
-              csp_enabled:
-                type: boolean
-              csrf_enabled:
-                type: boolean
-              gui_enabled:
-                type: boolean
-              incoming_connections:
-                format: int64
-                type: integer
-              json_rpc_enabled:
-                type: boolean
-              open_connections:
-                format: int64
-                type: integer
-              outgoing_connections:
-                format: int64
-                type: integer
-              started_at:
-                format: int64
-                type: integer
-              unconfirmed_verify_transaction:
-                properties:
-                  burn_factor:
-                    format: int64
-                    type: integer
-                  max_decimal:
-                    format: int64
-                    type: integer
-                  max_transaction_size:
-                    format: int64
-                    type: integer
-                type: object
-              unversioned_api_enabled:
-                type: boolean
-              uptime:
-                type: string
-              user_agent:
-                type: string
-              user_verify_transaction:
-                properties:
-                  burn_factor:
-                    format: int64
-                    type: integer
-                  max_decimal:
-                    format: int64
-                    type: integer
-                  max_transaction_size:
-                    format: int64
-                    type: integer
-                type: object
-              version:
-                properties:
-                  branch:
-                    type: string
-                  commit:
-                    type: string
-                  version:
-                    type: string
-                type: object
-              wallet_api_enabled:
-                type: boolean
+          $ref: '#/responses/healthResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns node health data.
@@ -768,77 +241,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns the most recent N blocks on the blockchain.
-          schema:
-            properties:
-              blocks:
-                items:
-                  properties:
-                    body:
-                      items:
-                        properties:
-                          inner_hash:
-                            type: string
-                          inputs:
-                            items:
-                              type: string
-                            type: array
-                          length:
-                            format: int32
-                            type: integer
-                          outputs:
-                            items:
-                              properties:
-                                coins:
-                                  type: string
-                                dst:
-                                  type: string
-                                hours:
-                                  format: int64
-                                  type: integer
-                                uxid:
-                                  type: string
-                            type: array
-                          sigs:
-                            items:
-                              type: string
-                            type: array
-                          timestamp:
-                            format: int32
-                            type: integer
-                          txid:
-                            type: string
-                          type:
-                            format: int32
-                            type: integer
-                      type: array
-                    header:
-                      properties:
-                        block_hash:
-                          type: string
-                        fee:
-                          format: int64
-                          type: integer
-                        previous_block_hash:
-                          type: string
-                        seq:
-                          format: int64
-                          type: integer
-                        timestamp:
-                          format: int64
-                          type: integer
-                        tx_body_hash:
-                          type: string
-                        ux_hash:
-                          type: string
-                        version:
-                          format: int32
-                          type: integer
-                      type: object
-                    size:
-                      format: int32
-                      type: integer
-                type: array
+          $ref: '#/responses/lastBlocksResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/network/connection:
@@ -854,58 +257,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint return a connection struct
-          schema:
-            properties:
-              address:
-                type: string
-              connected_at:
-                format: int64
-                type: integer
-              height:
-                format: int64
-                type: integer
-              id:
-                format: int64
-                type: integer
-              is_trusted_peer:
-                type: boolean
-              last_received:
-                format: int64
-                type: integer
-              last_sent:
-                format: int64
-                type: integer
-              listen_port:
-                format: int32
-                type: integer
-              mirror:
-                format: int32
-                type: integer
-              outgoing:
-                type: boolean
-              state:
-                enum:
-                - pending
-                - connected
-                - introduced
-                type: string
-              unconfirmed_verify_transaction:
-                description: Represent unconfirmed transactions
-                properties:
-                  burn_factor:
-                    format: int32
-                    type: integer
-                  max_decimals:
-                    format: int32
-                    type: integer
-                  max_transaction_size:
-                    format: int32
-                    type: integer
-                type: object
-              user_agent:
-                type: string
-            type: object
+          $ref: '#/responses/networkConnectionResponse'
         default:
           $ref: '#/responses/genericError'
       summary: This endpoint returns a specific connection.
@@ -951,59 +303,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint return a connection struct
-          schema:
-            items:
-              properties:
-                address:
-                  type: string
-                connected_at:
-                  format: int64
-                  type: integer
-                height:
-                  format: int64
-                  type: integer
-                id:
-                  format: int64
-                  type: integer
-                is_trusted_peer:
-                  type: boolean
-                last_received:
-                  format: int64
-                  type: integer
-                last_sent:
-                  format: int64
-                  type: integer
-                listen_port:
-                  format: int32
-                  type: integer
-                mirror:
-                  format: int32
-                  type: integer
-                outgoing:
-                  type: boolean
-                state:
-                  enum:
-                  - pending
-                  - connected
-                  - introduced
-                  type: string
-                unconfirmed_verify_transaction:
-                  description: Represent unconfirmed transactions
-                  properties:
-                    burn_factor:
-                      format: int32
-                      type: integer
-                    max_decimals:
-                      format: int32
-                      type: integer
-                    max_transaction_size:
-                      format: int32
-                      type: integer
-                  type: object
-                user_agent:
-                  type: string
-            type: array
+          $ref: '#/responses/networkConnectionsResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -1032,11 +332,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint return a list of trusted connections.
-          schema:
-            items:
-              type: string
-            type: array
+          $ref: '#/responses/arrayStringResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -1051,11 +347,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint return an list of default connections.
-          schema:
-            items:
-              type: string
-            type: array
+          $ref: '#/responses/arrayStringResponse'
         default:
           $ref: '#/responses/genericError'
       summary: defaultConnectionsHandler returns the list of default hardcoded bootstrap
@@ -1078,110 +370,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: UnspentOutputsSummary records unspent outputs in different
-            status.
-          schema:
-            properties:
-              head:
-                properties:
-                  fee:
-                    format: int64
-                    type: integer
-                  hash:
-                    type: string
-                  previous_block_hash:
-                    type: string
-                  seq:
-                    format: int64
-                    type: integer
-                  timestamp:
-                    format: int64
-                    type: integer
-                  tx_body_hash:
-                    type: string
-                  ux_hash:
-                    type: string
-                  version:
-                    format: int64
-                    type: integer
-                type: object
-              head_outputs:
-                description: HeadOutputs are unspent outputs confirmed in the blockchain
-                items:
-                  properties:
-                    address:
-                      type: string
-                    block_seq:
-                      format: int64
-                      type: integer
-                    calculated_hours:
-                      format: int64
-                      type: integer
-                    coins:
-                      type: string
-                    hash:
-                      type: string
-                    hours:
-                      format: int64
-                      type: integer
-                    src_tx:
-                      type: string
-                    time:
-                      format: int64
-                      type: integer
-                type: array
-              incoming_outputs:
-                description: IncomingOutputs are unspent outputs being created by
-                  unconfirmed transactions
-                items:
-                  properties:
-                    address:
-                      type: string
-                    block_seq:
-                      format: int64
-                      type: integer
-                    calculated_hours:
-                      format: int64
-                      type: integer
-                    coins:
-                      type: string
-                    hash:
-                      type: string
-                    hours:
-                      format: int64
-                      type: integer
-                    src_tx:
-                      type: string
-                    time:
-                      format: int64
-                      type: integer
-                type: array
-              outgoing_outputs:
-                description: OutgoingOutputs are unspent outputs being spent in unconfirmed
-                  transactions
-                items:
-                  properties:
-                    address:
-                      type: string
-                    block_seq:
-                      format: int64
-                      type: integer
-                    calculated_hours:
-                      format: int64
-                      type: integer
-                    coins:
-                      type: string
-                    hash:
-                      type: string
-                    hours:
-                      format: int64
-                      type: integer
-                    src_tx:
-                      type: string
-                    time:
-                      format: int64
-                      type: integer
-                type: array
+          $ref: '#/responses/outputsResponse'
         default:
           $ref: '#/responses/genericError'
       summary: If neither addrs nor hashes are specificed, return all unspent outputs.
@@ -1200,110 +389,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: UnspentOutputsSummary records unspent outputs in different
-            status.
-          schema:
-            properties:
-              head:
-                properties:
-                  fee:
-                    format: int64
-                    type: integer
-                  hash:
-                    type: string
-                  previous_block_hash:
-                    type: string
-                  seq:
-                    format: int64
-                    type: integer
-                  timestamp:
-                    format: int64
-                    type: integer
-                  tx_body_hash:
-                    type: string
-                  ux_hash:
-                    type: string
-                  version:
-                    format: int64
-                    type: integer
-                type: object
-              head_outputs:
-                description: HeadOutputs are unspent outputs confirmed in the blockchain
-                items:
-                  properties:
-                    address:
-                      type: string
-                    block_seq:
-                      format: int64
-                      type: integer
-                    calculated_hours:
-                      format: int64
-                      type: integer
-                    coins:
-                      type: string
-                    hash:
-                      type: string
-                    hours:
-                      format: int64
-                      type: integer
-                    src_tx:
-                      type: string
-                    time:
-                      format: int64
-                      type: integer
-                type: array
-              incoming_outputs:
-                description: IncomingOutputs are unspent outputs being created by
-                  unconfirmed transactions
-                items:
-                  properties:
-                    address:
-                      type: string
-                    block_seq:
-                      format: int64
-                      type: integer
-                    calculated_hours:
-                      format: int64
-                      type: integer
-                    coins:
-                      type: string
-                    hash:
-                      type: string
-                    hours:
-                      format: int64
-                      type: integer
-                    src_tx:
-                      type: string
-                    time:
-                      format: int64
-                      type: integer
-                type: array
-              outgoing_outputs:
-                description: OutgoingOutputs are unspent outputs being spent in unconfirmed
-                  transactions
-                items:
-                  properties:
-                    address:
-                      type: string
-                    block_seq:
-                      format: int64
-                      type: integer
-                    calculated_hours:
-                      format: int64
-                      type: integer
-                    coins:
-                      type: string
-                    hash:
-                      type: string
-                    hours:
-                      format: int64
-                      type: integer
-                    src_tx:
-                      type: string
-                    time:
-                      format: int64
-                      type: integer
-                type: array
+          $ref: '#/responses/outputsResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -1319,60 +405,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns a transaction identified by its txid hash.
-          schema:
-            items:
-              properties:
-                announced:
-                  type: string
-                checked:
-                  type: string
-                is_valid:
-                  type: boolean
-                received:
-                  type: string
-                transaction:
-                  description: BlockTransactionVerbose has readable transaction data
-                    for transactions inside a block. It differs from Transaction in
-                    that it includes metadata for transaction inputs and the calculated
-                    coinhour fee spent by the block
-                  properties:
-                    inner_hash:
-                      type: string
-                    inputs:
-                      items:
-                        type: string
-                      type: array
-                    length:
-                      format: int32
-                      type: integer
-                    outputs:
-                      items:
-                        properties:
-                          coins:
-                            type: string
-                          dst:
-                            type: string
-                          hours:
-                            format: int64
-                            type: integer
-                          uxid:
-                            type: string
-                      type: array
-                    sigs:
-                      items:
-                        type: string
-                      type: array
-                    timestamp:
-                      format: int32
-                      type: integer
-                    txid:
-                      type: string
-                    type:
-                      format: int32
-                      type: integer
-                  type: object
-            type: array
+          $ref: '#/responses/pendingTxsResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/resendUnconfirmedTxns:
@@ -1408,25 +441,13 @@ paths:
       - application/json
       responses:
         "200":
-          description: Response for endpoint /api/v1/address_uxouts
-          schema:
-            properties:
-              richlist:
-                items:
-                  properties:
-                    address:
-                      type: string
-                    coins:
-                      type: string
-                    locked:
-                      type: boolean
-                type: array
+          $ref: '#/responses/richlistResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns the top skycoin holders.
   /api/v1/transaction:
     get:
-      description: Returns a transaction identified by its txid hash with just id
+      description: Returns a transaction identi`fied by its txid hash with just id
       operationId: transaction
       parameters:
       - description: transaction hash
@@ -1442,68 +463,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns a transaction identified by its txid hash.
-          schema:
-            properties:
-              status:
-                properties:
-                  block_seq:
-                    description: If confirmed, the sequence of the block in which
-                      the transaction was executed
-                    format: int64
-                    type: integer
-                  confirmed:
-                    type: boolean
-                  height:
-                    description: If confirmed, how many blocks deep in the chain it
-                      is. Will be at least 1 if confirmed
-                    format: int64
-                    type: integer
-                  unconfirmed:
-                    type: boolean
-                type: object
-              time:
-                format: int64
-                type: integer
-              txn:
-                description: TransactionVerbose has readable transaction data. It
-                  adds TransactionStatus to a BlockTransactionVerbose
-                properties:
-                  inner_hash:
-                    type: string
-                  inputs:
-                    items:
-                      type: string
-                    type: array
-                  length:
-                    format: int32
-                    type: integer
-                  outputs:
-                    items:
-                      properties:
-                        coins:
-                          type: string
-                        dst:
-                          type: string
-                        hours:
-                          format: int64
-                          type: integer
-                        uxid:
-                          type: string
-                    type: array
-                  sigs:
-                    items:
-                      type: string
-                    type: array
-                  timestamp:
-                    format: int64
-                    type: integer
-                  txid:
-                    type: string
-                  type:
-                    format: int32
-                    type: integer
-                type: object
+          $ref: '#/responses/transactionResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/transactions:
@@ -1523,72 +483,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns transactions that match the filters.
-          schema:
-            properties:
-              txns:
-                items:
-                  properties:
-                    status:
-                      properties:
-                        block_seq:
-                          description: If confirmed, the sequence of the block in
-                            which the transaction was executed
-                          format: int64
-                          type: integer
-                        confirmed:
-                          type: boolean
-                        height:
-                          description: If confirmed, how many blocks deep in the chain
-                            it is. Will be at least 1 if confirmed
-                          format: int64
-                          type: integer
-                        unconfirmed:
-                          type: boolean
-                      type: object
-                    time:
-                      format: int64
-                      type: integer
-                    txn:
-                      description: TransactionVerbose has readable transaction data.
-                        It adds TransactionStatus to a BlockTransactionVerbose
-                      properties:
-                        inner_hash:
-                          type: string
-                        inputs:
-                          items:
-                            type: string
-                          type: array
-                        length:
-                          format: int32
-                          type: integer
-                        outputs:
-                          items:
-                            properties:
-                              coins:
-                                type: string
-                              dst:
-                                type: string
-                              hours:
-                                format: int64
-                                type: integer
-                              uxid:
-                                type: string
-                          type: array
-                        sigs:
-                          items:
-                            type: string
-                          type: array
-                        timestamp:
-                          format: int64
-                          type: integer
-                        txid:
-                          type: string
-                        type:
-                          format: int32
-                          type: integer
-                      type: object
-                type: array
+          $ref: '#/responses/transactionsResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns transactions that match the filters.
@@ -1608,72 +503,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns transactions that match the filters.
-          schema:
-            properties:
-              txns:
-                items:
-                  properties:
-                    status:
-                      properties:
-                        block_seq:
-                          description: If confirmed, the sequence of the block in
-                            which the transaction was executed
-                          format: int64
-                          type: integer
-                        confirmed:
-                          type: boolean
-                        height:
-                          description: If confirmed, how many blocks deep in the chain
-                            it is. Will be at least 1 if confirmed
-                          format: int64
-                          type: integer
-                        unconfirmed:
-                          type: boolean
-                      type: object
-                    time:
-                      format: int64
-                      type: integer
-                    txn:
-                      description: TransactionVerbose has readable transaction data.
-                        It adds TransactionStatus to a BlockTransactionVerbose
-                      properties:
-                        inner_hash:
-                          type: string
-                        inputs:
-                          items:
-                            type: string
-                          type: array
-                        length:
-                          format: int32
-                          type: integer
-                        outputs:
-                          items:
-                            properties:
-                              coins:
-                                type: string
-                              dst:
-                                type: string
-                              hours:
-                                format: int64
-                                type: integer
-                              uxid:
-                                type: string
-                          type: array
-                        sigs:
-                          items:
-                            type: string
-                          type: array
-                        timestamp:
-                          format: int64
-                          type: integer
-                        txid:
-                          type: string
-                        type:
-                          format: int32
-                          type: integer
-                      type: object
-                type: array
+          $ref: '#/responses/transactionsResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -1691,32 +521,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Response for endpoint /api/v1/uxout
-          schema:
-            properties:
-              coins:
-                format: integer
-                type: integer
-              hours:
-                format: int64
-                type: integer
-              owner_address:
-                type: string
-              spent_block_seq:
-                format: in64
-                type: integer
-              spent_tx:
-                type: string
-              src_block_seq:
-                format: int64
-                type: integer
-              src_tx:
-                type: string
-              time:
-                format: int64
-                type: integer
-              uxid:
-                type: string
+          $ref: '#/responses/uxoutResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns an unspent output by ID.
@@ -1748,37 +553,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Response for endpoint /api/v1/wallet
-          schema:
-            properties:
-              entries:
-                items:
-                  properties:
-                    address:
-                      type: string
-                    public_key:
-                      type: string
-                type: array
-              meta:
-                properties:
-                  coin:
-                    type: string
-                  crypto_type:
-                    type: string
-                  encrypted:
-                    type: boolean
-                  filename:
-                    type: string
-                  label:
-                    type: string
-                  timestamp:
-                    format: int64
-                    type: integer
-                  type:
-                    type: string
-                  version:
-                    type: string
-                type: object
+          $ref: '#/responses/walletResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns a wallet by id.
@@ -1796,38 +571,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns the wallets balance
-          schema:
-            properties:
-              addresses:
-                additionalProperties:
-                  properties:
-                    coins:
-                      format: int64
-                      type: integer
-                    hours:
-                      format: int64
-                      type: integer
-                  type: object
-                type: object
-              confirmed:
-                properties:
-                  coins:
-                    format: int64
-                    type: integer
-                  hours:
-                    format: int64
-                    type: integer
-                type: object
-              predicted:
-                properties:
-                  coins:
-                    format: int64
-                    type: integer
-                  hours:
-                    format: int64
-                    type: integer
-                type: object
+          $ref: '#/responses/walletBalanceResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns the wallet's balance, both confirmed and predicted.  The predicted
@@ -1866,37 +610,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint loads wallets from seed
-          schema:
-            properties:
-              entries:
-                items:
-                  properties:
-                    address:
-                      type: string
-                    public_key:
-                      type: string
-                type: array
-              meta:
-                properties:
-                  coin:
-                    type: string
-                  crypto_type:
-                    type: string
-                  encrypted:
-                    type: boolean
-                  filename:
-                    type: string
-                  label:
-                    type: string
-                  timestamp:
-                    format: int64
-                    type: integer
-                  type:
-                    type: string
-                  version:
-                    type: string
-                type: object
+          $ref: '#/responses/walletCreateResponse'  
         default:
           $ref: '#/responses/genericError'
       security:
@@ -1919,37 +633,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint decrypts wallets.
-          schema:
-            properties:
-              entries:
-                items:
-                  properties:
-                    address:
-                      type: string
-                    public_key:
-                      type: string
-                type: array
-              meta:
-                properties:
-                  coin:
-                    type: string
-                  crypto_type:
-                    type: string
-                  encrypted:
-                    type: boolean
-                  filename:
-                    type: string
-                  label:
-                    type: string
-                  timestamp:
-                    format: int64
-                    type: integer
-                  type:
-                    type: string
-                  version:
-                    type: string
-                type: object
+          $ref: '#/responses/walletDecryptResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -1973,37 +657,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint encrypt wallets.
-          schema:
-            properties:
-              entries:
-                items:
-                  properties:
-                    address:
-                      type: string
-                    public_key:
-                      type: string
-                type: array
-              meta:
-                properties:
-                  coin:
-                    type: string
-                  crypto_type:
-                    type: string
-                  encrypted:
-                    type: boolean
-                  filename:
-                    type: string
-                  label:
-                    type: string
-                  timestamp:
-                    format: int64
-                    type: integer
-                  type:
-                    type: string
-                  version:
-                    type: string
-                type: object
+          $ref: '#/responses/walletEncryptResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2031,13 +685,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint generate new addresses
-          schema:
-            properties:
-              addresses:
-                items:
-                  type: string
-                type: array
+          $ref: '#/responses/walletNewAddressResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2058,11 +706,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Generates wallet seed
-          schema:
-            properties:
-              seed:
-                type: string
+          $ref: '#/responses/walletNewSeedResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/wallet/seed:
@@ -2083,11 +727,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint Returns seed of wallet of given id
-          schema:
-            properties:
-              seed:
-                type: string
+          $ref: '#/responses/walletSeedResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2125,70 +765,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Creates and broadcasts a transaction sending money from one
-            of our wallets to destination address.
-          schema:
-            properties:
-              balance:
-                properties:
-                  confirmed:
-                    properties:
-                      coins:
-                        format: int64
-                        type: integer
-                      hours:
-                        format: int64
-                        type: integer
-                    type: object
-                  predicted:
-                    properties:
-                      coins:
-                        format: int64
-                        type: integer
-                      hours:
-                        format: int64
-                        type: integer
-                    type: object
-                type: object
-              error:
-                type: string
-              txn:
-                properties:
-                  hash:
-                    type: string
-                  inner_hash:
-                    type: string
-                  inputs:
-                    items:
-                      type: string
-                    type: array
-                  length:
-                    format: int32
-                    type: integer
-                  outputs:
-                    items:
-                      properties:
-                        coins:
-                          type: string
-                        dst:
-                          type: string
-                        hours:
-                          format: int64
-                          type: integer
-                        uxid:
-                          type: string
-                    type: array
-                  sigs:
-                    items:
-                      type: string
-                    type: array
-                  timestamp:
-                    format: int64
-                    type: integer
-                  type:
-                    format: int32
-                    type: integer
-                type: object
+          $ref: '#/responses/walletSpentResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2247,64 +824,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns blocks between a start and end point.
-          schema:
-            properties:
-              encoded_transaction:
-                type: string
-              transaction:
-                properties:
-                  fee:
-                    type: string
-                  inner_hash:
-                    type: string
-                  inputs:
-                    items:
-                      properties:
-                        address:
-                          type: string
-                        block:
-                          format: int64
-                          type: integer
-                        calculated_hours:
-                          type: string
-                        coins:
-                          type: string
-                        hours:
-                          type: string
-                        timestamp:
-                          format: int64
-                          type: integer
-                        txid:
-                          type: string
-                        uxid:
-                          type: string
-                    type: array
-                  length:
-                    format: int64
-                    type: integer
-                  outputs:
-                    items:
-                      properties:
-                        address:
-                          type: string
-                        coins:
-                          type: string
-                        hours:
-                          type: string
-                        uxid:
-                          type: string
-                    type: array
-                  sigs:
-                    items:
-                      type: string
-                    type: array
-                  txid:
-                    type: string
-                  type:
-                    format: int32
-                    type: integer
-                type: object
+          $ref: '#/responses/walletTransactionResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2324,69 +844,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns returns all unconfirmed transactions for all addresses
-            in a given wallet
-          schema:
-            properties:
-              transactions:
-                items:
-                  properties:
-                    announced:
-                      type: string
-                    checked:
-                      type: string
-                    is_valid:
-                      type: boolean
-                    received:
-                      type: string
-                    transaction:
-                      properties:
-                        fee:
-                          format: int64
-                          type: integer
-                        inner_hash:
-                          type: string
-                        inputs:
-                          properties:
-                            calculated_hours:
-                              format: int64
-                              type: integer
-                            coins:
-                              type: string
-                            dst:
-                              type: string
-                            hours:
-                              format: int64
-                              type: integer
-                            uxid:
-                              type: string
-                          type: object
-                        length:
-                          format: int32
-                          type: integer
-                        outputs:
-                          properties:
-                            coins:
-                              type: string
-                            dst:
-                              type: string
-                            hours:
-                              format: int64
-                              type: integer
-                            uxid:
-                              type: string
-                          type: object
-                        sigs:
-                          items:
-                            type: string
-                          type: array
-                        txid:
-                          type: string
-                        type:
-                          format: int32
-                          type: integer
-                      type: object
-                type: array
+          $ref: '#/responses/walletTransactionsResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/wallet/unload:
@@ -2441,38 +899,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint return all loaded wallets
-          schema:
-            items:
-              properties:
-                entries:
-                  items:
-                    properties:
-                      address:
-                        type: string
-                      public_key:
-                        type: string
-                  type: array
-                meta:
-                  properties:
-                    coin:
-                      type: string
-                    crypto_type:
-                      type: string
-                    encrypted:
-                      type: boolean
-                    filename:
-                      type: string
-                    label:
-                      type: string
-                    timestamp:
-                      type: integer
-                    type:
-                      type: string
-                    version:
-                      type: string
-                  type: object
-            type: array
+          $ref: '#/responses/walletsResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v1/wallets/folderName:
@@ -2489,12 +916,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint return the wallet directory path
-          schema:
-            properties:
-              address:
-                type: string
-            type: object
+          $ref: '#/responses/walletsFolderResponse'
         default:
           $ref: '#/responses/genericError'
   /api/v2/address/verify:
@@ -2510,18 +932,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Response verifies a Skycoin address
-          schema:
-            properties:
-              data:
-                properties:
-                  version:
-                    format: int64
-                    type: integer
-                type: object
-              error:
-                type: object
-            type: object
+          $ref: '#/responses/verifyAddressResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2540,58 +951,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Ok, returns the transaction.
-          schema:
-            properties:
-              data:
-                properties:
-                  transaction:
-                    description: Represents a readable transaction
-                    properties:
-                      hash:
-                        type: string
-                      inner_hash:
-                        type: string
-                      inputs:
-                        items:
-                          type: string
-                        type: array
-                      length:
-                        format: int32
-                        type: integer
-                      outputs:
-                        items:
-                          properties:
-                            coins:
-                              type: string
-                            dst:
-                              type: string
-                            hours:
-                              format: int64
-                              type: integer
-                            uxid:
-                              type: string
-                        type: array
-                      sigs:
-                        items:
-                          type: string
-                        type: array
-                      timestamp:
-                        format: int64
-                        type: integer
-                      type:
-                        format: int32
-                        type: integer
-                    type: object
-                type: object
-              error:
-                properties:
-                  code:
-                    format: int64
-                    type: integer
-                  message:
-                    type: string
-                type: object
+          $ref: '#/responses/transactionInjectResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2609,11 +969,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns the hex-encoded byte serialization of a transaction
-          schema:
-            properties:
-              rawtx:
-                type: string
+          $ref: '#/responses/transactionRawResponse'
         default:
           $ref: '#/responses/genericError'
       summary: Returns the hex-encoded byte serialization of a transaction. The transaction
@@ -2626,75 +982,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Responses ok
-          schema:
-            properties:
-              data:
-                properties:
-                  confirmed:
-                    type: boolean
-                  transaction:
-                    properties:
-                      fee:
-                        type: string
-                      inner_hash:
-                        type: string
-                      inputs:
-                        items:
-                          properties:
-                            address:
-                              type: string
-                            block:
-                              format: int64
-                              type: integer
-                            calculated_hours:
-                              type: string
-                            coins:
-                              type: string
-                            hours:
-                              type: string
-                            timestamp:
-                              format: int64
-                              type: integer
-                            txid:
-                              type: string
-                            uxid:
-                              type: string
-                        type: array
-                      length:
-                        format: int32
-                        type: integer
-                      outputs:
-                        items:
-                          properties:
-                            address:
-                              type: string
-                            coins:
-                              type: string
-                            hours:
-                              type: string
-                            uxid:
-                              type: string
-                        type: array
-                      sigs:
-                        items:
-                          type: string
-                        type: array
-                      txid:
-                        type: string
-                      type:
-                        format: int32
-                        type: integer
-                    type: object
-                type: object
-              error:
-                properties:
-                  code:
-                    format: int64
-                    type: integer
-                  message:
-                    type: string
-                type: object
+          $ref: '#/responses/transactionVerifyResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2721,40 +1009,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: This endpoint decrypts wallets.
-          schema:
-            properties:
-              data:
-                properties:
-                  entries:
-                    items:
-                      properties:
-                        address:
-                          type: string
-                        public_key:
-                          type: string
-                    type: array
-                  meta:
-                    properties:
-                      coin:
-                        type: string
-                      crypto_type:
-                        type: string
-                      encrypted:
-                        type: boolean
-                      filename:
-                        type: string
-                      label:
-                        type: string
-                      timestamp:
-                        format: int64
-                        type: integer
-                      type:
-                        type: string
-                      version:
-                        type: string
-                    type: object
-                type: object
+          $ref: '#/responses/walletRecoverResponse'
         default:
           $ref: '#/responses/genericError'
       security:
@@ -2777,12 +1032,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Verifies a wallet seed.
-          schema:
-            properties:
-              data:
-                description: Empty
-                type: object
+          $ref: '#/responses/walletSeedVerifyResponse'
         "422":
           description: Wrong Seed
         default:
@@ -2796,47 +1046,49 @@ produces:
 responses:
   buildInfo:
     description: BuildInfo represents the build info
-    headers:
-      branch:
-        description: git branch name
-        type: string
-      commit:
-        description: git commit id
-        type: string
-      version:
-        description: version number
-        type: string
+    schema:
+      properties:
+        branch:
+          description: git branch name
+          type: string
+        commit:
+          description: git commit id
+          type: string
+        version:
+          description: version number
+          type: string
   coinSupply:
     description: CoinSupply records the coin supply info.
-    headers:
-      current_coinhour_supply:
-        description: CurrentCoinHourSupply is coins hours in non distribution addresses.
-        type: string
-      current_supply:
-        description: Coins distributed beyond the project.
-        type: string
-      locked_distribution_addresses:
-        description: Distribution addresses which are locked and do not count towards
-          total supply.
-        items:
+    schema:
+      properties:
+        current_coinhour_supply:
+          description: CurrentCoinHourSupply is coins hours in non distribution addresses.
           type: string
-        type: array
-      max_supply:
-        description: MaxSupply is the maximum number of coins to be distributed ever.
-        type: string
-      total_coinhour_supply:
-        description: TotalCoinHourSupply is coin hours in all addresses including
-          unlocked distribution addresses.
-        type: string
-      total_supply:
-        description: TotalSupply is CurrentSupply plus coins held by the distribution
-          addresses that are spendable.
-        type: string
-      unlocked_distribution_addresses:
-        description: Distribution addresses which count towards total supply.
-        items:
+        current_supply:
+          description: Coins distributed beyond the project.
           type: string
-        type: array
+        locked_distribution_addresses:
+          description: Distribution addresses which are locked and do not count towards
+            total supply.
+          items:
+            type: string
+          type: array
+        max_supply:
+          description: MaxSupply is the maximum number of coins to be distributed ever.
+          type: string
+        total_coinhour_supply:
+          description: TotalCoinHourSupply is coin hours in all addresses including
+            unlocked distribution addresses.
+          type: string
+        total_supply:
+          description: TotalSupply is CurrentSupply plus coins held by the distribution
+            addresses that are spendable.
+          type: string
+        unlocked_distribution_addresses:
+          description: Distribution addresses which count towards total supply.
+          items:
+            type: string
+          type: array
   genericError:
     description: |-
       A GenericError is the default error message that is generated.
@@ -2851,6 +1103,1557 @@ responses:
           type: string
           x-go-name: Message
       type: object
+  address_uxoutsResponse:
+    description: Return address uxouts
+    schema:
+      items:
+        properties:
+          coins:
+            format: integer
+            type: integer
+          hours:
+            format: int64
+            type: integer
+          owner_address:
+            type: string
+          spent_block_seq:
+            format: in64
+            type: integer
+          spent_tx:
+            type: string
+          src_block_seq:
+            format: int64
+            type: integer
+          src_tx:
+            type: string
+          time:
+            format: int64
+            type: integer
+          uxid:
+            type: string
+      type: array
+  addressCountResponse:
+    description: This endpoint Returns the total number of unique address that
+          have coins.
+    schema:
+      properties:
+        count:
+          format: int64
+          type: integer
+  balanceResponse:
+    description: Returns the balance of one or more addresses
+    schema:
+      properties:
+        addresses:
+          additionalProperties:
+            properties:
+              coins:
+                format: int64
+                type: integer
+              hours:
+                format: int64
+                type: integer
+            type: object
+          type: object
+        confirmed:
+          properties:
+            coins:
+              format: int64
+              type: integer
+            hours:
+              format: int64
+              type: integer
+          type: object
+        predicted:
+          properties:
+            coins:
+              format: int64
+              type: integer
+            hours:
+              format: int64
+              type: integer
+          type: object
+  blockResponse:
+    description: BlockVerbose represents a readable block with verbose data.
+    schema:
+      properties:
+        body:
+          properties:
+            txns:
+              items:
+                properties:
+                  inner_hash:
+                    type: string
+                  inputs:
+                    items:
+                      type: string
+                    type: array
+                  length:
+                    format: int32
+                    type: integer
+                  outputs:
+                    items:
+                      properties:
+                        coins:
+                          type: string
+                        dst:
+                          type: string
+                        hours:
+                          format: int64
+                          type: integer
+                        uxid:
+                          type: string
+                    type: array
+                  sigs:
+                    items:
+                      type: string
+                    type: array
+                  timestamp:
+                    format: int64
+                    type: integer
+                  txid:
+                    type: string
+                  type:
+                    format: int32
+                    type: integer
+              type: array
+          type: object
+        header:
+          properties:
+            block_hash:
+              type: string
+            fee:
+              format: int32
+              type: integer
+            previous_block_hash:
+              type: string
+            seq:
+              format: int32
+              type: integer
+            timestamp:
+              format: int64
+              type: integer
+            tx_body_hash:
+              type: string
+            ux_hash:
+              type: string
+            version:
+              format: int32
+              type: integer
+          type: object
+        size:
+          format: int32
+          type: integer
+  blockchainMetadataResponse:
+    description: This endpoint returns the blockchain metadata.
+    schema:
+      properties:
+        head:
+          properties:
+            block_hash:
+              type: string
+            fee:
+              format: int64
+              type: integer
+            previous_block_hash:
+              type: string
+            seq:
+              type: string
+            timestamp:
+              format: int64
+              type: integer
+            tx_body_hash:
+              type: string
+            ux_hash:
+              type: string
+            version:
+              format: int64
+              type: integer
+          type: object
+        unconfirmed:
+          format: int64
+          type: integer
+        unspents:
+          format: int64
+          type: integer
+  blockchainProgressResponse:
+    description: This endpoint returns the blockchain sync progress
+    schema:
+      properties:
+        current:
+          format: int64
+          type: integer
+        highest:
+          format: int64
+          type: integer
+        peers:
+          items:
+            properties:
+              address:
+                type: string
+              height:
+                format: int64
+                type: integer
+          type: array
+  blocksResponse:
+    description: Returns blocks between a start and end point.
+    schema:
+      properties:
+        blocks:
+          items:
+            properties:
+              body:
+                properties:
+                  txns:
+                    items:
+                      properties:
+                        inner_hash:
+                          type: string
+                        inputs:
+                          items:
+                            type: string
+                          type: array
+                        length:
+                          format: int32
+                          type: integer
+                        outputs:
+                          items:
+                            properties:
+                              coins:
+                                type: string
+                              dst:
+                                type: string
+                              hours:
+                                format: int64
+                                type: integer
+                              uxid:
+                                type: string
+                          type: array
+                        sigs:
+                          items:
+                            type: string
+                          type: array
+                        timestamp:
+                          format: int32
+                          type: integer
+                        txid:
+                          type: string
+                        type:
+                          format: int32
+                          type: integer
+                    type: array
+                type: object
+              header:
+                properties:
+                  block_hash:
+                    type: string
+                  fee:
+                    format: int64
+                    type: integer
+                  previous_block_hash:
+                    type: string
+                  seq:
+                    format: int64
+                    type: integer
+                  timestamp:
+                    format: int64
+                    type: integer
+                  tx_body_hash:
+                    type: string
+                  ux_hash:
+                    type: string
+                  version:
+                    format: int32
+                    type: integer
+                type: object
+              size:
+                format: int32
+                type: integer
+          type: array
+  csrfResponse:
+    description: Return a csrf Token.
+    schema:
+      properties:
+        csrf_token:
+          type: string
+      type: object
+  explorerAddressResponse:
+    description: Response explorer address
+    schema:
+      items:
+        properties:
+          fee:
+            format: in64
+            type: integer
+          inner_hash:
+            type: string
+          inputs:
+            items:
+              properties:
+                calculated_hours:
+                  format: int64
+                  type: integer
+                coins:
+                  type: string
+                hours:
+                  format: int64
+                  type: integer
+                owner:
+                  type: string
+                uxid:
+                  type: string
+            type: array
+          length:
+            format: int64
+            type: integer
+          outputs:
+            items:
+              properties:
+                coins:
+                  type: string
+                dst:
+                  type: string
+                hours:
+                  format: int64
+                  type: integer
+                uxid:
+                  type: string
+            type: array
+          sigs:
+            items:
+              type: string
+            type: array
+          status:
+            properties:
+              block_seq:
+                format: int64
+                type: integer
+              confirmed:
+                type: boolean
+              label:
+                format: int64
+                type: integer
+              unconfirmed:
+                type: boolean
+            type: object
+          timestamp:
+            format: integer
+            type: integer
+          txid:
+            type: string
+          type:
+            format: in64
+            type: integer
+      type: array
+  healthResponse:
+    description: This endpoint returns node health data.
+    schema:
+      properties:
+        blockchain:
+          properties:
+            head:
+              properties:
+                block_hash:
+                  type: string
+                fee:
+                  format: int64
+                  type: integer
+                previous_block_hash:
+                  type: string
+                seq:
+                  format: int64
+                  type: integer
+                timestamp:
+                  format: int64
+                  type: integer
+                tx_body_hash:
+                  type: string
+                ux_hash:
+                  type: string
+                version:
+                  format: int64
+                  type: integer
+              type: object
+            time_since_last_block:
+              type: string
+            unconfirmed:
+              format: int64
+              type: integer
+            unspents:
+              format: int64
+              type: integer
+          type: object
+        coin:
+          type: string
+        csp_enabled:
+          type: boolean
+        csrf_enabled:
+          type: boolean
+        gui_enabled:
+          type: boolean
+        incoming_connections:
+          format: int64
+          type: integer
+        json_rpc_enabled:
+          type: boolean
+        open_connections:
+          format: int64
+          type: integer
+        outgoing_connections:
+          format: int64
+          type: integer
+        started_at:
+          format: int64
+          type: integer
+        unconfirmed_verify_transaction:
+          properties:
+            burn_factor:
+              format: int64
+              type: integer
+            max_decimal:
+              format: int64
+              type: integer
+            max_transaction_size:
+              format: int64
+              type: integer
+          type: object
+        unversioned_api_enabled:
+          type: boolean
+        uptime:
+          type: string
+        user_agent:
+          type: string
+        user_verify_transaction:
+          properties:
+            burn_factor:
+              format: int64
+              type: integer
+            max_decimal:
+              format: int64
+              type: integer
+            max_transaction_size:
+              format: int64
+              type: integer
+          type: object
+        version:
+          properties:
+            branch:
+              type: string
+            commit:
+              type: string
+            version:
+              type: string
+          type: object
+        wallet_api_enabled:
+          type: boolean
+  lastBlocksResponse:
+    description: Returns the most recent N blocks on the blockchain.
+    schema:
+      properties:
+        blocks:
+          items:
+            properties:
+              body:
+                items:
+                  properties:
+                    inner_hash:
+                      type: string
+                    inputs:
+                      items:
+                        type: string
+                      type: array
+                    length:
+                      format: int32
+                      type: integer
+                    outputs:
+                      items:
+                        properties:
+                          coins:
+                            type: string
+                          dst:
+                            type: string
+                          hours:
+                            format: int64
+                            type: integer
+                          uxid:
+                            type: string
+                      type: array
+                    sigs:
+                      items:
+                        type: string
+                      type: array
+                    timestamp:
+                      format: int32
+                      type: integer
+                    txid:
+                      type: string
+                    type:
+                      format: int32
+                      type: integer
+                type: array
+              header:
+                properties:
+                  block_hash:
+                    type: string
+                  fee:
+                    format: int64
+                    type: integer
+                  previous_block_hash:
+                    type: string
+                  seq:
+                    format: int64
+                    type: integer
+                  timestamp:
+                    format: int64
+                    type: integer
+                  tx_body_hash:
+                    type: string
+                  ux_hash:
+                    type: string
+                  version:
+                    format: int32
+                    type: integer
+                type: object
+              size:
+                format: int32
+                type: integer
+          type: array
+  networkConnectionResponse:
+    description: This endpoint return a connection
+    schema:
+      properties:
+        address:
+          type: string
+        connected_at:
+          format: int64
+          type: integer
+        height:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        is_trusted_peer:
+          type: boolean
+        last_received:
+          format: int64
+          type: integer
+        last_sent:
+          format: int64
+          type: integer
+        listen_port:
+          format: int32
+          type: integer
+        mirror:
+          format: int32
+          type: integer
+        outgoing:
+          type: boolean
+        state:
+          enum:
+          - pending
+          - connected
+          - introduced
+          type: string
+        unconfirmed_verify_transaction:
+          description: Represent unconfirmed transactions
+          properties:
+            burn_factor:
+              format: int32
+              type: integer
+            max_decimals:
+              format: int32
+              type: integer
+            max_transaction_size:
+              format: int32
+              type: integer
+          type: object
+        user_agent:
+          type: string
+      type: object
+  networkConnectionsResponse:
+    description: This endpoint return an array of connections
+    schema:
+      items:
+        properties:
+          address:
+            type: string
+          connected_at:
+            format: int64
+            type: integer
+          height:
+            format: int64
+            type: integer
+          id:
+            format: int64
+            type: integer
+          is_trusted_peer:
+            type: boolean
+          last_received:
+            format: int64
+            type: integer
+          last_sent:
+            format: int64
+            type: integer
+          listen_port:
+            format: int32
+            type: integer
+          mirror:
+            format: int32
+            type: integer
+          outgoing:
+            type: boolean
+          state:
+            enum:
+            - pending
+            - connected
+            - introduced
+            type: string
+          unconfirmed_verify_transaction:
+            description: Represent unconfirmed transactions
+            properties:
+              burn_factor:
+                format: int32
+                type: integer
+              max_decimals:
+                format: int32
+                type: integer
+              max_transaction_size:
+                format: int32
+                type: integer
+            type: object
+          user_agent:
+            type: string
+      type: array
+  arrayStringResponse:
+    description: Array of string as Response
+    schema:
+      items:
+        type: string
+      type: array
+  outputsResponse:
+    description: Response unspent outputs in different status.
+    schema:
+      properties:
+        head:
+          properties:
+            fee:
+              format: int64
+              type: integer
+            hash:
+              type: string
+            previous_block_hash:
+              type: string
+            seq:
+              format: int64
+              type: integer
+            timestamp:
+              format: int64
+              type: integer
+            tx_body_hash:
+              type: string
+            ux_hash:
+              type: string
+            version:
+              format: int64
+              type: integer
+          type: object
+        head_outputs:
+          description: HeadOutputs are unspent outputs confirmed in the blockchain
+          items:
+            properties:
+              address:
+                type: string
+              block_seq:
+                format: int64
+                type: integer
+              calculated_hours:
+                format: int64
+                type: integer
+              coins:
+                type: string
+              hash:
+                type: string
+              hours:
+                format: int64
+                type: integer
+              src_tx:
+                type: string
+              time:
+                format: int64
+                type: integer
+          type: array
+        incoming_outputs:
+          description: IncomingOutputs are unspent outputs being created by
+            unconfirmed transactions
+          items:
+            properties:
+              address:
+                type: string
+              block_seq:
+                format: int64
+                type: integer
+              calculated_hours:
+                format: int64
+                type: integer
+              coins:
+                type: string
+              hash:
+                type: string
+              hours:
+                format: int64
+                type: integer
+              src_tx:
+                type: string
+              time:
+                format: int64
+                type: integer
+          type: array
+        outgoing_outputs:
+          description: OutgoingOutputs are unspent outputs being spent in unconfirmed
+            transactions
+          items:
+            properties:
+              address:
+                type: string
+              block_seq:
+                format: int64
+                type: integer
+              calculated_hours:
+                format: int64
+                type: integer
+              coins:
+                type: string
+              hash:
+                type: string
+              hours:
+                format: int64
+                type: integer
+              src_tx:
+                type: string
+              time:
+                format: int64
+                type: integer
+          type: array
+  pendingTxsResponse:
+    description: Returns pending txs
+    schema:
+      items:
+        properties:
+          announced:
+            type: string
+          checked:
+            type: string
+          is_valid:
+            type: boolean
+          received:
+            type: string
+          transaction:
+            description: BlockTransactionVerbose has readable transaction data
+              for transactions inside a block. It differs from Transaction in
+              that it includes metadata for transaction inputs and the calculated
+              coinhour fee spent by the block
+            properties:
+              inner_hash:
+                type: string
+              inputs:
+                items:
+                  type: string
+                type: array
+              length:
+                format: int32
+                type: integer
+              outputs:
+                items:
+                  properties:
+                    coins:
+                      type: string
+                    dst:
+                      type: string
+                    hours:
+                      format: int64
+                      type: integer
+                    uxid:
+                      type: string
+                type: array
+              sigs:
+                items:
+                  type: string
+                type: array
+              timestamp:
+                format: int32
+                type: integer
+              txid:
+                type: string
+              type:
+                format: int32
+                type: integer
+            type: object
+      type: array
+  richlistResponse:
+    description: Response for richlist
+    schema:
+      properties:
+        richlist:
+          items:
+            properties:
+              address:
+                type: string
+              coins:
+                type: string
+              locked:
+                type: boolean
+          type: array
+  transactionResponse:
+    description: Returns a transaction identified by its txid hash.
+    schema:
+      properties:
+        status:
+          properties:
+            block_seq:
+              description: If confirmed, the sequence of the block in which
+                the transaction was executed
+              format: int64
+              type: integer
+            confirmed:
+              type: boolean
+            height:
+              description: If confirmed, how many blocks deep in the chain it
+                is. Will be at least 1 if confirmed
+              format: int64
+              type: integer
+            unconfirmed:
+              type: boolean
+          type: object
+        time:
+          format: int64
+          type: integer
+        txn:
+          description: TransactionVerbose has readable transaction data. It
+            adds TransactionStatus to a BlockTransactionVerbose
+          properties:
+            inner_hash:
+              type: string
+            inputs:
+              items:
+                type: string
+              type: array
+            length:
+              format: int32
+              type: integer
+            outputs:
+              items:
+                properties:
+                  coins:
+                    type: string
+                  dst:
+                    type: string
+                  hours:
+                    format: int64
+                    type: integer
+                  uxid:
+                    type: string
+              type: array
+            sigs:
+              items:
+                type: string
+              type: array
+            timestamp:
+              format: int64
+              type: integer
+            txid:
+              type: string
+            type:
+              format: int32
+              type: integer
+          type: object
+  transactionsResponse:
+    description: Returns transactions that match the filters.
+    schema:
+      properties:
+        txns:
+          items:
+            properties:
+              status:
+                properties:
+                  block_seq:
+                    description: If confirmed, the sequence of the block in
+                      which the transaction was executed
+                    format: int64
+                    type: integer
+                  confirmed:
+                    type: boolean
+                  height:
+                    description: If confirmed, how many blocks deep in the chain
+                      it is. Will be at least 1 if confirmed
+                    format: int64
+                    type: integer
+                  unconfirmed:
+                    type: boolean
+                type: object
+              time:
+                format: int64
+                type: integer
+              txn:
+                description: TransactionVerbose has readable transaction data.
+                  It adds TransactionStatus to a BlockTransactionVerbose
+                properties:
+                  inner_hash:
+                    type: string
+                  inputs:
+                    items:
+                      type: string
+                    type: array
+                  length:
+                    format: int32
+                    type: integer
+                  outputs:
+                    items:
+                      properties:
+                        coins:
+                          type: string
+                        dst:
+                          type: string
+                        hours:
+                          format: int64
+                          type: integer
+                        uxid:
+                          type: string
+                    type: array
+                  sigs:
+                    items:
+                      type: string
+                    type: array
+                  timestamp:
+                    format: int64
+                    type: integer
+                  txid:
+                    type: string
+                  type:
+                    format: int32
+                    type: integer
+                type: object
+          type: array
+  uxoutResponse:
+    description: Response an uxout
+    schema:
+      properties:
+        coins:
+          format: integer
+          type: integer
+        hours:
+          format: int64
+          type: integer
+        owner_address:
+          type: string
+        spent_block_seq:
+          format: in64
+          type: integer
+        spent_tx:
+          type: string
+        src_block_seq:
+          format: int64
+          type: integer
+        src_tx:
+          type: string
+        time:
+          format: int64
+          type: integer
+        uxid:
+          type: string
+  walletResponse:
+    description: Response a wallet
+    schema:
+      properties:
+        entries:
+          items:
+            properties:
+              address:
+                type: string
+              public_key:
+                type: string
+          type: array
+        meta:
+          properties:
+            coin:
+              type: string
+            crypto_type:
+              type: string
+            encrypted:
+              type: boolean
+            filename:
+              type: string
+            label:
+              type: string
+            timestamp:
+              format: int64
+              type: integer
+            type:
+              type: string
+            version:
+              type: string
+          type: object
+  walletBalanceResponse:
+    description: Returns the wallets balance
+    schema:
+      properties:
+        addresses:
+          additionalProperties:
+            properties:
+              coins:
+                format: int64
+                type: integer
+              hours:
+                format: int64
+                type: integer
+            type: object
+          type: object
+        confirmed:
+          properties:
+            coins:
+              format: int64
+              type: integer
+            hours:
+              format: int64
+              type: integer
+          type: object
+        predicted:
+          properties:
+            coins:
+              format: int64
+              type: integer
+            hours:
+              format: int64
+              type: integer
+          type: object
+  walletCreateResponse:
+    description: This endpoint loads wallets from seed
+    schema:
+      properties:
+        entries:
+          items:
+            properties:
+              address:
+                type: string
+              public_key:
+                type: string
+          type: array
+        meta:
+          properties:
+            coin:
+              type: string
+            crypto_type:
+              type: string
+            encrypted:
+              type: boolean
+            filename:
+              type: string
+            label:
+              type: string
+            timestamp:
+              format: int64
+              type: integer
+            type:
+              type: string
+            version:
+              type: string
+          type: object
+  walletDecryptResponse:
+    description: This endpoint decrypts wallets.
+    schema:
+      properties:
+        entries:
+          items:
+            properties:
+              address:
+                type: string
+              public_key:
+                type: string
+          type: array
+        meta:
+          properties:
+            coin:
+              type: string
+            crypto_type:
+              type: string
+            encrypted:
+              type: boolean
+            filename:
+              type: string
+            label:
+              type: string
+            timestamp:
+              format: int64
+              type: integer
+            type:
+              type: string
+            version:
+              type: string
+          type: object
+  walletEncryptResponse:
+    description: This endpoint encrypt wallets.
+    schema:
+      properties:
+        entries:
+          items:
+            properties:
+              address:
+                type: string
+              public_key:
+                type: string
+          type: array
+        meta:
+          properties:
+            coin:
+              type: string
+            crypto_type:
+              type: string
+            encrypted:
+              type: boolean
+            filename:
+              type: string
+            label:
+              type: string
+            timestamp:
+              format: int64
+              type: integer
+            type:
+              type: string
+            version:
+              type: string
+          type: object
+  walletNewAddressResponse:
+    description: This endpoint generate new addresses
+    schema:
+      properties:
+        addresses:
+          items:
+            type: string
+          type: array
+  walletNewSeedResponse:
+    description: Generates wallet seed
+    schema:
+      properties:
+        seed:
+          type: string
+  walletSeedResponse:
+    description: This endpoint Returns seed of wallet of given id
+    schema:
+      properties:
+        seed:
+          type: string
+  walletSpentResponse:
+    description: Creates and broadcasts a transaction sending money from one
+            of our wallets to destination address.
+    schema:
+      properties:
+        balance:
+          properties:
+            confirmed:
+              properties:
+                coins:
+                  format: int64
+                  type: integer
+                hours:
+                  format: int64
+                  type: integer
+              type: object
+            predicted:
+              properties:
+                coins:
+                  format: int64
+                  type: integer
+                hours:
+                  format: int64
+                  type: integer
+              type: object
+          type: object
+        error:
+          type: string
+        txn:
+          properties:
+            hash:
+              type: string
+            inner_hash:
+              type: string
+            inputs:
+              items:
+                type: string
+              type: array
+            length:
+              format: int32
+              type: integer
+            outputs:
+              items:
+                properties:
+                  coins:
+                    type: string
+                  dst:
+                    type: string
+                  hours:
+                    format: int64
+                    type: integer
+                  uxid:
+                    type: string
+              type: array
+            sigs:
+              items:
+                type: string
+              type: array
+            timestamp:
+              format: int64
+              type: integer
+            type:
+              format: int32
+              type: integer
+          type: object
+  walletTransactionResponse:
+    description: Returns wallet transaction
+    schema:
+      properties:
+        encoded_transaction:
+          type: string
+        transaction:
+          properties:
+            fee:
+              type: string
+            inner_hash:
+              type: string
+            inputs:
+              items:
+                properties:
+                  address:
+                    type: string
+                  block:
+                    format: int64
+                    type: integer
+                  calculated_hours:
+                    type: string
+                  coins:
+                    type: string
+                  hours:
+                    type: string
+                  timestamp:
+                    format: int64
+                    type: integer
+                  txid:
+                    type: string
+                  uxid:
+                    type: string
+              type: array
+            length:
+              format: int64
+              type: integer
+            outputs:
+              items:
+                properties:
+                  address:
+                    type: string
+                  coins:
+                    type: string
+                  hours:
+                    type: string
+                  uxid:
+                    type: string
+              type: array
+            sigs:
+              items:
+                type: string
+              type: array
+            txid:
+              type: string
+            type:
+              format: int32
+              type: integer
+          type: object
+  walletTransactionsResponse:
+    description: Returns wallet transactions
+    schema:
+      properties:
+        transactions:
+          items:
+            properties:
+              announced:
+                type: string
+              checked:
+                type: string
+              is_valid:
+                type: boolean
+              received:
+                type: string
+              transaction:
+                properties:
+                  fee:
+                    format: int64
+                    type: integer
+                  inner_hash:
+                    type: string
+                  inputs:
+                    properties:
+                      calculated_hours:
+                        format: int64
+                        type: integer
+                      coins:
+                        type: string
+                      dst:
+                        type: string
+                      hours:
+                        format: int64
+                        type: integer
+                      uxid:
+                        type: string
+                    type: object
+                  length:
+                    format: int32
+                    type: integer
+                  outputs:
+                    properties:
+                      coins:
+                        type: string
+                      dst:
+                        type: string
+                      hours:
+                        format: int64
+                        type: integer
+                      uxid:
+                        type: string
+                    type: object
+                  sigs:
+                    items:
+                      type: string
+                    type: array
+                  txid:
+                    type: string
+                  type:
+                    format: int32
+                    type: integer
+                type: object
+          type: array
+  walletsResponse:
+    description: This endpoint return all loaded wallets
+    schema:
+      items:
+        properties:
+          entries:
+            items:
+              properties:
+                address:
+                  type: string
+                public_key:
+                  type: string
+            type: array
+          meta:
+            properties:
+              coin:
+                type: string
+              crypto_type:
+                type: string
+              encrypted:
+                type: boolean
+              filename:
+                type: string
+              label:
+                type: string
+              timestamp:
+                type: integer
+              type:
+                type: string
+              version:
+                type: string
+            type: object
+      type: array
+  walletsFolderResponse:
+    description: This endpoint return the wallet directory path
+    schema:
+      properties:
+        address:
+          type: string
+      type: object
+  verifyAddressResponse:
+    description: Response verifies a Skycoin address
+    schema:
+      properties:
+        data:
+          properties:
+            version:
+              format: int64
+              type: integer
+          type: object
+        error:
+          type: object
+      type: object
+  transactionInjectResponse:
+    description: Returns the transaction.
+    schema:
+      properties:
+        data:
+          properties:
+            transaction:
+              description: Represents a readable transaction
+              properties:
+                hash:
+                  type: string
+                inner_hash:
+                  type: string
+                inputs:
+                  items:
+                    type: string
+                  type: array
+                length:
+                  format: int32
+                  type: integer
+                outputs:
+                  items:
+                    properties:
+                      coins:
+                        type: string
+                      dst:
+                        type: string
+                      hours:
+                        format: int64
+                        type: integer
+                      uxid:
+                        type: string
+                  type: array
+                sigs:
+                  items:
+                    type: string
+                  type: array
+                timestamp:
+                  format: int64
+                  type: integer
+                type:
+                  format: int32
+                  type: integer
+              type: object
+          type: object
+        error:
+          properties:
+            code:
+              format: int64
+              type: integer
+            message:
+              type: string
+          type: object
+  transactionRawResponse:
+    description: Returns the hex-encoded byte serialization of a transaction
+    schema:
+      properties:
+        rawtx:
+          type: string
+  transactionVerifyResponse:
+    description: This endpoint return a ferificated transaction
+    schema:
+      properties:
+        data:
+          properties:
+            confirmed:
+              type: boolean
+            transaction:
+              properties:
+                fee:
+                  type: string
+                inner_hash:
+                  type: string
+                inputs:
+                  items:
+                    properties:
+                      address:
+                        type: string
+                      block:
+                        format: int64
+                        type: integer
+                      calculated_hours:
+                        type: string
+                      coins:
+                        type: string
+                      hours:
+                        type: string
+                      timestamp:
+                        format: int64
+                        type: integer
+                      txid:
+                        type: string
+                      uxid:
+                        type: string
+                  type: array
+                length:
+                  format: int32
+                  type: integer
+                outputs:
+                  items:
+                    properties:
+                      address:
+                        type: string
+                      coins:
+                        type: string
+                      hours:
+                        type: string
+                      uxid:
+                        type: string
+                  type: array
+                sigs:
+                  items:
+                    type: string
+                  type: array
+                txid:
+                  type: string
+                type:
+                  format: int32
+                  type: integer
+              type: object
+          type: object
+        error:
+          properties:
+            code:
+              format: int64
+              type: integer
+            message:
+              type: string
+          type: object
+  walletRecoverResponse:
+    description: This endpoint recover wallets.
+    schema:
+      properties:
+        data:
+          properties:
+            entries:
+              items:
+                properties:
+                  address:
+                    type: string
+                  public_key:
+                    type: string
+              type: array
+            meta:
+              properties:
+                coin:
+                  type: string
+                crypto_type:
+                  type: string
+                encrypted:
+                  type: boolean
+                filename:
+                  type: string
+                label:
+                  type: string
+                timestamp:
+                  format: int64
+                  type: integer
+                type:
+                  type: string
+                version:
+                  type: string
+              type: object
+          type: object
+  walletSeedVerifyResponse:
+    description: Verifies a wallet seed.
+    schema:
+      properties:
+        data:
+          description: Empty
+          type: object
+          
 schemes:
 - http
 - https
