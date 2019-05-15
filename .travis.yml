@@ -9,10 +9,114 @@ matrix:
   include:
     - os: linux
       dist: xenial
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=orangepi-plus2
+    #     - QEMU_OS=ubuntu
     - os: linux
       env:
-        - QEMU_PLATFORM=raspberrypi3
+        - QEMU_PLATFORM=orangepi-plus2
         - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=orangepi-plus2
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberry-pi2
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberry-pi2
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberry-pi2
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberrypi3
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberrypi3
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=raspberrypi3
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=beaglebone-black
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=beaglebone-black
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=beaglebone-black
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=asus-tinker-board
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=asus-tinker-board
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=asus-tinker-board
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=bananapi-m1-plus
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=bananapi-m1-plus
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=bananapi-m1-plus
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-c1
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-c1
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-c1
+    #     - QEMU_OS=fedora
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=ubuntu
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=debian
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=odroid-xu4
+    #     - QEMU_OS=fedora
     - os: osx
       osx_image: xcode8.3
 
