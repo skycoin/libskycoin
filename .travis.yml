@@ -117,8 +117,8 @@ matrix:
     #   env:
     #     - QEMU_PLATFORM=odroid-xu4
     #     - QEMU_OS=fedora
-    - os: osx
-      osx_image: xcode8.3
+    # - os: osx
+      # osx_image: xcode8.3
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq;
@@ -149,7 +149,7 @@ script:
     docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS --file docker/images/test-arm/Dockerfile  . -t skydev-test ;
     fi
   - if [[ "$QEMU_PLATFORM" ]]; then
-    docker run skydev-test -v $PWD:/go/src/github.com/skycoin/libskycoin ci-scripts/build.sh;
+    docker run skydev-test ci-scripts/build.sh;
     if
 before_deploy:
   - export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
