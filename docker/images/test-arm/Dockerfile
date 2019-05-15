@@ -19,4 +19,5 @@ RUN make -C $GOPATH/src/github.com/skycoin/libskycoin test-libc
 
 RUN [ "cross-build-end" ]
 
-WORKDIR $GOPATH/src
+WORKDIR $GOPATH/src/github.com/skycoin
+VOLUME $GOPATH/src/

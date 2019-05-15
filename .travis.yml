@@ -152,7 +152,10 @@ before_deploy:
   - export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
   - export ARCH="$(uname -m)"
   - export OS="$(uname -s)"
-  - make build-libc
+  - if [[ "$QEMU_PLATFORM" ]]; then
+    docker run -v $PWD:/go/src/github.com/skycoin/libskycoin ./ci-scripts/build.sh ;
+    if
+  - if [[ -z "$QEMU_PLATFORM" ]]; then make build-libc ; if
   - tar -c -z -f libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C build ./*
 deploy:
   - provider: releases
