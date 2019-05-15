@@ -77,7 +77,7 @@ DefaultAPI_blocksPost(apiClient_t *apiClient ,int start ,int end ,list_t * seqs)
 
 // coinSupplyHandler returns coin distribution supply stats
 //
-void
+object_t*
 DefaultAPI_coinSupply(apiClient_t *apiClient);
 
 
@@ -120,7 +120,7 @@ DefaultAPI_networkConnection(apiClient_t *apiClient ,char * addr);
 // This endpoint returns all outgoings connections.
 //
 list_t*
-DefaultAPI_networkConnections(apiClient_t *apiClient ,state_e states ,state_e direction);
+DefaultAPI_networkConnections(apiClient_t *apiClient ,char* states ,char* direction);
 
 
 // This endpoint disconnects a connection by ID or address
@@ -171,7 +171,7 @@ object_t*
 DefaultAPI_richlist(apiClient_t *apiClient ,int include_distribution ,char * n);
 
 
-// Returns a transaction identified by its txid hash with just id
+// Returns a transaction identi`fied by its txid hash with just id
 //
 object_t*
 DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int encoded);
@@ -221,7 +221,7 @@ DefaultAPI_verifyAddress(apiClient_t *apiClient ,char * address);
 
 // versionHandler returns the application version info
 //
-void
+object_t*
 DefaultAPI_version(apiClient_t *apiClient);
 
 
@@ -270,7 +270,7 @@ DefaultAPI_walletNewAddress(apiClient_t *apiClient ,char * id ,char * num ,char 
 // Returns the wallet directory path
 //
 object_t*
-DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy);
+DefaultAPI_walletNewSeed(apiClient_t *apiClient ,char* entropy);
 
 
 // Recovers an encrypted wallet by providing the seed. The first address will be generated from seed and compared to the first address of the specified wallet. If they match, the wallet will be regenerated with an optional password. If the wallet is not encrypted, an error is returned.

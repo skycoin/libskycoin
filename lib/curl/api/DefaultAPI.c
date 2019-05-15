@@ -114,7 +114,7 @@ DefaultAPI_addressUxouts(apiClient_t *apiClient ,char * address)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Response for endpoint /api/v1/address_uxouts");
+        printf("%s\n","Return address uxouts");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -709,7 +709,7 @@ end:
 
 // coinSupplyHandler returns coin distribution supply stats
 //
-void
+object_t*
 DefaultAPI_coinSupply(apiClient_t *apiClient)
 {
     list_t    *localVarQueryParameters = NULL;
@@ -743,8 +743,15 @@ DefaultAPI_coinSupply(apiClient_t *apiClient)
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
-    //No return type
-end:
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
@@ -754,6 +761,9 @@ end:
     list_free(localVarHeaderType);
 
     free(localVarPath);
+    return elementToReturn;
+end:
+    return NULL;
 
 }
 
@@ -848,7 +858,7 @@ DefaultAPI_defaultConnections(apiClient_t *apiClient)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","This endpoint return an list of default connections.");
+        printf("%s\n","Array of string as Response");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -921,7 +931,7 @@ DefaultAPI_explorerAddress(apiClient_t *apiClient ,char * address)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Response for endpoint /api/v1/explorer/address");
+        printf("%s\n","Response explorer address");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1140,7 +1150,7 @@ DefaultAPI_networkConnection(apiClient_t *apiClient ,char * addr)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","This endpoint return a connection struct");
+        printf("%s\n","This endpoint return a connection");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1175,8 +1185,7 @@ end:
 // This endpoint returns all outgoings connections.
 //
 list_t*
-DefaultAPI_networkConnections(apiClient_t *apiClient ,state_e states ,state_e direction)
-{
+DefaultAPI_networkConnections(apiClient_t *apiClient, char* states, char* direction) {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
     list_t    *localVarFormParameters = NULL;
@@ -1194,26 +1203,28 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,state_e states ,state_e di
 
     // query parameters
     char *keyQuery_states;
-    state_e valueQuery_states;
+    char *valueQuery_states;
     keyValuePair_t *keyPairQuery_states = 0;
     if (states)
     {
-        keyQuery_states = strdup("states");
-        valueQuery_states = (states);
-        keyPairQuery_states = keyValuePair_create(keyQuery_states, (void *)valueQuery_states);
-        list_addElement(localVarQueryParameters,keyPairQuery_states);
+    //string
+    keyQuery_states = strdup("states");
+    valueQuery_states = strdup(states);
+    keyPairQuery_states = keyValuePair_create(keyQuery_states, valueQuery_states);
+    list_addElement(localVarQueryParameters,keyPairQuery_states);
     }
 
     // query parameters
     char *keyQuery_direction;
-    state_e valueQuery_direction;
+    char *valueQuery_direction;
     keyValuePair_t *keyPairQuery_direction = 0;
     if (direction)
     {
-        keyQuery_direction = strdup("direction");
-        valueQuery_direction = (direction);
-        keyPairQuery_direction = keyValuePair_create(keyQuery_direction, (void *)valueQuery_direction);
-        list_addElement(localVarQueryParameters,keyPairQuery_direction);
+    //string
+    keyQuery_direction = strdup("direction");
+    valueQuery_direction = strdup(direction);
+    keyPairQuery_direction = keyValuePair_create(keyQuery_direction, valueQuery_direction);
+    list_addElement(localVarQueryParameters,keyPairQuery_direction);
     }
     list_addElement(localVarHeaderType,"application/json"); //produces
     apiClient_invoke(apiClient,
@@ -1227,7 +1238,7 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,state_e states ,state_e di
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","This endpoint return a connection struct");
+        printf("%s\n","This endpoint return an array of connections");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1261,10 +1272,10 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,state_e states ,state_e di
 
     free(localVarPath);
     free(keyQuery_states);
-//    free(valueQuery_states);
+    free(valueQuery_states);
     keyValuePair_free(keyPairQuery_states);
     free(keyQuery_direction);
-//    free(valueQuery_direction);
+    free(valueQuery_direction);
     keyValuePair_free(keyPairQuery_direction);
     return elementToReturn;
 end:
@@ -1431,7 +1442,7 @@ DefaultAPI_networkConnectionsTrust(apiClient_t *apiClient)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","This endpoint return a list of trusted connections.");
+        printf("%s\n","Array of string as Response");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1504,7 +1515,7 @@ DefaultAPI_outputsGet(apiClient_t *apiClient ,list_t * address ,list_t * hash)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","UnspentOutputsSummary records unspent outputs in different status.");
+        printf("%s\n","Response unspent outputs in different status.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1588,7 +1599,7 @@ DefaultAPI_outputsPost(apiClient_t *apiClient ,char * address ,char * hash)
                     "POST");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","UnspentOutputsSummary records unspent outputs in different status.");
+        printf("%s\n","Response unspent outputs in different status.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1654,7 +1665,7 @@ DefaultAPI_pendingTxs(apiClient_t *apiClient)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Returns a transaction identified by its txid hash.");
+        printf("%s\n","Returns pending txs");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1798,7 +1809,7 @@ DefaultAPI_richlist(apiClient_t *apiClient ,int include_distribution ,char * n)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Response for endpoint /api/v1/address_uxouts");
+        printf("%s\n","Response for richlist");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -1832,7 +1843,7 @@ end:
 
 }
 
-// Returns a transaction identified by its txid hash with just id
+// Returns a transaction identi`fied by its txid hash with just id
 //
 object_t*
 DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int encoded)
@@ -1964,7 +1975,7 @@ DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx)
                     "POST");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Ok, returns the transaction.");
+        printf("%s\n","Returns the transaction.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -2102,7 +2113,7 @@ DefaultAPI_transactionVerify(apiClient_t *apiClient)
                     "POST");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Responses ok");
+        printf("%s\n","This endpoint return a ferificated transaction");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -2354,7 +2365,7 @@ DefaultAPI_uxout(apiClient_t *apiClient ,char * uxid)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Response for endpoint /api/v1/uxout");
+        printf("%s\n","Response an uxout");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -2463,7 +2474,7 @@ end:
 
 // versionHandler returns the application version info
 //
-void
+object_t*
 DefaultAPI_version(apiClient_t *apiClient)
 {
     list_t    *localVarQueryParameters = NULL;
@@ -2497,8 +2508,15 @@ DefaultAPI_version(apiClient_t *apiClient)
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
-    //No return type
-end:
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
@@ -2508,6 +2526,9 @@ end:
     list_free(localVarHeaderType);
 
     free(localVarPath);
+    return elementToReturn;
+end:
+    return NULL;
 
 }
 
@@ -2554,7 +2575,7 @@ DefaultAPI_wallet(apiClient_t *apiClient ,char * id)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Response for endpoint /api/v1/wallet");
+        printf("%s\n","Response a wallet");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -3157,8 +3178,7 @@ end:
 // Returns the wallet directory path
 //
 object_t*
-DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
-{
+DefaultAPI_walletNewSeed(apiClient_t *apiClient, char* entropy) {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
     list_t    *localVarFormParameters = NULL;
@@ -3176,7 +3196,7 @@ DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
 
     // query parameters
     char *keyQuery_entropy;
-    entropy_e valueQuery_entropy;
+    char *valueQuery_entropy;
     keyValuePair_t *keyPairQuery_entropy = 0;
     if (entropy)
     {
@@ -3221,7 +3241,7 @@ DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
 
     free(localVarPath);
     free(keyQuery_entropy);
-//    free(valueQuery_entropy);
+    free(valueQuery_entropy);
     keyValuePair_free(keyPairQuery_entropy);
     return elementToReturn;
 end:
@@ -3296,7 +3316,7 @@ DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * 
                     "POST");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","This endpoint decrypts wallets.");
+        printf("%s\n","This endpoint recover wallets.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -3664,7 +3684,7 @@ DefaultAPI_walletTransaction(apiClient_t *apiClient ,inline_object_t * body)
                     "POST");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Returns blocks between a start and end point.");
+        printf("%s\n","Returns wallet transaction");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -3738,7 +3758,7 @@ DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Returns returns all unconfirmed transactions for all addresses in a given wallet");
+        printf("%s\n","Returns wallet transactions");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");

@@ -1,7 +1,7 @@
 /*
  * inline_response_200_3.h
  *
- *
+ * 
  */
 
 #ifndef _inline_response_200_3_H_
@@ -14,7 +14,6 @@
 #include "inline_response_200_3_unconfirmed_verify_transaction.h"
 
                 typedef enum  {  pending, connected, introduced } state_e;
-                typedef enum  {  First = 128, Second = 256 } entropy_e;
 
         char* state_ToString(state_e state);
 
