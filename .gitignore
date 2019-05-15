@@ -7,7 +7,8 @@
 *.so
 
 sb
-
+lib/curl/build
+lib/curl/cmake-build-debug
 build
 data
 pkg

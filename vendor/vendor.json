@@ -3,311 +3,193 @@
 	"ignore": "test",
 	"package": [
 		{
-			"checksumSHA1": "GM+KgxfAv3HJdtffkEPpegaFxe0=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/NYTimes/gziphandler",
-			"path": "github.com/NYTimes/gziphandler",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "nHJbl1D+H7h2zyEgXI3qXNATkEU=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/andreyvit/diff",
+			"checksumSHA1": "1W/d+0HDpXE67U3NSmL86Ssvc8Q=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/andreyvit/diff",
 			"path": "github.com/andreyvit/diff",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "0rido7hYHQtfq3UJzVT5LClLAWc=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/beorn7/perks/quantile",
-			"path": "github.com/beorn7/perks/quantile",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "OT4XN9z5k69e2RsMSpwW74B+yk4=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/blang/semver",
+			"checksumSHA1": "gtGSFgVVukEvdGKNybx197XZe4g=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/blang/semver",
 			"path": "github.com/blang/semver",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "R1Q34Pfnt197F/nCOO9kG8c+Z90=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/boltdb/bolt",
+			"checksumSHA1": "kdtDNzZbuUo0imfE+EQsU4GVe70=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/boltdb/bolt",
 			"path": "github.com/boltdb/bolt",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "hFFFYFqtS10h1arNtLUo2MmkYZE=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/cenkalti/backoff",
+			"checksumSHA1": "fm8WTsIPxZjml8JmcQxClheMoNM=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/cenkalti/backoff",
 			"path": "github.com/cenkalti/backoff",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "CSPbwbyzqA6sfORicn4HFtIhF/c=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/davecgh/go-spew/spew",
+			"checksumSHA1": "WyILd3ED3GIwuxbCJXKzNAaXDa8=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/davecgh/go-spew/spew",
 			"path": "github.com/davecgh/go-spew/spew",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
 			"checksumSHA1": "7NP1qUMF8Kx1y0zANxx0e+oq9Oo=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/fsnotify/fsnotify",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/fsnotify/fsnotify",
 			"path": "github.com/fsnotify/fsnotify",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "ccc981bf80385c528a65fbfdd49bf2d8da22aa23",
+			"revisionTime": "2018-08-30T22:02:26Z"
 		},
 		{
-			"checksumSHA1": "mE9XW26JSpe4meBObM6J/Oeq0eg=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/golang/protobuf/proto",
-			"path": "github.com/golang/protobuf/proto",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "ZqEwha5gnqiPgKO1sCp6o9UMhM8=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl",
+			"checksumSHA1": "bWGI7DqWg6IdhfamV96OD+Esa+8=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl",
 			"path": "github.com/hashicorp/hcl",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "XQmjDva9JCGGkIecOgwtBEMCJhU=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/ast",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/ast",
 			"path": "github.com/hashicorp/hcl/hcl/ast",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "1GmX7G0Pgf5XprOh+T3zXMXX0dc=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/parser",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/parser",
 			"path": "github.com/hashicorp/hcl/hcl/parser",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "encY+ZtDf4nJaMvsVL2c+EJ2r3Q=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/printer",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/printer",
 			"path": "github.com/hashicorp/hcl/hcl/printer",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "+qJTCxhkwC7r+VZlPlZz8S74KmU=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/scanner",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/scanner",
 			"path": "github.com/hashicorp/hcl/hcl/scanner",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "oS3SCN9Wd6D8/LG0Yx1fu84a7gI=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/strconv",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/strconv",
 			"path": "github.com/hashicorp/hcl/hcl/strconv",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "c6yprzj06ASwCo18TtbbNNBHljA=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/token",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/hcl/token",
 			"path": "github.com/hashicorp/hcl/hcl/token",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "PwlfXt7mFS8UYzWxOK5DOq0yxS0=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/json/parser",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/json/parser",
 			"path": "github.com/hashicorp/hcl/json/parser",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "afrZ8VmAwfTdDAYVgNSXbxa4GsA=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/json/scanner",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/json/scanner",
 			"path": "github.com/hashicorp/hcl/json/scanner",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
 			"checksumSHA1": "fNlXQCQEnb+B3k5UDL/r15xtSJY=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/json/token",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/hashicorp/hcl/json/token",
 			"path": "github.com/hashicorp/hcl/json/token",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "65a6292f0157eff210d03ed1bf6c59b190b8b906",
+			"revisionTime": "2018-09-06T18:38:39Z"
 		},
 		{
-			"checksumSHA1": "40vJyUB4ezQSn/NSadsKEOrudMc=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/inconshreveable/mousetrap",
-			"path": "github.com/inconshreveable/mousetrap",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "r6ZMyP/HsdeToXIxvgP3ntL6Bds=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/konsorten/go-windows-terminal-sequences",
+			"checksumSHA1": "KrCGyloOHx8+KWf1ysmvNqGjjfw=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/konsorten/go-windows-terminal-sequences",
 			"path": "github.com/konsorten/go-windows-terminal-sequences",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "AYZGozgchqe4WcKH/jCZI1flnP8=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/magiconair/properties",
+			"checksumSHA1": "J4XX2To0Ui7/jtatIa3ZCB3oYJc=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/magiconair/properties",
 			"path": "github.com/magiconair/properties",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "7c38529aac7222391b7a2661365177a97e21b998",
+			"revisionTime": "2018-11-20T17:11:50Z"
 		},
 		{
-			"checksumSHA1": "XEV3BI3nHA/rNa/tIgB7fVCrDww=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/mattn/go-colorable",
+			"checksumSHA1": "r+Q6sPzA1enpjiadt8GiPKZTZvc=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/mattn/go-colorable",
 			"path": "github.com/mattn/go-colorable",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "w5RcOnfv5YDr3j2bd1YydkPiZx4=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/mattn/go-isatty",
+			"checksumSHA1": "qLu6xvmn9YEOjY7qCD9ze1kajtg=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/mattn/go-isatty",
 			"path": "github.com/mattn/go-isatty",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "bKMZjd2wPw13VwoE7mBeSv5djFA=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/matttproud/golang_protobuf_extensions/pbutil",
-			"path": "github.com/matttproud/golang_protobuf_extensions/pbutil",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "CIK3BBNX3nuUQCmNqTQydNfMNKI=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/mgutz/ansi",
+			"checksumSHA1": "uCSZfMuuaA/Fy4Wu5Scaox7d/10=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/mgutz/ansi",
 			"path": "github.com/mgutz/ansi",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
 			"checksumSHA1": "J+g0oZePWp2zSIISD2dZZKTxmgg=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/mitchellh/mapstructure",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/mitchellh/mapstructure",
 			"path": "github.com/mitchellh/mapstructure",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3536a929edddb9a5b34bd6861dc4a9647cb459fe",
+			"revisionTime": "2018-10-05T04:51:35Z"
 		},
 		{
-			"checksumSHA1": "hlXUEyUn6u1ZhZbunDqTTEz1gyw=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/pelletier/go-toml",
+			"checksumSHA1": "NzzMfGmmPoTGVwLZDkj3FXXDvCA=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/pelletier/go-toml",
 			"path": "github.com/pelletier/go-toml",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "27c6b39a135b7dc87a14afb068809132fb7a9a8f",
+			"revisionTime": "2018-11-24T00:27:27Z"
 		},
 		{
-			"checksumSHA1": "LuFv4/jlrmFNnDb/5SCSEPAM9vU=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/pmezard/go-difflib/difflib",
+			"checksumSHA1": "vdlynahHOcvO6E9HNYGXMfhPXP0=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/pmezard/go-difflib/difflib",
 			"path": "github.com/pmezard/go-difflib/difflib",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "KkB+77Ziom7N6RzSbyUwYGrmDeU=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/client_golang/prometheus",
-			"path": "github.com/prometheus/client_golang/prometheus",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "lG3//eDlwqA4IOuAPrNtLh9G0TA=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/client_golang/prometheus/promhttp",
-			"path": "github.com/prometheus/client_golang/prometheus/promhttp",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "V8xkqgmP66sq2ZW4QO5wi9a4oZE=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/client_model/go",
-			"path": "github.com/prometheus/client_model/go",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "ljxJzXiQ7dNsmuRIUhqqP+qjRWc=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/common/expfmt",
-			"path": "github.com/prometheus/common/expfmt",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "GWlM3d2vPYyNATtTFgftS10/A9w=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg",
-			"path": "github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "ewHRWF7p/HQeh7RowZg5BUeDkdY=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/common/model",
-			"path": "github.com/prometheus/common/model",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "4zOdjJcskuocAzI+i6rcRzYjSlI=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/procfs",
-			"path": "github.com/prometheus/procfs",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "8E1IbrgtLBee7J404VKPyoI+qsk=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/procfs/internal/util",
-			"path": "github.com/prometheus/procfs/internal/util",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "HSP5hVT0CNMRa8+Xtz4z2Ic5U0E=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/procfs/nfs",
-			"path": "github.com/prometheus/procfs/nfs",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "yItvTQLUVqm/ArLEbvEhqG0T5a0=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/prometheus/procfs/xfs",
-			"path": "github.com/prometheus/procfs/xfs",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "dTSETLqmJ1OXyuy7kOfwg71w4fQ=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/rs/cors",
+			"checksumSHA1": "m8S8P4vBN5V5EXXqcGoGFdvI00w=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/rs/cors",
 			"path": "github.com/rs/cors",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "UwtyqB7CaUWPlw0DVJQvw0IFQZs=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/sergi/go-diff/diffmatchpatch",
+			"checksumSHA1": "SODT1VKvY/YOK26uGl+WCEU4+pY=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/sergi/go-diff/diffmatchpatch",
 			"path": "github.com/sergi/go-diff/diffmatchpatch",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "dhcoAs6YFyvXiG55mx5WDxg+/4g=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/shopspring/decimal",
+			"checksumSHA1": "MtAjGXhzLPgYXQACpx6KXyvMfco=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/shopspring/decimal",
 			"path": "github.com/shopspring/decimal",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "YjhDOmq6sEghGST0PAiyA+8EAT4=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/sirupsen/logrus",
-			"path": "github.com/sirupsen/logrus",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "Txvdu1GuxSsPFNWHfKq1BX28O/A=",
-			"path": "github.com/skycoin/skycoin/src/api",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
 			"checksumSHA1": "xtsTTofQspBNQueoLeZuArefvUc=",
@@ -316,397 +198,100 @@
 			"revisionTime": "2018-12-29T03:45:21Z"
 		},
 		{
-			"checksumSHA1": "UH0f3XriekmIGW5M7s5sqHfrYrY=",
-			"path": "github.com/skycoin/skycoin/src/cipher",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "bfyCblgbl6jvvz61+pmQn2pRu8s=",
-			"path": "github.com/skycoin/skycoin/src/cipher/base58",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "49FGlAEgdzx52sMHAGZ86/mrYQY=",
-			"path": "github.com/skycoin/skycoin/src/cipher/chacha20poly1305",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "otDKg6Tb4vyl5pUv5ECNLxsd2f4=",
-			"path": "github.com/skycoin/skycoin/src/cipher/chacha20poly1305/internal/chacha20",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "MdTdMqLHRC2Hm5OnV4ao3f9O7D4=",
-			"path": "github.com/skycoin/skycoin/src/cipher/encoder",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "SMEt7uKoie9UcWr3gbwV/YDMgpA=",
-			"path": "github.com/skycoin/skycoin/src/cipher/encrypt",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "K6bbJ0xL5d1fLO2JR4YWRuXsiuA=",
-			"path": "github.com/skycoin/skycoin/src/cipher/go-bip39",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "ACJtchaAt6C/h4rNMpaC2ayL2y4=",
-			"path": "github.com/skycoin/skycoin/src/cipher/pbkdf2",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "EFgRBF7HzszdvB+O687pPn3CPL8=",
-			"path": "github.com/skycoin/skycoin/src/cipher/poly1305",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "Ojb0je198cJYbyxk7jO22yHH1Qo=",
-			"path": "github.com/skycoin/skycoin/src/cipher/ripemd160",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "aOeI5KE2/wjJePtIrgD7muKSFUc=",
-			"path": "github.com/skycoin/skycoin/src/cipher/scrypt",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "QHp5Vv1d6BeILBTV0Dp+60aDURA=",
-			"path": "github.com/skycoin/skycoin/src/cipher/secp256k1-go",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "J/9D0hZgXj6qW0NODxb5reCEUR4=",
-			"path": "github.com/skycoin/skycoin/src/cipher/secp256k1-go/secp256k1-go2",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "7JrBl9ns5MV2x/aeA1xIntlAuU8=",
-			"path": "github.com/skycoin/skycoin/src/cipher/testsuite",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "WLzeDjJYAcsQxBJdfGDtNHAyhAQ=",
-			"path": "github.com/skycoin/skycoin/src/cli",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "FEAA2KwzlZMzvfRteInzAPK/sQA=",
-			"path": "github.com/skycoin/skycoin/src/coin",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "ihkCk4VlkcHtV8xoeew0YHLaXpE=",
-			"path": "github.com/skycoin/skycoin/src/daemon",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "k/aiUQpWQKuAF1PSQG1ifRF1Esw=",
-			"path": "github.com/skycoin/skycoin/src/daemon/gnet",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "THW7qfkNvBH81A2W0iVp7EhSgzo=",
-			"path": "github.com/skycoin/skycoin/src/daemon/pex",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "NbB8jA7RxXCKcw1uKaaSfWZukV0=",
-			"path": "github.com/skycoin/skycoin/src/daemon/strand",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "43yOw2l0Wr7BJehwJkJnSqNzag4=",
-			"path": "github.com/skycoin/skycoin/src/params",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "h9CSlTbmglcPSLHGSJuHkkOOGeo=",
-			"path": "github.com/skycoin/skycoin/src/readable",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "uqCSssIzaunJfbR5Hl3qtHHjlXA=",
-			"path": "github.com/skycoin/skycoin/src/skycoin",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "VhQ2OdB55XqswYaxtrFXqMVUCRw=",
-			"path": "github.com/skycoin/skycoin/src/testutil",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "KZrv5aAh8UDbwkhiRSmsf9hF1iE=",
-			"path": "github.com/skycoin/skycoin/src/testutil/assert",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "Jy2kAUjkRee28Dd5I1TnD5YXIF8=",
-			"path": "github.com/skycoin/skycoin/src/testutil/require",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "q8iI7393VJeZSUNuNLUDj8raXCE=",
-			"path": "github.com/skycoin/skycoin/src/util/apputil",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "0fUCau2uMppUxyya/HDyqzp9sKQ=",
-			"path": "github.com/skycoin/skycoin/src/util/certutil",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "x9jtFkhJS4kYBp1deQRFsODM3bc=",
-			"path": "github.com/skycoin/skycoin/src/util/droplet",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "1Z7u4VWE5WMNhVijaIhlpnENNfU=",
-			"path": "github.com/skycoin/skycoin/src/util/elapse",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "Yqsj26qQ+Pol6V94PECKVtYmKRs=",
-			"path": "github.com/skycoin/skycoin/src/util/fee",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "09bS93Xyq0WTnqxOK1TE+GBLeIM=",
-			"path": "github.com/skycoin/skycoin/src/util/file",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "2THt4SsIjHQgqSYDiwbpIG5rVWs=",
-			"path": "github.com/skycoin/skycoin/src/util/http",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "+kDUDc72TDp0hcn/igAK+VzXNMI=",
-			"path": "github.com/skycoin/skycoin/src/util/iputil",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "KAha7Cpi2FDGDvoq/U8jM/I+Uwc=",
-			"path": "github.com/skycoin/skycoin/src/util/logging",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "slol1US8vTOOroRac5VpVnd/x+4=",
-			"path": "github.com/skycoin/skycoin/src/util/timeutil",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "SDHyISWc8i17Nc5XYtlpuxoL9yY=",
-			"path": "github.com/skycoin/skycoin/src/util/useragent",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "KKboARw3jRRKiP1LQgEGTVv5b8k=",
-			"path": "github.com/skycoin/skycoin/src/visor",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "Esz3HIO/pFWHNcEcsL0pUPNbb+0=",
-			"path": "github.com/skycoin/skycoin/src/visor/blockdb",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "xaDCauzwK6QZNzPuxk9CLClfisg=",
-			"path": "github.com/skycoin/skycoin/src/visor/dbutil",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "QHlSHVM9zArDET79u7iKUZQZZzw=",
-			"path": "github.com/skycoin/skycoin/src/visor/historydb",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "JEETnApoJ0F2/EcSrvRj8xozi1o=",
-			"path": "github.com/skycoin/skycoin/src/wallet",
-			"revision": "943c61fdf38f5b785ad6bb5af052b08a2438a84c",
-			"revisionTime": "2018-12-29T03:45:21Z"
-		},
-		{
-			"checksumSHA1": "RXdGcEWihBEokWLc+LTy/UnI8OM=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/spf13/afero",
+			"checksumSHA1": "koMbVURsXSZmMCSzbfqaHYPEaMw=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/spf13/afero",
 			"path": "github.com/spf13/afero",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "a5d6946387efe7d64d09dcba68cdd523dc1273a3",
+			"revisionTime": "2018-12-16T11:45:33Z"
 		},
 		{
 			"checksumSHA1": "HcOjO9+cwl+xYnkiGuIeesqwBs8=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/spf13/afero/mem",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/spf13/afero/mem",
 			"path": "github.com/spf13/afero/mem",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "a5d6946387efe7d64d09dcba68cdd523dc1273a3",
+			"revisionTime": "2018-12-16T11:45:33Z"
 		},
 		{
-			"checksumSHA1": "Hc2i9OOK34PAImuNftTaHdbdLgs=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/spf13/cast",
+			"checksumSHA1": "So+ok+Fp2ztieiuZXD/wp8UJhS0=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/spf13/cast",
 			"path": "github.com/spf13/cast",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "8c9545af88b134710ab1cd196795e7f2388358d7",
+			"revisionTime": "2018-10-24T22:49:29Z"
 		},
 		{
-			"checksumSHA1": "zIZZJkfCJx0+s6GCdenxvJrBTPM=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/spf13/cobra",
-			"path": "github.com/spf13/cobra",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "fL/aH2pPCg51QUFedpS6EcT94KU=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/spf13/jwalterweatherman",
+			"checksumSHA1": "kmcWtDErtMPA3+o7+B4MDC3z+T0=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/spf13/jwalterweatherman",
 			"path": "github.com/spf13/jwalterweatherman",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "94f6ae3ed3bceceafa716478c5fbf8d29ca601a1",
+			"revisionTime": "2018-10-28T14:53:47Z"
 		},
 		{
-			"checksumSHA1": "WVKhLVXQFxXwmuRX+IRzebUmxjE=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/spf13/pflag",
-			"path": "github.com/spf13/pflag",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "dfYFNHHmFpJ/Ls3wCGAvuhRmWFY=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/spf13/viper",
+			"checksumSHA1": "e5baWaL9kzmQuekB8o4sVoMghVQ=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/spf13/viper",
 			"path": "github.com/spf13/viper",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "6d33b5a963d922d182c91e8a1c88d81fd150cfd4",
+			"revisionTime": "2018-12-07T10:02:11Z"
 		},
 		{
-			"checksumSHA1": "MRVLjdkQR4RXdrFu2hHxX5mWAmQ=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/stretchr/objx",
+			"checksumSHA1": "XxxSHLJ1BOfvzzLprfVDb71HgIc=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/stretchr/objx",
 			"path": "github.com/stretchr/objx",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "mGbTYZ8dHVTiPTTJu3ktp+84pPI=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/stretchr/testify/assert",
+			"checksumSHA1": "LkWb883wzX7qlnDAfpn0qLaPOuM=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/stretchr/testify/assert",
 			"path": "github.com/stretchr/testify/assert",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "hs0IfAV4wNExbAXc0aUU9V2SuFc=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/stretchr/testify/mock",
+			"checksumSHA1": "JDUrjeLSe3GVVevgD34wtjnP9Jo=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/stretchr/testify/mock",
 			"path": "github.com/stretchr/testify/mock",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "7vs6dSc1PPGBKyzb/SCIyeMJPLQ=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/stretchr/testify/require",
+			"checksumSHA1": "iCXNsEoolscua0lVhcTmhymPpWY=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/stretchr/testify/require",
 			"path": "github.com/stretchr/testify/require",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "zkpfnGNlew6jx+Ti+aTa9O7K+0g=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/toqueteos/webbrowser",
+			"checksumSHA1": "065A15+M4uSn0s6MKpklFjZwcFk=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/toqueteos/webbrowser",
 			"path": "github.com/toqueteos/webbrowser",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "wHJK2MbuCCBwndMy6qzRMCDuQ1E=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/github.com/urfave/cli",
+			"checksumSHA1": "TI0Ge0RFQodQ0rlXCnYF4D7fICY=",
+			"origin": "github.com/skycoin/skycoin/vendor/github.com/urfave/cli",
 			"path": "github.com/urfave/cli",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "BGm8lKZmvJbf/YOJLeL1rw2WVjA=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/golang.org/x/crypto/ssh/terminal",
-			"path": "golang.org/x/crypto/ssh/terminal",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "GtamqiJoL7PGHsN454AoffBFMa8=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/golang.org/x/net/context",
-			"path": "golang.org/x/net/context",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "mXU12fPuXEaU+rkYQ113fXYx2Ys=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/golang.org/x/sys/unix",
-			"path": "golang.org/x/sys/unix",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "Y7nctMxT58lRM78VtElPerhcnEs=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/golang.org/x/sys/windows",
-			"path": "golang.org/x/sys/windows",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
-		},
-		{
-			"checksumSHA1": "ziMb9+ANGRJSSIuxYdRbA+cDRBQ=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/golang.org/x/text/transform",
+			"origin": "github.com/skycoin/skycoin/vendor/golang.org/x/text/transform",
 			"path": "golang.org/x/text/transform",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "BCNYmf4Ek93G4lk5x3ucNi/lTwA=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/golang.org/x/text/unicode/norm",
+			"origin": "github.com/skycoin/skycoin/vendor/golang.org/x/text/unicode/norm",
 			"path": "golang.org/x/text/unicode/norm",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		},
 		{
-			"checksumSHA1": "ZSWoOPUNRr5+3dhkLK3C4cZAQPk=",
-			"origin": "github.com/simelo/libskycoin/gopath/src/github.com/skycoin/skycoin/vendor/gopkg.in/yaml.v2",
+			"origin": "github.com/skycoin/skycoin/vendor/gopkg.in/yaml.v2",
 			"path": "gopkg.in/yaml.v2",
-			"revision": "17754c6bbac1a68f11b553f784361fa4f6ee4b7c",
-			"revisionTime": "2019-01-15T05:47:59Z"
+			"revision": "3e2676bf14743b1f3a4dbe8425f42b950249fcc8",
+			"revisionTime": "2019-03-03T16:38:25Z"
 		}
 	],
-	"rootPath": "github.com/simelo/libskycoin"
+	"rootPath": "github.com/skycoin/libskycoin"
 }

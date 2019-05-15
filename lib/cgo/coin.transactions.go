@@ -433,7 +433,7 @@ func SKY_coin_Transaction_OutputHours(handle C.Transaction__Handle, _arg0 *uint6
 
 //export SKY_coin_Create_Transactions
 func SKY_coin_Create_Transactions(handle *C.Transactions__Handle) (____error_code uint32) {
-	txs := make(coin.Transactions, 0, 0)
+	txs := make(coin.Transactions, 0)
 	*handle = registerTransactionsHandle(&txs)
 	return SKY_OK
 }
