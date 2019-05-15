@@ -9,18 +9,18 @@ matrix:
   include:
     # - os: linux
       # dist: xenial
+    # - os: linux
+    #   env:
+    #     - QEMU_PLATFORM=orangepi-plus2
+    #     - QEMU_OS=ubuntu
     - os: linux
       env:
         - QEMU_PLATFORM=orangepi-plus2
-        - QEMU_OS=ubuntu
+        - QEMU_OS=debian
     # - os: linux
-      # env:
-        # - QEMU_PLATFORM=orangepi-plus2
-        # - QEMU_OS=debian
-    # - os: linux
-      # env:
-        # - QEMU_PLATFORM=orangepi-plus2
-        # - QEMU_OS=fedora
+    #   env:
+    #     - QEMU_PLATFORM=orangepi-plus2
+    #     - QEMU_OS=fedora
     # - os: linux
     #   env:
     #     - QEMU_PLATFORM=raspberry-pi2
@@ -34,17 +34,17 @@ matrix:
     #     - QEMU_PLATFORM=raspberry-pi2
     #     - QEMU_OS=fedora
     # - os: linux
-      # env:
-        # - QEMU_PLATFORM=raspberrypi3
-        # - QEMU_OS=ubuntu
+    #   env:
+    #     - QEMU_PLATFORM=raspberrypi3
+    #     - QEMU_OS=ubuntu
     # - os: linux
-      # env:
-        # - QEMU_PLATFORM=raspberrypi3
-        # - QEMU_OS=debian
+    #   env:
+    #     - QEMU_PLATFORM=raspberrypi3
+    #     - QEMU_OS=debian
     # - os: linux
-      # env:
-        # - QEMU_PLATFORM=raspberrypi3
-        # - QEMU_OS=fedora
+    #   env:
+    #     - QEMU_PLATFORM=raspberrypi3
+    #     - QEMU_OS=fedora
     # - os: linux
     #   env:
     #     - QEMU_PLATFORM=beaglebone-black
