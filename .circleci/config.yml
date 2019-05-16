@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     docker: # use the docker executor type; machine and macos executors are also supported
-      - image: circleci/golang:1.11 # the primary container, where your job's commands are run
-      
+      - image: circleci/golang:1.11.10-stretch # the primary container, where your job's commands are run
+
     environment:
       BUILD_DIR: build
       BUILDLIB_DIR: $BUILD_DIR/libskycoin
