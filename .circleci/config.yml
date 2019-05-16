@@ -3,12 +3,21 @@ jobs:
   build:
     docker: # use the docker executor type; machine and macos executors are also supported
       - image: circleci/golang:1.11 # the primary container, where your job's commands are run
+      
+    environment:
+      BUILD_DIR: build
+      BUILDLIB_DIR: $BUILD_DIR/libskycoin
+      LIB_DIR: lib
+      CGO_ENABLED: 1
+      VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 60s
+      PATH_DIR: $GOPATH/src/github.com/skycoin/libskycoin/
+
     steps:
       - checkout # check out the code in the project directory
-      - run: git submodule init && git submodule update
       - run: make dep
       - run: ./ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
+      - run: go get -t ./...
       - run: make install-linters
       - run: VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
       - run: make install-deps-libc-linux
