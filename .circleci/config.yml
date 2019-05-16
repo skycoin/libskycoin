@@ -5,7 +5,8 @@ jobs:
       - image: circleci/golang:1.11 # the primary container, where your job's commands are run
     steps:
       - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
+      - run: git submodule init && git submodule update
+      - run: make deps
       - run: ./ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
       - run: make install-linters
