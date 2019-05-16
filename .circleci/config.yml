@@ -6,7 +6,7 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run: git submodule init && git submodule update
-      - run: make deps
+      - run: make dep
       - run: ./ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
       - run: make install-linters
