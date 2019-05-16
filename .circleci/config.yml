@@ -15,7 +15,8 @@ jobs:
       - run: make dep
       - run: ./ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
-      - run: go get github.com/skycoin/skycoin
+      - run: go get -u github.com/kardianos/govendor
+      - run: govendor init && govendor update
       - run: go get -t ./...
       - run: make install-linters
       - run: VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
