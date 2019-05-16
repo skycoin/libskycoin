@@ -1,5 +1,8 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/golang
+    docker: # use the docker executor type; machine and macos executors are also supported
+      - image: balenalib/raspberrypi3-ubuntu-golang # the primary container, where your job's commands are run
+    steps:
+      - checkout # check out the code in the project directory
+      - run: date # run the `echo` command
