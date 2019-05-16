@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
-.PHONY: install-linters format clean-libc format-libc lint-libc
+.PHONY: install-linters format clean-libc format-libc lint-libc docs
 
 COIN ?= skycoin
 
@@ -121,7 +121,7 @@ docs-libc:
 	moxygen -o $(LIBDOC_DIR)/API.md $(LIBDOC_DIR)/xml/
 	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o docs/libc/curl
 
-docs: docs-libc
+docs: docs-libc ## Generate library documentation
 
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
