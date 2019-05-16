@@ -60,11 +60,35 @@ The following rules are enforced
 - Contributions must comply to the development guidelines documented in the [Skycoin wiki](https://github.com/skycoin/skycoin/wiki).
 - C / C++ code must comply to the [Bitcoin C coding style](https://github.com/bitcoin/bitcoin/blob/master/doc/developer-notes.md#coding-style-c) (enforced by `clang-format`).
 
+### Doxygen comment syntax
+
+If you want to continue with `the doxygen way`(we recommend it) of coding and document functions, structs, and functions, you should follow the specifications found in the [Doxygen official site](http://www.doxygen.nl/manual/docblocks.html).
+
+An example of documentation using `doxygen` is the next:
+
+```c
+/**
+ * Addresses of Bitcoin accounts
+ */
+typedef struct {
+    GoUint8_ Version;      ///< Address version identifier.
+                           ///< Used to differentiate testnet
+                           ///< vs mainnet addresses, for instance.
+    cipher__Ripemd160 Key; ///< Address hash identifier.
+} cipher__BitcoinAddress;
+```
+This code example can be found at `include/cipher.bitcoin.go.h`.
+
+Inside `/* */`  we found struct documentation, meanwhile `//<` symbol is used to describe fields of the struct.
+
+After that, run `make docs` for a new docs generation. You can found the api documentation at `docs/libc` folder.
+
 ### Makefile targets:
 
 |Target                        |Help|
 | :-------------               | :----------: | 
 |test-libc                     |Run tests for libskycoin C client library|
+|docs                           |Generate library documentation|
 |lint                          |Run linters. Use make install-linters first.|
 |check                         |Run tests and linters|
 |install-linters-Linux         |Install linters on GNU/Linux|
