@@ -148,7 +148,6 @@ script:
   - echo $PWD
   - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
   - if [[ "$QEMU_PLATFORM" ]]; then docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS --file docker/images/test-arm/Dockerfile  . -t skydev-test ; fi
-  - make check-swagger
 
 notifications:
   email: false

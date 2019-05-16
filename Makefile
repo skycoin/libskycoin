@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
+.PHONY: install-linters format clean-libc format-libc lint-libc
 
 COIN ?= skycoin
 
