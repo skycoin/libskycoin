@@ -59,3 +59,22 @@ The following rules are enforced
 
 - Contributions must comply to the development guidelines documented in the [Skycoin wiki](https://github.com/skycoin/skycoin/wiki).
 - C / C++ code must comply to the [Bitcoin C coding style](https://github.com/bitcoin/bitcoin/blob/master/doc/developer-notes.md#coding-style-c) (enforced by `clang-format`).
+
+### Makefile targets:
+
+|Target                        |Help|
+| :-------------               | :----------: | 
+|test-libc                     |Run tests for libskycoin C client library|
+|lint                          |Run linters. Use make install-linters first.|
+|check                         |Run tests and linters|
+|install-linters-Linux         |Install linters on GNU/Linux|
+|install-linters-Darwin        |Install linters on Mac OSX|
+|install-deps-Linux            |Install deps on GNU/Linux|
+|install-deps-Darwin           |Install deps on Mac OSX|
+|install-libraries-deps        |Install deps for `lib\curl` wrapper of Skycoin REST API|
+|install-linters               |Install linters|
+|install-deps-libc-linux       |Install locally dependencies for testing libskycoin|
+|install-lib-curl              |Install Sky Api curl based rest wrapper|
+|install-deps-libc-osx         |Install locally dependencies for testing libskycoin|
+|format                        |Formats the code. Must have goimports installed (use make install-linters).|
+|clean-libc                    |Clean files generate by library|
