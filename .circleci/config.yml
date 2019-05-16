@@ -7,3 +7,10 @@ jobs:
       - checkout # check out the code in the project directory
       - run: echo "hello world" # run the `echo` command
       - run: ./ci-scripts/install-travis-gcc.sh
+      - run: go get github.com/gz-c/gox
+      - run: go get -t ./...
+      - run: make install-linters
+      - run: VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
+      - run: make install-deps-libc
+      - run: make install-lib-curl
+      - run: make check
