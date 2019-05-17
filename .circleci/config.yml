@@ -28,4 +28,4 @@ jobs:
       - run: VERSION=1.10.2 $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-golangci-lint.sh
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-libc-linux
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin test-libc
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check
