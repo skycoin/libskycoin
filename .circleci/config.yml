@@ -1,21 +1,20 @@
 version: 2.1
 jobs:
   linux_32bits:
+    machine: true
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
-    docker: 
-      - image: balenalib/orangepi-plus2-debian-golang
-
     environment:
       BUILD_DIR: build
       BUILDLIB_DIR: $BUILD_DIR/libskycoin
       LIB_DIR: lib
       CGO_ENABLED: 1
+      QEMU_PLATFORM: orangepi-plus2
+      QEMU_OS: debian
 
     steps:
-      - run: go env
-      - run: go version 
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
       - checkout # check out the code in the project directory
+      - run: cd $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin && docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS --file docker/images/test-arm/Dockerfile  . -t skydev-test
       # - run: mkdir -p $GOPATH/src/github.com/skycoin
       # - run: cd $GOPATH/src/github.com/skycoin && git clone --branch v0.25.1 https://github.com/skycoin/skycoin 
       # - run: ls -oa $GOPATH/src/github.com/skycoin
