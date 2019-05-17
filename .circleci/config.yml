@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  linux_64bits:
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     docker: # use the docker executor type; machine and macos executors are also supported
       - image: circleci/golang:1.11 # the primary container, where your job's commands are run
