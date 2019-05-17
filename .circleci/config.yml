@@ -13,13 +13,12 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run: make dep
+      - run: echo $GOPATH
       - run: ./ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
-      - run: go get -u github.com/kardianos/govendor
-      - run: govendor init && govendor update
-      - run: go get -t ./...
-      - run: make install-linters
-      - run: VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
-      - run: make install-deps-libc-linux
-      - run: make install-lib-curl
-      - run: make check
+      # - run: go get -t ./...
+      # - run: make install-linters
+      # - run: VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
+      # - run: make install-deps-libc-linux
+      # - run: make install-lib-curl
+      # - run: make check
