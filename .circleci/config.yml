@@ -18,13 +18,12 @@ jobs:
       - run: cd $GOPATH/src/github.com/skycoin && git clone --branch v0.25.1 https://github.com/skycoin/skycoin 
       - run: ls -oa $GOPATH/src/github.com/skycoin
       - run: ls -oa $GOPATH/src/github.com/skycoin/libskycoin
-      - run: ls -oa .
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin dep
       - run: $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
       - run: go get -t ./...
-      - run: make install-linters
-      - run: VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-linters
+      - run: VERSION=1.10.2 $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-golangci-lint.sh
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-libc-linux
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check
