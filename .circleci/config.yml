@@ -30,10 +30,10 @@ jobs:
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check
 
-  macos:
+  linux_32bits:
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
-    macos:
-      xcode: "9.3.0"
+    docker: 
+      - image: balenalib/orangepi-plus2-debian-golang
 
     environment:
       BUILD_DIR: build
@@ -42,6 +42,7 @@ jobs:
       CGO_ENABLED: 1
 
     steps:
+      - run: [ "cross-build-start" ]
       - run: go env
       - run: go version 
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
@@ -56,12 +57,13 @@ jobs:
       - run: go get -t ./...
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-linters
       - run: VERSION=1.10.2 $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-golangci-lint.sh
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-libc-osx
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-libc-linux
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check    
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check
+      - run: [ "cross-build-end" ]    
 workflows:
   version: 2
   linux-osx:
     jobs:
       - linux_64bits
-      - macos
+      - linux_32bits
