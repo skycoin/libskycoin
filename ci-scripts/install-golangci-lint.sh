@@ -14,4 +14,4 @@ curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | 
 # In alpine linux (as it does not come with curl by default)
 wget -O - -q https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s vX.Y.Z
 
-golangci-lint --version
+# golangci-lint --version
