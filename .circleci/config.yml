@@ -1,35 +1,5 @@
 version: 2.1
 jobs:
-  linux_64bits:
-    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
-    docker: # use the docker executor type; machine and macos executors are also supported
-      - image: circleci/golang:1.11 # the primary container, where your job's commands are run
-
-    environment:
-      BUILD_DIR: build
-      BUILDLIB_DIR: $BUILD_DIR/libskycoin
-      LIB_DIR: lib
-      CGO_ENABLED: 1
-
-    steps:
-      - run: go env
-      - run: go version 
-      - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
-      - checkout # check out the code in the project directory
-      - run: mkdir -p $GOPATH/src/github.com/skycoin
-      - run: cd $GOPATH/src/github.com/skycoin && git clone --branch v0.25.1 https://github.com/skycoin/skycoin 
-      - run: ls -oa $GOPATH/src/github.com/skycoin
-      - run: ls -oa $GOPATH/src/github.com/skycoin/libskycoin
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin dep
-      - run: $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-travis-gcc.sh
-      - run: go get github.com/gz-c/gox
-      - run: go get -t ./...
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-linters
-      - run: VERSION=1.10.2 $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-golangci-lint.sh
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-libc-linux
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
-      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check
-
   linux_32bits:
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     docker: 
@@ -64,5 +34,4 @@ workflows:
   version: 2
   linux-osx:
     jobs:
-      - linux_64bits
       - linux_32bits
