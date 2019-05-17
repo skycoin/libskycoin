@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/libskycoin
+    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     docker: # use the docker executor type; machine and macos executors are also supported
       - image: circleci/golang # the primary container, where your job's commands are run
 
@@ -14,6 +14,8 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run: make dep
+      - run: mkdir -p $GOPATH/src/github.com/skycoin
+      - run: cd $GOPATH/src/github.com/skycoin && git clone --branch v0.25.1 https://github.com/skycoin/skycoin 
       - run: ./ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
       - run: go get -t ./...
