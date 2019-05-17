@@ -1,6 +1,7 @@
 version: 2
 jobs:
   build:
+    working_directory: /go/src/github.com/libskycoin
     docker: # use the docker executor type; machine and macos executors are also supported
       - image: circleci/golang # the primary container, where your job's commands are run
 
@@ -9,7 +10,6 @@ jobs:
       BUILDLIB_DIR: $BUILD_DIR/libskycoin
       LIB_DIR: lib
       CGO_ENABLED: 1
-      GOPATH: /home/circleci/project
 
     steps:
       - checkout # check out the code in the project directory
