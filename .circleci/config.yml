@@ -14,8 +14,6 @@ jobs:
     steps:
       - checkout # check out the code in the project directory
       - run: make dep
-      - run: echo $GOPATH
-      - run: echo $PWD
       - run: ./ci-scripts/install-travis-gcc.sh
       - run: go get github.com/gz-c/gox
       - run: go get -t ./...
