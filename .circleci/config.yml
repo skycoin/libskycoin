@@ -30,8 +30,38 @@ jobs:
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check
 
+  macos:
+    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
+    macos:
+      xcode: "9.3.0"
+
+    environment:
+      BUILD_DIR: build
+      BUILDLIB_DIR: $BUILD_DIR/libskycoin
+      LIB_DIR: lib
+      CGO_ENABLED: 1
+
+    steps:
+      - run: go env
+      - run: go version 
+      - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
+      - checkout # check out the code in the project directory
+      - run: mkdir -p $GOPATH/src/github.com/skycoin
+      - run: cd $GOPATH/src/github.com/skycoin && git clone --branch v0.25.1 https://github.com/skycoin/skycoin 
+      - run: ls -oa $GOPATH/src/github.com/skycoin
+      - run: ls -oa $GOPATH/src/github.com/skycoin/libskycoin
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin dep
+      - run: $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-travis-gcc.sh
+      - run: go get github.com/gz-c/gox
+      - run: go get -t ./...
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-linters
+      - run: VERSION=1.10.2 $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/install-golangci-lint.sh
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-libc-osx
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
+      - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check    
 workflows:
   version: 2
-  build_and_test:
+  linux-osx:
     jobs:
       - linux_64bits
+      - macos
