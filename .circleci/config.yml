@@ -29,3 +29,6 @@ jobs:
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-libc-linux
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin install-lib-curl
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin check
+
+workflows:
+  - linux_64bits
