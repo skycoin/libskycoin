@@ -17,6 +17,7 @@ jobs:
       - run: mkdir -p $GOPATH/src/github.com/skycoin
       - run: cd $GOPATH/src/github.com/skycoin && git clone --branch v0.25.1 https://github.com/skycoin/skycoin 
       - run: ls -oa $GOPATH/src/github.com/skycoin
+      - run: ls -oa $GOPATH/src/github.com/skycoin/libskycoin
       # - run: make -C $CIRCLE_WORKING_DIRECTORY dep
       # - run: $CIRCLE_WORKING_DIRECTORY/ci-scripts/install-travis-gcc.sh
       # - run: go get github.com/gz-c/gox
