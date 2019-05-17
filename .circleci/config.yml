@@ -9,6 +9,7 @@ jobs:
       BUILDLIB_DIR: $BUILD_DIR/libskycoin
       LIB_DIR: lib
       CGO_ENABLED: 1
+      GOPATH: /home/circleci/project
 
     steps:
       - checkout # check out the code in the project directory
