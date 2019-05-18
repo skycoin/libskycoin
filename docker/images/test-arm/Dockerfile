@@ -10,6 +10,7 @@ ADD . $GOPATH/src/github.com/skycoin/libskycoin/
 RUN [ "cross-build-start" ]
 
 RUN ls -oa $GOPATH/src/github.com/skycoin/libskycoin/
+RUN make -C $GOPATH/src/github.com/skycoin/libskycoin dep
 RUN sh $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/docker_install_${QEMU_OS}.sh
 RUN go get github.com/gz-c/gox
 RUN go get -t ./...
