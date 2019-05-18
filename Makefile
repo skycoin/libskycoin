@@ -166,15 +166,24 @@ install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
 
-install-deps-libc: install-deps-libc-$(OSNAME) install-libraries-deps
+install-deps-skyapi-Linux:
+	sudo add-apt-repository ppa:george-edison55/cmake-3.x
+	sudo apt-get update
+	sudo apt-get install cmake
+
+install-deps-skyapi-Darwin:
+	brew install curl
+	brew install cmake
+	ls
+
+install-deps-libc: install-deps-libc-$(OSNAME)
+
+install-deps-skyapi: install-deps-skyapi-$(OSNAME)
 
 install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
 	tar -xzf check-0.12.0.tar.gz
 	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
-
-install-lib-curl: ## Install Sky Api curl based rest wrapper
-	bash .travis/install_lib_curl.sh
 
 install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
