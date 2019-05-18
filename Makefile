@@ -136,6 +136,7 @@ lint-libc: format-libc
 check: lint test-libc lint-libc ## Run tests and linters
 
 install-linters-Linux: ## Install linters on GNU/Linux
+	sudo apt-get update
 	sudo apt-get install $(PKG_CLANG_FORMAT)
 	sudo apt-get install $(PKG_CLANG_LINTER)
 
