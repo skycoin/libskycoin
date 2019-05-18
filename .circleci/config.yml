@@ -1,0 +1,70 @@
+version: 2
+jobs:
+  orangepi-plus2:
+    docker:
+      - image: docker:18.06.0-ce-git
+    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
+    environment:
+      QEMU_PLATFORM: orangepi-plus2
+
+    steps:
+      - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
+      - checkout
+      - setup_remote_docker:
+          version: 18.06.0-ce
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=fedora --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+
+  raspberrypi3:
+    docker:
+      - image: docker:18.06.0-ce-git
+    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
+    environment:
+      QEMU_PLATFORM: raspberrypi3
+
+    steps:
+      - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
+      - checkout
+      - setup_remote_docker:
+          version: 18.06.0-ce
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=fedora --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+  
+  raspberrypi2:
+    docker:
+      - image: docker:18.06.0-ce-git
+    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
+    environment:
+      QEMU_PLATFORM: raspberry-pi2
+
+    steps:
+      - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
+      - checkout
+      - setup_remote_docker:
+          version: 18.06.0-ce
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=fedora --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+  
+  bananapi_m1_plus:
+      docker:
+        - image: docker:18.06.0-ce-git
+      working_directory: $GOPATH/src/github.com/skycoin/libskycoin
+      environment:
+        QEMU_PLATFORM: bananapi-m1-plus
+  
+      steps:
+        - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
+        - checkout
+        - setup_remote_docker:
+            version: 18.06.0-ce
+        - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+        - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=fedora --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+  
+workflows:
+  version: 2
+  arm_test:
+    jobs:
+      - raspberrypi3
+      - orangepi-plus2
+      - raspberrypi2
+      - bananapi_m1_plus

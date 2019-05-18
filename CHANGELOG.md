@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+- C client for Skycoin Api at `lib/curl`. For next versions a form of automatically generating the C client will be included in the Makefile.
+- In this version we only support the client at `lib/curl`
+
 ### Fixed
 
 - `/api/v1/health` will return correct build info when running Docker containers based on `skycoin/skycoin` mainnet image.
@@ -16,7 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
+
 - Delete function `SKY_base58_String2Hex`
+
 
 ## [0.25.0] - 2018-12-19
 

@@ -20,10 +20,6 @@ SKYSRC_REL_PATH        = $(LIBVENDOR_REL_PATH)/github.com/skycoin/skycoin
 # --- Relative path to Skycoin vendor directory
 SKYVENDOR_REL_PATH     = $(SKYSRC_REL_PATH)/vendor
 
-# Source files
-LIB_FILES = $(shell find ./lib/cgo -type f -name "*.go")
-HEADER_FILES = $(shell find ./include -type f -name "*.h")
-
 # Compilation output for libskycoin
 BUILD_DIR = build
 BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
@@ -33,6 +29,14 @@ DOC_DIR = docs
 INCLUDE_DIR = include
 LIBSRC_DIR = lib/cgo
 LIBDOC_DIR = $(DOC_DIR)/libc
+SWAGGER_SPEC_DIR = lib/swagger
+SWAGGER_CLIENT_DIR = lib/curl
+
+# Source files
+LIB_FILES = $(shell find $(LIBSRC_DIR) -type f -name "*.go")
+HEADER_FILES = $(shell find $(INCLUDE_DIR) -type f -name "*.h")
+SWAGGER_FILES += skycoin.v0.25.1.openapi.v2.json
+SWAGGER_FILES += skycoin.v0.25.1.openapi.v2.yml
 
 # Compilation flags for libskycoin
 CC_VERSION = $(shell $(CC) -dumpversion)
@@ -73,8 +77,7 @@ configure-build:
 
 ## Update links to dependency packages
 dep:
-	git submodule init || true
-	git submodule update
+	git submodule update --init --recursive
 	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/golang.org $(LIBVENDOR_REL_PATH)/golang.org
 	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/gopkg.in $(LIBVENDOR_REL_PATH)/gopkg.in
 	ls -1 $(SKYVENDOR_REL_PATH)/github.com | grep -v '^skycoin$$' | xargs -I NAME ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/github.com/NAME $(LIBVENDOR_REL_PATH)/github.com/NAME
@@ -148,16 +151,27 @@ install-deps-Linux: ## Install deps on GNU/Linux
 install-deps-Darwin: ## Install deps on Mac OSX
 	brew install $(PKG_LIB_TEST)
 
+install-libraries-deps: ## Install deps on GNU/Linux
+	if [[ "$(UNAME_S)" == "Linux" ]]; then (cd build && wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz && echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt && md5sum -c cmake_md5.txt && tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null && mv cmake-3.3.2-Linux-x86_64 cmake-install && PATH=$(pwd)/build/cmake-install:$(pwd)/build/cmake-install/bin:$PATH ) ; fi
+	(cd build && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && bash ./configure && make && sudo make install)
+	if [[ "$(UNAME_S)" == "Darwin" ]]; then brew install curl ; fi
+	# install uncrustify
+	(cd build && git clone https://github.com/uncrustify/uncrustify.git)
+	(cd build/uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
+
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(GOPATH)/bin v1.10.2
 
-install-deps-libc: install-deps-libc-$(OSNAME)
+install-deps-libc: install-deps-libc-$(OSNAME) install-libraries-deps
 
 install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
 	tar -xzf check-0.12.0.tar.gz
 	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
+
+install-lib-curl: ## Install Sky Api curl based rest wrapper
+	bash .travis/install_lib_curl.sh
 
 install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
@@ -172,8 +186,8 @@ clean-libc: ## Clean files generate by library
 	rm -rfv include/libskycoin.h
 
 format-libc:
-	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format lib/cgo/tests/*.c
-	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format include/*.h
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format lib/cgo/tests/*.c
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format include/*.h
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
