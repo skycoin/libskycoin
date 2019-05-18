@@ -3,13 +3,12 @@ services:
   - docker
 language: go
 go:
-  - 1.11.x
 matrix:
   include:
-    - os: linux
-      dist: xenial
-    - os: osx
-      osx_image: xcode8.3
+    # - os: linux
+      # dist: xenial
+    # - os: osx
+      # osx_image: xcode8.3
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq;
@@ -35,11 +34,17 @@ install:
   - make install-lib-curl
 script:
   - make check
+  - if [[ "$QEMU_PLATFORM" ]]; then
+    docker run skydev-test ci-scripts/build.sh;
+    if
 before_deploy:
   - export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
   - export ARCH="$(uname -m)"
   - export OS="$(uname -s)"
-  - make build-libc
+  - if [[ "$QEMU_PLATFORM" ]]; then
+    docker run skydev-test -v $PWD:/go/src/github.com/skycoin/libskycoin ci-scripts/build.sh;
+    if
+  - if [[ -z "$QEMU_PLATFORM" ]]; then make build-libc ; if
   - tar -c -z -f libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C build ./*
 deploy:
   - provider: releases
