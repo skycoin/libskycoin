@@ -77,8 +77,7 @@ configure-build:
 
 ## Update links to dependency packages
 dep:
-	git submodule init || true
-	git submodule update
+	git submodule update --init --recursive
 	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/golang.org $(LIBVENDOR_REL_PATH)/golang.org
 	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/gopkg.in $(LIBVENDOR_REL_PATH)/gopkg.in
 	ls -1 $(SKYVENDOR_REL_PATH)/github.com | grep -v '^skycoin$$' | xargs -I NAME ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/github.com/NAME $(LIBVENDOR_REL_PATH)/github.com/NAME
@@ -191,8 +190,8 @@ clean-libc: ## Clean files generate by library
 	rm -rfv include/libskycoin.h
 
 format-libc:
-	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format lib/cgo/tests/*.c
-	$(PKG_CLANG_FORMAT) -sort-includes -verbose -i -assume-filename=.clang-format include/*.h
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format lib/cgo/tests/*.c
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format include/*.h
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
