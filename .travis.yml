@@ -9,114 +9,6 @@ matrix:
   include:
     - os: linux
       dist: xenial
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=orangepi-plus2
-    #     - QEMU_OS=ubuntu
-    - os: linux
-      env:
-        - QEMU_PLATFORM=orangepi-plus2
-        - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=orangepi-plus2
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=raspberry-pi2
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=raspberry-pi2
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=raspberry-pi2
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=raspberrypi3
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=raspberrypi3
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=raspberrypi3
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=beaglebone-black
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=beaglebone-black
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=beaglebone-black
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=asus-tinker-board
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=asus-tinker-board
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=asus-tinker-board
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=bananapi-m1-plus
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=bananapi-m1-plus
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=bananapi-m1-plus
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-xu4
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-xu4
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-xu4
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-c1
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-c1
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-c1
-    #     - QEMU_OS=fedora
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-xu4
-    #     - QEMU_OS=ubuntu
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-xu4
-    #     - QEMU_OS=debian
-    # - os: linux
-    #   env:
-    #     - QEMU_PLATFORM=odroid-xu4
-    #     - QEMU_OS=fedora
     - os: osx
       osx_image: xcode8.3
 
@@ -136,18 +28,16 @@ env:
 
 
 install:
-  - if [[ -z "$QEMU_PLATFORM" ]]; then go get github.com/gz-c/gox; fi
-  - if [[ -z "$QEMU_PLATFORM" ]]; then go get -t ./... ; fi
-  - if [[ -z "$QEMU_PLATFORM" ]]; then make install-linters ; fi
-  - if [[ -z "$QEMU_PLATFORM" ]]; then VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh ; fi
+  - go get github.com/gz-c/gox
+  - go get -t ./...
+  - make install-linters
+  - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DEPS_DIR="${TRAVIS_BUILD_DIR}/deps" && mkdir ${DEPS_DIR} && cd ${DEPS_DIR} && travis_retry wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz && echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt && md5sum -c cmake_md5.txt && tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null && mv cmake-3.3.2-Linux-x86_64 cmake-install && PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH && cd ${TRAVIS_BUILD_DIR}; fi
-  - if [[ -z "$QEMU_PLATFORM" ]]; then make install-deps-libc ; fi
-  - if [[ -z "$QEMU_PLATFORM" ]]; then make install-lib-curl ; fi
+  - make install-deps-libc
+  - make install-lib-curl
 
 script:
-  - echo $PWD
-  - if [[ -z "$QEMU_PLATFORM" ]]; then make check ; fi
-  - if [[ "$QEMU_PLATFORM" ]]; then docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS --file docker/images/test-arm/Dockerfile  . -t skydev-test ; fi
+  - make check
 
 notifications:
   email: false
