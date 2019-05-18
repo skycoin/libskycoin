@@ -116,12 +116,14 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib:$(BUILDLIB_DIR)" $(BIN_DIR)/test_libskycoin_shared
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"         $(BIN_DIR)/test_libskycoin_static
 
+docs-skyapi:
+	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o docs/libc/curl
+
 docs-libc:
 	doxygen ./.Doxyfile
 	moxygen -o $(LIBDOC_DIR)/API.md $(LIBDOC_DIR)/xml/
-	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o docs/libc/curl
 
-docs: docs-libc ## Generate library documentation
+docs: docs-libc docs-skyapi ## Generate library documentation
 
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
