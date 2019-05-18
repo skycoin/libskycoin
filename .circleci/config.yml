@@ -10,6 +10,7 @@ jobs:
     steps:
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
       - checkout
+      - run: apt update && apt install make
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin dep
       - setup_remote_docker:
           version: 18.06.0-ce
@@ -25,6 +26,7 @@ jobs:
     steps:
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
       - checkout
+      - run: apt update && apt install make
       - run: make -C $GOPATH/src/github.com/skycoin/libskycoin dep
       - setup_remote_docker:
           version: 18.06.0-ce
