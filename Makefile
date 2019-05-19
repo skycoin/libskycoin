@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: test-libc test-lint build-libc check
+.PHONY: test-libc test-lint build-libc check build build-skyapi test-skyapi
 .PHONY: install-linters format clean-libc format-libc lint-libc
 
 COIN ?= skycoin
@@ -121,6 +121,8 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"         $(BIN_DIR)/test_libskycoin_static
 
 test-skyapi: build-skyapi ## Run test for skyapi(libcurl based) library
+
+test: test-libc test-skyapi ## Run all test for libskycoin
 
 docs-libc:
 	doxygen ./.Doxyfile
