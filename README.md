@@ -146,6 +146,10 @@ After that, run `make docs` for a new docs generation. You can found the api doc
 
 |Target                        |Help|
 | :-------------               | :----------: | 
+|build-libc-static             |Build libskycoin C static library|
+|build-libc-shared             |Build libskycoin C shared library|
+|build-libc                    |Build libskycoin C client libraries|
+|build                         |Build all C libraries
 |test-libc                     |Run tests for libskycoin C client library|
 |docs                          |Generate documentation for all libraries|
 |docs-libc                     |Generate libskycoin documentation|
@@ -163,3 +167,4 @@ After that, run `make docs` for a new docs generation. You can found the api doc
 |install-deps-libc-osx         |Install locally dependencies for testing libskycoin|
 |format                        |Formats the code. Must have goimports installed (use make install-linters).|
 |clean-libc                    |Clean files generate by library|
+

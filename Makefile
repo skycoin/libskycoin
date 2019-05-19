@@ -93,14 +93,13 @@ $(BUILDLIB_DIR)/libskycoin.a: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	go build -buildmode=c-archive -o $(BUILDLIB_DIR)/libskycoin.a  $(LIB_FILES)
 	mv $(BUILDLIB_DIR)/libskycoin.h $(INCLUDE_DIR)/
 
-## Build libskycoin C static library
-build-libc-static: $(BUILDLIB_DIR)/libskycoin.a
+build-libc-static: $(BUILDLIB_DIR)/libskycoin.a ## Build libskycoin C static library
 
-## Build libskycoin C shared library
-build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so
+build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so ## Build libskycoin C shared library
 
-## Build libskycoin C client libraries
-build-libc: configure-build build-libc-static build-libc-shared
+build-libc: configure-build build-libc-static build-libc-shared ## Build libskycoin C client libraries
+
+build: build-libc ## Build all C libraries
 
 ## Build libskycoin C client library and executable C test suites
 ## with debug symbols. Use this target to debug the source code
