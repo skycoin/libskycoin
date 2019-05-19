@@ -36,7 +36,10 @@ install:
   - make install-deps-skyapi
 
 script:
-  - make check
+  - make lint
+  - make test-libc
+  - make lint-libc
+  - make test-skyapi
 
 notifications:
   email: false
