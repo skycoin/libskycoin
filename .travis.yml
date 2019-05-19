@@ -3,42 +3,56 @@ services:
   - docker
 language: go
 go:
-  - "1.11.x"
-
 matrix:
   include:
     - os: linux
       dist: xenial
     - os: osx
       osx_image: xcode8.3
-
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq;
+    fi
   - ./ci-scripts/install-travis-gcc.sh
   - eval "CC=gcc-6 && CXX=g++-6"
-
 env:
   global:
     - BUILD_DIR: build
-    - BUILDLIB_DIR: $BUILD_DIR/libskycoin
+    - BUILDLIB_DIR: "$BUILD_DIR/libskycoin"
     - LIB_DIR: lib
     - CGO_ENABLED: 1
     - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 60s
-    - PATH_DIR: $GOPATH/src/github.com/skycoin/libskycoin/
-
-
+    - PATH_DIR: "$GOPATH/src/github.com/skycoin/libskycoin/"
 install:
+  # Install gox
   - go get github.com/gz-c/gox
   - go get -t ./...
   - make install-linters
-  - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DEPS_DIR="${TRAVIS_BUILD_DIR}/deps" && mkdir ${DEPS_DIR} && cd ${DEPS_DIR} && travis_retry wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz && echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt && md5sum -c cmake_md5.txt && tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null && mv cmake-3.3.2-Linux-x86_64 cmake-install && PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH && cd ${TRAVIS_BUILD_DIR}; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    sudo apt-get install cmake ;
+    fi
   - make install-deps-libc
   - make install-lib-curl
-
 script:
   - make check
-
+before_deploy:
+  - export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
+  - export ARCH="$(uname -m)"
+  - export OS="$(uname -s)"
+  - make build
+  - tar -c -z -f libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C build ./*
+deploy:
+  - provider: releases
+    api_key:
+      secure: ZqagrrwPFXs4bgHV9lJkZaex6dxAEUJprSdhsqJLYTkF4uBN5VYNM4KCy+azBabV8pVLxiCCZ8G/ocRw+omQgzJ/1lymNtYez8C/SLAuKzOFxdTxkvyQ9pW5Xr+fjptTEpe/E/lRYvS6LFtQEEpbrtjW/km9HWc7EdMNxUaGhBCRun0YhK3a7JSpQE7JbsyR691Zco8hLb2b5PO8qYx5NoVWHKPMLMYUZhbSZbWs0Viu8s8t9VLVhrSIudAKnQiNs5viWp0YZy6U6mRMuBeZ7wazebx0d/BAj78f+atGOZIiJbHgOxupnhhgR10X7b5B89JggxVe3IFr5t96qz3VV4aTl1yuLZ3i8eYanMIvdirnpPU36bbfAVMJuG7L4hFmZ+pD22ZmiOI4COqHDxSd0gF8DUri+Cf9S+5RF5Kk3YBArQzdue6DjNPBtKyQja1xINfj3Go2LQnaKH+/ffzBJIlw9TICcqf241FS3bNtx0QvUDV/+ezqy0dcD7xKOoUQmLDhyWt5NltNKu/JjoCwj99B9P45GQHJCrSvMu71hwNYlTJxtTJuLIVRXqI5BUEGpnBK99MV+6nycl0ePla4zXTBbJ/uOFzwfj1njAdw2DT4ceTsvtkTAc9qEi3S1hrRL2z3mHQ4loZCTJ9Nn9Cx0WOgfs/bCDvExa7b+AJ3ScE=
+    file:
+      - libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz
+    skip_cleanup: true
+    draft: true
+    overwrite: true
+    on:
+      repo: skycoin/hardware-wallet
+      tags: true
 notifications:
   email: false
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
