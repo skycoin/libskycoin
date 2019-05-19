@@ -88,7 +88,9 @@ After that, run `make docs` for a new docs generation. You can found the api doc
 |Target                        |Help|
 | :-------------               | :----------: | 
 |test-libc                     |Run tests for libskycoin C client library|
-|docs                           |Generate library documentation|
+|docs                          |Generate documentation for all libraries|
+|docs-libc                     |Generate libskycoin documentation|
+|docs-skyapi                   |Generate SkyApi (libcurl) documentation|
 |lint                          |Run linters. Use make install-linters first.|
 |check                         |Run tests and linters|
 |install-linters-Linux         |Install linters on GNU/Linux|
