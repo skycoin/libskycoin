@@ -172,8 +172,8 @@ install-deps-skyapi-linux:
 	sudo apt-get install libcurl3-gnutls
 
 install-deps-skyapi-osx:
-	brew install cmake
-	brew install curl
+	brew list cmake || brew install cmake
+	brew list curl || brew install curl
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
