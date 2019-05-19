@@ -102,7 +102,7 @@ build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so
 build-libc: configure-build build-libc-static build-libc-shared
 
 build-skyapi: ## Build skyapi(libcurl based) library
-	bash .travis/install_lib_curl.sh
+	bash lib/curl/install_lib_curl.sh
 
 build: build-libc build-skyapi ## Build libraries
 
