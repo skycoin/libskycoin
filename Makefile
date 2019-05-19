@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 .PHONY: test-libc test-lint build-libc check
-.PHONY: install-linters format clean-libc format-libc lint-libc
+.PHONY: install-linters format clean-libc format-libc lint-libc docs
 
 COIN ?= skycoin
 
@@ -28,7 +28,8 @@ BIN_DIR = bin
 DOC_DIR = docs
 INCLUDE_DIR = include
 LIBSRC_DIR = lib/cgo
-LIBDOC_DIR = $(DOC_DIR)/libc
+LIBSKYDOC_DIR = $(DOC_DIR)/libc
+LIBCURLDOC_DIR = $(DOC_DIR)/curl
 SWAGGER_SPEC_DIR = lib/swagger
 SWAGGER_CLIENT_DIR = lib/curl
 
@@ -115,11 +116,14 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib:$(BUILDLIB_DIR)" $(BIN_DIR)/test_libskycoin_shared
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"         $(BIN_DIR)/test_libskycoin_static
 
-docs-libc:
-	doxygen ./.Doxyfile
-	moxygen -o $(LIBDOC_DIR)/API.md $(LIBDOC_DIR)/xml/
+docs-skyapi: ## Generate SkyApi (libcurl) documentation
+	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o $(LIBCURLDOC_DIR)
 
-docs: docs-libc
+docs-libc: ## Generate libskycoin documentation
+	doxygen ./.Doxyfile
+	moxygen -o $(LIBSKYDOC_DIR)/API.md $(LIBSKYDOC_DIR)/xml/
+
+docs: docs-libc docs-skyapi ## Generate documentation for all libraries
 
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
@@ -151,7 +155,7 @@ install-deps-Linux: ## Install deps on GNU/Linux
 install-deps-Darwin: ## Install deps on Mac OSX
 	brew install $(PKG_LIB_TEST)
 
-install-libraries-deps: ## Install deps on GNU/Linux
+install-libraries-deps: ## Install deps for lib\curl wrapper of Skycoin REST API
 	if [[ "$(UNAME_S)" == "Linux" ]]; then (cd build && wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz && echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt && md5sum -c cmake_md5.txt && tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null && mv cmake-3.3.2-Linux-x86_64 cmake-install && PATH=$(pwd)/build/cmake-install:$(pwd)/build/cmake-install/bin:$PATH ) ; fi
 	(cd build && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && bash ./configure && make && sudo make install)
 	if [[ "$(UNAME_S)" == "Darwin" ]]; then brew install curl ; fi
