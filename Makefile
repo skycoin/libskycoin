@@ -165,13 +165,13 @@ install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
 
-install-deps-skyapi-Linux:
+install-deps-skyapi-linux:
 	sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
 	sudo apt-get update
 	sudo apt-get install cmake
 	sudo apt-get install libcurl3-gnutls
 
-install-deps-skyapi-Darwin:
+install-deps-skyapi-osx:
 	brew install cmake
 	brew install curl
 
