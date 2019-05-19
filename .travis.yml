@@ -40,7 +40,6 @@ before_deploy:
   - export ARCH="$(uname -m)"
   - export OS="$(uname -s)"
   - make build
-  - if [[ -z "$QEMU_PLATFORM" ]]; then make build-libc ; if
   - tar -c -z -f libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C build ./*
 deploy:
   - provider: releases
