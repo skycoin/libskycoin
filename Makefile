@@ -28,7 +28,8 @@ BIN_DIR = bin
 DOC_DIR = docs
 INCLUDE_DIR = include
 LIBSRC_DIR = lib/cgo
-LIBDOC_DIR = $(DOC_DIR)/libc
+LIBSKYDOC_DIR = $(DOC_DIR)/libc
+LIBCURLDOC_DIR = $(DOC_DIR)/curl
 SWAGGER_SPEC_DIR = lib/swagger
 SWAGGER_CLIENT_DIR = lib/curl
 
@@ -116,11 +117,11 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"         $(BIN_DIR)/test_libskycoin_static
 
 docs-skyapi:
-	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o docs/libc/curl
+	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o $(LIBCURLDOC_DIR)
 
 docs-libc:
 	doxygen ./.Doxyfile
-	moxygen -o $(LIBDOC_DIR)/API.md $(LIBDOC_DIR)/xml/
+	moxygen -o $(LIBSKYDOC_DIR)/API.md $(LIBSKYDOC_DIR)/xml/
 
 docs: docs-libc docs-skyapi ## Generate library documentation
 
