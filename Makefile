@@ -165,19 +165,19 @@ install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
 
-install-deps-skyapi-linux:
+install-deps-skyapi-Linux:
 	sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
 	sudo apt-get update
 	sudo apt-get install cmake
 	sudo apt-get install libcurl3-gnutls
 
-install-deps-skyapi-osx:
+install-deps-skyapi-Darwin:
 	brew list cmake || brew install cmake
 	brew list curl || brew install curl
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
-install-deps-skyapi: install-deps-skyapi-$(OSNAME)
+install-deps-skyapi: install-deps-skyapi-$(UNAME_S)
 #	(cd build && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && bash ./configure && make && sudo make install)
 	(cd build && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
 
