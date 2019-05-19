@@ -144,9 +144,9 @@ invoking `SKY_handle_close` API function.
 
 Follow these steps to generate API documentation.
 
-- [Install `doxygen`](https://www.stack.nl/~dimitri/doxygen/manual/install.html)
+- Install `doxygen` like so: `sudo apt-get install doxygen`
 - Install `moxygen` like so: `npm install moxygen -g`
 - At the project top-level folder invoke `make docs-libc` (libskycoin docs only) or `make docs` (all docs).
 
-Both `doxygen` and `moxygen` are pre-installed in [`skycoin/skycoindev-cli:develop`](https://hub.docker.com/r/skycoin/skycoindev-cli) Docker image.
+`doxygen` and `moxygen` generate documentation for cryptographic API. Both are are pre-installed in [`skycoin/skycoindev-cli:develop`](https://hub.docker.com/r/skycoin/skycoindev-cli) Docker image.
 

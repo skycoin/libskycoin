@@ -59,3 +59,48 @@ The following rules are enforced
 
 - Contributions must comply to the development guidelines documented in the [Skycoin wiki](https://github.com/skycoin/skycoin/wiki).
 - C / C++ code must comply to the [Bitcoin C coding style](https://github.com/bitcoin/bitcoin/blob/master/doc/developer-notes.md#coding-style-c) (enforced by `clang-format`).
+
+### Doxygen comment syntax
+
+If you want to continue with `the doxygen way`(we recommend it) of coding and document functions, structs, and functions, you should follow the specifications found in the [Doxygen official site](http://www.doxygen.nl/manual/docblocks.html).
+
+An example of documentation using `doxygen` is the next:
+
+```c
+/**
+ * Addresses of Bitcoin accounts
+ */
+typedef struct {
+    GoUint8_ Version;      ///< Address version identifier.
+                           ///< Used to differentiate testnet
+                           ///< vs mainnet addresses, for instance.
+    cipher__Ripemd160 Key; ///< Address hash identifier.
+} cipher__BitcoinAddress;
+```
+This code example can be found at `include/cipher.bitcoin.go.h`.
+
+Inside `/* */`  we found struct documentation, meanwhile `//<` symbol is used to describe fields of the struct.
+
+After that, run `make docs` for a new docs generation. You can found the api documentation at `docs/libc` folder.
+
+### Makefile targets:
+
+|Target                        |Help|
+| :-------------               | :----------: | 
+|test-libc                     |Run tests for libskycoin C client library|
+|docs                          |Generate documentation for all libraries|
+|docs-libc                     |Generate libskycoin documentation|
+|docs-skyapi                   |Generate SkyApi (libcurl) documentation|
+|lint                          |Run linters. Use make install-linters first.|
+|check                         |Run tests and linters|
+|install-linters-Linux         |Install linters on GNU/Linux|
+|install-linters-Darwin        |Install linters on Mac OSX|
+|install-deps-Linux            |Install deps on GNU/Linux|
+|install-deps-Darwin           |Install deps on Mac OSX|
+|install-libraries-deps        |Install deps for `lib\curl` wrapper of Skycoin REST API|
+|install-linters               |Install linters|
+|install-deps-libc-linux       |Install locally dependencies for testing libskycoin|
+|install-lib-curl              |Install Sky Api curl based rest wrapper|
+|install-deps-libc-osx         |Install locally dependencies for testing libskycoin|
+|format                        |Formats the code. Must have goimports installed (use make install-linters).|
+|clean-libc                    |Clean files generate by library|
