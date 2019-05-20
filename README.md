@@ -97,10 +97,8 @@ After that, run `make docs` for a new docs generation. You can found the api doc
 |install-linters-Darwin        |Install linters on Mac OSX|
 |install-deps-Linux            |Install deps on GNU/Linux|
 |install-deps-Darwin           |Install deps on Mac OSX|
-|install-libraries-deps        |Install deps for `lib\curl` wrapper of Skycoin REST API|
 |install-linters               |Install linters|
 |install-deps-libc-linux       |Install locally dependencies for testing libskycoin|
-|install-lib-curl              |Install Sky Api curl based rest wrapper|
 |install-deps-libc-osx         |Install locally dependencies for testing libskycoin|
 |format                        |Formats the code. Must have goimports installed (use make install-linters).|
 |clean-libc                    |Clean files generate by library|
