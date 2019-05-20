@@ -23,6 +23,7 @@ SKYVENDOR_REL_PATH     = $(SKYSRC_REL_PATH)/vendor
 # Compilation output for libskycoin
 BUILD_DIR = build
 BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
+BUILDLIBSKYAPI_DIR = $(BUILD_DIR)/libskyapi
 LIB_DIR = lib
 BIN_DIR = bin
 DOC_DIR = docs
@@ -101,6 +102,8 @@ build-libc: configure-build build-libc-static build-libc-shared ## Build libskyc
 
 build-skyapi: ## Build skyapi(libcurl based) library
 	./lib/curl/install_lib_curl.sh
+	mkdir -p ./build/libskyapi
+	cp lib/curl/build/libskyapi.so ./build/libskyapi
 
 build: build-libc build-skyapi ## Build libraries
 
@@ -194,6 +197,7 @@ format: ## Formats the code. Must have goimports installed (use make install-lin
 
 clean-libc: ## Clean files generate by library
 	rm -rfv $(BUILDLIB_DIR)
+	rm -rfv $(BUILDLIBSKYAPI_DIR)
 	rm -rfv bin
 	rm -rfv qemu_test_libskycoin*
 	rm -rfv include/libskycoin.h
