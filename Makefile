@@ -93,14 +93,13 @@ $(BUILDLIB_DIR)/libskycoin.a: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	go build -buildmode=c-archive -o $(BUILDLIB_DIR)/libskycoin.a  $(LIB_FILES)
 	mv $(BUILDLIB_DIR)/libskycoin.h $(INCLUDE_DIR)/
 
-## Build libskycoin C static library
-build-libc-static: $(BUILDLIB_DIR)/libskycoin.a
+build-libc-static: $(BUILDLIB_DIR)/libskycoin.a ## Build libskycoin C static library
 
-## Build libskycoin C shared library
-build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so
+build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so ## Build libskycoin C shared library
 
-## Build libskycoin C client libraries
-build-libc: configure-build build-libc-static build-libc-shared
+build-libc: configure-build build-libc-static build-libc-shared ## Build libskycoin C client libraries
+
+build: build-libc ## Build all C libraries
 
 build-skyapi: ## Build skyapi(libcurl based) library
 	./lib/curl/install_lib_curl.sh
@@ -149,6 +148,7 @@ lint-libc: format-libc
 check: lint test-libc lint-libc test-skyapi ## Run tests and linters
 
 install-linters-Linux: ## Install linters on GNU/Linux
+	sudo apt-get update
 	sudo apt-get install $(PKG_CLANG_FORMAT)
 	sudo apt-get install $(PKG_CLANG_LINTER)
 
@@ -166,10 +166,7 @@ install-deps-Darwin: ## Install deps on Mac OSX
 
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
-	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
-	# However, they suggest `curl ... | bash` which we should not do
-	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-	VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
+	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(GOPATH)/bin v1.10.2
 
 install-deps-skyapi-Linux:
 	sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
