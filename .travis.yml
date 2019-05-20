@@ -57,7 +57,6 @@ deploy:
     on:
       repo: skycoin/hardware-wallet
       tags: true
->>>>>>> origin/v0.25dev
 notifications:
   email: false
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
