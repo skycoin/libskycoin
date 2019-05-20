@@ -149,8 +149,11 @@ After that, run `make docs` for a new docs generation. You can found the api doc
 |build-libc-static             |Build libskycoin C static library|
 |build-libc-shared             |Build libskycoin C shared library|
 |build-libc                    |Build libskycoin C client libraries|
-|build                         |Build all C libraries
+|build-skyapi                  |Build skyapi(libcurl based) library|
+|build                         |Build libraries|
 |test-libc                     |Run tests for libskycoin C client library|
+|test-skyapi                   |Run test for skyapi(libcurl based) library|
+|test                          |Run all test for libskycoin|
 |docs                          |Generate documentation for all libraries|
 |docs-libc                     |Generate libskycoin documentation|
 |docs-skyapi                   |Generate SkyApi (libcurl) documentation|
@@ -163,6 +166,7 @@ After that, run `make docs` for a new docs generation. You can found the api doc
 |install-linters               |Install linters|
 |install-deps-libc-linux       |Install locally dependencies for testing libskycoin|
 |install-deps-libc-osx         |Install locally dependencies for testing libskycoin|
+|install-deps-skyapi           |Install skyapi(libcurl based) library.|
 |format                        |Formats the code. Must have goimports installed (use make install-linters).|
 |clean-libc                    |Clean files generate by library|
 
