@@ -182,7 +182,7 @@ install-deps-skyapi-Darwin:
 install-deps-libc: install-deps-libc-$(OSNAME)
 
 install-deps-skyapi: install-deps-skyapi-$(UNAME_S) ## Install skyapi(libcurl based) library.
-	(cd build && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
+	(mkdir -p build && cd build && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
 
 install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
