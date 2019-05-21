@@ -170,21 +170,23 @@ install-linters: install-linters-$(UNAME_S) ## Install linters
 	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(GOPATH)/bin v1.10.2
 
 install-deps-skyapi-Linux:
+	mkdir -p deps
 	sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
 	sudo apt-get update
 	sudo apt-get install cmake
 	sudo apt-get install libcurl3-gnutls
 	sudo apt remove curl
-	(mkdir -p build && cd build && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
 
 install-deps-skyapi-Darwin:
-	(mkdir -p build && cd build && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
+	mkdir -p deps
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
 	brew install curl
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
 install-deps-skyapi: install-deps-skyapi-$(UNAME_S) ## Install skyapi(libcurl based) library.
-	(mkdir -p build && cd build && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
+	(cd deps && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
 
 install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz

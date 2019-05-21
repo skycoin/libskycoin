@@ -28,8 +28,8 @@ install:
   - go get github.com/gz-c/gox
   - go get -t ./...
   - make install-linters
-  - make install-deps-skyapi
   - make install-deps-libc
+  - make install-deps-skyapi
 script:
   - make lint
   - make test-libc
