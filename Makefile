@@ -24,6 +24,8 @@ SKYVENDOR_REL_PATH     = $(SKYSRC_REL_PATH)/vendor
 BUILD_DIR = build
 BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
 BUILDLIBSKYAPI_DIR = $(BUILD_DIR)/libskyapi
+LIBNAME_Linux = libskyapi.so
+LIBNAME_Darwin = libskyapi.dylib
 LIB_DIR = lib
 BIN_DIR = bin
 DOC_DIR = docs
@@ -103,7 +105,7 @@ build-libc: configure-build build-libc-static build-libc-shared ## Build libskyc
 build-skyapi: ## Build skyapi(libcurl based) library
 	bash ./lib/curl/install_lib_curl.sh
 	mkdir -p ./build/libskyapi
-	cp lib/curl/build/libskyapi.so ./build/libskyapi
+	cp lib/curl/build/LIBNAME_$(UNAME_S) ./build/libskyapi
 
 build: build-libc build-skyapi ## Build libraries
 
@@ -180,8 +182,7 @@ install-deps-skyapi-Linux:
 
 install-deps-skyapi-Darwin:
 	mkdir -p deps
-	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
-	brew install curl
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure --prefix=/usr/local/curl && make && sudo make install)
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
