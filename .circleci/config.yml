@@ -57,11 +57,6 @@ jobs:
       - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/circle/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   publish-github-release_32:
-    requires:
-      - bananapi_m1_plus
-      - raspberrypi2
-      - raspberrypi3
-      - orangepi-plus2
     docker:
       - image: docker:18.06.0-ce-git
     steps:
