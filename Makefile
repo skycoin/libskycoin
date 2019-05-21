@@ -185,16 +185,9 @@ install-deps-skyapi-Darwin:
 	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure --prefix=/usr/local/curl && make && sudo make install)
 
 install-deps-libc: install-deps-libc-$(OSNAME)
-# install-deps-skyapi-$(UNAME_S)
-install-deps-skyapi: ## Install skyapi(libcurl based) library.
-	if [[ "$(UNAME_S)" == "Linux" ]]; then (cd build && wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz && echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt && md5sum -c cmake_md5.txt && tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null && mv cmake-3.3.2-Linux-x86_64 cmake-install && PATH=$(pwd)/build/cmake-install:$(pwd)/build/cmake-install/bin:$PATH ) ; fi
-	(cd build && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && bash ./configure && make && sudo make install)
-	if [[ "$(UNAME_S)" == "Darwin" ]]; then brew install curl ; fi
-	# install uncrustify
-	(cd build && git clone https://github.com/uncrustify/uncrustify.git)
-	(cd build/uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
 
-#	(cd deps && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
+install-deps-skyapi: install-deps-skyapi-$(UNAME_S) ## Install skyapi(libcurl based) library.
+	(cd deps && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
 
 install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
