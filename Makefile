@@ -178,6 +178,8 @@ install-deps-skyapi-Linux:
 install-deps-skyapi-Darwin:
 	brew list cmake || brew install cmake
 	brew list curl || brew install curl
+	brew upgrade curl
+	brew upgrade cmake
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
