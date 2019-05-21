@@ -12,7 +12,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/circle/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   raspberrypi3:
     docker:
@@ -26,7 +26,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/circle/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   raspberrypi2:
     docker:
@@ -40,7 +40,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/circle/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   bananapi_m1_plus:
     docker:
@@ -54,7 +54,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/circle/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   publish-github-release_32:
     docker:
