@@ -63,14 +63,19 @@ jobs:
       - raspberrypi3
       - orangepi-plus2
     docker:
-      - image: circleci/golang:1.10
+      - image: docker:18.06.0-ce-git
     steps:
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
       - checkout
+      - setup_remote_docker:
+          version: 18.06.0-ce
       - run:
           name: "Publish Release on GitHub ARMv7"
-          command: |
-            docker build  --build-arg CIRCLE_SHA1 --build-arg GITHUB_OAUTH_TOKEN --build-arg CIRCLE_PROJECT_USERNAME --build-arg CIRCLE_PROJECT_REPONAME   --build-arg QEMU_PLATFORM=raspberrypi3 --build-arg VERSION  --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/circle/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-deploy
+          command: | 
+          if [[ "$CIRCLE_BRANCH" == "master" ]]; then
+                docker build  --build-arg CIRCLE_SHA1 --build-arg GITHUB_OAUTH_TOKEN --build-arg CIRCLE_PROJECT_USERNAME --build-arg CIRCLE_PROJECT_REPONAME   --build-arg QEMU_PLATFORM=raspberrypi3 --build-arg VERSION  --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/circle/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-deploy ;
+          fi
+          
 
 workflows:
   version: 2
@@ -80,8 +85,4 @@ workflows:
       - orangepi-plus2
       - raspberrypi2
       - bananapi_m1_plus
-      - publish-github-release_32:
-          filters:
-            branches:
-              only:
-                - master
+      - publish-github-release_32
