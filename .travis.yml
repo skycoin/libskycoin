@@ -3,8 +3,6 @@ services:
   - docker
 language: go
 go:
-  - "1.11.x"
-
 matrix:
   include:
     - os: linux
@@ -25,7 +23,6 @@ env:
     - CGO_ENABLED: 1
     - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 60s
     - PATH_DIR: "$GOPATH/src/github.com/skycoin/libskycoin/"
-
 install:
   # Install gox
   - go get github.com/gz-c/gox
