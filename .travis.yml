@@ -31,6 +31,7 @@ install:
   - make install-deps-libc
   - make install-deps-skyapi
 script:
+  - make build-skyapi
   - make lint
   - make test-libc
   - make lint-libc
