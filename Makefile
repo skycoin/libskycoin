@@ -179,7 +179,7 @@ install-deps-skyapi-Linux:
 	sudo apt-get install cmake
 	sudo apt-get install libcurl3-gnutls
 	sudo apt remove curl
-	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && mkdir -p build && cd build && cmake .. && make && sudo make install)
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
 
 install-deps-skyapi-Darwin:
 	export LDFLAGS="-L/usr/local/opt/curl/lib"
