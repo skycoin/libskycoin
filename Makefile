@@ -103,8 +103,6 @@ build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so ## Build libskycoin C shared li
 build-libc: configure-build build-libc-static build-libc-shared ## Build libskycoin C client libraries
 
 build-skyapi: ## Build skyapi(libcurl based) library
-        export LDFLAGS="-L/usr/local/opt/curl/lib"
-        export CPPFLAGS="-I/usr/local/opt/curl/include"
 	(cd lib/curl && bash ./install_lib_curl.sh)
 	mkdir -p ./build/libskyapi
 	cp lib/curl/build/$(LIBNAME_$(UNAME_S)) ./build/libskyapi
@@ -183,6 +181,8 @@ install-deps-skyapi-Linux:
 	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
 
 install-deps-skyapi-Darwin:
+	export LDFLAGS="-L/usr/local/opt/curl/lib"
+	export CPPFLAGS="-I/usr/local/opt/curl/include"
 	mkdir -p deps
 	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
 	brew install curl
