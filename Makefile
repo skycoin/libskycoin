@@ -182,10 +182,8 @@ install-deps-skyapi-Linux:
 
 install-deps-skyapi-Darwin:
 	mkdir -p deps
-	#(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure --prefix=/usr/local/curl && make && sudo make install)
-	brew install curl@7.58
-	brew --prefix curl
-	brew ls --verbose curl
+	brew rm curl
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure --prefix=/usr/local/curl && make && sudo make install)
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
