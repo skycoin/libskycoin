@@ -11,7 +11,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(pkgName "skyapi")
 
 find_package(CURL 7.58.0 EXACT REQUIRED 
-	PATHS "/usr/local/Cellar/curl/7.64.1/lib;/usr/local/Cellar/curl/7.64.1;/usr/local/Cellar;/usr/local/Cellar/curl")
+	PATHS "/usr/local;/usr/local/lib")
 if(CURL_FOUND)
 	include_directories(${CURL_INCLUDE_DIR})
 	set(PLATFORM_LIBRARIES ${PLATFORM_LIBRARIES} ${CURL_LIBRARIES} )

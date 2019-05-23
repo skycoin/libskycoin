@@ -188,8 +188,9 @@ install-deps-skyapi-Darwin:
 	brew install openssl
 	brew --prefix openssl
 	brew ls --verbose openssl
-	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && mkdir -p build && cd build && cmake .. && make && sudo make install)
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
 	brew install curl
+#	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && mkdir -p build && cd build && cmake -DOPENSSL_ROOT_DIR="/usr/local/Cellar/openssl/1.0.2l" .. && make && sudo make install)
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
