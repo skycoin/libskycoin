@@ -42,15 +42,22 @@ Consult respective `README` files for further details.
 
 All these make rules require skycoin to be a git submodule of pyskycoin
 
-- `build-libc`
-  * Compiles skycoin C language library.
-- `test-libc`
-  * Compiles skycoin C language library and executes the tests.	
-- `build-libc-static`
-  * Build libskycoin C static library
-- `build-libc-shared`
-  * Build libskycoin C shared library
-
+|Target                        |Help|
+| :-------------               | :----------: | 
+|build-libc-static             |Build libskycoin C static library|
+|build-libc-shared             |Build libskycoin C shared library|
+|build-libc                    |Build libskycoin C client libraries|
+|build                         |Build all C libraries
+|test-libc                     |Run tests for libskycoin C client library|
+|docs                          |Generate documentation for all libraries|
+|docs-libc                     |Generate libskycoin documentation|
+|docs-skyapi                   |Generate SkyApi (libcurl) documentation|
+|lint                          |Run linters. Use make install-linters first.|
+|check                         |Run tests and linters|
+|install-libraries-deps        |Install deps for `lib\curl` wrapper of Skycoin REST API|
+|install-linters               |Install linters|
+|format                        |Formats the code. Must have goimports installed (use make install-linters).|
+|clean-libc                    |Clean files generate by library|
   
 ## Development setup
 
@@ -141,23 +148,3 @@ This code example can be found at `include/cipher.bitcoin.go.h`.
 Inside `/* */`  we found struct documentation, meanwhile `//<` symbol is used to describe fields of the struct.
 
 After that, run `make docs` for a new docs generation. You can found the api documentation at `docs/libc` folder.
-
-### Makefile targets:
-
-|Target                        |Help|
-| :-------------               | :----------: | 
-|build-libc-static             |Build libskycoin C static library|
-|build-libc-shared             |Build libskycoin C shared library|
-|build-libc                    |Build libskycoin C client libraries|
-|build                         |Build all C libraries
-|test-libc                     |Run tests for libskycoin C client library|
-|docs                          |Generate documentation for all libraries|
-|docs-libc                     |Generate libskycoin documentation|
-|docs-skyapi                   |Generate SkyApi (libcurl) documentation|
-|lint                          |Run linters. Use make install-linters first.|
-|check                         |Run tests and linters|
-|install-libraries-deps        |Install deps for `lib\curl` wrapper of Skycoin REST API|
-|install-linters               |Install linters|
-|format                        |Formats the code. Must have goimports installed (use make install-linters).|
-|clean-libc                    |Clean files generate by library|
-
