@@ -53,7 +53,7 @@ deploy:
     draft: true
     overwrite: true
     on:
-      repo: skycoin/hardware-wallet
+      repo: skycoin/libskycoin
       tags: true
 notifications:
   email: false

@@ -1,5 +1,5 @@
 
-[](https://user-images.githubusercontent.com/26845312/32426705-d95cb988-c281-11e7-9463-a3fce8076a72.png)
+![](https://repository-images.githubusercontent.com/165332391/de95dc00-7cec-11e9-8fcb-d42fbd8e3577)
 
 # Skycoin C library
 
@@ -40,17 +40,24 @@ Consult respective `README` files for further details.
 
 ## Make Rules
 
-All these make rules require skycoin to be a git submodule of pyskycoin
+All these make rules require skycoin to be a git submodule of libskycoin
 
-- `build-libc`
-  * Compiles skycoin C language library.
-- `test-libc`
-  * Compiles skycoin C language library and executes the tests.	
-- `build-libc-static`
-  * Build libskycoin C static library
-- `build-libc-shared`
-  * Build libskycoin C shared library
-
+|Target                        |Help|
+| :-------------               | :----------: | 
+|build-libc-static             |Build libskycoin C static library|
+|build-libc-shared             |Build libskycoin C shared library|
+|build-libc                    |Build libskycoin C client libraries|
+|build                         |Build all C libraries
+|test-libc                     |Run tests for libskycoin C client library|
+|docs                          |Generate documentation for all libraries|
+|docs-libc                     |Generate libskycoin documentation|
+|docs-skyapi                   |Generate SkyApi (libcurl) documentation|
+|lint                          |Run linters. Use make install-linters first.|
+|check                         |Run tests and linters|
+|install-libraries-deps        |Install deps for `lib\curl` wrapper of Skycoin REST API|
+|install-linters               |Install linters|
+|format                        |Formats the code. Must have goimports installed (use make install-linters).|
+|clean-libc                    |Clean files generate by library|
   
 ## Development setup
 
@@ -102,7 +109,7 @@ in sync with the corresponding tag of `skycoin/skycoin` official repository.
 Stable development branches are created most of the time for the following reasons:
 
 - A Skycoin release increasing [patch version number](https://semver.org/).
-- Enhanced support and bug fixes for a version of PySkycoin compiled against an
+- Enhanced support and bug fixes for a version of the library compiled against an
   stable version of Skycoin
 - Backporting useful features added in `develop`.
 
@@ -142,31 +149,7 @@ Inside `/* */`  we found struct documentation, meanwhile `//<` symbol is used to
 
 After that, run `make docs` for a new docs generation. You can found the api documentation at `docs/libc` folder.
 
-### Makefile targets:
-
-|Target                        |Help|
-| :-------------               | :----------: | 
-|build-libc-static             |Build libskycoin C static library|
-|build-libc-shared             |Build libskycoin C shared library|
-|build-libc                    |Build libskycoin C client libraries|
-|build-skyapi                  |Build skyapi(libcurl based) library|
 |build                         |Build libraries|
-|test-libc                     |Run tests for libskycoin C client library|
 |test-skyapi                   |Run test for skyapi(libcurl based) library|
 |test                          |Run all test for libskycoin|
-|docs                          |Generate documentation for all libraries|
-|docs-libc                     |Generate libskycoin documentation|
-|docs-skyapi                   |Generate SkyApi (libcurl) documentation|
-|lint                          |Run linters. Use make install-linters first.|
-|check                         |Run tests and linters|
-|install-linters-Linux         |Install linters on GNU/Linux|
-|install-linters-Darwin        |Install linters on Mac OSX|
-|install-deps-Linux            |Install deps on GNU/Linux|
-|install-deps-Darwin           |Install deps on Mac OSX|
-|install-linters               |Install linters|
-|install-deps-libc-linux       |Install locally dependencies for testing libskycoin|
-|install-deps-libc-osx         |Install locally dependencies for testing libskycoin|
 |install-deps-skyapi           |Install skyapi(libcurl based) library.|
-|format                        |Formats the code. Must have goimports installed (use make install-linters).|
-|clean-libc                    |Clean files generate by library|
-
