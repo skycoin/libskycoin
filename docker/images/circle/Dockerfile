@@ -1,7 +1,5 @@
 ARG QEMU_PLATFORM
 FROM balenalib/${QEMU_PLATFORM}-debian-golang
-# FIXME: If not repeated here build fails.
-# See https://travis-ci.org/simelo/libskycoin/jobs/529481211#L649-L653
 
 ARG GITHUB_OAUTH_TOKEN
 ARG PROJECT_USERNAME
