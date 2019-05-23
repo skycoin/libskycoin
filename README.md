@@ -40,7 +40,7 @@ Consult respective `README` files for further details.
 
 ## Make Rules
 
-All these make rules require skycoin to be a git submodule of pyskycoin
+All these make rules require skycoin to be a git submodule of libskycoin
 
 |Target                        |Help|
 | :-------------               | :----------: | 
@@ -109,7 +109,7 @@ in sync with the corresponding tag of `skycoin/skycoin` official repository.
 Stable development branches are created most of the time for the following reasons:
 
 - A Skycoin release increasing [patch version number](https://semver.org/).
-- Enhanced support and bug fixes for a version of PySkycoin compiled against an
+- Enhanced support and bug fixes for a version of the library compiled against an
   stable version of Skycoin
 - Backporting useful features added in `develop`.
 
