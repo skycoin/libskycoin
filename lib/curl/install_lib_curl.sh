@@ -5,8 +5,7 @@ cd build
 #echo "brew ls --verbose curl"
 #brew ls --verbose curl
 # for normal install use following command
-cmake -DCURL_ROOT_DIR="/usr/local" ..
-exit 1
+cmake -D CMAKE_C_COMPILER=/usr/bin/gcc -D CMAKE_CXX_COMPILER=/usr/bin/g++ ..
 make
 sudo make install
 

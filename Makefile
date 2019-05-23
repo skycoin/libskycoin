@@ -105,7 +105,6 @@ build-libc: configure-build build-libc-static build-libc-shared ## Build libskyc
 build-skyapi: ## Build skyapi(libcurl based) library
 	(cd lib/curl && bash ./install_lib_curl.sh)
 	mkdir -p ./build/libskyapi
-	exit 1
 	cp lib/curl/build/$(LIBNAME_$(UNAME_S)) ./build/libskyapi
 
 build: build-libc build-skyapi ## Build libraries
