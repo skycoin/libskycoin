@@ -4,9 +4,9 @@ FROM balenalib/${QEMU_PLATFORM}-debian-golang
 # See https://travis-ci.org/simelo/libskycoin/jobs/529481211#L649-L653
 
 ARG GITHUB_OAUTH_TOKEN
-ARG CIRCLE_PROJECT_USERNAME
-ARG CIRCLE_PROJECT_REPONAME
-ARG CIRCLE_SHA1
+ARG PROJECT_USERNAME
+ARG PROJECT_REPONAME
+ARG SHA1
 ADD . $GOPATH/src/github.com/skycoin/libskycoin/
 
 RUN [ "cross-build-start" ]
@@ -23,6 +23,6 @@ ENV OS=Linux
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin build
 RUN tar -c -z -f libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C $GOPATH/src/github.com/skycoin/libskycoin/build $GOPATH/src/github.com/skycoin/libskycoin/build/*
 RUN go get github.com/tcnksm/ghr
-RUN ghr -t ${GITHUB_OAUTH_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz
+RUN ghr -t ${GITHUB_OAUTH_TOKEN} -u ${PROJECT_USERNAME} -r ${PROJECT_REPONAME} -c ${SHA1} -delete ${VERSION} libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz
 
 RUN [ "cross-build-end" ]
