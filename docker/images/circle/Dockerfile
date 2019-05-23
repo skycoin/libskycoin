@@ -17,9 +17,9 @@ RUN make -C $GOPATH/src/github.com/skycoin/libskycoin dep
 RUN go get github.com/gz-c/gox
 RUN go get -t ./...
 ENV CGO_ENABLED=1
-ENV VERSION=0.25.1
-ENV ARCH=arm
-ENV OS=Linux
+RUN export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
+RUN export ARCH="$(uname -m)"
+RUN export OS="$(uname -s)"
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin build
 RUN tar -c -z -f libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C $GOPATH/src/github.com/skycoin/libskycoin/build $GOPATH/src/github.com/skycoin/libskycoin/build/*
 RUN go get github.com/tcnksm/ghr
