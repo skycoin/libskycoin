@@ -1,5 +1,5 @@
 
-[](https://user-images.githubusercontent.com/26845312/32426705-d95cb988-c281-11e7-9463-a3fce8076a72.png)
+![](https://repository-images.githubusercontent.com/165332391/de95dc00-7cec-11e9-8fcb-d42fbd8e3577)
 
 # Skycoin C library
 
@@ -156,15 +156,8 @@ After that, run `make docs` for a new docs generation. You can found the api doc
 |docs-skyapi                   |Generate SkyApi (libcurl) documentation|
 |lint                          |Run linters. Use make install-linters first.|
 |check                         |Run tests and linters|
-|install-linters-Linux         |Install linters on GNU/Linux|
-|install-linters-Darwin        |Install linters on Mac OSX|
-|install-deps-Linux            |Install deps on GNU/Linux|
-|install-deps-Darwin           |Install deps on Mac OSX|
 |install-libraries-deps        |Install deps for `lib\curl` wrapper of Skycoin REST API|
 |install-linters               |Install linters|
-|install-deps-libc-linux       |Install locally dependencies for testing libskycoin|
-|install-lib-curl              |Install Sky Api curl based rest wrapper|
-|install-deps-libc-osx         |Install locally dependencies for testing libskycoin|
 |format                        |Formats the code. Must have goimports installed (use make install-linters).|
 |clean-libc                    |Clean files generate by library|
 
