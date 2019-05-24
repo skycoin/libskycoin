@@ -7,7 +7,8 @@ cd build
 #echo "brew ls --verbose curl"
 #brew ls --verbose curl
 # for normal install use following command
-cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
+cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_VERBOSE_MAKEFILE=ON ..
+grep -R object_convertToJSON ../../
 make
 sudo make install
 
