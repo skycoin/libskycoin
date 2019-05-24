@@ -188,17 +188,17 @@ install-deps-skyapi-Darwin:
 	#FIXME brew --prefix openssl fix with this instead of /usr/local/opt/openssl https://travis-ci.com/skycoin/libskycoin/jobs/202706851#L2049
 	(cd deps && wget http://curl.haxx.se/download/curl-7.65.0.tar.gz && tar -xf curl-7.65.0.tar.gz && cd curl-7.65.0/ && mkdir build && cd build && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl .. && make && sudo make install)
 
-install-deps-libc: install-deps-libc-$(OSNAME)
+install-deps-libc: install-deps-libc-$(UNAME_S)
 
 install-deps-skyapi: install-deps-skyapi-$(UNAME_S) ## Install skyapi(libcurl based) library.
 	(cd deps && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
 
-install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
+install-deps-libc-Linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
 	tar -xzf check-0.12.0.tar.gz
 	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
 
-install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
+install-deps-libc-Darwin: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
