@@ -1,93 +1,88 @@
-cmake_minimum_required (VERSION 2.6)
-project (CGenerator)
+cmake_minimum_required(VERSION 2.6)
+project(CGenerator)
 
-cmake_policy(SET CMP0063 NEW)
+#cmake_policy(SET CMP0063 NEW)
 
-set(CMAKE_C_VISIBILITY_PRESET default)
-set(CMAKE_CXX_VISIBILITY_PRESET default)
-set(CMAKE_VISIBILITY_INLINES_HIDDEN OFF)
+#set(CMAKE_C_VISIBILITY_PRESET default)
+#set(CMAKE_CXX_VISIBILITY_PRESET default)
+#set(CMAKE_VISIBILITY_INLINES_HIDDEN OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
 set(pkgName "skyapi")
 
-find_package(CURL 7.58.0 REQUIRED)
-if(CURL_FOUND)
-	include_directories(${CURL_INCLUDE_DIR})
-	set(PLATFORM_LIBRARIES ${PLATFORM_LIBRARIES} ${CURL_LIBRARIES} )
-else(CURL_FOUND)
-	message(FATAL_ERROR "Could not find the CURL library and development files.")
-endif()
+find_package(CURL 7.58.0 EXACT REQUIRED)
 
 set(SRCS
-    src/list.c
-    src/apiKey.c
-    src/apiClient.c
-    external/cJSON.c
-    model/_api_v1_explorer_address_inputs.c
-    model/_api_v1_explorer_address_outputs.c
-    model/_api_v1_explorer_address_status.c
-    model/_api_v1_pending_txs_transaction.c
-    model/_api_v1_wallet_transaction_hours_selection.c
-    model/_api_v1_wallet_transaction_to.c
-    model/_api_v1_wallet_transaction_wallet.c
-    model/_api_v1_wallets_entries.c
-    model/_api_v1_wallets_meta.c
-    model/inline_object.c
-    model/inline_response_200.c
-    model/inline_response_200_1.c
-    model/inline_response_200_2.c
-    model/inline_response_200_3.c
-    model/inline_response_200_3_unconfirmed_verify_transaction.c
-    model/inline_response_200_4.c
-    model/inline_response_200_5.c
-    model/inline_response_200_6.c
-    model/inline_response_200_7.c
-    model/inline_response_200_7_data.c
-    model/inline_response_default.c
-    api/DefaultAPI.c
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/list.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/apiKey.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/apiClient.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/cJSON.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_inputs.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_outputs.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_status.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_hours_selection.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_to.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_wallet.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_entries.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_meta.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_object.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_2.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3_unconfirmed_verify_transaction.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_4.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_5.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_6.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7_data.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_default.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/DefaultAPI.c
 )
 
 set(HDRS
-    include/apiClient.h
-    include/list.h
-    include/keyValuePair.h
-    external/cJSON.h
-    model/_api_v1_explorer_address_inputs.h
-    model/_api_v1_explorer_address_outputs.h
-    model/_api_v1_explorer_address_status.h
-    model/_api_v1_pending_txs_transaction.h
-    model/_api_v1_wallet_transaction_hours_selection.h
-    model/_api_v1_wallet_transaction_to.h
-    model/_api_v1_wallet_transaction_wallet.h
-    model/_api_v1_wallets_entries.h
-    model/_api_v1_wallets_meta.h
-    model/inline_object.h
-    model/inline_response_200.h
-    model/inline_response_200_1.h
-    model/inline_response_200_2.h
-    model/inline_response_200_3.h
-    model/inline_response_200_3_unconfirmed_verify_transaction.h
-    model/inline_response_200_4.h
-    model/inline_response_200_5.h
-    model/inline_response_200_6.h
-    model/inline_response_200_7.h
-    model/inline_response_200_7_data.h
-    model/inline_response_default.h
-    api/DefaultAPI.h
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/apiClient.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/list.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/keyValuePair.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/cJSON.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_inputs.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_outputs.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_status.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_hours_selection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_to.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_wallet.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_entries.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_meta.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_object.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_2.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3_unconfirmed_verify_transaction.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_4.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_5.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_6.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7_data.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_default.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/api/DefaultAPI.h
 )
 
+include_directories(${CURL_INCLUDE_DIR})
 # Add library with project file with projectname as library name
 add_library(${pkgName} SHARED ${SRCS} ${HDRS})
 # Link dependent libraries
-target_link_libraries(${pkgName} ${CURL_LIBRARIES} )
+target_link_libraries(${pkgName} ${CURL_LIBRARIES})
 #install library to destination
 install(TARGETS ${pkgName} DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 # Setting file variables to null
-set(SRCS "")
-set(HDRS "")
+#set(SRCS "")
+#set(HDRS "")
 
 
 ## This section shows how to use the above compiled libary to compile the source files
