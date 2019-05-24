@@ -8,6 +8,7 @@ cd build
 #brew ls --verbose curl
 # for normal install use following command
 cmake -DCMAKE_VERBOSE_MAKEFILE=ON ..
+grep -R object_convertToJSON ../../
 make
 sudo make install
 
