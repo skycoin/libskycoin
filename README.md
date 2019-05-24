@@ -57,6 +57,8 @@ All these make rules require skycoin to be a git submodule of libskycoin
 |docs-skyapi                   |Generate SkyApi (libcurl) documentation|
 |lint                          |Run linters. Use make install-linters first.|
 |check                         |Run tests and linters|
+|install-deps                  |Install deps for libc and skyapi|
+|install-deps-libc             |Install deps for libc|
 |install-deps-skyapi           |Install skyapi(libcurl based) library.|  
 |install-linters               |Install linters|
 |format                        |Formats the code. Must have goimports installed (use make install-linters).|
@@ -153,3 +155,4 @@ This code example can be found at `include/cipher.bitcoin.go.h`.
 Inside `/* */`  we found struct documentation, meanwhile `//<` symbol is used to describe fields of the struct.
 
 After that, run `make docs` for a new docs generation. You can found the api documentation at `docs/libc` folder.
+

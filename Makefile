@@ -189,7 +189,7 @@ install-deps-skyapi-Darwin:
 	brew install openssl curl uncrustify || true
 	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xf curl-7.58.0.tar.gz && cd curl-7.58.0/ && mkdir build && cd build && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl .. && make && sudo make install)
 
-install-deps-libc: install-deps-libc-$(UNAME_S)
+install-deps-libc: install-deps-libc-$(UNAME_S) ## Install deps for libc
 
 install-deps-skyapi: install-deps-skyapi-$(UNAME_S) ## Install skyapi(libcurl based) library.
 
@@ -200,6 +200,8 @@ install-deps-libc-Linux: configure-build ## Install locally dependencies for tes
 
 install-deps-libc-Darwin: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
+
+install-deps: install-deps-libc install-deps-skyapi ## Install deps for libc and skyapi
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
