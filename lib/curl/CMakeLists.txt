@@ -26,6 +26,7 @@ set(SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_wallet.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_entries.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_meta.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_object.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.c
@@ -55,6 +56,7 @@ set(HDRS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_wallet.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_entries.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_meta.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_object.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.h
