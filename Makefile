@@ -186,7 +186,7 @@ install-deps-skyapi-Darwin:
 	mkdir -p deps
 	brew install openssl
 	#FIXME brew --prefix openssl fix with this instead of /usr/local/opt/openssl https://travis-ci.com/skycoin/libskycoin/jobs/202706851#L2049
-	(cd deps && wget http://curl.haxx.se/download/curl-7.65.0.tar.gz && tar -xf curl-7.65.0.tar.gz && cd curl-7.65.0/ && mkdir build && cd build && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl .. && make && sudo make install)
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xf curl-7.65.0.tar.gz && cd curl-7.65.0/ && mkdir build && cd build && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl .. && make && sudo make install)
 
 install-deps-libc: install-deps-libc-$(OSNAME)
 
