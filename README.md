@@ -68,33 +68,37 @@ All these make rules require skycoin to be a git submodule of libskycoin
 
 ## Development setup
 
-  ### Running tests
+### Running tests
 
-  ```sh
-  $ make test-libc
-  ```
+```sh
+$ make test-libc
+```
 
-  ### Releases
+### Releases
 
-  #### Update the version
+#### Update the version
 
-  0. If the `master` branch has commits that are not in `develop` (e.g. due to a hotfix applied to `master`), merge `master` into `develop` (and fix any build or test failures)
-  0. Switch to a new release branch named `release-X.Y.Z` for preparing the release.
-  0. Ensure that the submodule at `gopath/src/github.com/skycoin/skycoin` is in sync with respect to the corresponding tag in https://github.com/skycoin/skycoin repository.
-  0. Update `CHANGELOG.md`: move the "unreleased" changes to the version and add the date.
-  0. Follow the steps in [pre-release testing](#pre-release-testing)
-  0. Make a PR merging the release branch into `master`
-  0. Review the PR and merge it
-  0. Tag the `master` branch with the version number. Version tags start with `v`, e.g. `v0.20.0`. Sign the tag. If you have your GPG key in github, creating a release on the Github website will automatically tag the release. It can be tagged from the command line with `git tag -as v0.20.0 $COMMIT_ID`, but Github will not recognize it as a "release".
-  0. Release builds are created and uploaded by travis. To do it manually, checkout the master branch and follow the [create release builds instructions](#creating-release-builds).
+0. If the `master` branch has commits that are not in `develop` (e.g. due to a hotfix applied to `master`), merge `master` into `develop` (and fix any build or test failures)
+0. Switch to a new release branch named `release-X.Y.Z` for preparing the release.
+0. If the release process needs modifications, edit these steps before moving forward
+0. Ensure that the submodule at `vendor/github.com/skycoin/skycoin` is in sync with respect to the corresponding tag in https://github.com/skycoin/skycoin repository.
+0. Update `CHANGELOG.md`: move the "unreleased" changes to the version and add the date.
+0. Run `make docs` to regenerate documentation for all libraries and ensure they ar up-to-date.
+0. Follow the steps in [pre-release testing](#pre-release-testing)
+0. Make a PR merging the release branch into `master`
+0. Review the PR and merge it
+0. Tag the `master` branch with the version number. Version tags start with `v`, e.g. `v0.20.0`. Sign the tag. If you have your GPG key in github, creating a release on the Github website will automatically tag the release. It can be tagged from the command line with `git tag -as v0.20.0 $COMMIT_ID`, but Github will not recognize it as a "release".
+0. Release builds are created and uploaded by travis. To do it manually, checkout the master branch and follow the [create release builds instructions](#creating-release-builds).
+0. Merge changes in `master` back into `develop` branch to start working towards next stable version.
 
-  #### Pre-release testing
+#### Pre-release testing
 
-  Perform these actions before releasing:
+Perform these actions before releasing:
 
-  ```sh
-  make check
-  ```
+```sh
+make check
+```
+
 ## Development
 
 We have two branches: `master` and `develop`.
