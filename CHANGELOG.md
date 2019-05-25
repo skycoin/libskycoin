@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+### Fixed
+
+### Changed
+
+### Removed
+
+## [0.25.1] - 2019-05-24
+
+### Added
+
+- Export functions in Skycoin 0.25.1 core API's
 - `skyapi` C client for Skycoin node REST at `lib/curl`.
 - Support for building `libskycoin` on ARM and 32 / 64 bits.
 
@@ -23,11 +34,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Delete function `SKY_base58_String2Hex`
 
-
 ## [0.25.0] - 2018-12-19
 
 ### Added
 
+- Export functions in Skycoin 0.25.0 core API's
 - Coinhour burn factor when creating transactions can be configured at runtime with `USER_BURN_FACTOR` envvar
 - Max transaction size when creating transactions can be configured at runtime with `USER_MAX_TXN_SIZE` envvar
 - Max decimals allowed when creating transactions can be configured at runtime with `USER_MAX_DECIMALS` envvar
