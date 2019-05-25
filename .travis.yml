@@ -42,7 +42,8 @@ before_deploy:
   - export ARCH="$(uname -m)"
   - export OS="$(uname -s)"
   - make build
-  - cd build && tar czf ../libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz ./*
+  - ( cd build && tar czf ../libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz ./* )
+  - pwd && ls -l .
 deploy:
   - provider: releases
     api_key:
