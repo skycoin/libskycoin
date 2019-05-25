@@ -28,13 +28,15 @@ install:
   - go get github.com/gz-c/gox
   - go get -t ./...
   - make install-linters
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    sudo apt-get install cmake ;
-    fi
   - make install-deps-libc
-  - make install-lib-curl
+  - make install-deps-skyapi
 script:
-  - make check
+  - make build-skyapi
+  - make lint
+  - make test-libc
+  - make lint-libc
+  - make test-skyapi
+
 before_deploy:
   - export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
   - export ARCH="$(uname -m)"

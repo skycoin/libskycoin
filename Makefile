@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: test-libc test-lint build-libc check
+.PHONY: test-libc test-lint build-libc check build build-skyapi test-skyapi
 .PHONY: install-linters format clean-libc format-libc lint-libc docs
 
 COIN ?= skycoin
@@ -23,6 +23,9 @@ SKYVENDOR_REL_PATH     = $(SKYSRC_REL_PATH)/vendor
 # Compilation output for libskycoin
 BUILD_DIR = build
 BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
+BUILDLIBSKYAPI_DIR = $(BUILD_DIR)/libskyapi
+LIBNAME_Linux = libskyapi.so
+LIBNAME_Darwin = libskyapi.dylib
 LIB_DIR = lib
 BIN_DIR = bin
 DOC_DIR = docs
@@ -99,7 +102,12 @@ build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so ## Build libskycoin C shared li
 
 build-libc: configure-build build-libc-static build-libc-shared ## Build libskycoin C client libraries
 
-build: build-libc ## Build all C libraries
+build-skyapi: ## Build skyapi(libcurl based) library
+	(cd lib/curl && bash ./install_lib_curl.sh)
+	mkdir -p ./build/libskyapi
+	cp lib/curl/build/$(LIBNAME_$(UNAME_S)) ./build/libskyapi
+
+build: build-libc build-skyapi ## Build libraries
 
 ## Build libskycoin C client library and executable C test suites
 ## with debug symbols. Use this target to debug the source code
@@ -114,6 +122,10 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 	$(CC) -o $(BIN_DIR)/test_libskycoin_static $(LIB_DIR)/cgo/tests/*.c $(LIB_DIR)/cgo/tests/testutils/*.c $(BUILDLIB_DIR)/libskycoin.a $(LDLIBS) $(LDFLAGS)
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib:$(BUILDLIB_DIR)" $(BIN_DIR)/test_libskycoin_shared
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"         $(BIN_DIR)/test_libskycoin_static
+
+test-skyapi: build-skyapi ## Run test for skyapi(libcurl based) library
+
+test: test-libc test-skyapi ## Run all test for libskycoin
 
 docs-skyapi: ## Generate SkyApi (libcurl) documentation
 	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o $(LIBCURLDOC_DIR)
@@ -136,7 +148,7 @@ lint-libc: format-libc
 	clang-tidy  lib/cgo/tests/*.c -- $(LIBC_FLAGS) -Wincompatible-pointer-types
 
 
-check: lint test-libc lint-libc ## Run tests and linters
+check: lint test-libc lint-libc test-skyapi ## Run tests and linters
 
 install-linters-Linux: ## Install linters on GNU/Linux
 	sudo apt-get update
@@ -155,39 +167,55 @@ install-deps-Linux: ## Install deps on GNU/Linux
 install-deps-Darwin: ## Install deps on Mac OSX
 	brew install $(PKG_LIB_TEST)
 
-install-libraries-deps: ## Install deps for lib\curl wrapper of Skycoin REST API
-	if [[ "$(UNAME_S)" == "Linux" ]]; then (cd build && wget --no-check-certificate https://cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz && echo "f3546812c11ce7f5d64dc132a566b749 *cmake-3.3.2-Linux-x86_64.tar.gz" > cmake_md5.txt && md5sum -c cmake_md5.txt && tar -xvf cmake-3.3.2-Linux-x86_64.tar.gz > /dev/null && mv cmake-3.3.2-Linux-x86_64 cmake-install && PATH=$(pwd)/build/cmake-install:$(pwd)/build/cmake-install/bin:$PATH ) ; fi
-	(cd build && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && bash ./configure && make && sudo make install)
-	if [[ "$(UNAME_S)" == "Darwin" ]]; then brew install curl ; fi
-	# install uncrustify
-	(cd build && git clone https://github.com/uncrustify/uncrustify.git)
-	(cd build/uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
-
 install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
 	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(GOPATH)/bin v1.10.2
 
-install-deps-libc: install-deps-libc-$(OSNAME) install-libraries-deps
+install-deps-skyapi-Linux:
+	mkdir -p deps
+	sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
+	sudo apt-get update
+	sudo apt-get install cmake
+	sudo apt-get install libcurl3-gnutls
+	sudo apt remove curl
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
+	(cd deps && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
 
-install-deps-libc-linux: configure-build ## Install locally dependencies for testing libskycoin
+install-deps-skyapi-Darwin:
+	export LDFLAGS="-L/usr/local/opt/curl/lib"
+	export CPPFLAGS="-I/usr/local/opt/curl/include"
+	mkdir -p deps
+	brew update
+	brew install openssl curl uncrustify || true
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xf curl-7.58.0.tar.gz && cd curl-7.58.0/ && mkdir build && cd build && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl .. && make && sudo make install)
+
+install-deps-libc: install-deps-libc-$(UNAME_S) ## Install deps for libc
+
+install-deps-skyapi: install-deps-skyapi-$(UNAME_S) ## Install skyapi(libcurl based) library.
+
+install-deps-libc-Linux: configure-build ## Install locally dependencies for testing libskycoin
 	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
 	tar -xzf check-0.12.0.tar.gz
 	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
 
-install-lib-curl: ## Install Sky Api curl based rest wrapper
-	bash .travis/install_lib_curl.sh
-
-install-deps-libc-osx: configure-build ## Install locally dependencies for testing libskycoin
+install-deps-libc-Darwin: configure-build ## Install locally dependencies for testing libskycoin
 	brew install check
+
+install-deps: install-deps-libc install-deps-skyapi ## Install deps for libc and skyapi
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
 	goimports -w -local github.com/skycoin/skycoin ./lib
 
-clean-libc: ## Clean files generate by library
+clean-libc: ## Clean files generated by libc
 	rm -rfv $(BUILDLIB_DIR)
 	rm -rfv bin
 	rm -rfv qemu_test_libskycoin*
 	rm -rfv include/libskycoin.h
+
+clean-skyapi: ## Clean files generated by skyapi
+	rm -rfv $(BUILDLIBSKYAPI_DIR)
+
+clean: clean-libc clean-skyapi ## Clean all files generated by libraries
 
 format-libc:
 	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format lib/cgo/tests/*.c
