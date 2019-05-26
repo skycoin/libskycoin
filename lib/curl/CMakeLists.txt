@@ -6,7 +6,9 @@ project(CGenerator)
 #set(CMAKE_C_VISIBILITY_PRESET default)
 #set(CMAKE_CXX_VISIBILITY_PRESET default)
 #set(CMAKE_VISIBILITY_INLINES_HIDDEN OFF)
-set(CMAKE_BUILD_TYPE Debug)
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif(NOT CMAKE_BUILD_TYPE)
 
 set(pkgName "skyapi")
 
@@ -79,6 +81,8 @@ add_library(${pkgName} SHARED ${SRCS} ${HDRS})
 target_link_libraries(${pkgName} ${CURL_LIBRARIES})
 #install library to destination
 install(TARGETS ${pkgName} DESTINATION ${CMAKE_INSTALL_PREFIX})
+
+unset(CMAKE_BUILD_TYPE CACHE)
 
 # Setting file variables to null
 #set(SRCS "")
