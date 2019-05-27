@@ -375,6 +375,7 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/transactionGetPostResponse"
+          $ref: "#/components/responses/transactionGetPostResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns transactions that match the filters.
@@ -1132,6 +1133,9 @@ components:
               format: int32
               type: integer
           type: object
+        time:
+          type: integer
+          format: int64
     transactionVerbose:
       properties:
         time:
