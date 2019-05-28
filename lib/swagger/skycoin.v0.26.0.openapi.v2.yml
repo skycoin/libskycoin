@@ -263,11 +263,7 @@ paths:
       operationId: defaultConnections
       responses:
         "200":
-          description: This endpoint return an list of default connections.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ArrayString"
+          $ref: "#/components/responses/defaultConnectionsResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: defaultConnectionsHandler returns the list of default hardcoded
@@ -1497,10 +1493,6 @@ components:
           type: string
         is_valid:
           type: boolean
-    ArrayString:
-      items:
-        type: string
-      type: array
     networkConnectionSchema:
       properties:
         address:
@@ -1588,6 +1580,14 @@ components:
             type:
               type: string
   responses:
+    defaultConnectionsResponse:
+      description: This endpoint return an list of default connections.
+      content:
+        application/json:
+          schema:
+            items:
+              type: string
+            type: array
     networkConnectionsResponse:
       description: This endpoint return networks connections
       content:
@@ -2445,7 +2445,9 @@ components:
           schema:
             properties:
               addresses:
-                $ref: "#/components/schemas/ArrayString"
+                items:
+                  type: string
+                type: array
     EmptyResponse:
       description: This endpoint returns empty json
     walletEncryptResponse:
@@ -2700,7 +2702,9 @@ components:
           schema:
             properties:
               txids:
-                $ref: "#/components/schemas/ArrayString"
+                items:
+                  type: string
+                type: array
     outputsResponse:
       description: UnspentOutputsSummary records unspent outputs in different status.
       content:
