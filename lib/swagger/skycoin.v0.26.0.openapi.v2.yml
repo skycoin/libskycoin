@@ -24,10 +24,7 @@ paths:
         "200":
           description: This endpoint Returns the total number of unique address that have
             coins.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/addressCountResponse"
+          $ref: "#/components/responses/addressCountResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns the total number of unique address that have coins.
@@ -53,6 +50,40 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/blockResponse"
+        default:
+          $ref: "#/components/responses/genericError"
+      summary: Returns the balance of one or more addresses, both confirmed and
+        predicted. The predicted balance is the confirmed balance minus the
+        pending spends.
+  /api/v1/blocks:
+    get:
+      operationId: blocks
+      parameters:
+        - description: start seq
+          in: query
+          name: start
+          schema:
+            type: integer
+        - description: end seq
+          in: query
+          name: end
+          schema:
+            type: integer
+        - description: comma-separated list of block seqs
+          in: query
+          name: seq
+          schema:
+            items:
+              type: integer
+            type: array
+        - description: return verbose transaction input data
+          in: query
+          name: verbose
+          schema:
+            type: boolean
+      responses:
+        "200":
+          $ref: "#/components/responses/blocksResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns the balance of one or more addresses, both confirmed and
@@ -200,13 +231,7 @@ paths:
               - introduced
       responses:
         "200":
-          description: This endpoint return a connection struct
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/networkConnectionSchema'
-                type: array
+          $ref: "#/components/responses/networkConnectionsResponse"
         default:
           $ref: "#/components/responses/genericError"
       security:
@@ -375,7 +400,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/transactionGetPostResponse"
-          $ref: "#/components/responses/transactionGetPostResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns transactions that match the filters.
@@ -407,7 +431,7 @@ paths:
         - csrfAuth:
             []
       summary: Returns transactions that match the filters.
-  /api/v1/uxout:
+  /api/v1/uxout :
     get:
       operationId: uxout
       parameters:
@@ -1053,12 +1077,185 @@ paths:
               schema:
                 type: string
                 example: "b700000000075f255d42ddd2fb228fe488b8b468526810db7a144aeed1fd091e3fd404626e010000009b6fae9a70a42464dda089c943fafbf7bae8b8402e6bf4e4077553206eebc2ed4f7630bb1bd92505131cca5bf8bd82a44477ef53058e1995411bdbf1f5dfad1f00010000005287f390628909dd8c25fad0feb37859c0c1ddcf90da0c040c837c89fefd9191010000000010722f061aa262381dce35193d43eceb112373c300127a0000000000a303000000000000"
+  /api/v1/last_blocks:
+     get:
+       description: Returns the most recent N blocks on the blockchain
+       operationId: lastBlocks
+       parameters:
+       - in: query
+         name: num
+         required: true
+         type: integer
+       - in: query
+         name: verbose
+         type: boolean
+       produces:
+       - application/json
+       responses:
+         "200":
+           $ref: '#/responses/lastBlocksResponses'
+         default:
+           $ref: '#/responses/genericError'
+  /api/v1/address_uxouts:
+    get:
+      description: Returns the historical, spent outputs associated with an address
+      operationId: addressUxouts
+      parameters:
+        - description: address to filter by
+          in: query
+          name: address
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          $ref: '#/responses/address_uxoutsResponse'
+        default:
+          $ref: '#/responses/genericError'
+
 servers:
   - url: http://127.0.0.1:6420
   - url: https://skycoin.net
   - url: https://staging.node.skycoin.net
 components:
   schemas:
+    blockVerboseSchemaArray:
+      items:
+        $ref: '#/components/schemas/blockVerboseSchema'
+      type: array
+    blockVerboseSchema:
+      properties:
+        header:
+          properties:
+            seq:
+              type: integer
+            timestamp:
+              type: integer
+            fee:
+              type: integer
+            version:
+              type: integer
+            block_hash:
+              type: string
+            previous_block_hash:
+              type: string
+            tx_body_hash:
+              type: string
+            ux_hash:
+              type: string
+          type: object
+        body:
+          properties:
+            txns:
+              items:
+                properties:
+                  length:
+                    type: integer
+                  type:
+                    type: integer
+                  txid:
+                    type: string
+                  inner_hash:
+                    type: string
+                  sigs:
+                    items:
+                      type: string
+                    type: array
+                  inputs:
+                    items:
+                      properties:
+                        uxdi:
+                          type: string
+                        owner:
+                          type: string
+                        coins:
+                          type: string
+                        hours:
+                          type: string
+                        calculated_hours:
+                          type: string
+                    type: array
+                  outputs:
+                    items:
+                      properties:
+                        uxid:
+                          type: string
+                        dst:
+                          type: string
+                        coins:
+                          type: string
+                        hours:
+                          type: integer
+                    type: array
+              type: array
+          type: object
+        size:
+          type: integer
+      type: object
+    blockSchemaArray:
+      items:
+        $ref: '#/components/schemas/blockSchema'
+      type: array
+    blockSchema:
+      properties:
+        header:
+          properties:
+            seq:
+              type: integer
+            timestamp:
+              type: integer
+            fee:
+              type: integer
+            version:
+              type: integer
+            block_hash:
+              type: string
+            previous_block_hash:
+              type: string
+            tx_body_hash:
+              type: string
+            ux_hash:
+              type: string
+          type: object
+        body:
+          properties:
+            txns:
+              items:
+                properties:
+                  length:
+                    type: integer
+                  type:
+                    type: integer
+                  txid:
+                    type: string
+                  inner_hash:
+                    type: string
+                  sigs:
+                    items:
+                      type: string
+                    type: array
+                  inputs:
+                    items:
+                      type: string
+                    type: array
+                  outputs:
+                    items:
+                      properties:
+                        uxid:
+                          type: string
+                        dst:
+                          type: string
+                        coins:
+                          type: string
+                        hours:
+                          type: integer
+                    type: array
+              type: array
+          type: object
+        size:
+          type: integer
+      type: object
     singleKey:
       properties:
         data:
@@ -1390,6 +1587,56 @@ components:
             type:
               type: string
   responses:
+    networkConnectionsResponse:
+      description: This endpoint return networks connections
+      content:
+        application/json:
+          schema:
+            properties:
+              connections:
+                items:
+                  $ref: '#/components/schemas/networkConnectionSchema'
+                type: array
+            type: object
+    address_uxoutsResponse:
+      description: Return address uxouts
+      content:
+        application/json:
+          schema:
+            items:
+              properties:
+                coins:
+                  format: integer
+                  type: integer
+                hours:
+                  format: int64
+                  type: integer
+                owner_address:
+                  type: string
+                spent_block_seq:
+                  format: in64
+                  type: integer
+                spent_tx:
+                  type: string
+                src_block_seq:
+                  format: int64
+                  type: integer
+                src_tx:
+                  type: string
+                time:
+                  format: int64
+                  type: integer
+                uxid:
+                  type: string
+            type: array
+    lastBlocksResponses:
+      description: Get last N blocks
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/responses/lastBlocksResponse'
+              - $ref: '#/components/responses/lastBlocksVerboseResponse'
     dataResponse:
       description: Response for api/v2/data endpoint
       content:
@@ -1444,6 +1691,169 @@ components:
                         type: string
                     type: object
                 type: object
+    lastBlocksResponse:
+      description: Returns the most recent N blocks on the blockchain
+      schema:
+        properties:
+          blocks:
+            items:
+              properties:
+                body:
+                  properties:
+                    txns:
+                      items:
+                        properties:
+                          inner_hash:
+                            type: string
+                          inputs:
+                            items:
+                              type: string
+                            type: array
+                          length:
+                            format: int32
+                            type: integer
+                          outputs:
+                            items:
+                              properties:
+                                coins:
+                                  type: string
+                                dst:
+                                  type: string
+                                hours:
+                                  format: int64
+                                  type: integer
+                                uxid:
+                                  type: string
+                            type: array
+                          sigs:
+                            items:
+                              type: string
+                            type: array
+                          timestamp:
+                            format: int32
+                            type: integer
+                          txid:
+                            type: string
+                          type:
+                            format: int32
+                            type: integer
+                      type: array
+                  type: object
+                header:
+                  properties:
+                    block_hash:
+                      type: string
+                    fee:
+                      format: int64
+                      type: integer
+                    previous_block_hash:
+                      type: string
+                    seq:
+                      format: int64
+                      type: integer
+                    timestamp:
+                      format: int64
+                      type: integer
+                    tx_body_hash:
+                      type: string
+                    ux_hash:
+                      type: string
+                    version:
+                      format: int32
+                      type: integer
+                  type: object
+                size:
+                  format: int32
+                  type: integer
+            type: array
+    lastBlocksVerboseResponse:
+      description: Returns the most recent N blocks on the blockchain with verbose.
+      schema:
+        properties:
+          blocks:
+            items:
+              properties:
+                body:
+                  properties:
+                    txns:
+                      items:
+                        properties:
+                          inner_hash:
+                            type: string
+                          inputs:
+                            items:
+                              properties:
+                                uxid:
+                                  type: string
+                                owner:
+                                  type: string
+                                coins:
+                                  type: string
+                                hours:
+                                  type: integer
+                                  format: int64
+                                calculated_hours:
+                                  type: integer
+                                  format: int64
+                              type: object
+                            type: array
+                          length:
+                            format: int32
+                            type: integer
+                          outputs:
+                            items:
+                              properties:
+                                coins:
+                                  type: string
+                                dst:
+                                  type: string
+                                hours:
+                                  format: int64
+                                  type: integer
+                                uxid:
+                                  type: string
+                            type: array
+                          sigs:
+                            items:
+                              type: string
+                            type: array
+                          timestamp:
+                            format: int32
+                            type: integer
+                          txid:
+                            type: string
+                          type:
+                            format: int32
+                            type: integer
+                      type: array
+                  type: object
+                header:
+                  properties:
+                    block_hash:
+                      type: string
+                    fee:
+                      format: int64
+                      type: integer
+                    previous_block_hash:
+                      type: string
+                    seq:
+                      format: int64
+                      type: integer
+                    timestamp:
+                      format: int64
+                      type: integer
+                    tx_body_hash:
+                      type: string
+                    ux_hash:
+                      type: string
+                    version:
+                      format: int32
+                      type: integer
+                  type: object
+                size:
+                  format: int32
+                  type: integer
+            type: array
     walletTransactionSignResponse:
       description: Signs an unsigned transaction, returning the transaction with updated signatures and the encoded, serialized transaction.
       content:
@@ -1604,64 +2014,17 @@ components:
       content:
         application/json:
           schema:
-            properties:
-              header:
-                properties:
-                  seq:
-                    type: integer
-                  timestamp:
-                    type: integer
-                  fee:
-                    type: integer
-                  version:
-                    type: integer
-                  block_hash:
-                    type: string
-                  previous_block_hash:
-                    type: string
-                  tx_body_hash:
-                    type: string
-                  ux_hash:
-                    type: string
-                type: object
-              body:
-                properties:
-                  txns:
-                    items:
-                      properties:
-                        length:
-                          type: integer
-                        type:
-                          type: integer
-                        txid:
-                          type: string
-                        inner_hash:
-                          type: string
-                        sigs:
-                          items:
-                            type: string
-                          type: array
-                        inputs:
-                          items:
-                            type: string
-                          type: array
-                        outputs:
-                          items:
-                            properties:
-                              uxid:
-                                type: string
-                              dst:
-                                type: string
-                              coins:
-                                type: string
-                              hours:
-                                type: integer
-                          type: array
-                    type: array
-                type: object
-              size:
-                type: integer
-            type: object
+            oneOf:
+              - $ref: '#/components/schemas/blockSchemaArray'
+              - $ref: '#/components/schemas/blockVerboseSchemaArray'
+    blocksResponse:
+      description: Get blocks in specific range
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/blockSchema'
+              - $ref: '#/components/schemas/blockVerboseSchema'
     pendingTxsVerboseResponse:
       description: Transaction inputs include the owner address, coins, hours and calculated hours.
       content:
@@ -1811,6 +2174,8 @@ components:
             properties:
               data:
                 properties:
+                  unsigned:
+                    type: boolean
                   confirmed:
                     type: boolean
                   transaction:
