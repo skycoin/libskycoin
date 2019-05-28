@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   contact:
-    email: skycoin.doe@example.com
+    email: contact@skycoin.net
     name: Skycoin project
     url: https://skycoin.net
   description: Skycoin is a next-generation cryptocurrency.
