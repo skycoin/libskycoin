@@ -11,20 +11,16 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
-#include "_api_v1_wallets_entries.h"
-#include "_api_v1_wallets_meta.h"
 
 
 
 typedef struct inline_response_200_5_t {
-    list_t *entries; //nonprimitive container
-    _api_v1_wallets_meta_t *meta; //model
+    char *address; // string
 
 } inline_response_200_5_t;
 
 inline_response_200_5_t *inline_response_200_5_create(
-    list_t *entries,
-    _api_v1_wallets_meta_t *meta
+    char *address
 );
 
 void inline_response_200_5_free(inline_response_200_5_t *inline_response_200_5);

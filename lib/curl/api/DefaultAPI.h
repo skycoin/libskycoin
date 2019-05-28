@@ -4,7 +4,7 @@
 #include "../include/list.h"
 #include "../external/cJSON.h"
 #include "../include/keyValuePair.h"
-#include "../model/inline_object.h"
+#include "../model/UNKNOWN_BASE_TYPE.h"
 #include "../model/inline_response_200.h"
 #include "../model/inline_response_200_1.h"
 #include "../model/inline_response_200_2.h"
@@ -14,12 +14,22 @@
 #include "../model/inline_response_200_6.h"
 #include "../model/inline_response_200_7.h"
 #include "../model/inline_response_default.h"
+#include "../model/network_connection_schema.h"
 #include "../model/object.h"
+#include "../model/one_ofarrayarray.h"
+#include "../model/one_ofblock_schemablock_verbose_schema.h"
+#include "../model/one_oflast_blocks_responselast_blocks_verbose_response.h"
+#include "../model/one_ofpending_txs_verbose_responsepending_txs_response.h"
+#include "../model/one_ofsingle_keymulti_key.h"
+#include "../model/one_oftransaction_responsetransaction_verbose_responsetransaction_encoded_response.h"
+#include "../model/one_oftransaction_v2_params_unspenttransaction_v2_params_address.h"
+#include "../model/one_oftransactions_responsetransaction_verbose_response.h"
+#include "../model/one_ofwallet_transactions_responseswallet_transactions_verbose_responses.h"
 
 
 // Returns the total number of unique address that have coins.
 //
-object_t*
+inline_response_200_t*
 DefaultAPI_addressCount(apiClient_t *apiClient);
 
 
@@ -27,6 +37,14 @@ DefaultAPI_addressCount(apiClient_t *apiClient);
 //
 list_t*
 DefaultAPI_addressUxouts(apiClient_t *apiClient ,char * address);
+
+
+char*
+DefaultAPI_apiV1RawtxGet(apiClient_t *apiClient);
+
+
+char*
+DefaultAPI_apiV2MetricsGet(apiClient_t *apiClient);
 
 
 // Returns the balance of one or more addresses, both confirmed and predicted. The predicted balance is the confirmed balance minus the pending spends.
@@ -41,10 +59,10 @@ object_t*
 DefaultAPI_balancePost(apiClient_t *apiClient ,char * addrs);
 
 
-// Returns a block by hash or seq. Note: only one of hash or seq is allowed
+// Returns the balance of one or more addresses, both confirmed and predicted. The predicted balance is the confirmed balance minus the pending spends.
 //
-object_t*
-DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq);
+one_ofarrayarray_t*
+DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq ,int verbose);
 
 
 // Returns the blockchain metadata.
@@ -59,44 +77,40 @@ object_t*
 DefaultAPI_blockchainProgress(apiClient_t *apiClient);
 
 
-// blocksHandler returns blocks between a start and end point,
+// Returns the balance of one or more addresses, both confirmed and predicted. The predicted balance is the confirmed balance minus the pending spends.
 //
-// or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. Without verbose.
-//
-object_t*
-DefaultAPI_blocksGet(apiClient_t *apiClient ,int start ,int end ,list_t * seqs);
-
-
-// blocksHandler returns blocks between a start and end point,
-//
-// or an explicit list of sequences. If using start and end, the block sequences include both the start and end point. Explicit sequences cannot be combined with start and end. Without verbose
-//
-object_t*
-DefaultAPI_blocksPost(apiClient_t *apiClient ,int start ,int end ,list_t * seqs);
+one_ofblock_schemablock_verbose_schema_t*
+DefaultAPI_blocks(apiClient_t *apiClient ,int start ,int end ,list_t * seq ,int verbose);
 
 
 // coinSupplyHandler returns coin distribution supply stats
 //
-object_t*
+inline_response_200_1_t*
 DefaultAPI_coinSupply(apiClient_t *apiClient);
 
 
 // Creates a new CSRF token. Previous CSRF tokens are invalidated by this call.
 //
-inline_response_200_1_t*
+inline_response_200_2_t*
 DefaultAPI_csrf(apiClient_t *apiClient);
+
+
+void
+DefaultAPI_dataDELETE(apiClient_t *apiClient ,char * type ,char * key);
+
+
+one_ofsingle_keymulti_key_t*
+DefaultAPI_dataGET(apiClient_t *apiClient ,char * type ,char * key);
+
+
+void
+DefaultAPI_dataPOST(apiClient_t *apiClient ,char * type ,char * key ,char * val);
 
 
 // defaultConnectionsHandler returns the list of default hardcoded bootstrap addresses.\\n They are not necessarily connected to.
 //
 list_t*
 DefaultAPI_defaultConnections(apiClient_t *apiClient);
-
-
-// Returns all transactions (confirmed and unconfirmed) for an address
-//
-list_t*
-DefaultAPI_explorerAddress(apiClient_t *apiClient ,char * address);
 
 
 // Returns node health data.
@@ -107,20 +121,20 @@ DefaultAPI_health(apiClient_t *apiClient);
 
 // Returns the most recent N blocks on the blockchain
 //
-object_t*
-DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num);
+one_oflast_blocks_responselast_blocks_verbose_response_t*
+DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num ,int verbose);
 
 
 // This endpoint returns a specific connection.
 //
-inline_response_200_3_t*
+network_connection_schema_t*
 DefaultAPI_networkConnection(apiClient_t *apiClient ,char * addr);
 
 
 // This endpoint returns all outgoings connections.
 //
-list_t*
-DefaultAPI_networkConnections(apiClient_t *apiClient ,char* states ,char* direction);
+inline_response_200_3_t*
+DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction_e direction);
 
 
 // This endpoint disconnects a connection by ID or address
@@ -153,15 +167,13 @@ object_t*
 DefaultAPI_outputsPost(apiClient_t *apiClient ,char * address ,char * hash);
 
 
-// Returns pending (unconfirmed) transactions without verbose
-//
-list_t*
-DefaultAPI_pendingTxs(apiClient_t *apiClient);
+one_ofpending_txs_verbose_responsepending_txs_response_t*
+DefaultAPI_pendingTxs(apiClient_t *apiClient ,int verbose);
 
 
 // Broadcasts all unconfirmed transactions from the unconfirmed transaction pool
 //
-void
+object_t*
 DefaultAPI_resendUnconfirmedTxns(apiClient_t *apiClient);
 
 
@@ -171,16 +183,20 @@ object_t*
 DefaultAPI_richlist(apiClient_t *apiClient ,int include_distribution ,char * n);
 
 
-// Returns a transaction identi`fied by its txid hash with just id
+// Returns a transaction identified by its txid hash with just id
 //
-object_t*
-DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int encoded);
+one_oftransaction_responsetransaction_verbose_responsetransaction_encoded_response_t*
+DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int verbose ,int encoded);
 
 
 // Broadcast a hex-encoded, serialized transaction to the network.
 //
-object_t*
+char*
 DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx);
+
+
+inline_response_200_6_t*
+DefaultAPI_transactionPost(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE);
 
 
 // Returns the hex-encoded byte serialization of a transaction. The transaction may be confirmed or unconfirmed.
@@ -192,19 +208,19 @@ DefaultAPI_transactionRaw(apiClient_t *apiClient ,char * txid);
 // Decode and verify an encoded transaction
 //
 object_t*
-DefaultAPI_transactionVerify(apiClient_t *apiClient);
+DefaultAPI_transactionVerify(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE);
 
 
 // Returns transactions that match the filters.
 //
-object_t*
-DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirmed);
+one_oftransactions_responsetransaction_verbose_response_t*
+DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirmed ,int verbose);
 
 
 // Returns transactions that match the filters.
 //
-object_t*
-DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirmed);
+one_oftransactions_responsetransaction_verbose_response_t*
+DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirmed ,int verbose);
 
 
 // Returns an unspent output by ID.
@@ -215,13 +231,13 @@ DefaultAPI_uxout(apiClient_t *apiClient ,char * uxid);
 
 // Verifies a Skycoin address.
 //
-inline_response_200_7_t*
-DefaultAPI_verifyAddress(apiClient_t *apiClient ,char * address);
+object_t*
+DefaultAPI_verifyAddress(apiClient_t *apiClient ,object_t * address);
 
 
 // versionHandler returns the application version info
 //
-object_t*
+inline_response_200_4_t*
 DefaultAPI_version(apiClient_t *apiClient);
 
 
@@ -257,7 +273,7 @@ DefaultAPI_walletEncrypt(apiClient_t *apiClient ,char * id ,char * password);
 
 // Returns the wallet directory path
 //
-inline_response_200_6_t*
+inline_response_200_5_t*
 DefaultAPI_walletFolder(apiClient_t *apiClient ,char * addr);
 
 
@@ -270,7 +286,7 @@ DefaultAPI_walletNewAddress(apiClient_t *apiClient ,char * id ,char * num ,char 
 // Returns the wallet directory path
 //
 object_t*
-DefaultAPI_walletNewSeed(apiClient_t *apiClient ,char* entropy);
+DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy);
 
 
 // Recovers an encrypted wallet by providing the seed. The first address will be generated from seed and compared to the first address of the specified wallet. If they match, the wallet will be regenerated with an optional password. If the wallet is not encrypted, an error is returned.
@@ -291,22 +307,20 @@ object_t*
 DefaultAPI_walletSeedVerify(apiClient_t *apiClient ,char * seed);
 
 
-// Creates and broadcasts a transaction sending money from one of our wallets to destination address.
+// Creates a signed transaction
 //
 object_t*
-DefaultAPI_walletSpent(apiClient_t *apiClient ,char * id ,char * dst ,char * coins ,char * password);
+DefaultAPI_walletTransaction(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE);
 
 
 // Creates a signed transaction
 //
-object_t*
-DefaultAPI_walletTransaction(apiClient_t *apiClient ,inline_object_t * body);
+inline_response_200_7_t*
+DefaultAPI_walletTransactionSign(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE);
 
 
-// Returns returns all unconfirmed transactions for all addresses in a given wallet verbose
-//
-object_t*
-DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id);
+one_ofwallet_transactions_responseswallet_transactions_verbose_responses_t*
+DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id ,int verbose);
 
 
 // Unloads wallet from the wallet service.
@@ -317,7 +331,7 @@ DefaultAPI_walletUnload(apiClient_t *apiClient ,char * id);
 
 // Update the wallet.
 //
-void
+char*
 DefaultAPI_walletUpdate(apiClient_t *apiClient ,char * id ,char * label);
 
 

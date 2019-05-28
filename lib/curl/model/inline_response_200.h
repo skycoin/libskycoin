@@ -15,28 +15,12 @@
 
 
 typedef struct inline_response_200_t {
-    long hours; //numeric
-    int coins; //numeric
-    char *uxid; // string
-    char *owner_address; // string
-    int spent_block_seq; //numeric
-    char *spent_tx; // string
-    long time; //numeric
-    long src_block_seq; //numeric
-    char *src_tx; // string
+    long count; //numeric
 
 } inline_response_200_t;
 
 inline_response_200_t *inline_response_200_create(
-    long hours,
-    int coins,
-    char *uxid,
-    char *owner_address,
-    int spent_block_seq,
-    char *spent_tx,
-    long time,
-    long src_block_seq,
-    char *src_tx
+    long count
 );
 
 void inline_response_200_free(inline_response_200_t *inline_response_200);
