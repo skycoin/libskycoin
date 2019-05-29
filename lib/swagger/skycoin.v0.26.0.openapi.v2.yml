@@ -941,9 +941,23 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/transactionV2ParamsUnspent'
-                - $ref: '#/components/schemas/transactionV2ParamsAddress'
+              $ref: '#/components/schemas/transactionV2ParamsAddress'
+      responses:
+        "200":
+          $ref: "#/components/responses/transactionPostResponse"
+        default:
+          $ref: "#/components/responses/genericError"
+      security:
+        - csrfAuth:
+            []
+  /api/v2/transaction/unspent:
+    post:
+      operationId: transactionPostUnspent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/transactionV2ParamsUnspent'
       responses:
         "200":
           $ref: "#/components/responses/transactionPostResponse"
@@ -1096,6 +1110,26 @@ paths:
         - csrfAuth:
             []
       summary: Verifies a wallet seed.
+  /api/v2/data/single:
+    get:
+      operationId: dataGETSingle
+      parameters:
+        - description: storage type.
+          in: header
+          name: type
+          schema:
+            type: string
+        - description: key of the specific value to get.
+          in: header
+          name: key
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: '#/components/schemas/singleKey'
+        default:
+          $ref: "#/components/responses/genericError"
+
   /api/v2/data:
     get:
       operationId: dataGET
@@ -1112,7 +1146,7 @@ paths:
             type: string
       responses:
         "200":
-          $ref: "#/components/responses/dataResponse"
+          $ref: '#/components/schemas/multiKey'
         default:
           $ref: "#/components/responses/genericError"
     post:
@@ -1758,14 +1792,14 @@ components:
 #            oneOf:
 #              - $ref: '#/components/responses/lastBlocksResponse'
 #              - $ref: '#/components/responses/lastBlocksVerboseResponse'
-    dataResponse:
-      description: Response for api/v2/data endpoint
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: '#/components/schemas/singleKey'
-              - $ref: '#/components/schemas/multiKey'
+#    dataResponse:
+#      description: Response for api/v2/data endpoint
+#      content:
+#        application/json:
+#          schema:
+#            oneOf:
+#              - $ref: '#/components/schemas/singleKey'
+#              - $ref: '#/components/schemas/multiKey'
     walletSeedVerify:
       description: Verifies a wallet seed.
       content:
