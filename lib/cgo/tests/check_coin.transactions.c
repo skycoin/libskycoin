@@ -276,10 +276,11 @@ START_TEST(TestTransactionUpdateHeader)
     Transaction__Handle handle;
     coin__Transaction* ptx;
     ptx = makeTransaction(&handle);
-    cipher__SHA256 hash, nullHash, hashInner;
+    cipher__SHA256 hash; 
+    cipher__SHA256 nullHash = "";
+    cipher__SHA256 hashInner;
     memcpy(&hash, &ptx->InnerHash, sizeof(cipher__SHA256));
     memset(&ptx->InnerHash, 0, sizeof(cipher__SHA256));
-    memset(&nullHash, 0, sizeof(cipher__SHA256));
     result = SKY_coin_Transaction_UpdateHeader(handle);
     ck_assert(!isU8Eq(ptx->InnerHash, nullHash, sizeof(cipher__SHA256)));
     ck_assert(isU8Eq(ptx->InnerHash, hash, sizeof(cipher__SHA256)));
