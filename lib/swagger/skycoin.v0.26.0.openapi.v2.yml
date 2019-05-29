@@ -42,14 +42,31 @@ paths:
           name: seq
           schema:
             type: integer
-        - description: return verbose transaction input data
-          in: query
-          name: verbose
-          schema:
-            type: boolean
       responses:
         "200":
-          $ref: "#/components/responses/blockResponse"
+          $ref: '#/components/schemas/blockSchemaArray'
+        default:
+          $ref: "#/components/responses/genericError"
+      summary: Returns the balance of one or more addresses, both confirmed and
+        predicted. The predicted balance is the confirmed balance minus the
+        pending spends.
+  /api/v1/block/verbose:
+    get:
+      operationId: blockVerbose
+      parameters:
+        - description: get block by hash
+          in: query
+          name: hash
+          schema:
+            type: string
+        - description: get block by sequence number
+          in: query
+          name: seq
+          schema:
+            type: integer
+      responses:
+        "200":
+          $ref: '#/components/schemas/blockVerboseSchemaArray'
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns the balance of one or more addresses, both confirmed and
@@ -76,14 +93,38 @@ paths:
             items:
               type: integer
             type: array
-        - description: return verbose transaction input data
-          in: query
-          name: verbose
-          schema:
-            type: boolean
       responses:
         "200":
           $ref: "#/components/responses/blocksResponse"
+        default:
+          $ref: "#/components/responses/genericError"
+      summary: Returns the balance of one or more addresses, both confirmed and
+        predicted. The predicted balance is the confirmed balance minus the
+        pending spends.
+  /api/v1/blocks/verbose:
+    get:
+      operationId: blocksVerbose
+      parameters:
+        - description: start seq
+          in: query
+          name: start
+          schema:
+            type: integer
+        - description: end seq
+          in: query
+          name: end
+          schema:
+            type: integer
+        - description: comma-separated list of block seqs
+          in: query
+          name: seq
+          schema:
+            items:
+              type: integer
+            type: array
+      responses:
+        "200":
+          $ref: "#/components/responses/blocksVerboseResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns the balance of one or more addresses, both confirmed and
@@ -358,19 +399,41 @@ paths:
           required: true
           schema:
             type: string
-        - description: include verbose transaction input data
-          in: query
-          name: verbose
-          schema:
-            type: boolean
-        - description: return the transaction as hex-encoded serialized bytes
-          in: query
-          name: encoded
-          schema:
-            type: boolean
       responses:
         "200":
-          $ref: "#/components/responses/v1TransactionResponse"
+          $ref: "#/components/responses/transactionResponse"
+        default:
+          $ref: "#/components/responses/genericError"
+  /api/v1/transaction/verbose:
+    get:
+      description: Returns a transaction identified by its txid hash with just id
+      operationId: transactionVerbose
+      parameters:
+        - description: transaction Id
+          in: query
+          name: txid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/transactionVerboseResponse"
+        default:
+          $ref: "#/components/responses/genericError"
+  /api/v1/transaction/encoded:
+    get:
+      description: Returns a transaction identified by its txid hash with just id
+      operationId: transactionEncoded
+      parameters:
+        - description: transaction Id
+          in: query
+          name: txid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/transactionEncodedResponse"
         default:
           $ref: "#/components/responses/genericError"
   /api/v1/transactions:
@@ -388,14 +451,9 @@ paths:
           name: confirmed
           schema:
             type: string
-        - description: Include verbose transaction input data
-          in: query
-          name: verbose
-          schema:
-            type: boolean
       responses:
         "200":
-          $ref: "#/components/responses/transactionGetPostResponse"
+          $ref: "#/components/responses/transactionsResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns transactions that match the filters.
@@ -413,14 +471,53 @@ paths:
           name: confirmed
           schema:
             type: string
-        - description: Include verbose transaction input data
-          in: query
-          name: verbose
-          schema:
-            type: boolean
       responses:
         "200":
-          $ref: "#/components/responses/transactionGetPostResponse"
+          $ref: "#/components/responses/transactionsResponse"
+        default:
+          $ref: "#/components/responses/genericError"
+      security:
+        - csrfAuth:
+            []
+      summary: Returns transactions that match the filters.
+  /api/v1/transactions/verbose:
+    get:
+      operationId: transactionsGetVerbose
+      parameters:
+        - description: command separated list of addresses
+          in: query
+          name: addrs
+          schema:
+            type: string
+        - description: Whether the transactions should be confirmed [optional, must be 0 or
+            1; if not provided, returns all]
+          in: query
+          name: confirmed
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/transactionVerboseResponse"
+        default:
+          $ref: "#/components/responses/genericError"
+      summary: Returns transactions that match the filters.
+    post:
+      operationId: transactionsPostVerbose
+      parameters:
+        - description: command separated list of addresses
+          in: query
+          name: addrs
+          schema:
+            type: string
+        - description: Whether the transactions should be confirmed [optional, must be 0 or
+            1; if not provided, returns all]
+          in: query
+          name: confirmed
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/transactionVerboseResponse"
         default:
           $ref: "#/components/responses/genericError"
       security:
@@ -720,14 +817,24 @@ paths:
           required: true
           schema:
             type: string
-        - description: include verbose transaction input data
-          in: query
-          name: verbose
-          schema:
-            type: boolean
       responses:
         "200":
-          $ref: "#/components/responses/walletTransactionsOneOfResponse"
+          $ref: "#/components/responses/walletTransactionsResponses"
+        default:
+          $ref: "#/components/responses/genericError"
+  /api/v1/wallet/transactions/verbose:
+    get:
+      operationId: walletTransactionsVerbose
+      parameters:
+        - description: Wallet Id.
+          in: query
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/walletTransactionsVerboseResponses"
         default:
           $ref: "#/components/responses/genericError"
   /api/v1/wallet/unload:
@@ -1052,15 +1159,17 @@ paths:
   /api/v1/pendingTxs:
     get:
       operationId: pendingTxs
-      parameters:
-        - description: include verbose transaction input data
-          in: query
-          name: verbose
-          schema:
-            type: boolean
       responses:
         "200":
-          $ref: "#/components/responses/pendingTxsOneOfResponse"
+          $ref: '#/components/responses/pendingTxsResponse'
+        default:
+          $ref: "#/components/responses/genericError"
+  /api/v1/pendingTxs/verbose:
+    get:
+      operationId: pendingTxsVerbose
+      responses:
+        "200":
+          $ref: '#/components/responses/pendingTxsVerboseResponse'
         default:
           $ref: "#/components/responses/genericError"
   /api/v1/rawtx:
@@ -1084,14 +1193,25 @@ paths:
           required: true
           schema:
             type: integer
-        - description: Verbose
-          in: query
-          name: verbose
-          schema:
-            type: boolean
       responses:
         "200":
-          $ref: "#/components/responses/lastBlocksResponses"
+          $ref: '#/components/responses/lastBlocksResponse'
+        default:
+          $ref: '#/components/responses/genericError'
+  /api/v1/last_blocks/verbose:
+    get:
+      description: Returns the most recent N blocks on the blockchain
+      operationId: lastBlocksVerbose
+      parameters:
+        - description: Num of blockss
+          in: query
+          name: num
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          $ref: '#/components/responses/lastBlocksVerboseResponse'
         default:
           $ref: '#/components/responses/genericError'
   /api/v1/address_uxouts:
@@ -1630,14 +1750,14 @@ components:
                 uxid:
                   type: string
             type: array
-    lastBlocksResponses:
-      description: Get last N blocks
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: '#/components/responses/lastBlocksResponse'
-              - $ref: '#/components/responses/lastBlocksVerboseResponse'
+#    lastBlocksResponses:
+#      description: Get last N blocks
+#      content:
+#        application/json:
+#          schema:
+#            oneOf:
+#              - $ref: '#/components/responses/lastBlocksResponse'
+#              - $ref: '#/components/responses/lastBlocksVerboseResponse'
     dataResponse:
       description: Response for api/v2/data endpoint
       content:
@@ -2014,22 +2134,36 @@ components:
                   $ref: '#/components/schemas/transactionEncoded'
                 type: array
             type: object
-    blockResponse:
-      description: Get bock by hash or sequence
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: '#/components/schemas/blockSchemaArray'
-              - $ref: '#/components/schemas/blockVerboseSchemaArray'
+#    blockResponse:
+#      description: Get bock by hash or sequence
+#      content:
+#        application/json:
+#          schema:
+#            oneOf:
+#              - $ref: '#/components/schemas/blockSchemaArray'
+#              - $ref: '#/components/schemas/blockVerboseSchemaArray'
     blocksResponse:
       description: Get blocks in specific range
       content:
         application/json:
           schema:
-            oneOf:
-              - $ref: '#/components/schemas/blockSchema'
-              - $ref: '#/components/schemas/blockVerboseSchema'
+            properties:
+              blocks:
+                items:
+                  $ref: '#/components/schemas/blockSchema'
+                type: array
+            type: object
+    blocksVerboseResponse:
+      description: Get blocks in specific range with verbose
+      content:
+        application/json:
+          schema:
+            properties:
+              blocks:
+                items:
+                  $ref: '#/components/schemas/blockVerboseSchema'
+                type: array
+            type: object
     pendingTxsVerboseResponse:
       description: Transaction inputs include the owner address, coins, hours and calculated hours.
       content:
@@ -2094,14 +2228,14 @@ components:
                   type: boolean
               type: object
             type: array
-    pendingTxsOneOfResponse:
-      description: Transaction inputs include the owner address, coins, hours and calculated hours.
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: '#/components/responses/pendingTxsVerboseResponse'
-              - $ref: '#/components/responses/pendingTxsResponse'
+#    pendingTxsOneOfResponse:
+#      description: Transaction inputs include the owner address, coins, hours and calculated hours.
+#      content:
+#        application/json:
+#          schema:
+#            oneOf:
+#              - $ref: '#/components/responses/pendingTxsVerboseResponse'
+#              - $ref: '#/components/responses/pendingTxsResponse'
     pendingTxsResponse:
       description: Transaction inputs include the owner address, coins, hours and calculated hours.
       content:
@@ -2154,23 +2288,23 @@ components:
                   type: boolean
               type: object
             type: array
-    v1TransactionResponse:
-      description: Transaction endoint response
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: "#/components/responses/transactionResponse"
-              - $ref: "#/components/responses/transactionVerboseResponse"
-              - $ref: "#/components/responses/transactionEncodedResponse"
-    transactionGetPostResponse:
-      description: Transaction endoint response
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: "#/components/responses/transactionsResponse"
-              - $ref: "#/components/responses/transactionVerboseResponse"
+#    v1TransactionResponse:
+#      description: Transaction endoint response
+#      content:
+#        application/json:
+#          schema:
+#            oneOf:
+#              - $ref: "#/components/responses/transactionResponse"
+#              - $ref: "#/components/responses/transactionVerboseResponse"
+#              - $ref: "#/components/responses/transactionEncodedResponse"
+#    transactionGetPostResponse:
+#      description: Transaction endoint response
+#      content:
+#        application/json:
+#          schema:
+#            oneOf:
+#              - $ref: "#/components/responses/transactionsResponse"
+#              - $ref: "#/components/responses/transactionVerboseResponse"
     transactionVerifyResponse:
       description: Responses ok
       content:
@@ -2946,14 +3080,14 @@ components:
               csrf_token:
                 type: string
             type: object
-    walletTransactionsOneOfResponse:
-      description: This endpoint returns wallet transactions
-      content:
-        application/json:
-          schema:
-            oneOf:
-              - $ref: "#/components/responses/walletTransactionsResponses"
-              - $ref: "#/components/responses/walletTransactionsVerboseResponses"
+#    walletTransactionsOneOfResponse:
+#      description: This endpoint returns wallet transactions
+#      content:
+#        application/json:
+#          schema:
+#            oneOf:
+#              - $ref: "#/components/responses/walletTransactionsResponses"
+#              - $ref: "#/components/responses/walletTransactionsVerboseResponses"
     blockchainProgressResponse:
       description: This endpoint returns the blockchain sync progress
       content:
