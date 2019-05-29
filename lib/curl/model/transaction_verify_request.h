@@ -1,7 +1,7 @@
 /*
  * transaction_verify_request.h
  *
- * 
+ *
  */
 
 #ifndef _transaction_verify_request_H_
@@ -15,13 +15,13 @@
 
 
 typedef struct transaction_verify_request_t {
-    int unsigned; //boolean
+    int unsigned_; //boolean
     char *encoded_transaction; // string
 
 } transaction_verify_request_t;
 
 transaction_verify_request_t *transaction_verify_request_create(
-    int unsigned,
+    int unsigned_,
     char *encoded_transaction
 );
 

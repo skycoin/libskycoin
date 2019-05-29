@@ -60,11 +60,11 @@ DefaultAPI_addressCount(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -144,10 +144,10 @@ DefaultAPI_addressUxouts(apiClient_t *apiClient ,char * address)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_address);
     free(valueQuery_address);
@@ -195,11 +195,11 @@ DefaultAPI_apiV1RawtxGet(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -244,11 +244,11 @@ DefaultAPI_apiV2MetricsGet(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -318,10 +318,10 @@ DefaultAPI_balanceGet(apiClient_t *apiClient ,char * addrs)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addrs);
     free(valueQuery_addrs);
@@ -394,10 +394,10 @@ DefaultAPI_balancePost(apiClient_t *apiClient ,char * addrs)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addrs);
     free(valueQuery_addrs);
@@ -492,10 +492,10 @@ DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_hash);
     free(valueQuery_hash);
@@ -592,10 +592,10 @@ DefaultAPI_blockVerbose(apiClient_t *apiClient ,char * hash ,int seq)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_hash);
     free(valueQuery_hash);
@@ -657,11 +657,11 @@ DefaultAPI_blockchainMetadata(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -718,11 +718,11 @@ DefaultAPI_blockchainProgress(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -810,10 +810,10 @@ DefaultAPI_blocks(apiClient_t *apiClient ,int start ,int end ,list_t * seq)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_start);
     keyValuePair_free(keyPairQuery_start);
@@ -905,10 +905,10 @@ DefaultAPI_blocksVerbose(apiClient_t *apiClient ,int start ,int end ,list_t * se
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_start);
     keyValuePair_free(keyPairQuery_start);
@@ -969,11 +969,11 @@ DefaultAPI_coinSupply(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -1030,11 +1030,11 @@ DefaultAPI_csrf(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -1106,11 +1106,11 @@ end:
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_type);
     free(valueHeader_type);
@@ -1192,11 +1192,11 @@ DefaultAPI_dataGET(apiClient_t *apiClient ,char * type ,char * key)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_type);
     free(valueHeader_type);
@@ -1281,11 +1281,11 @@ DefaultAPI_dataGETSingle(apiClient_t *apiClient ,char * type ,char * key)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_type);
     free(valueHeader_type);
@@ -1375,11 +1375,11 @@ end:
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_type);
     free(valueHeader_type);
@@ -1443,11 +1443,11 @@ DefaultAPI_defaultConnections(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -1504,11 +1504,11 @@ DefaultAPI_health(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -1578,10 +1578,10 @@ DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_num);
     keyValuePair_free(keyPairQuery_num);
@@ -1653,10 +1653,10 @@ DefaultAPI_lastBlocksVerbose(apiClient_t *apiClient ,int num)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_num);
     keyValuePair_free(keyPairQuery_num);
@@ -1728,10 +1728,10 @@ DefaultAPI_networkConnection(apiClient_t *apiClient ,char * addr)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addr);
     free(valueQuery_addr);
@@ -1745,8 +1745,7 @@ end:
 // This endpoint returns all outgoings connections.
 //
 inline_response_200_5_t*
-DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction_e direction)
-{
+DefaultAPI_networkConnections(apiClient_t *apiClient, char* states, char* direction) {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
     list_t    *localVarFormParameters = NULL;
@@ -1764,7 +1763,7 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction
 
     // query parameters
     char *keyQuery_states;
-    states_e valueQuery_states;
+    char *valueQuery_states;
     keyValuePair_t *keyPairQuery_states = 0;
     if (states)
     {
@@ -1776,7 +1775,7 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction
 
     // query parameters
     char *keyQuery_direction;
-    direction_e valueQuery_direction;
+    char *valueQuery_direction;
     keyValuePair_t *keyPairQuery_direction = 0;
     if (direction)
     {
@@ -1786,7 +1785,6 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction
         list_addElement(localVarQueryParameters,keyPairQuery_direction);
     }
     list_addElement(localVarHeaderType,"application/json"); //produces
-    list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
                     localVarPath,
                     localVarQueryParameters,
@@ -1816,10 +1814,10 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_states);
     free(valueQuery_states);
@@ -1888,10 +1886,10 @@ end:
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -1951,11 +1949,11 @@ DefaultAPI_networkConnectionsExchange(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -2013,11 +2011,11 @@ DefaultAPI_networkConnectionsTrust(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -2087,10 +2085,10 @@ DefaultAPI_outputsGet(apiClient_t *apiClient ,list_t * address ,list_t * hash)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -2172,10 +2170,10 @@ DefaultAPI_outputsPost(apiClient_t *apiClient ,char * address ,char * hash)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_address);
     free(valueQuery_address);
@@ -2246,11 +2244,11 @@ DefaultAPI_pendingTxs(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -2315,11 +2313,11 @@ DefaultAPI_pendingTxsVerbose(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -2377,11 +2375,11 @@ DefaultAPI_resendUnconfirmedTxns(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -2463,10 +2461,10 @@ DefaultAPI_richlist(apiClient_t *apiClient ,int include_distribution ,char * n)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_include_distribution);
     keyValuePair_free(keyPairQuery_include_distribution);
@@ -2541,10 +2539,10 @@ DefaultAPI_transaction(apiClient_t *apiClient ,char * txid)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_txid);
     free(valueQuery_txid);
@@ -2617,10 +2615,10 @@ DefaultAPI_transactionEncoded(apiClient_t *apiClient ,char * txid)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_txid);
     free(valueQuery_txid);
@@ -2687,11 +2685,11 @@ DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_rawtx);
     free(valueHeader_rawtx);
@@ -2759,9 +2757,9 @@ DefaultAPI_transactionPost(apiClient_t *apiClient ,transaction_v2_params_address
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
@@ -2830,9 +2828,9 @@ DefaultAPI_transactionPostUnspent(apiClient_t *apiClient ,transaction_v2_params_
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
@@ -2906,10 +2904,10 @@ DefaultAPI_transactionRaw(apiClient_t *apiClient ,char * txid)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_txid);
     free(valueQuery_txid);
@@ -2982,10 +2980,10 @@ DefaultAPI_transactionVerbose(apiClient_t *apiClient ,char * txid)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_txid);
     free(valueQuery_txid);
@@ -3055,9 +3053,9 @@ DefaultAPI_transactionVerify(apiClient_t *apiClient ,transaction_verify_request_
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
@@ -3143,10 +3141,10 @@ DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirme
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addrs);
     free(valueQuery_addrs);
@@ -3234,10 +3232,10 @@ DefaultAPI_transactionsGetVerbose(apiClient_t *apiClient ,char * addrs ,char * c
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addrs);
     free(valueQuery_addrs);
@@ -3325,10 +3323,10 @@ DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirm
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addrs);
     free(valueQuery_addrs);
@@ -3416,10 +3414,10 @@ DefaultAPI_transactionsPostVerbose(apiClient_t *apiClient ,char * addrs ,char * 
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addrs);
     free(valueQuery_addrs);
@@ -3495,10 +3493,10 @@ DefaultAPI_uxout(apiClient_t *apiClient ,char * uxid)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_uxid);
     free(valueQuery_uxid);
@@ -3571,10 +3569,10 @@ DefaultAPI_verifyAddress(apiClient_t *apiClient ,object_t * address)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_address);
     keyValuePair_free(keyPairQuery_address);
@@ -3633,11 +3631,11 @@ DefaultAPI_version(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:
@@ -3707,10 +3705,10 @@ DefaultAPI_wallet(apiClient_t *apiClient ,char * id)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -3783,10 +3781,10 @@ DefaultAPI_walletBalance(apiClient_t *apiClient ,char * id)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -3906,11 +3904,11 @@ DefaultAPI_walletCreate(apiClient_t *apiClient ,char * seed ,char * label ,int s
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_seed);
     free(valueHeader_seed);
@@ -4004,11 +4002,11 @@ DefaultAPI_walletDecrypt(apiClient_t *apiClient ,char * id ,char * password)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_id);
     free(valueHeader_id);
@@ -4095,11 +4093,11 @@ DefaultAPI_walletEncrypt(apiClient_t *apiClient ,char * id ,char * password)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_id);
     free(valueHeader_id);
@@ -4175,10 +4173,10 @@ DefaultAPI_walletFolder(apiClient_t *apiClient ,char * addr)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_addr);
     free(valueQuery_addr);
@@ -4275,10 +4273,10 @@ DefaultAPI_walletNewAddress(apiClient_t *apiClient ,char * id ,char * num ,char 
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -4298,8 +4296,7 @@ end:
 // Returns the wallet directory path
 //
 object_t*
-DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
-{
+DefaultAPI_walletNewSeed(apiClient_t *apiClient, char* entropy) {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
     list_t    *localVarFormParameters = NULL;
@@ -4317,7 +4314,7 @@ DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
 
     // query parameters
     char *keyQuery_entropy;
-    entropy_e valueQuery_entropy;
+    char *valueQuery_entropy;
     keyValuePair_t *keyPairQuery_entropy = 0;
     if (entropy)
     {
@@ -4357,10 +4354,10 @@ DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_entropy);
     free(valueQuery_entropy);
@@ -4456,11 +4453,11 @@ DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * 
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_id);
     free(valueHeader_id);
@@ -4551,10 +4548,10 @@ DefaultAPI_walletSeed(apiClient_t *apiClient ,char * id ,char * password)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -4632,11 +4629,11 @@ DefaultAPI_walletSeedVerify(apiClient_t *apiClient ,char * seed)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_seed);
     free(valueHeader_seed);
@@ -4706,9 +4703,9 @@ DefaultAPI_walletTransaction(apiClient_t *apiClient ,wallet_transaction_request_
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
@@ -4779,9 +4776,9 @@ DefaultAPI_walletTransactionSign(apiClient_t *apiClient ,wallet_transaction_sign
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
@@ -4853,10 +4850,10 @@ DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -4927,10 +4924,10 @@ DefaultAPI_walletTransactionsVerbose(apiClient_t *apiClient ,char * id)
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -4996,10 +4993,10 @@ end:
         free(apiClient->dataReceived);
     }
     list_free(localVarQueryParameters);
-    
-    
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyQuery_id);
     free(valueQuery_id);
@@ -5077,11 +5074,11 @@ DefaultAPI_walletUpdate(apiClient_t *apiClient ,char * id ,char * label)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
+
     list_free(localVarHeaderParameters);
-    
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     free(keyHeader_id);
     free(valueHeader_id);
@@ -5154,11 +5151,11 @@ DefaultAPI_wallets(apiClient_t *apiClient)
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    
-    
-    
+
+
+
     list_free(localVarHeaderType);
-    
+
     free(localVarPath);
     return elementToReturn;
 end:

@@ -162,7 +162,7 @@ DefaultAPI_networkConnection(apiClient_t *apiClient ,char * addr);
 // This endpoint returns all outgoings connections.
 //
 inline_response_200_5_t*
-DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction_e direction);
+DefaultAPI_networkConnections(apiClient_t *apiClient ,char* states ,char* direction);
 
 
 // This endpoint disconnects a connection by ID or address
@@ -346,7 +346,7 @@ DefaultAPI_walletNewAddress(apiClient_t *apiClient ,char * id ,char * num ,char 
 // Returns the wallet directory path
 //
 object_t*
-DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy);
+DefaultAPI_walletNewSeed(apiClient_t *apiClient ,char* entropy);
 
 
 // Recovers an encrypted wallet by providing the seed. The first address will be generated from seed and compared to the first address of the specified wallet. If they match, the wallet will be regenerated with an optional password. If the wallet is not encrypted, an error is returned.
