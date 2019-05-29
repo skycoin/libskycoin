@@ -63,6 +63,7 @@ set(SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request_wallet.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_sign_request.c
     ${CMAKE_CURRENT_SOURCE_DIR}/api/DefaultAPI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.c
 
 )
 
@@ -117,7 +118,7 @@ set(HDRS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request_wallet.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_sign_request.h
     ${CMAKE_CURRENT_SOURCE_DIR}/api/DefaultAPI.h
-
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.h
 )
 
 include_directories(${CURL_INCLUDE_DIR})

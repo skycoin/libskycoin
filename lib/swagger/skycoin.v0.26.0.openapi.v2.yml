@@ -248,7 +248,7 @@ paths:
           $ref: "#/components/responses/genericError"
       security:
         - csrfAuth:
-            []
+            []/da
   /api/v1/network/connections:
     get:
       operationId: networkConnections
