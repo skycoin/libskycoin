@@ -757,47 +757,7 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                change_address:
-                  type: string
-                hours_selection:
-                  properties:
-                    mode:
-                      type: string
-                    share_factor:
-                      type: string
-                    type:
-                      type: string
-                  type: object
-                ignore_unconfirmed:
-                  type: boolean
-                to:
-                  items:
-                    properties:
-                      address:
-                        type: string
-                      coins:
-                        format: int64
-                        type: integer
-                      hours:
-                        format: int64
-                        type: integer
-                  type: array
-                wallet:
-                  properties:
-                    addresses:
-                      items:
-                        type: string
-                      type: array
-                    id:
-                      type: string
-                    password:
-                      type: string
-                    unspents:
-                      items:
-                        type: string
-                      type: array
-                  type: object
+              $ref: "#/components/schemas/walletTransactionRequest"
         required: true
       responses:
         "200":
@@ -954,6 +914,8 @@ paths:
     post:
       operationId: transactionPostUnspent
       requestBody:
+        description: Unspent parameters
+        required: true
         content:
           application/json:
             schema:
@@ -1013,11 +975,7 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                unsigned:
-                  type: boolean
-                encoded_transaction:
-                  type: string
+              $ref: "#/components/schemas/transactionVerifyRequest"
         required: true
       responses:
         "200":
@@ -1035,18 +993,7 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                wallet_id:
-                  type: string
-                password:
-                  type: string
-                encoded_transaction:
-                  type: string
-                sign_indexes:
-                  items:
-                    type: integer
-                    format: int64
-                  type: array
+              $ref: "#/components/schemas/walletTransactionSignRequest"
         required: true
       responses:
         "200":
@@ -1271,6 +1218,67 @@ servers:
   - url: https://staging.node.skycoin.net
 components:
   schemas:
+    transactionVerifyRequest:
+      properties:
+        unsigned:
+          type: boolean
+        encoded_transaction:
+          type: string
+    walletTransactionRequest:
+      properties:
+        change_address:
+          type: string
+        hours_selection:
+          properties:
+            mode:
+              type: string
+            share_factor:
+              type: string
+            type:
+              type: string
+          type: object
+        ignore_unconfirmed:
+          type: boolean
+        to:
+          items:
+            properties:
+              address:
+                type: string
+              coins:
+                format: int64
+                type: integer
+              hours:
+                format: int64
+                type: integer
+          type: array
+        wallet:
+          properties:
+            addresses:
+              items:
+                type: string
+              type: array
+            id:
+              type: string
+            password:
+              type: string
+            unspents:
+              items:
+                type: string
+              type: array
+          type: object
+    walletTransactionSignRequest:
+      properties:
+        wallet_id:
+          type: string
+        password:
+          type: string
+        encoded_transaction:
+          type: string
+        sign_indexes:
+          items:
+            type: integer
+            format: int64
+          type: array
     blockVerboseSchemaArray:
       items:
         $ref: '#/components/schemas/blockVerboseSchema'

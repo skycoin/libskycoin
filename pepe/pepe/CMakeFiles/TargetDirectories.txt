@@ -1,0 +1,7 @@
+/home/maceo/goeg/src/github.com/skycoin/libskycoin/pepe/pepe/CMakeFiles/install/strip.dir
+/home/maceo/goeg/src/github.com/skycoin/libskycoin/pepe/pepe/CMakeFiles/edit_cache.dir
+/home/maceo/goeg/src/github.com/skycoin/libskycoin/pepe/pepe/CMakeFiles/skycoin_rest_api/.dir
+/home/maceo/goeg/src/github.com/skycoin/libskycoin/pepe/pepe/CMakeFiles/rebuild_cache.dir
+/home/maceo/goeg/src/github.com/skycoin/libskycoin/pepe/pepe/CMakeFiles/list_install_components.dir
+/home/maceo/goeg/src/github.com/skycoin/libskycoin/pepe/pepe/CMakeFiles/install/local.dir
+/home/maceo/goeg/src/github.com/skycoin/libskycoin/pepe/pepe/CMakeFiles/install.dir
