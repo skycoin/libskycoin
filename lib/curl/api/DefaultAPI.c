@@ -410,8 +410,8 @@ end:
 
 // Returns the balance of one or more addresses, both confirmed and predicted. The predicted balance is the confirmed balance minus the pending spends.
 //
-one_ofarrayarray_t*
-DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq ,int verbose)
+list_t*
+DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq)
 {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -451,18 +451,6 @@ DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq ,int verbose)
         keyPairQuery_seq = keyValuePair_create(keyQuery_seq, &valueQuery_seq);
         list_addElement(localVarQueryParameters,keyPairQuery_seq);
     }
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
-    }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
@@ -476,19 +464,29 @@ DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq ,int verbose)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Get bock by hash or sequence");
+        printf("%s\n","Return block Array");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
-    //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_ofarrayarray_t *elementToReturn = one_ofarrayarray_parseFromJSON(DefaultAPIlocalVarJSON);
-    cJSON_Delete(DefaultAPIlocalVarJSON);
-    if(elementToReturn == NULL) {
-        // return 0;
+    if(!cJSON_IsArray(DefaultAPIlocalVarJSON)) {
+        return 0;//nonprimitive container
+    }
+    list_t *elementToReturn = list_create();
+    cJSON *VarJSON;
+    cJSON_ArrayForEach(VarJSON, DefaultAPIlocalVarJSON)
+    {
+        if(!cJSON_IsObject(VarJSON))
+        {
+           // return 0;
+        }
+        char *localVarJSONToChar = cJSON_Print(VarJSON);
+        list_addElement(elementToReturn , localVarJSONToChar);
     }
 
+    cJSON_Delete( DefaultAPIlocalVarJSON);
+    cJSON_Delete( VarJSON);
     //return type
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
@@ -504,8 +502,106 @@ DefaultAPI_block(apiClient_t *apiClient ,char * hash ,int seq ,int verbose)
     keyValuePair_free(keyPairQuery_hash);
     free(keyQuery_seq);
     keyValuePair_free(keyPairQuery_seq);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+// Returns the balance of one or more addresses, both confirmed and predicted. The predicted balance is the confirmed balance minus the pending spends.
+//
+list_t*
+DefaultAPI_blockVerbose(apiClient_t *apiClient ,char * hash ,int seq)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/block/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/block/verbose");
+
+
+
+
+    // query parameters
+    char *keyQuery_hash;
+    char * valueQuery_hash;
+    keyValuePair_t *keyPairQuery_hash = 0;
+    if (hash)
+    {
+        keyQuery_hash = strdup("hash");
+        valueQuery_hash = strdup((hash));
+        keyPairQuery_hash = keyValuePair_create(keyQuery_hash, valueQuery_hash);
+        list_addElement(localVarQueryParameters,keyPairQuery_hash);
+    }
+
+    // query parameters
+    char *keyQuery_seq;
+    int valueQuery_seq;
+    keyValuePair_t *keyPairQuery_seq = 0;
+    if (seq)
+    {
+        keyQuery_seq = strdup("seq");
+        valueQuery_seq = (seq);
+        keyPairQuery_seq = keyValuePair_create(keyQuery_seq, &valueQuery_seq);
+        list_addElement(localVarQueryParameters,keyPairQuery_seq);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Return Block with Verbose");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    if(!cJSON_IsArray(DefaultAPIlocalVarJSON)) {
+        return 0;//nonprimitive container
+    }
+    list_t *elementToReturn = list_create();
+    cJSON *VarJSON;
+    cJSON_ArrayForEach(VarJSON, DefaultAPIlocalVarJSON)
+    {
+        if(!cJSON_IsObject(VarJSON))
+        {
+           // return 0;
+        }
+        char *localVarJSONToChar = cJSON_Print(VarJSON);
+        list_addElement(elementToReturn , localVarJSONToChar);
+    }
+
+    cJSON_Delete( DefaultAPIlocalVarJSON);
+    cJSON_Delete( VarJSON);
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_hash);
+    free(valueQuery_hash);
+    keyValuePair_free(keyPairQuery_hash);
+    free(keyQuery_seq);
+    keyValuePair_free(keyPairQuery_seq);
     return elementToReturn;
 end:
     return NULL;
@@ -636,8 +732,8 @@ end:
 
 // Returns the balance of one or more addresses, both confirmed and predicted. The predicted balance is the confirmed balance minus the pending spends.
 //
-one_ofblock_schemablock_verbose_schema_t*
-DefaultAPI_blocks(apiClient_t *apiClient ,int start ,int end ,list_t * seq ,int verbose)
+inline_response_200_1_t*
+DefaultAPI_blocks(apiClient_t *apiClient ,int start ,int end ,list_t * seq)
 {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -683,18 +779,6 @@ DefaultAPI_blocks(apiClient_t *apiClient ,int start ,int end ,list_t * seq ,int 
     {
         list_addElement(localVarQueryParameters,seq);
     }
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
-    }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
@@ -715,7 +799,7 @@ DefaultAPI_blocks(apiClient_t *apiClient ,int start ,int end ,list_t * seq ,int 
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_ofblock_schemablock_verbose_schema_t *elementToReturn = one_ofblock_schemablock_verbose_schema_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_1_t *elementToReturn = inline_response_200_1_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -735,8 +819,101 @@ DefaultAPI_blocks(apiClient_t *apiClient ,int start ,int end ,list_t * seq ,int 
     keyValuePair_free(keyPairQuery_start);
     free(keyQuery_end);
     keyValuePair_free(keyPairQuery_end);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+// Returns the balance of one or more addresses, both confirmed and predicted. The predicted balance is the confirmed balance minus the pending spends.
+//
+inline_response_200_2_t*
+DefaultAPI_blocksVerbose(apiClient_t *apiClient ,int start ,int end ,list_t * seq)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/blocks/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/blocks/verbose");
+
+
+
+
+    // query parameters
+    char *keyQuery_start;
+    int valueQuery_start;
+    keyValuePair_t *keyPairQuery_start = 0;
+    if (start)
+    {
+        keyQuery_start = strdup("start");
+        valueQuery_start = (start);
+        keyPairQuery_start = keyValuePair_create(keyQuery_start, &valueQuery_start);
+        list_addElement(localVarQueryParameters,keyPairQuery_start);
+    }
+
+    // query parameters
+    char *keyQuery_end;
+    int valueQuery_end;
+    keyValuePair_t *keyPairQuery_end = 0;
+    if (end)
+    {
+        keyQuery_end = strdup("end");
+        valueQuery_end = (end);
+        keyPairQuery_end = keyValuePair_create(keyQuery_end, &valueQuery_end);
+        list_addElement(localVarQueryParameters,keyPairQuery_end);
+    }
+
+    // query parameters
+    if (seq)
+    {
+        list_addElement(localVarQueryParameters,seq);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Get blocks in specific range with verbose");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    inline_response_200_2_t *elementToReturn = inline_response_200_2_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_start);
+    keyValuePair_free(keyPairQuery_start);
+    free(keyQuery_end);
+    keyValuePair_free(keyPairQuery_end);
     return elementToReturn;
 end:
     return NULL;
@@ -745,7 +922,7 @@ end:
 
 // coinSupplyHandler returns coin distribution supply stats
 //
-inline_response_200_1_t*
+inline_response_200_3_t*
 DefaultAPI_coinSupply(apiClient_t *apiClient)
 {
     list_t    *localVarQueryParameters = NULL;
@@ -782,7 +959,7 @@ DefaultAPI_coinSupply(apiClient_t *apiClient)
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    inline_response_200_1_t *elementToReturn = inline_response_200_1_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_3_t *elementToReturn = inline_response_200_3_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -806,7 +983,7 @@ end:
 
 // Creates a new CSRF token. Previous CSRF tokens are invalidated by this call.
 //
-inline_response_200_2_t*
+inline_response_200_4_t*
 DefaultAPI_csrf(apiClient_t *apiClient)
 {
     list_t    *localVarQueryParameters = NULL;
@@ -843,7 +1020,7 @@ DefaultAPI_csrf(apiClient_t *apiClient)
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    inline_response_200_2_t *elementToReturn = inline_response_200_2_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_4_t *elementToReturn = inline_response_200_4_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -944,7 +1121,7 @@ end:
 
 }
 
-one_ofsingle_keymulti_key_t*
+object_t*
 DefaultAPI_dataGET(apiClient_t *apiClient ,char * type ,char * key)
 {
     list_t    *localVarQueryParameters = NULL;
@@ -998,14 +1175,103 @@ DefaultAPI_dataGET(apiClient_t *apiClient ,char * type ,char * key)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Response for api/v2/data endpoint");
+        printf("%s\n","Return multiKey");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_ofsingle_keymulti_key_t *elementToReturn = one_ofsingle_keymulti_key_parseFromJSON(DefaultAPIlocalVarJSON);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    
+    list_free(localVarHeaderParameters);
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyHeader_type);
+    free(valueHeader_type);
+    free(keyPairHeader_type);
+    free(keyHeader_key);
+    free(valueHeader_key);
+    free(keyPairHeader_key);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+object_t*
+DefaultAPI_dataGETSingle(apiClient_t *apiClient ,char * type ,char * key)
+{
+    list_t    *localVarQueryParameters = NULL;
+    list_t    *localVarHeaderParameters = list_create();
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v2/data/single")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v2/data/single");
+
+
+
+
+    // header parameters
+    char *keyHeader_type;
+    char * valueHeader_type;
+    keyValuePair_t *keyPairHeader_type = 0;
+    if (type) {
+        keyHeader_type = strdup("type");
+        valueHeader_type = strdup((type));
+        keyPairHeader_type = keyValuePair_create(keyHeader_type, valueHeader_type);
+        list_addElement(localVarHeaderParameters,keyPairHeader_type);
+    }
+
+
+    // header parameters
+    char *keyHeader_key;
+    char * valueHeader_key;
+    keyValuePair_t *keyPairHeader_key = 0;
+    if (key) {
+        keyHeader_key = strdup("key");
+        valueHeader_key = strdup((key));
+        keyPairHeader_key = keyValuePair_create(keyHeader_key, valueHeader_key);
+        list_addElement(localVarHeaderParameters,keyPairHeader_key);
+    }
+
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Return singleKey");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -1252,8 +1518,8 @@ end:
 
 // Returns the most recent N blocks on the blockchain
 //
-one_oflast_blocks_responselast_blocks_verbose_response_t*
-DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num ,int verbose)
+object_t*
+DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num)
 {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -1281,18 +1547,6 @@ DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num ,int verbose)
         keyPairQuery_num = keyValuePair_create(keyQuery_num, &valueQuery_num);
         list_addElement(localVarQueryParameters,keyPairQuery_num);
     }
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
-    }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
@@ -1306,14 +1560,14 @@ DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num ,int verbose)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Get last N blocks");
+        printf("%s\n","Returns the most recent N blocks on the blockchain");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_oflast_blocks_responselast_blocks_verbose_response_t *elementToReturn = one_oflast_blocks_responselast_blocks_verbose_response_parseFromJSON(DefaultAPIlocalVarJSON);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -1331,8 +1585,81 @@ DefaultAPI_lastBlocks(apiClient_t *apiClient ,int num ,int verbose)
     free(localVarPath);
     free(keyQuery_num);
     keyValuePair_free(keyPairQuery_num);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+// Returns the most recent N blocks on the blockchain
+//
+object_t*
+DefaultAPI_lastBlocksVerbose(apiClient_t *apiClient ,int num)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/last_blocks/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/last_blocks/verbose");
+
+
+
+
+    // query parameters
+    char *keyQuery_num;
+    int valueQuery_num;
+    keyValuePair_t *keyPairQuery_num = 0;
+    if (num)
+    {
+        keyQuery_num = strdup("num");
+        valueQuery_num = (num);
+        keyPairQuery_num = keyValuePair_create(keyQuery_num, &valueQuery_num);
+        list_addElement(localVarQueryParameters,keyPairQuery_num);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Returns the most recent N blocks on the blockchain with verbose.");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_num);
+    keyValuePair_free(keyPairQuery_num);
     return elementToReturn;
 end:
     return NULL;
@@ -1417,7 +1744,7 @@ end:
 
 // This endpoint returns all outgoings connections.
 //
-inline_response_200_3_t*
+inline_response_200_5_t*
 DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction_e direction)
 {
     list_t    *localVarQueryParameters = list_create();
@@ -1478,7 +1805,7 @@ DefaultAPI_networkConnections(apiClient_t *apiClient ,states_e states ,direction
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    inline_response_200_3_t *elementToReturn = inline_response_200_3_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_5_t *elementToReturn = inline_response_200_5_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -1862,10 +2189,10 @@ end:
 
 }
 
-one_ofpending_txs_verbose_responsepending_txs_response_t*
-DefaultAPI_pendingTxs(apiClient_t *apiClient ,int verbose)
+list_t*
+DefaultAPI_pendingTxs(apiClient_t *apiClient)
 {
-    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
     list_t    *localVarFormParameters = NULL;
     list_t *localVarHeaderType = list_create();
@@ -1879,18 +2206,6 @@ DefaultAPI_pendingTxs(apiClient_t *apiClient ,int verbose)
 
 
 
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
-    }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
@@ -1909,26 +2224,103 @@ DefaultAPI_pendingTxs(apiClient_t *apiClient ,int verbose)
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
-    //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_ofpending_txs_verbose_responsepending_txs_response_t *elementToReturn = one_ofpending_txs_verbose_responsepending_txs_response_parseFromJSON(DefaultAPIlocalVarJSON);
-    cJSON_Delete(DefaultAPIlocalVarJSON);
-    if(elementToReturn == NULL) {
-        // return 0;
+    if(!cJSON_IsArray(DefaultAPIlocalVarJSON)) {
+        return 0;//nonprimitive container
+    }
+    list_t *elementToReturn = list_create();
+    cJSON *VarJSON;
+    cJSON_ArrayForEach(VarJSON, DefaultAPIlocalVarJSON)
+    {
+        if(!cJSON_IsObject(VarJSON))
+        {
+           // return 0;
+        }
+        char *localVarJSONToChar = cJSON_Print(VarJSON);
+        list_addElement(elementToReturn , localVarJSONToChar);
     }
 
+    cJSON_Delete( DefaultAPIlocalVarJSON);
+    cJSON_Delete( VarJSON);
     //return type
     if (apiClient->dataReceived) {
         free(apiClient->dataReceived);
     }
-    list_free(localVarQueryParameters);
+    
     
     
     list_free(localVarHeaderType);
     
     free(localVarPath);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+list_t*
+DefaultAPI_pendingTxsVerbose(apiClient_t *apiClient)
+{
+    list_t    *localVarQueryParameters = NULL;
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/pendingTxs/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/pendingTxs/verbose");
+
+
+
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Transaction inputs include the owner address, coins, hours and calculated hours.");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    if(!cJSON_IsArray(DefaultAPIlocalVarJSON)) {
+        return 0;//nonprimitive container
+    }
+    list_t *elementToReturn = list_create();
+    cJSON *VarJSON;
+    cJSON_ArrayForEach(VarJSON, DefaultAPIlocalVarJSON)
+    {
+        if(!cJSON_IsObject(VarJSON))
+        {
+           // return 0;
+        }
+        char *localVarJSONToChar = cJSON_Print(VarJSON);
+        list_addElement(elementToReturn , localVarJSONToChar);
+    }
+
+    cJSON_Delete( DefaultAPIlocalVarJSON);
+    cJSON_Delete( VarJSON);
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
     return elementToReturn;
 end:
     return NULL;
@@ -2089,8 +2481,8 @@ end:
 
 // Returns a transaction identified by its txid hash with just id
 //
-one_oftransaction_responsetransaction_verbose_responsetransaction_encoded_response_t*
-DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int verbose ,int encoded)
+transaction_t*
+DefaultAPI_transaction(apiClient_t *apiClient ,char * txid)
 {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -2118,30 +2510,6 @@ DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int verbose ,int enc
         keyPairQuery_txid = keyValuePair_create(keyQuery_txid, valueQuery_txid);
         list_addElement(localVarQueryParameters,keyPairQuery_txid);
     }
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
-    }
-
-    // query parameters
-    char *keyQuery_encoded;
-    int valueQuery_encoded;
-    keyValuePair_t *keyPairQuery_encoded = 0;
-    if (encoded)
-    {
-        keyQuery_encoded = strdup("encoded");
-        valueQuery_encoded = (encoded);
-        keyPairQuery_encoded = keyValuePair_create(keyQuery_encoded, &valueQuery_encoded);
-        list_addElement(localVarQueryParameters,keyPairQuery_encoded);
-    }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
@@ -2155,14 +2523,14 @@ DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int verbose ,int enc
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Transaction endoint response");
+        printf("%s\n","Returns a transaction identified by its txid hash.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_oftransaction_responsetransaction_verbose_responsetransaction_encoded_response_t *elementToReturn = one_oftransaction_responsetransaction_verbose_responsetransaction_encoded_response_parseFromJSON(DefaultAPIlocalVarJSON);
+    transaction_t *elementToReturn = transaction_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -2181,10 +2549,82 @@ DefaultAPI_transaction(apiClient_t *apiClient ,char * txid ,int verbose ,int enc
     free(keyQuery_txid);
     free(valueQuery_txid);
     keyValuePair_free(keyPairQuery_txid);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
-    free(keyQuery_encoded);
-    keyValuePair_free(keyPairQuery_encoded);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+// Returns a transaction identified by its txid hash with just id
+//
+transaction_encoded_s_t*
+DefaultAPI_transactionEncoded(apiClient_t *apiClient ,char * txid)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/transaction/encoded")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/transaction/encoded");
+
+
+
+
+    // query parameters
+    char *keyQuery_txid;
+    char * valueQuery_txid;
+    keyValuePair_t *keyPairQuery_txid = 0;
+    if (txid)
+    {
+        keyQuery_txid = strdup("txid");
+        valueQuery_txid = strdup((txid));
+        keyPairQuery_txid = keyValuePair_create(keyQuery_txid, valueQuery_txid);
+        list_addElement(localVarQueryParameters,keyPairQuery_txid);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Returns a transaction identified by its txid hash Encoded.");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    transaction_encoded_s_t *elementToReturn = transaction_encoded_s_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_txid);
+    free(valueQuery_txid);
+    keyValuePair_free(keyPairQuery_txid);
     return elementToReturn;
 end:
     return NULL;
@@ -2262,8 +2702,8 @@ end:
 
 }
 
-inline_response_200_6_t*
-DefaultAPI_transactionPost(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE)
+inline_response_200_10_t*
+DefaultAPI_transactionPost(apiClient_t *apiClient ,transaction_v2_params_address_t * transaction_v2_params_address)
 {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
@@ -2281,12 +2721,12 @@ DefaultAPI_transactionPost(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN
 
 
     // Body Param
-    cJSON *localVarSingleItemJSON_UNKNOWN_BASE_TYPE;
-    if (UNKNOWN_BASE_TYPE != NULL)
+    cJSON *localVarSingleItemJSON_transaction_v2_params_address;
+    if (transaction_v2_params_address != NULL)
     {
         //string
-        localVarSingleItemJSON_UNKNOWN_BASE_TYPE = UNKNOWN_BASE_TYPE_convertToJSON(UNKNOWN_BASE_TYPE);
-        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+        localVarSingleItemJSON_transaction_v2_params_address = transaction_v2_params_address_convertToJSON(transaction_v2_params_address);
+        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_transaction_v2_params_address);
     }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
@@ -2309,7 +2749,7 @@ DefaultAPI_transactionPost(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    inline_response_200_6_t *elementToReturn = inline_response_200_6_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_10_t *elementToReturn = inline_response_200_10_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -2325,7 +2765,78 @@ DefaultAPI_transactionPost(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
-    cJSON_Delete(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+    cJSON_Delete(localVarSingleItemJSON_transaction_v2_params_address);
+    free(localVarBodyParameters);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+inline_response_200_10_t*
+DefaultAPI_transactionPostUnspent(apiClient_t *apiClient ,transaction_v2_params_unspent_t * transaction_v2_params_unspent)
+{
+    list_t    *localVarQueryParameters = NULL;
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = list_create();
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v2/transaction/unspent")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v2/transaction/unspent");
+
+
+
+
+    // Body Param
+    cJSON *localVarSingleItemJSON_transaction_v2_params_unspent;
+    if (transaction_v2_params_unspent != NULL)
+    {
+        //string
+        localVarSingleItemJSON_transaction_v2_params_unspent = transaction_v2_params_unspent_convertToJSON(transaction_v2_params_unspent);
+        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_transaction_v2_params_unspent);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    list_addElement(localVarContentType,"application/json"); //consumes
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "POST");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Response is a transaction");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    inline_response_200_10_t *elementToReturn = inline_response_200_10_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    
+    
+    
+    list_free(localVarHeaderType);
+    list_free(localVarContentType);
+    free(localVarPath);
+    cJSON_Delete(localVarSingleItemJSON_transaction_v2_params_unspent);
     free(localVarBodyParameters);
     return elementToReturn;
 end:
@@ -2409,10 +2920,86 @@ end:
 
 }
 
+// Returns a transaction identified by its txid hash with just id
+//
+transaction_verbose_t*
+DefaultAPI_transactionVerbose(apiClient_t *apiClient ,char * txid)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/transaction/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/transaction/verbose");
+
+
+
+
+    // query parameters
+    char *keyQuery_txid;
+    char * valueQuery_txid;
+    keyValuePair_t *keyPairQuery_txid = 0;
+    if (txid)
+    {
+        keyQuery_txid = strdup("txid");
+        valueQuery_txid = strdup((txid));
+        keyPairQuery_txid = keyValuePair_create(keyQuery_txid, valueQuery_txid);
+        list_addElement(localVarQueryParameters,keyPairQuery_txid);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Returns a transaction identified by its txid hash with verbose response.");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    transaction_verbose_t *elementToReturn = transaction_verbose_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_txid);
+    free(valueQuery_txid);
+    keyValuePair_free(keyPairQuery_txid);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
 // Decode and verify an encoded transaction
 //
 object_t*
-DefaultAPI_transactionVerify(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE)
+DefaultAPI_transactionVerify(apiClient_t *apiClient ,transaction_verify_request_t * transaction_verify_request)
 {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
@@ -2430,12 +3017,12 @@ DefaultAPI_transactionVerify(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNO
 
 
     // Body Param
-    cJSON *localVarSingleItemJSON_UNKNOWN_BASE_TYPE;
-    if (UNKNOWN_BASE_TYPE != NULL)
+    cJSON *localVarSingleItemJSON_transaction_verify_request;
+    if (transaction_verify_request != NULL)
     {
         //string
-        localVarSingleItemJSON_UNKNOWN_BASE_TYPE = UNKNOWN_BASE_TYPE_convertToJSON(UNKNOWN_BASE_TYPE);
-        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+        localVarSingleItemJSON_transaction_verify_request = transaction_verify_request_convertToJSON(transaction_verify_request);
+        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_transaction_verify_request);
     }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
@@ -2474,7 +3061,7 @@ DefaultAPI_transactionVerify(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNO
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
-    cJSON_Delete(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+    cJSON_Delete(localVarSingleItemJSON_transaction_verify_request);
     free(localVarBodyParameters);
     return elementToReturn;
 end:
@@ -2484,8 +3071,8 @@ end:
 
 // Returns transactions that match the filters.
 //
-one_oftransactions_responsetransaction_verbose_response_t*
-DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirmed ,int verbose)
+object_t*
+DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirmed)
 {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -2524,18 +3111,6 @@ DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirme
         valueQuery_confirmed = strdup((confirmed));
         keyPairQuery_confirmed = keyValuePair_create(keyQuery_confirmed, valueQuery_confirmed);
         list_addElement(localVarQueryParameters,keyPairQuery_confirmed);
-    }
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
     }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
@@ -2550,14 +3125,14 @@ DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirme
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Transaction endoint response");
+        printf("%s\n","Returns transactions that match the filters.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_oftransactions_responsetransaction_verbose_response_t *elementToReturn = one_oftransactions_responsetransaction_verbose_response_parseFromJSON(DefaultAPIlocalVarJSON);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -2579,8 +3154,6 @@ DefaultAPI_transactionsGet(apiClient_t *apiClient ,char * addrs ,char * confirme
     free(keyQuery_confirmed);
     free(valueQuery_confirmed);
     keyValuePair_free(keyPairQuery_confirmed);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
     return elementToReturn;
 end:
     return NULL;
@@ -2589,8 +3162,99 @@ end:
 
 // Returns transactions that match the filters.
 //
-one_oftransactions_responsetransaction_verbose_response_t*
-DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirmed ,int verbose)
+transaction_verbose_t*
+DefaultAPI_transactionsGetVerbose(apiClient_t *apiClient ,char * addrs ,char * confirmed)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/transactions/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/transactions/verbose");
+
+
+
+
+    // query parameters
+    char *keyQuery_addrs;
+    char * valueQuery_addrs;
+    keyValuePair_t *keyPairQuery_addrs = 0;
+    if (addrs)
+    {
+        keyQuery_addrs = strdup("addrs");
+        valueQuery_addrs = strdup((addrs));
+        keyPairQuery_addrs = keyValuePair_create(keyQuery_addrs, valueQuery_addrs);
+        list_addElement(localVarQueryParameters,keyPairQuery_addrs);
+    }
+
+    // query parameters
+    char *keyQuery_confirmed;
+    char * valueQuery_confirmed;
+    keyValuePair_t *keyPairQuery_confirmed = 0;
+    if (confirmed)
+    {
+        keyQuery_confirmed = strdup("confirmed");
+        valueQuery_confirmed = strdup((confirmed));
+        keyPairQuery_confirmed = keyValuePair_create(keyQuery_confirmed, valueQuery_confirmed);
+        list_addElement(localVarQueryParameters,keyPairQuery_confirmed);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Returns a transaction identified by its txid hash with verbose response.");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    transaction_verbose_t *elementToReturn = transaction_verbose_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_addrs);
+    free(valueQuery_addrs);
+    keyValuePair_free(keyPairQuery_addrs);
+    free(keyQuery_confirmed);
+    free(valueQuery_confirmed);
+    keyValuePair_free(keyPairQuery_confirmed);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+// Returns transactions that match the filters.
+//
+object_t*
+DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirmed)
 {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -2630,18 +3294,6 @@ DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirm
         keyPairQuery_confirmed = keyValuePair_create(keyQuery_confirmed, valueQuery_confirmed);
         list_addElement(localVarQueryParameters,keyPairQuery_confirmed);
     }
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
-    }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
@@ -2655,14 +3307,14 @@ DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirm
                     "POST");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","Transaction endoint response");
+        printf("%s\n","Returns transactions that match the filters.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_oftransactions_responsetransaction_verbose_response_t *elementToReturn = one_oftransactions_responsetransaction_verbose_response_parseFromJSON(DefaultAPIlocalVarJSON);
+    object_t *elementToReturn = object_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -2684,8 +3336,97 @@ DefaultAPI_transactionsPost(apiClient_t *apiClient ,char * addrs ,char * confirm
     free(keyQuery_confirmed);
     free(valueQuery_confirmed);
     keyValuePair_free(keyPairQuery_confirmed);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+// Returns transactions that match the filters.
+//
+transaction_verbose_t*
+DefaultAPI_transactionsPostVerbose(apiClient_t *apiClient ,char * addrs ,char * confirmed)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/transactions/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/transactions/verbose");
+
+
+
+
+    // query parameters
+    char *keyQuery_addrs;
+    char * valueQuery_addrs;
+    keyValuePair_t *keyPairQuery_addrs = 0;
+    if (addrs)
+    {
+        keyQuery_addrs = strdup("addrs");
+        valueQuery_addrs = strdup((addrs));
+        keyPairQuery_addrs = keyValuePair_create(keyQuery_addrs, valueQuery_addrs);
+        list_addElement(localVarQueryParameters,keyPairQuery_addrs);
+    }
+
+    // query parameters
+    char *keyQuery_confirmed;
+    char * valueQuery_confirmed;
+    keyValuePair_t *keyPairQuery_confirmed = 0;
+    if (confirmed)
+    {
+        keyQuery_confirmed = strdup("confirmed");
+        valueQuery_confirmed = strdup((confirmed));
+        keyPairQuery_confirmed = keyValuePair_create(keyQuery_confirmed, valueQuery_confirmed);
+        list_addElement(localVarQueryParameters,keyPairQuery_confirmed);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "POST");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","Returns a transaction identified by its txid hash with verbose response.");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    transaction_verbose_t *elementToReturn = transaction_verbose_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_addrs);
+    free(valueQuery_addrs);
+    keyValuePair_free(keyPairQuery_addrs);
+    free(keyQuery_confirmed);
+    free(valueQuery_confirmed);
+    keyValuePair_free(keyPairQuery_confirmed);
     return elementToReturn;
 end:
     return NULL;
@@ -2845,7 +3586,7 @@ end:
 
 // versionHandler returns the application version info
 //
-inline_response_200_4_t*
+inline_response_200_6_t*
 DefaultAPI_version(apiClient_t *apiClient)
 {
     list_t    *localVarQueryParameters = NULL;
@@ -2882,7 +3623,7 @@ DefaultAPI_version(apiClient_t *apiClient)
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    inline_response_200_4_t *elementToReturn = inline_response_200_4_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_6_t *elementToReturn = inline_response_200_6_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -3374,7 +4115,7 @@ end:
 
 // Returns the wallet directory path
 //
-inline_response_200_5_t*
+inline_response_200_9_t*
 DefaultAPI_walletFolder(apiClient_t *apiClient ,char * addr)
 {
     list_t    *localVarQueryParameters = list_create();
@@ -3423,7 +4164,7 @@ DefaultAPI_walletFolder(apiClient_t *apiClient ,char * addr)
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    inline_response_200_5_t *elementToReturn = inline_response_200_5_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_9_t *elementToReturn = inline_response_200_9_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -3909,7 +4650,7 @@ end:
 // Creates a signed transaction
 //
 object_t*
-DefaultAPI_walletTransaction(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE)
+DefaultAPI_walletTransaction(apiClient_t *apiClient ,wallet_transaction_request_t * wallet_transaction_request)
 {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
@@ -3927,12 +4668,12 @@ DefaultAPI_walletTransaction(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNO
 
 
     // Body Param
-    cJSON *localVarSingleItemJSON_UNKNOWN_BASE_TYPE;
-    if (UNKNOWN_BASE_TYPE != NULL)
+    cJSON *localVarSingleItemJSON_wallet_transaction_request;
+    if (wallet_transaction_request != NULL)
     {
         //string
-        localVarSingleItemJSON_UNKNOWN_BASE_TYPE = UNKNOWN_BASE_TYPE_convertToJSON(UNKNOWN_BASE_TYPE);
-        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+        localVarSingleItemJSON_wallet_transaction_request = wallet_transaction_request_convertToJSON(wallet_transaction_request);
+        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_wallet_transaction_request);
     }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
@@ -3971,7 +4712,7 @@ DefaultAPI_walletTransaction(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNO
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
-    cJSON_Delete(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+    cJSON_Delete(localVarSingleItemJSON_wallet_transaction_request);
     free(localVarBodyParameters);
     return elementToReturn;
 end:
@@ -3981,8 +4722,8 @@ end:
 
 // Creates a signed transaction
 //
-inline_response_200_7_t*
-DefaultAPI_walletTransactionSign(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * UNKNOWN_BASE_TYPE)
+inline_response_200_11_t*
+DefaultAPI_walletTransactionSign(apiClient_t *apiClient ,wallet_transaction_sign_request_t * wallet_transaction_sign_request)
 {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = NULL;
@@ -4000,12 +4741,12 @@ DefaultAPI_walletTransactionSign(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * U
 
 
     // Body Param
-    cJSON *localVarSingleItemJSON_UNKNOWN_BASE_TYPE;
-    if (UNKNOWN_BASE_TYPE != NULL)
+    cJSON *localVarSingleItemJSON_wallet_transaction_sign_request;
+    if (wallet_transaction_sign_request != NULL)
     {
         //string
-        localVarSingleItemJSON_UNKNOWN_BASE_TYPE = UNKNOWN_BASE_TYPE_convertToJSON(UNKNOWN_BASE_TYPE);
-        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+        localVarSingleItemJSON_wallet_transaction_sign_request = wallet_transaction_sign_request_convertToJSON(wallet_transaction_sign_request);
+        localVarBodyParameters = cJSON_Print(localVarSingleItemJSON_wallet_transaction_sign_request);
     }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
@@ -4028,7 +4769,7 @@ DefaultAPI_walletTransactionSign(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * U
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    inline_response_200_7_t *elementToReturn = inline_response_200_7_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_11_t *elementToReturn = inline_response_200_11_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -4044,7 +4785,7 @@ DefaultAPI_walletTransactionSign(apiClient_t *apiClient ,UNKNOWN_BASE_TYPE_t * U
     list_free(localVarHeaderType);
     list_free(localVarContentType);
     free(localVarPath);
-    cJSON_Delete(localVarSingleItemJSON_UNKNOWN_BASE_TYPE);
+    cJSON_Delete(localVarSingleItemJSON_wallet_transaction_sign_request);
     free(localVarBodyParameters);
     return elementToReturn;
 end:
@@ -4052,8 +4793,8 @@ end:
 
 }
 
-one_ofwallet_transactions_responseswallet_transactions_verbose_responses_t*
-DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id ,int verbose)
+inline_response_200_7_t*
+DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id)
 {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
@@ -4081,18 +4822,6 @@ DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id ,int verbose)
         keyPairQuery_id = keyValuePair_create(keyQuery_id, valueQuery_id);
         list_addElement(localVarQueryParameters,keyPairQuery_id);
     }
-
-    // query parameters
-    char *keyQuery_verbose;
-    int valueQuery_verbose;
-    keyValuePair_t *keyPairQuery_verbose = 0;
-    if (verbose)
-    {
-        keyQuery_verbose = strdup("verbose");
-        valueQuery_verbose = (verbose);
-        keyPairQuery_verbose = keyValuePair_create(keyQuery_verbose, &valueQuery_verbose);
-        list_addElement(localVarQueryParameters,keyPairQuery_verbose);
-    }
     list_addElement(localVarHeaderType,"application/json"); //produces
     list_addElement(localVarHeaderType,"application/xml"); //produces
     apiClient_invoke(apiClient,
@@ -4106,14 +4835,14 @@ DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id ,int verbose)
                     "GET");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","This endpoint returns wallet transactions");
+        printf("%s\n","This endpoint returns all unconfirmed transactions for all addresses in a given wallet.");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
     }
     //nonprimitive not container
     cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
-    one_ofwallet_transactions_responseswallet_transactions_verbose_responses_t *elementToReturn = one_ofwallet_transactions_responseswallet_transactions_verbose_responses_parseFromJSON(DefaultAPIlocalVarJSON);
+    inline_response_200_7_t *elementToReturn = inline_response_200_7_parseFromJSON(DefaultAPIlocalVarJSON);
     cJSON_Delete(DefaultAPIlocalVarJSON);
     if(elementToReturn == NULL) {
         // return 0;
@@ -4132,8 +4861,80 @@ DefaultAPI_walletTransactions(apiClient_t *apiClient ,char * id ,int verbose)
     free(keyQuery_id);
     free(valueQuery_id);
     keyValuePair_free(keyPairQuery_id);
-    free(keyQuery_verbose);
-    keyValuePair_free(keyPairQuery_verbose);
+    return elementToReturn;
+end:
+    return NULL;
+
+}
+
+inline_response_200_8_t*
+DefaultAPI_walletTransactionsVerbose(apiClient_t *apiClient ,char * id)
+{
+    list_t    *localVarQueryParameters = list_create();
+    list_t    *localVarHeaderParameters = NULL;
+    list_t    *localVarFormParameters = NULL;
+    list_t *localVarHeaderType = list_create();
+    list_t *localVarContentType = NULL;
+    char      *localVarBodyParameters = NULL;
+
+    // create the path
+    long sizeOfPath = strlen("/api/v1/wallet/transactions/verbose")+1;
+    char *localVarPath = malloc(sizeOfPath);
+    snprintf(localVarPath, sizeOfPath, "/api/v1/wallet/transactions/verbose");
+
+
+
+
+    // query parameters
+    char *keyQuery_id;
+    char * valueQuery_id;
+    keyValuePair_t *keyPairQuery_id = 0;
+    if (id)
+    {
+        keyQuery_id = strdup("id");
+        valueQuery_id = strdup((id));
+        keyPairQuery_id = keyValuePair_create(keyQuery_id, valueQuery_id);
+        list_addElement(localVarQueryParameters,keyPairQuery_id);
+    }
+    list_addElement(localVarHeaderType,"application/json"); //produces
+    list_addElement(localVarHeaderType,"application/xml"); //produces
+    apiClient_invoke(apiClient,
+                    localVarPath,
+                    localVarQueryParameters,
+                    localVarHeaderParameters,
+                    localVarFormParameters,
+                    localVarHeaderType,
+                    localVarContentType,
+                    localVarBodyParameters,
+                    "GET");
+
+    if (apiClient->response_code == 200) {
+        printf("%s\n","This endpoint returns all unconfirmed transactions for all addresses in a given wallet with verbose.");
+    }
+    if (apiClient->response_code == 0) {
+        printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
+    }
+    //nonprimitive not container
+    cJSON *DefaultAPIlocalVarJSON = cJSON_Parse(apiClient->dataReceived);
+    inline_response_200_8_t *elementToReturn = inline_response_200_8_parseFromJSON(DefaultAPIlocalVarJSON);
+    cJSON_Delete(DefaultAPIlocalVarJSON);
+    if(elementToReturn == NULL) {
+        // return 0;
+    }
+
+    //return type
+    if (apiClient->dataReceived) {
+        free(apiClient->dataReceived);
+    }
+    list_free(localVarQueryParameters);
+    
+    
+    list_free(localVarHeaderType);
+    
+    free(localVarPath);
+    free(keyQuery_id);
+    free(valueQuery_id);
+    keyValuePair_free(keyPairQuery_id);
     return elementToReturn;
 end:
     return NULL;

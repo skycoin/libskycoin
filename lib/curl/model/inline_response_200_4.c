@@ -6,17 +6,13 @@
 
 
 inline_response_200_4_t *inline_response_200_4_create(
-    char *branch,
-    char *commit,
-    char *version
+    char *csrf_token
     ) {
 	inline_response_200_4_t *inline_response_200_4_local_var = malloc(sizeof(inline_response_200_4_t));
     if (!inline_response_200_4_local_var) {
         return NULL;
     }
-	inline_response_200_4_local_var->branch = branch;
-	inline_response_200_4_local_var->commit = commit;
-	inline_response_200_4_local_var->version = version;
+	inline_response_200_4_local_var->csrf_token = csrf_token;
 
 	return inline_response_200_4_local_var;
 }
@@ -24,34 +20,16 @@ inline_response_200_4_t *inline_response_200_4_create(
 
 void inline_response_200_4_free(inline_response_200_4_t *inline_response_200_4) {
     listEntry_t *listEntry;
-    free(inline_response_200_4->branch);
-    free(inline_response_200_4->commit);
-    free(inline_response_200_4->version);
+    free(inline_response_200_4->csrf_token);
 	free(inline_response_200_4);
 }
 
 cJSON *inline_response_200_4_convertToJSON(inline_response_200_4_t *inline_response_200_4) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_4->branch
-    if(inline_response_200_4->branch) { 
-    if(cJSON_AddStringToObject(item, "branch", inline_response_200_4->branch) == NULL) {
-    goto fail; //String
-    }
-     } 
-
-
-	// inline_response_200_4->commit
-    if(inline_response_200_4->commit) { 
-    if(cJSON_AddStringToObject(item, "commit", inline_response_200_4->commit) == NULL) {
-    goto fail; //String
-    }
-     } 
-
-
-	// inline_response_200_4->version
-    if(inline_response_200_4->version) { 
-    if(cJSON_AddStringToObject(item, "version", inline_response_200_4->version) == NULL) {
+	// inline_response_200_4->csrf_token
+    if(inline_response_200_4->csrf_token) { 
+    if(cJSON_AddStringToObject(item, "csrf_token", inline_response_200_4->csrf_token) == NULL) {
     goto fail; //String
     }
      } 
@@ -68,28 +46,10 @@ inline_response_200_4_t *inline_response_200_4_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_4_t *inline_response_200_4_local_var = NULL;
 
-    // inline_response_200_4->branch
-    cJSON *branch = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "branch");
-    if (branch) { 
-    if(!cJSON_IsString(branch))
-    {
-    goto end; //String
-    }
-    }
-
-    // inline_response_200_4->commit
-    cJSON *commit = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "commit");
-    if (commit) { 
-    if(!cJSON_IsString(commit))
-    {
-    goto end; //String
-    }
-    }
-
-    // inline_response_200_4->version
-    cJSON *version = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "version");
-    if (version) { 
-    if(!cJSON_IsString(version))
+    // inline_response_200_4->csrf_token
+    cJSON *csrf_token = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "csrf_token");
+    if (csrf_token) { 
+    if(!cJSON_IsString(csrf_token))
     {
     goto end; //String
     }
@@ -97,9 +57,7 @@ inline_response_200_4_t *inline_response_200_4_parseFromJSON(cJSON *inline_respo
 
 
     inline_response_200_4_local_var = inline_response_200_4_create (
-        branch ? strdup(branch->valuestring) : NULL,
-        commit ? strdup(commit->valuestring) : NULL,
-        version ? strdup(version->valuestring) : NULL
+        csrf_token ? strdup(csrf_token->valuestring) : NULL
         );
 
     return inline_response_200_4_local_var;

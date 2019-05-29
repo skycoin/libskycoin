@@ -15,16 +15,12 @@
 
 
 typedef struct inline_response_200_4_t {
-    char *branch; // string
-    char *commit; // string
-    char *version; // string
+    char *csrf_token; // string
 
 } inline_response_200_4_t;
 
 inline_response_200_4_t *inline_response_200_4_create(
-    char *branch,
-    char *commit,
-    char *version
+    char *csrf_token
 );
 
 void inline_response_200_4_free(inline_response_200_4_t *inline_response_200_4);

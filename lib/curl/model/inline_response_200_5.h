@@ -11,16 +11,17 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
+#include "network_connection_schema.h"
 
 
 
 typedef struct inline_response_200_5_t {
-    char *address; // string
+    list_t *connections; //nonprimitive container
 
 } inline_response_200_5_t;
 
 inline_response_200_5_t *inline_response_200_5_create(
-    char *address
+    list_t *connections
 );
 
 void inline_response_200_5_free(inline_response_200_5_t *inline_response_200_5);

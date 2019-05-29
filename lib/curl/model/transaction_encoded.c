@@ -6,7 +6,7 @@
 
 
 transaction_encoded_t *transaction_encoded_create(
-    transaction_encoded_transaction_t *transaction,
+    _api_v1_pending_txs_transaction_t *transaction,
     char *received,
     char *checked,
     char *announced,
@@ -28,7 +28,7 @@ transaction_encoded_t *transaction_encoded_create(
 
 void transaction_encoded_free(transaction_encoded_t *transaction_encoded) {
     listEntry_t *listEntry;
-    transaction_encoded_transaction_free(transaction_encoded->transaction);
+    _api_v1_pending_txs_transaction_free(transaction_encoded->transaction);
     free(transaction_encoded->received);
     free(transaction_encoded->checked);
     free(transaction_encoded->announced);
@@ -40,7 +40,7 @@ cJSON *transaction_encoded_convertToJSON(transaction_encoded_t *transaction_enco
 
 	// transaction_encoded->transaction
     if(transaction_encoded->transaction) { 
-    cJSON *transaction_local_JSON = transaction_encoded_transaction_convertToJSON(transaction_encoded->transaction);
+    cJSON *transaction_local_JSON = _api_v1_pending_txs_transaction_convertToJSON(transaction_encoded->transaction);
     if(transaction_local_JSON == NULL) {
     goto fail; //model
     }
@@ -96,9 +96,9 @@ transaction_encoded_t *transaction_encoded_parseFromJSON(cJSON *transaction_enco
 
     // transaction_encoded->transaction
     cJSON *transaction = cJSON_GetObjectItemCaseSensitive(transaction_encodedJSON, "transaction");
-    transaction_encoded_transaction_t *transaction_local_nonprim = NULL;
+    _api_v1_pending_txs_transaction_t *transaction_local_nonprim = NULL;
     if (transaction) { 
-    transaction_local_nonprim = transaction_encoded_transaction_parseFromJSON(transaction); //nonprimitive
+    transaction_local_nonprim = _api_v1_pending_txs_transaction_parseFromJSON(transaction); //nonprimitive
     }
 
     // transaction_encoded->received

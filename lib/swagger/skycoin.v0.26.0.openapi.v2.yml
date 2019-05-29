@@ -44,7 +44,7 @@ paths:
             type: integer
       responses:
         "200":
-          $ref: '#/components/schemas/blockSchemaArray'
+          $ref: '#/components/responses/blockSchemaArray'
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns the balance of one or more addresses, both confirmed and
@@ -66,7 +66,7 @@ paths:
             type: integer
       responses:
         "200":
-          $ref: '#/components/schemas/blockVerboseSchemaArray'
+          $ref: '#/components/responses/blockVerboseSchemaArray'
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns the balance of one or more addresses, both confirmed and
@@ -1073,7 +1073,7 @@ paths:
             type: string
       responses:
         "200":
-          $ref: '#/components/schemas/singleKey'
+          $ref: '#/components/responses/singleKey'
         default:
           $ref: "#/components/responses/genericError"
 
@@ -1093,7 +1093,7 @@ paths:
             type: string
       responses:
         "200":
-          $ref: '#/components/schemas/multiKey'
+          $ref: '#/components/responses/multiKey'
         default:
           $ref: "#/components/responses/genericError"
     post:
@@ -1279,10 +1279,6 @@ components:
             type: integer
             format: int64
           type: array
-    blockVerboseSchemaArray:
-      items:
-        $ref: '#/components/schemas/blockVerboseSchema'
-      type: array
     blockVerboseSchema:
       properties:
         header:
@@ -1352,10 +1348,6 @@ components:
         size:
           type: integer
       type: object
-    blockSchemaArray:
-      items:
-        $ref: '#/components/schemas/blockSchema'
-      type: array
     blockSchema:
       properties:
         header:
@@ -1415,22 +1407,6 @@ components:
         size:
           type: integer
       type: object
-    singleKey:
-      properties:
-        data:
-          type: string
-    multiKey:
-      properties:
-        data:
-          properties:
-            key1:
-              type: string
-            key2:
-              properties:
-                key:
-                  type: string
-              type: object
-          type: object
     transaction:
       properties:
         status:
@@ -1792,22 +1768,63 @@ components:
                 uxid:
                   type: string
             type: array
-#    lastBlocksResponses:
-#      description: Get last N blocks
-#      content:
-#        application/json:
-#          schema:
-#            oneOf:
-#              - $ref: '#/components/responses/lastBlocksResponse'
-#              - $ref: '#/components/responses/lastBlocksVerboseResponse'
-#    dataResponse:
-#      description: Response for api/v2/data endpoint
-#      content:
-#        application/json:
-#          schema:
-#            oneOf:
-#              - $ref: '#/components/schemas/singleKey'
-#              - $ref: '#/components/schemas/multiKey'
+    #    lastBlocksResponses:
+    #      description: Get last N blocks
+    #      content:
+    #        application/json:
+    #          schema:
+    #            oneOf:
+    #              - $ref: '#/components/responses/lastBlocksResponse'
+    #              - $ref: '#/components/responses/lastBlocksVerboseResponse'
+    #    dataResponse:
+    #      description: Response for api/v2/data endpoint
+    #      content:
+    #        application/json:
+    #          schema:
+    #            oneOf:
+    #              - $ref: '#/components/schemas/singleKey'
+    #              - $ref: '#/components/schemas/multiKey'
+    blockSchemaArray:
+      description: Return block Array
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/blockSchema'
+            type: array
+
+    blockVerboseSchemaArray:
+      description: Return Block with Verbose
+      content:
+        application/json:
+          schema:
+            items:
+              $ref: '#/components/schemas/blockVerboseSchema'
+            type: array
+    singleKey:
+      description: Return singleKey
+      content:
+        application/json:
+          schema:
+            properties:
+              data:
+                type: string
+    multiKey:
+      description: Return multiKey
+      content:
+        application/json:
+          schema:
+            properties:
+              data:
+                properties:
+                  key1:
+                    type: string
+                  key2:
+                    properties:
+                      key:
+                        type: string
+                    type: object
+                type: object
     walletSeedVerify:
       description: Verifies a wallet seed.
       content:
@@ -2176,14 +2193,14 @@ components:
                   $ref: '#/components/schemas/transactionEncoded'
                 type: array
             type: object
-#    blockResponse:
-#      description: Get bock by hash or sequence
-#      content:
-#        application/json:
-#          schema:
-#            oneOf:
-#              - $ref: '#/components/schemas/blockSchemaArray'
-#              - $ref: '#/components/schemas/blockVerboseSchemaArray'
+    #    blockResponse:
+    #      description: Get bock by hash or sequence
+    #      content:
+    #        application/json:
+    #          schema:
+    #            oneOf:
+    #              - $ref: '#/components/schemas/blockSchemaArray'
+    #              - $ref: '#/components/schemas/blockVerboseSchemaArray'
     blocksResponse:
       description: Get blocks in specific range
       content:
@@ -2270,14 +2287,14 @@ components:
                   type: boolean
               type: object
             type: array
-#    pendingTxsOneOfResponse:
-#      description: Transaction inputs include the owner address, coins, hours and calculated hours.
-#      content:
-#        application/json:
-#          schema:
-#            oneOf:
-#              - $ref: '#/components/responses/pendingTxsVerboseResponse'
-#              - $ref: '#/components/responses/pendingTxsResponse'
+    #    pendingTxsOneOfResponse:
+    #      description: Transaction inputs include the owner address, coins, hours and calculated hours.
+    #      content:
+    #        application/json:
+    #          schema:
+    #            oneOf:
+    #              - $ref: '#/components/responses/pendingTxsVerboseResponse'
+    #              - $ref: '#/components/responses/pendingTxsResponse'
     pendingTxsResponse:
       description: Transaction inputs include the owner address, coins, hours and calculated hours.
       content:
@@ -2330,23 +2347,23 @@ components:
                   type: boolean
               type: object
             type: array
-#    v1TransactionResponse:
-#      description: Transaction endoint response
-#      content:
-#        application/json:
-#          schema:
-#            oneOf:
-#              - $ref: "#/components/responses/transactionResponse"
-#              - $ref: "#/components/responses/transactionVerboseResponse"
-#              - $ref: "#/components/responses/transactionEncodedResponse"
-#    transactionGetPostResponse:
-#      description: Transaction endoint response
-#      content:
-#        application/json:
-#          schema:
-#            oneOf:
-#              - $ref: "#/components/responses/transactionsResponse"
-#              - $ref: "#/components/responses/transactionVerboseResponse"
+    #    v1TransactionResponse:
+    #      description: Transaction endoint response
+    #      content:
+    #        application/json:
+    #          schema:
+    #            oneOf:
+    #              - $ref: "#/components/responses/transactionResponse"
+    #              - $ref: "#/components/responses/transactionVerboseResponse"
+    #              - $ref: "#/components/responses/transactionEncodedResponse"
+    #    transactionGetPostResponse:
+    #      description: Transaction endoint response
+    #      content:
+    #        application/json:
+    #          schema:
+    #            oneOf:
+    #              - $ref: "#/components/responses/transactionsResponse"
+    #              - $ref: "#/components/responses/transactionVerboseResponse"
     transactionVerifyResponse:
       description: Responses ok
       content:
@@ -3122,14 +3139,14 @@ components:
               csrf_token:
                 type: string
             type: object
-#    walletTransactionsOneOfResponse:
-#      description: This endpoint returns wallet transactions
-#      content:
-#        application/json:
-#          schema:
-#            oneOf:
-#              - $ref: "#/components/responses/walletTransactionsResponses"
-#              - $ref: "#/components/responses/walletTransactionsVerboseResponses"
+    #    walletTransactionsOneOfResponse:
+    #      description: This endpoint returns wallet transactions
+    #      content:
+    #        application/json:
+    #          schema:
+    #            oneOf:
+    #              - $ref: "#/components/responses/walletTransactionsResponses"
+    #              - $ref: "#/components/responses/walletTransactionsVerboseResponses"
     blockchainProgressResponse:
       description: This endpoint returns the blockchain sync progress
       content:

@@ -11,12 +11,12 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
-#include "transaction_encoded_transaction.h"
+#include "_api_v1_pending_txs_transaction.h"
 
 
 
 typedef struct transaction_encoded_t {
-    transaction_encoded_transaction_t *transaction; //model
+    _api_v1_pending_txs_transaction_t *transaction; //model
     char *received; // string
     char *checked; // string
     char *announced; // string
@@ -25,7 +25,7 @@ typedef struct transaction_encoded_t {
 } transaction_encoded_t;
 
 transaction_encoded_t *transaction_encoded_create(
-    transaction_encoded_transaction_t *transaction,
+    _api_v1_pending_txs_transaction_t *transaction,
     char *received,
     char *checked,
     char *announced,
