@@ -19,7 +19,6 @@ set(SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/external/cJSON.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction_outputs.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_verbose_transaction.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/address.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema_body.c
@@ -29,10 +28,6 @@ set(SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_10.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_10_data.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_11.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_12.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_13.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_2.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_4.c
@@ -40,6 +35,7 @@ set(SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_6.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8_data.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_9.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_default.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/network_connection_schema.c
@@ -74,7 +70,6 @@ set(HDRS
     ${CMAKE_CURRENT_SOURCE_DIR}/external/cJSON.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction_outputs.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_verbose_transaction.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/address.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema_body.h
@@ -84,10 +79,6 @@ set(HDRS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_10.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_10_data.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_11.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_12.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_13.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_4.h
@@ -95,6 +86,7 @@ set(HDRS
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_6.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8_data.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_9.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_default.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/network_connection_schema.h

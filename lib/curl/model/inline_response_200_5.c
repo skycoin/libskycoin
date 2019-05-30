@@ -6,13 +6,17 @@
 
 
 inline_response_200_5_t *inline_response_200_5_create(
-    list_t *connections
+    char *branch,
+    char *commit,
+    char *version
     ) {
 	inline_response_200_5_t *inline_response_200_5_local_var = malloc(sizeof(inline_response_200_5_t));
     if (!inline_response_200_5_local_var) {
         return NULL;
     }
-	inline_response_200_5_local_var->connections = connections;
+	inline_response_200_5_local_var->branch = branch;
+	inline_response_200_5_local_var->commit = commit;
+	inline_response_200_5_local_var->version = version;
 
 	return inline_response_200_5_local_var;
 }
@@ -20,32 +24,35 @@ inline_response_200_5_t *inline_response_200_5_create(
 
 void inline_response_200_5_free(inline_response_200_5_t *inline_response_200_5) {
     listEntry_t *listEntry;
-	list_ForEach(listEntry, inline_response_200_5->connections) {
-		network_connection_schema_free(listEntry->data);
-	}
-	list_free(inline_response_200_5->connections);
+    free(inline_response_200_5->branch);
+    free(inline_response_200_5->commit);
+    free(inline_response_200_5->version);
 	free(inline_response_200_5);
 }
 
 cJSON *inline_response_200_5_convertToJSON(inline_response_200_5_t *inline_response_200_5) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_5->connections
-    if(inline_response_200_5->connections) { 
-    cJSON *connections = cJSON_AddArrayToObject(item, "connections");
-    if(connections == NULL) {
-    goto fail; //nonprimitive container
+	// inline_response_200_5->branch
+    if(inline_response_200_5->branch) { 
+    if(cJSON_AddStringToObject(item, "branch", inline_response_200_5->branch) == NULL) {
+    goto fail; //String
     }
+     } 
 
-    listEntry_t *connectionsListEntry;
-    if (inline_response_200_5->connections) {
-    list_ForEach(connectionsListEntry, inline_response_200_5->connections) {
-    cJSON *itemLocal = network_connection_schema_convertToJSON(connectionsListEntry->data);
-    if(itemLocal == NULL) {
-    goto fail;
+
+	// inline_response_200_5->commit
+    if(inline_response_200_5->commit) { 
+    if(cJSON_AddStringToObject(item, "commit", inline_response_200_5->commit) == NULL) {
+    goto fail; //String
     }
-    cJSON_AddItemToArray(connections, itemLocal);
-    }
+     } 
+
+
+	// inline_response_200_5->version
+    if(inline_response_200_5->version) { 
+    if(cJSON_AddStringToObject(item, "version", inline_response_200_5->version) == NULL) {
+    goto fail; //String
     }
      } 
 
@@ -61,31 +68,38 @@ inline_response_200_5_t *inline_response_200_5_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_5_t *inline_response_200_5_local_var = NULL;
 
-    // inline_response_200_5->connections
-    cJSON *connections = cJSON_GetObjectItemCaseSensitive(inline_response_200_5JSON, "connections");
-    list_t *connectionsList;
-    if (connections) { 
-    cJSON *connections_local_nonprimitive;
-    if(!cJSON_IsArray(connections)){
-        goto end; //nonprimitive container
+    // inline_response_200_5->branch
+    cJSON *branch = cJSON_GetObjectItemCaseSensitive(inline_response_200_5JSON, "branch");
+    if (branch) { 
+    if(!cJSON_IsString(branch))
+    {
+    goto end; //String
+    }
     }
 
-    connectionsList = list_create();
-
-    cJSON_ArrayForEach(connections_local_nonprimitive,connections )
+    // inline_response_200_5->commit
+    cJSON *commit = cJSON_GetObjectItemCaseSensitive(inline_response_200_5JSON, "commit");
+    if (commit) { 
+    if(!cJSON_IsString(commit))
     {
-        if(!cJSON_IsObject(connections_local_nonprimitive)){
-            goto end;
-        }
-        network_connection_schema_t *connectionsItem = network_connection_schema_parseFromJSON(connections_local_nonprimitive);
+    goto end; //String
+    }
+    }
 
-        list_addElement(connectionsList, connectionsItem);
+    // inline_response_200_5->version
+    cJSON *version = cJSON_GetObjectItemCaseSensitive(inline_response_200_5JSON, "version");
+    if (version) { 
+    if(!cJSON_IsString(version))
+    {
+    goto end; //String
     }
     }
 
 
     inline_response_200_5_local_var = inline_response_200_5_create (
-        connections ? connectionsList : NULL
+        branch ? strdup(branch->valuestring) : NULL,
+        commit ? strdup(commit->valuestring) : NULL,
+        version ? strdup(version->valuestring) : NULL
         );
 
     return inline_response_200_5_local_var;

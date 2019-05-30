@@ -6,13 +6,13 @@
 
 
 inline_response_200_8_t *inline_response_200_8_create(
-    list_t *transactions
+    inline_response_200_8_data_t *data
     ) {
 	inline_response_200_8_t *inline_response_200_8_local_var = malloc(sizeof(inline_response_200_8_t));
     if (!inline_response_200_8_local_var) {
         return NULL;
     }
-	inline_response_200_8_local_var->transactions = transactions;
+	inline_response_200_8_local_var->data = data;
 
 	return inline_response_200_8_local_var;
 }
@@ -20,32 +20,22 @@ inline_response_200_8_t *inline_response_200_8_create(
 
 void inline_response_200_8_free(inline_response_200_8_t *inline_response_200_8) {
     listEntry_t *listEntry;
-	list_ForEach(listEntry, inline_response_200_8->transactions) {
-		object_free(listEntry->data);
-	}
-	list_free(inline_response_200_8->transactions);
+    inline_response_200_8_data_free(inline_response_200_8->data);
 	free(inline_response_200_8);
 }
 
 cJSON *inline_response_200_8_convertToJSON(inline_response_200_8_t *inline_response_200_8) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_8->transactions
-    if(inline_response_200_8->transactions) { 
-    cJSON *transactions = cJSON_AddArrayToObject(item, "transactions");
-    if(transactions == NULL) {
-    goto fail; //nonprimitive container
+	// inline_response_200_8->data
+    if(inline_response_200_8->data) { 
+    cJSON *data_local_JSON = inline_response_200_8_data_convertToJSON(inline_response_200_8->data);
+    if(data_local_JSON == NULL) {
+    goto fail; //model
     }
-
-    listEntry_t *transactionsListEntry;
-    if (inline_response_200_8->transactions) {
-    list_ForEach(transactionsListEntry, inline_response_200_8->transactions) {
-    cJSON *itemLocal = object_convertToJSON(transactionsListEntry->data);
-    if(itemLocal == NULL) {
+    cJSON_AddItemToObject(item, "data", data_local_JSON);
+    if(item->child == NULL) {
     goto fail;
-    }
-    cJSON_AddItemToArray(transactions, itemLocal);
-    }
     }
      } 
 
@@ -61,31 +51,16 @@ inline_response_200_8_t *inline_response_200_8_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_8_t *inline_response_200_8_local_var = NULL;
 
-    // inline_response_200_8->transactions
-    cJSON *transactions = cJSON_GetObjectItemCaseSensitive(inline_response_200_8JSON, "transactions");
-    list_t *transactionsList;
-    if (transactions) { 
-    cJSON *transactions_local_nonprimitive;
-    if(!cJSON_IsArray(transactions)){
-        goto end; //nonprimitive container
-    }
-
-    transactionsList = list_create();
-
-    cJSON_ArrayForEach(transactions_local_nonprimitive,transactions )
-    {
-        if(!cJSON_IsObject(transactions_local_nonprimitive)){
-            goto end;
-        }
-        object_t *transactionsItem = object_parseFromJSON(transactions_local_nonprimitive);
-
-        list_addElement(transactionsList, transactionsItem);
-    }
+    // inline_response_200_8->data
+    cJSON *data = cJSON_GetObjectItemCaseSensitive(inline_response_200_8JSON, "data");
+    inline_response_200_8_data_t *data_local_nonprim = NULL;
+    if (data) { 
+    data_local_nonprim = inline_response_200_8_data_parseFromJSON(data); //nonprimitive
     }
 
 
     inline_response_200_8_local_var = inline_response_200_8_create (
-        transactions ? transactionsList : NULL
+        data ? data_local_nonprim : NULL
         );
 
     return inline_response_200_8_local_var;

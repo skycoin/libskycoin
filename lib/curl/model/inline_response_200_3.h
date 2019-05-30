@@ -15,24 +15,12 @@
 
 
 typedef struct inline_response_200_3_t {
-    char *current_coinhour_supply; // string
-    char *current_supply; // string
-    list_t *locked_distribution_addresses; //primitive container
-    char *max_supply; // string
-    char *total_coinhour_supply; // string
-    char *total_supply; // string
-    list_t *unlocked_distribution_addresses; //primitive container
+    char *csrf_token; // string
 
 } inline_response_200_3_t;
 
 inline_response_200_3_t *inline_response_200_3_create(
-    char *current_coinhour_supply,
-    char *current_supply,
-    list_t *locked_distribution_addresses,
-    char *max_supply,
-    char *total_coinhour_supply,
-    char *total_supply,
-    list_t *unlocked_distribution_addresses
+    char *csrf_token
 );
 
 void inline_response_200_3_free(inline_response_200_3_t *inline_response_200_3);

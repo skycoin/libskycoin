@@ -6,13 +6,13 @@
 
 
 inline_response_200_4_t *inline_response_200_4_create(
-    char *csrf_token
+    list_t *connections
     ) {
 	inline_response_200_4_t *inline_response_200_4_local_var = malloc(sizeof(inline_response_200_4_t));
     if (!inline_response_200_4_local_var) {
         return NULL;
     }
-	inline_response_200_4_local_var->csrf_token = csrf_token;
+	inline_response_200_4_local_var->connections = connections;
 
 	return inline_response_200_4_local_var;
 }
@@ -20,17 +20,32 @@ inline_response_200_4_t *inline_response_200_4_create(
 
 void inline_response_200_4_free(inline_response_200_4_t *inline_response_200_4) {
     listEntry_t *listEntry;
-    free(inline_response_200_4->csrf_token);
+	list_ForEach(listEntry, inline_response_200_4->connections) {
+		network_connection_schema_free(listEntry->data);
+	}
+	list_free(inline_response_200_4->connections);
 	free(inline_response_200_4);
 }
 
 cJSON *inline_response_200_4_convertToJSON(inline_response_200_4_t *inline_response_200_4) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_4->csrf_token
-    if(inline_response_200_4->csrf_token) { 
-    if(cJSON_AddStringToObject(item, "csrf_token", inline_response_200_4->csrf_token) == NULL) {
-    goto fail; //String
+	// inline_response_200_4->connections
+    if(inline_response_200_4->connections) { 
+    cJSON *connections = cJSON_AddArrayToObject(item, "connections");
+    if(connections == NULL) {
+    goto fail; //nonprimitive container
+    }
+
+    listEntry_t *connectionsListEntry;
+    if (inline_response_200_4->connections) {
+    list_ForEach(connectionsListEntry, inline_response_200_4->connections) {
+    cJSON *itemLocal = network_connection_schema_convertToJSON(connectionsListEntry->data);
+    if(itemLocal == NULL) {
+    goto fail;
+    }
+    cJSON_AddItemToArray(connections, itemLocal);
+    }
     }
      } 
 
@@ -46,18 +61,31 @@ inline_response_200_4_t *inline_response_200_4_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_4_t *inline_response_200_4_local_var = NULL;
 
-    // inline_response_200_4->csrf_token
-    cJSON *csrf_token = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "csrf_token");
-    if (csrf_token) { 
-    if(!cJSON_IsString(csrf_token))
+    // inline_response_200_4->connections
+    cJSON *connections = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "connections");
+    list_t *connectionsList;
+    if (connections) { 
+    cJSON *connections_local_nonprimitive;
+    if(!cJSON_IsArray(connections)){
+        goto end; //nonprimitive container
+    }
+
+    connectionsList = list_create();
+
+    cJSON_ArrayForEach(connections_local_nonprimitive,connections )
     {
-    goto end; //String
+        if(!cJSON_IsObject(connections_local_nonprimitive)){
+            goto end;
+        }
+        network_connection_schema_t *connectionsItem = network_connection_schema_parseFromJSON(connections_local_nonprimitive);
+
+        list_addElement(connectionsList, connectionsItem);
     }
     }
 
 
     inline_response_200_4_local_var = inline_response_200_4_create (
-        csrf_token ? strdup(csrf_token->valuestring) : NULL
+        connections ? connectionsList : NULL
         );
 
     return inline_response_200_4_local_var;

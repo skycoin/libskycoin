@@ -11,16 +11,17 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
+#include "object.h"
 
 
 
 typedef struct inline_response_200_9_t {
-    char *address; // string
+    object_t *data; //model
 
 } inline_response_200_9_t;
 
 inline_response_200_9_t *inline_response_200_9_create(
-    char *address
+    object_t *data
 );
 
 void inline_response_200_9_free(inline_response_200_9_t *inline_response_200_9);
