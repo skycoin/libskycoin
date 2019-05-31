@@ -15,6 +15,7 @@ import (
 	"github.com/skycoin/skycoin/src/util/droplet"
 	"github.com/skycoin/skycoin/src/util/fee"
 	"github.com/skycoin/skycoin/src/util/file"
+	mathutil "github.com/skycoin/skycoin/src/util/mathutil"
 	"github.com/skycoin/skycoin/src/visor"
 	"github.com/skycoin/skycoin/src/visor/blockdb"
 	"github.com/skycoin/skycoin/src/visor/dbutil"
@@ -508,13 +509,13 @@ var (
 		cli.ErrJSONMarshal:                  SKY_ErrJSONMarshal,
 		// coin
 		coin.ErrAddEarnedCoinHoursAdditionOverflow: SKY_ErrAddEarnedCoinHoursAdditionOverflow,
-		coin.ErrUint64MultOverflow:                 SKY_ErrUint64MultOverflow,
-		coin.ErrUint64AddOverflow:                  SKY_ErrUint64AddOverflow,
-		coin.ErrUint32AddOverflow:                  SKY_ErrUint32AddOverflow,
-		coin.ErrUint64OverflowsInt64:               SKY_ErrUint64OverflowsInt64,
-		coin.ErrInt64UnderflowsUint64:              SKY_ErrInt64UnderflowsUint64,
-		coin.ErrIntUnderflowsUint32:                SKY_ErrIntUnderflowsUint32,
-		coin.ErrIntOverflowsUint32:                 SKY_ErrIntOverflowsUint32,
+		mathutil.ErrUint64MultOverflow:             SKY_ErrUint64MultOverflow,
+		mathutil.ErrUint64AddOverflow:              SKY_ErrUint64AddOverflow,
+		mathutil.ErrUint32AddOverflow:              SKY_ErrUint32AddOverflow,
+		mathutil.ErrUint64OverflowsInt64:           SKY_ErrUint64OverflowsInt64,
+		mathutil.ErrInt64UnderflowsUint64:          SKY_ErrInt64UnderflowsUint64,
+		mathutil.ErrIntUnderflowsUint32:            SKY_ErrIntUnderflowsUint32,
+		mathutil.ErrIntOverflowsUint32:             SKY_ErrIntOverflowsUint32,
 		// daemon
 		// Removed in 34ad39ddb350
 		// gnet.ErrMaxDefaultConnectionsReached:           SKY_ErrMaxDefaultConnectionsReached,

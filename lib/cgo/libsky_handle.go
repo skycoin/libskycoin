@@ -15,8 +15,8 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/skycoin/pyskycoin/gopath/src/github.com/skycoin/skycoin/src/api/webrpc"
 	"github.com/skycoin/skycoin/src/api"
-	"github.com/skycoin/skycoin/src/api/webrpc"
 	"github.com/skycoin/skycoin/src/cli"
 	"github.com/skycoin/skycoin/src/coin"
 	"github.com/skycoin/skycoin/src/readable"
@@ -50,20 +50,6 @@ func overwriteHandle(handle C.Handle, obj interface{}) bool {
 		return true
 	}
 	return false
-}
-
-func registerWebRpcClientHandle(obj *webrpc.Client) C.WebRpcClient__Handle {
-	return (C.WebRpcClient__Handle)(registerHandle(obj))
-}
-
-func lookupWebRpcClientHandle(handle C.WebRpcClient__Handle) (*webrpc.Client, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*webrpc.Client); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
 }
 
 func registerWalletHandle(obj *wallet.Wallet) C.Wallet__Handle {
@@ -402,14 +388,14 @@ func lookupSortableTransactionHandle(handle C.SortableTransactionResult_Handle) 
 	return nil, false
 }
 
-func registerOutputsResultHandle(obj *webrpc.OutputsResult) C.OutputsResult_Handle {
+func registerOutputsResultHandle(obj *cli.OutputsResult) C.OutputsResult_Handle {
 	return (C.OutputsResult_Handle)(registerHandle(obj))
 }
 
-func lookupOutputsResultHandle(handle C.OutputsResult_Handle) (*webrpc.OutputsResult, bool) {
+func lookupOutputsResultHandle(handle C.OutputsResult_Handle) (*cli.OutputsResult, bool) {
 	obj, ok := lookupHandle(C.Handle(handle))
 	if ok {
-		if obj, isOK := (obj).(*webrpc.OutputsResult); isOK {
+		if obj, isOK := (obj).(*cli.OutputsResult); isOK {
 			return obj, true
 		}
 	}
