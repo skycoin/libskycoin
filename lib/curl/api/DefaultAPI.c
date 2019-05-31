@@ -3536,8 +3536,7 @@ end:
 // Returns the wallet directory path
 //
 object_t*
-DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
-{
+DefaultAPI_walletNewSeed(apiClient_t *apiClient, char* entropy) {
     list_t    *localVarQueryParameters = list_create();
     list_t    *localVarHeaderParameters = NULL;
     list_t    *localVarFormParameters = NULL;
@@ -3555,7 +3554,7 @@ DefaultAPI_walletNewSeed(apiClient_t *apiClient ,entropy_e entropy)
 
     // query parameters
     char *keyQuery_entropy;
-    entropy_e valueQuery_entropy;
+    char *valueQuery_entropy;
     keyValuePair_t *keyPairQuery_entropy = 0;
     if (entropy)
     {
