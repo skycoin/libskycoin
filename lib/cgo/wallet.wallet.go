@@ -269,40 +269,8 @@ func SKY_wallet_NewUxBalances(_headTime uint64, _uxa *C.coin__UxArray, _arg2 *C.
 	return
 }
 
-//export SKY_wallet_NewUxBalance
-func SKY_wallet_NewUxBalance(_headTime uint64, _ux *C.coin__UxOut, _arg2 *C.wallet__UxBalance) (____error_code uint32) {
-	headTime := _headTime
-	ux := *(*coin.UxOut)(unsafe.Pointer(_ux))
-	__arg2, ____return_err := wallet.NewUxBalance(headTime, ux)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-		*_arg2 = *(*C.wallet__UxBalance)(unsafe.Pointer(&__arg2))
-	}
-	return
-}
 
-//export SKY_wallet_ChooseSpendsMinimizeUxOuts
-func SKY_wallet_ChooseSpendsMinimizeUxOuts(_uxa []C.wallet__UxBalance, _coins, _hours uint64, _arg2 *C.GoSlice_) (____error_code uint32) {
-	uxa := *(*[]wallet.UxBalance)(unsafe.Pointer(&_uxa))
-	coins := _coins
-	hours := _hours
-	__arg2, ____return_err := wallet.ChooseSpendsMinimizeUxOuts(uxa, coins, hours)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-		copyToGoSlice(reflect.ValueOf(__arg2), _arg2)
-	}
-	return
-}
 
-//export SKY_wallet_ChooseSpendsMaximizeUxOuts
-func SKY_wallet_ChooseSpendsMaximizeUxOuts(_uxa []C.wallet__UxBalance, _coins, _hours uint64, _arg2 *C.GoSlice_) (____error_code uint32) {
-	uxa := *(*[]wallet.UxBalance)(unsafe.Pointer(&_uxa))
-	coins := _coins
-	hours := _hours
-	__arg2, ____return_err := wallet.ChooseSpendsMaximizeUxOuts(uxa, coins, hours)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-		copyToGoSlice(reflect.ValueOf(__arg2), _arg2)
-	}
-	return
-}
+
+
+

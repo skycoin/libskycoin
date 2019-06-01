@@ -200,16 +200,6 @@ func SKY_cipher_VerifyAddressSignedHash(_address *C.cipher__Address, _sig *C.cip
 	return
 }
 
-//export SKY_cipher_VerifySignedHash
-func SKY_cipher_VerifySignedHash(_sig *C.cipher__Sig, _hash *C.cipher__SHA256) (____error_code uint32) {
-	hash := (*cipher.SHA256)(unsafe.Pointer(_hash))
-	sig := (*cipher.Sig)(unsafe.Pointer(_sig))
-
-	err := cipher.VerifySignedHash(*sig, *hash)
-	____error_code = libErrorCode(err)
-	return
-}
-
 //export SKY_cipher_VerifyPubKeySignedHash
 func SKY_cipher_VerifyPubKeySignedHash(_pubkey *C.cipher__PubKey, _sig *C.cipher__Sig, _hash *C.cipher__SHA256) (____error_code uint32) {
 	pubkey := (*cipher.PubKey)(unsafe.Pointer(_pubkey))
