@@ -27,5 +27,6 @@ extern GoInt_ isTransactionsEq(coin__Transactions* x1, coin__Transactions* x2);
 extern GoInt_ isTransactionOutputEq(coin__TransactionOutput* x1, coin__TransactionOutput* x2);
 
 extern GoInt_ isGoStringEq(GoString string1, GoString string2);
+extern GoInt_ isGoString_Eq(GoString_ string1, GoString_ string2);
 
 #endif // LIBSKY_ASSERT_H
