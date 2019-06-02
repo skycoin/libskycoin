@@ -497,7 +497,7 @@ void ValidateSeedData(SeedTestData* seedData, InputTestData* inputData)
                 ck_assert_msg(err == SKY_OK, "SKY_cipher_VerifyAddressSignedHash failed: error=%d dataset=%d hashidx=%d", err, i, j);
                 // err = SKY_cipher_VerifySignedHash(sig, h);
                 // ck_assert_msg(err == SKY_OK,
-                    // "SKY_cipher_VerifySignedHash failed: error=%d dataset=%d hashidx=%d", err, i, j);
+                // "SKY_cipher_VerifySignedHash failed: error=%d dataset=%d hashidx=%d", err, i, j);
 
                 cipher__PubKey p2;
                 err = SKY_cipher_PubKeyFromSig(sig, h, &p2);

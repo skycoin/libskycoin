@@ -210,7 +210,7 @@ START_TEST(TestTransactionPushInput)
     result = SKY_coin_UxOut_Hash(&ux, &hash);
     ck_assert(result == SKY_OK);
     result = SKY_coin_Transaction_PushInput(handle, &hash);
-    ck_assert_int_eq(result , SKY_ERROR);
+    ck_assert_int_eq(result, SKY_ERROR);
 }
 END_TEST
 
@@ -274,7 +274,7 @@ START_TEST(TestTransactionUpdateHeader)
     Transaction__Handle handle;
     coin__Transaction* ptx;
     ptx = makeTransaction(&handle);
-    cipher__SHA256 hash; 
+    cipher__SHA256 hash;
     cipher__SHA256 nullHash = "";
     cipher__SHA256 hashInner;
     memcpy(&hash, &ptx->InnerHash, sizeof(cipher__SHA256));

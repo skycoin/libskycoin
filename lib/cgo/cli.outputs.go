@@ -8,6 +8,7 @@ package main
   #include "skytypes.h"
 */
 import "C"
+
 // TODO: Not implement datatype
 // //export SKY_cli_GetWalletOutputsFromFile
 // func SKY_cli_GetWalletOutputsFromFile(_c C.WebRpcClient__Handle, _walletFile string, _arg2 *C.ReadableUnspentOutputsSummary_Handle) (____error_code uint32) {
