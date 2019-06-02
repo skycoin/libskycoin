@@ -15,12 +15,12 @@ START_TEST(TestAddUint64)
 {
     int result;
     GoUint64 r;
-    result = SKY_coin_AddUint64(10, 11, &r);
+    result = SKY_util_AddUint64(10, 11, &r);
     ck_assert(result == SKY_OK);
     ck_assert(r == 21);
     GoUint64 maxUint64 = 0xFFFFFFFFFFFFFFFF;
     GoUint64 one = 1;
-    result = SKY_coin_AddUint64(maxUint64, one, &r);
+    result = SKY_util_AddUint64(maxUint64, one, &r);
     ck_assert(result == SKY_ErrUint64AddOverflow);
 }
 END_TEST
@@ -50,7 +50,7 @@ START_TEST(TestUint64ToInt64)
     int tests_count = sizeof(tests) / sizeof(math_tests);
     int i;
     for (i = 0; i < tests_count; i++) {
-        result = SKY_coin_Uint64ToInt64(tests[i].a, &r);
+        result = SKY_util_Uint64ToInt64(tests[i].a, &r);
         if (tests[i].failure) {
             ck_assert_msg(result == SKY_ErrUint64OverflowsInt64, "Failed test # %d", i + 1);
         } else {

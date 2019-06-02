@@ -271,7 +271,8 @@ func SKY_coin_Transaction_PushOutput(handle C.Transaction__Handle, _dst *C.ciphe
 	dst := *(*cipher.Address)(unsafe.Pointer(_dst))
 	coins := uint64(_coins)
 	hours := uint64(_hours)
-	txn.PushOutput(dst, coins, hours)
+	____return_err := txn.PushOutput(dst, coins, hours)
+	____error_code = libErrorCode(____return_err)
 	return
 }
 
@@ -330,30 +331,6 @@ func SKY_coin_Transaction_SizeHash(handle C.Transaction__Handle, _arg0 *uint32, 
 	return
 }
 
-//export SKY_coin_Transaction_TxID
-func SKY_coin_Transaction_TxID(handle C.Transaction__Handle, _arg0 *C.GoSlice_) (____error_code uint32) {
-	txn, ok := lookupTransactionHandle(handle)
-	if !ok {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	__arg0 := txn.TxID()
-	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
-	return
-}
-
-//export SKY_coin_Transaction_TxIDHex
-func SKY_coin_Transaction_TxIDHex(handle C.Transaction__Handle, _arg0 *C.GoString_) (____error_code uint32) {
-	txn, ok := lookupTransactionHandle(handle)
-	if !ok {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	__arg0 := txn.TxIDHex()
-	copyString(__arg0, _arg0)
-	return
-}
-
 //export SKY_coin_Transaction_UpdateHeader
 func SKY_coin_Transaction_UpdateHeader(handle C.Transaction__Handle) (____error_code uint32) {
 	txn, ok := lookupTransactionHandle(handle)
@@ -385,8 +362,22 @@ func SKY_coin_Transaction_Serialize(handle C.Transaction__Handle, _arg0 *C.GoSli
 		____error_code = SKY_BAD_HANDLE
 		return
 	}
-	__arg0 := txn.Serialize()
-	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+	__arg0, ____return_err := txn.Serialize()
+	____error_code = libErrorCode(____return_err)
+	if ____return_err == nil {
+		copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+	}
+	return
+}
+
+//export SKY_coin_TransactionDeserialize
+func SKY_coin_TransactionDeserialize(_b []byte, _arg1 *C.Transaction__Handle) (____error_code uint32) {
+	b := *(*[]byte)(unsafe.Pointer(&_b))
+	__arg1, ____return_err := coin.DeserializeTransaction(b)
+	____error_code = libErrorCode(____return_err)
+	if ____return_err == nil {
+		*_arg1 = registerTransactionHandle(&__arg1)
+	}
 	return
 }
 
