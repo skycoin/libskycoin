@@ -63,10 +63,10 @@ END_TEST
 
 Suite* coin_math(void)
 {
-    Suite* s = suite_create("Load coin.math");
+    Suite* s = suite_create("Load util.math");
     TCase* tc;
 
-    tc = tcase_create("coin.math");
+    tc = tcase_create("util.math");
     tcase_add_checked_fixture(tc, setup, teardown);
     tcase_add_test(tc, TestAddUint64);
     tcase_add_test(tc, TestUint64ToInt64);
