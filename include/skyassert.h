@@ -7,6 +7,7 @@
 extern GoInt_ isAddressEq(cipher__Address* addr1, cipher__Address* addr2);
 extern GoInt_ isAddressEqPtr(cipher__Address addr1, cipher__Address addr2);
 
+extern GoInt_ isBitcoinAddressEq(cipher__BitcoinAddress* addr1, cipher__BitcoinAddress* addr2);
 extern GoInt_ isPubKeyEq(cipher__PubKey* pubkey1, cipher__PubKey* pubkey2);
 extern GoInt_ isSigEq(cipher__Sig* sig1, cipher__Sig* sig2);
 
