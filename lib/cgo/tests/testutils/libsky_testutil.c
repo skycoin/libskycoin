@@ -287,6 +287,18 @@ int copyGoSlice_toGoSlice(GoSlice* pdest, GoSlice_* psource, int elem_size){
   return SKY_OK;
 }
 
+int copycoin_UxArraytoGoSlice(GoSlice* pdest, coin__UxArray* psource, int elem_size){
+  pdest->len = psource->len;
+  pdest->cap = psource->len;
+  int size = pdest->len * elem_size;
+  pdest->data = malloc(size);
+  if( pdest->data == NULL )
+    return SKY_ERROR;
+  registerMemCleanup( pdest->data );
+  memcpy(pdest->data, psource->data, size );
+  return SKY_OK;
+}
+
 int cutSlice(GoSlice_* slice, int start, int end, int elem_size, GoSlice_* result){
   int size = end - start;
   if( size <= 0)
