@@ -117,17 +117,55 @@ START_TEST(TestDecodeBase58BitcoinAddress)
     ck_assert(isBitcoinAddressEq(&a, &a2));
 
     GoUint8_ buffer_as[1024];
-    GoString_ as = {buffer_as,0};
-    memset(&a2,0,sizeof(cipher__BitcoinAddress));
-    SKY_cipher_BitcoinAddress_String(&a,&as);
+    GoString_ as = {buffer_as, 0};
+    memset(&a2, 0, sizeof(cipher__BitcoinAddress));
+    SKY_cipher_BitcoinAddress_String(&a, &as);
     GoString as_temp;
     as_temp.p = as.p;
     as_temp.n = as.n;
-    err = SKY_cipher_DecodeBase58BitcoinAddress(as_temp,&a2);
-    ck_assert_int_eq(err,SKY_OK);
-    ck_assert(isBitcoinAddressEq(&a,&a2));
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as_temp, &a2);
+    ck_assert_int_eq(err, SKY_OK);
+    ck_assert(isBitcoinAddressEq(&a, &a2));
 
-    // 
+    // preceding whitespace is invalid
+    GoUint8_ buffer_as2[1024];
+    GoString as2 = {buffer_as2, 0};
+    char tempStr[50];
+    strcpy(tempStr, " ");
+    strcat(tempStr, as.p);
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    cipher__BitcoinAddress a3;
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    // preceding zeroes are invalid
+    strcpy(tempStr, "000");
+    strcat(tempStr, as.p);
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    // trailing whitespace is invalid
+    strcpy(tempStr, as.p);
+    strcat(tempStr, " ");
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    // trailing zeroes are invalid
+    strcpy(tempStr, as.p);
+    strcat(tempStr, "000");
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    GoString nulls = {"1111111111111111111111111", 25};
+    err = SKY_cipher_DecodeBase58BitcoinAddress(nulls, &a3);
+    ck_assert_int_eq(err, SKY_ErrAddressInvalidChecksum);
 }
 END_TEST
 
