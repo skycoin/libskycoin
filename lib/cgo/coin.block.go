@@ -49,7 +49,8 @@ func SKY_coin_NewBlock(_b C.Block__Handle, _currentTime uint64, _hash *C.cipher_
 		____error_code = SKY_BAD_HANDLE
 		return
 	}
-	__arg2, ____return_err := coin.NewBlock(*b, _currentTime, hash, *txns, feeCalc)
+	currentTime := uint64(_currentTime)
+	__arg2, ____return_err := coin.NewBlock(*b, currentTime, hash, *txns, feeCalc)
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {
 		*_arg2 = registerBlockHandle(__arg2)

@@ -327,11 +327,11 @@ Suite* coin_blocks(void)
 
     tc = tcase_create("coin.block");
     tcase_add_checked_fixture(tc, setup, teardown);
-    tcase_add_test(tc, TestNewBlock);
-    tcase_add_test(tc, TestBlockHashHeader);
-    tcase_add_test(tc, TestBlockHashBody);
-    tcase_add_test(tc, TestNewGenesisBlock);
-    tcase_add_test(tc, TestCreateUnspent);
+    // tcase_add_test(tc, TestNewBlock);
+    // tcase_add_test(tc, TestBlockHashHeader);
+    // tcase_add_test(tc, TestBlockHashBody);
+    // tcase_add_test(tc, TestNewGenesisBlock);
+    // tcase_add_test(tc, TestCreateUnspent);
     tcase_add_test(tc, TestCreateUnspents);
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 150);
