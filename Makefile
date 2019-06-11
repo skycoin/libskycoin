@@ -82,9 +82,6 @@ configure-build:
 ## Update links to dependency packages
 dep:
 	git submodule update --init --recursive
-	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/golang.org $(LIBVENDOR_REL_PATH)/golang.org
-	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/gopkg.in $(LIBVENDOR_REL_PATH)/gopkg.in
-	ls -1 $(SKYVENDOR_REL_PATH)/github.com | grep -v '^skycoin$$' | xargs -I NAME ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/github.com/NAME $(LIBVENDOR_REL_PATH)/github.com/NAME
 
 $(BUILDLIB_DIR)/libskycoin.so: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	rm -Rf $(BUILDLIB_DIR)/libskycoin.so

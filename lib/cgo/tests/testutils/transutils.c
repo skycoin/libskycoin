@@ -109,7 +109,7 @@ coin__Transaction *makeTransactionFromUxOut(coin__UxOut *puxOut,
   result = SKY_coin_UxOut_Hash(puxOut, &sha256);
   ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_Hash failed");
   GoUint16 r;
-  result = SKY_coin_Transaction_PushInput(*handle, &sha256, &r);
+  result = SKY_coin_Transaction_PushInput(*handle, &sha256);
   ck_assert_msg(result == SKY_OK, "SKY_coin_Transaction_PushInput failed");
 
   cipher__Address address1, address2;

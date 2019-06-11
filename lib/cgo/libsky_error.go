@@ -3,6 +3,8 @@ package main
 import (
 	"errors"
 
+	"github.com/skycoin/skycoin/src/transaction"
+
 	"github.com/skycoin/skycoin/src/cipher"
 	"github.com/skycoin/skycoin/src/cipher/encoder"
 	"github.com/skycoin/skycoin/src/cipher/encrypt"
@@ -15,6 +17,7 @@ import (
 	"github.com/skycoin/skycoin/src/util/droplet"
 	"github.com/skycoin/skycoin/src/util/fee"
 	"github.com/skycoin/skycoin/src/util/file"
+	mathutil "github.com/skycoin/skycoin/src/util/mathutil"
 	"github.com/skycoin/skycoin/src/visor"
 	"github.com/skycoin/skycoin/src/visor/blockdb"
 	"github.com/skycoin/skycoin/src/visor/dbutil"
@@ -508,13 +511,13 @@ var (
 		cli.ErrJSONMarshal:                  SKY_ErrJSONMarshal,
 		// coin
 		coin.ErrAddEarnedCoinHoursAdditionOverflow: SKY_ErrAddEarnedCoinHoursAdditionOverflow,
-		coin.ErrUint64MultOverflow:                 SKY_ErrUint64MultOverflow,
-		coin.ErrUint64AddOverflow:                  SKY_ErrUint64AddOverflow,
-		coin.ErrUint32AddOverflow:                  SKY_ErrUint32AddOverflow,
-		coin.ErrUint64OverflowsInt64:               SKY_ErrUint64OverflowsInt64,
-		coin.ErrInt64UnderflowsUint64:              SKY_ErrInt64UnderflowsUint64,
-		coin.ErrIntUnderflowsUint32:                SKY_ErrIntUnderflowsUint32,
-		coin.ErrIntOverflowsUint32:                 SKY_ErrIntOverflowsUint32,
+		mathutil.ErrUint64MultOverflow:             SKY_ErrUint64MultOverflow,
+		mathutil.ErrUint64AddOverflow:              SKY_ErrUint64AddOverflow,
+		mathutil.ErrUint32AddOverflow:              SKY_ErrUint32AddOverflow,
+		mathutil.ErrUint64OverflowsInt64:           SKY_ErrUint64OverflowsInt64,
+		mathutil.ErrInt64UnderflowsUint64:          SKY_ErrInt64UnderflowsUint64,
+		mathutil.ErrIntUnderflowsUint32:            SKY_ErrIntUnderflowsUint32,
+		mathutil.ErrIntOverflowsUint32:             SKY_ErrIntOverflowsUint32,
 		// daemon
 		// Removed in 34ad39ddb350
 		// gnet.ErrMaxDefaultConnectionsReached:           SKY_ErrMaxDefaultConnectionsReached,
@@ -557,48 +560,35 @@ var (
 		blockdb.ErrNoHeadBlock: SKY_ErrNoHeadBlock,
 		visor.ErrVerifyStopped: SKY_ErrVerifyStopped,
 		// wallet
-		wallet.ErrInsufficientBalance:       SKY_ErrInsufficientBalance,
-		wallet.ErrInsufficientHours:         SKY_ErrInsufficientHours,
-		wallet.ErrZeroSpend:                 SKY_ErrZeroSpend,
-		wallet.ErrSpendingUnconfirmed:       SKY_ErrSpendingUnconfirmed,
-		wallet.ErrInvalidEncryptedField:     SKY_ErrInvalidEncryptedField,
-		wallet.ErrWalletEncrypted:           SKY_ErrWalletEncrypted,
-		wallet.ErrWalletNotEncrypted:        SKY_ErrWalletNotEncrypted,
-		wallet.ErrMissingPassword:           SKY_ErrWalletMissingPassword,
-		wallet.ErrMissingEncrypt:            SKY_ErrMissingEncrypt,
-		wallet.ErrInvalidPassword:           SKY_ErrWalletInvalidPassword,
-		wallet.ErrMissingSeed:               SKY_ErrMissingSeed,
-		wallet.ErrMissingAuthenticated:      SKY_ErrMissingAuthenticated,
-		wallet.ErrWrongCryptoType:           SKY_ErrWrongCryptoType,
-		wallet.ErrWalletNotExist:            SKY_ErrWalletNotExist,
-		wallet.ErrSeedUsed:                  SKY_ErrSeedUsed,
-		wallet.ErrWalletAPIDisabled:         SKY_ErrWalletAPIDisabled,
-		wallet.ErrSeedAPIDisabled:           SKY_ErrSeedAPIDisabled,
-		wallet.ErrWalletNameConflict:        SKY_ErrWalletNameConflict,
-		wallet.ErrInvalidHoursSelectionMode: SKY_ErrInvalidHoursSelectionMode,
-		wallet.ErrInvalidHoursSelectionType: SKY_ErrInvalidHoursSelectionType,
-		wallet.ErrUnknownAddress:            SKY_ErrUnknownAddress,
-		wallet.ErrUnknownUxOut:              SKY_ErrUnknownUxOut,
-		wallet.ErrNoUnspents:                SKY_ErrNoUnspents,
-		wallet.ErrNullChangeAddress:         SKY_ErrNullChangeAddress,
-		wallet.ErrMissingTo:                 SKY_ErrMissingTo,
-		wallet.ErrZeroCoinsTo:               SKY_ErrZeroCoinsTo,
-		wallet.ErrNullAddressTo:             SKY_ErrNullAddressTo,
-		wallet.ErrDuplicateTo:               SKY_ErrDuplicateTo,
-		wallet.ErrMissingWalletID:           SKY_ErrMissingWalletID,
-		wallet.ErrIncludesNullAddress:       SKY_ErrIncludesNullAddress,
-		wallet.ErrDuplicateAddresses:        SKY_ErrDuplicateAddresses,
-		wallet.ErrZeroToHoursAuto:           SKY_ErrZeroToHoursAuto,
-		wallet.ErrMissingModeAuto:           SKY_ErrMissingModeAuto,
-		wallet.ErrInvalidHoursSelMode:       SKY_ErrInvalidHoursSelMode,
-		wallet.ErrInvalidModeManual:         SKY_ErrInvalidModeManual,
-		wallet.ErrInvalidHoursSelType:       SKY_ErrInvalidHoursSelType,
-		wallet.ErrMissingShareFactor:        SKY_ErrMissingShareFactor,
-		wallet.ErrInvalidShareFactor:        SKY_ErrInvalidShareFactor,
-		wallet.ErrShareFactorOutOfRange:     SKY_ErrShareFactorOutOfRange,
-		wallet.ErrWalletParamsConflict:      SKY_ErrWalletParamsConflict,
-		wallet.ErrDuplicateUxOuts:           SKY_ErrDuplicateUxOuts,
-		wallet.ErrUnknownWalletID:           SKY_ErrUnknownWalletID,
+		transaction.ErrInsufficientBalance:       SKY_ErrInsufficientBalance,
+		transaction.ErrInsufficientHours:         SKY_ErrInsufficientHours,
+		transaction.ErrZeroSpend:                 SKY_ErrZeroSpend,
+		visor.ErrSpendingUnconfirmed:             SKY_ErrSpendingUnconfirmed,
+		wallet.ErrInvalidEncryptedField:          SKY_ErrInvalidEncryptedField,
+		wallet.ErrWalletEncrypted:                SKY_ErrWalletEncrypted,
+		wallet.ErrWalletNotEncrypted:             SKY_ErrWalletNotEncrypted,
+		wallet.ErrMissingPassword:                SKY_ErrWalletMissingPassword,
+		wallet.ErrMissingEncrypt:                 SKY_ErrMissingEncrypt,
+		wallet.ErrInvalidPassword:                SKY_ErrWalletInvalidPassword,
+		wallet.ErrMissingSeed:                    SKY_ErrMissingSeed,
+		wallet.ErrMissingAuthenticated:           SKY_ErrMissingAuthenticated,
+		wallet.ErrWrongCryptoType:                SKY_ErrWrongCryptoType,
+		wallet.ErrWalletNotExist:                 SKY_ErrWalletNotExist,
+		wallet.ErrSeedUsed:                       SKY_ErrSeedUsed,
+		wallet.ErrWalletAPIDisabled:              SKY_ErrWalletAPIDisabled,
+		wallet.ErrSeedAPIDisabled:                SKY_ErrSeedAPIDisabled,
+		wallet.ErrWalletNameConflict:             SKY_ErrWalletNameConflict,
+		transaction.ErrInvalidHoursSelectionType: SKY_ErrInvalidHoursSelectionType,
+		wallet.ErrUnknownAddress:                 SKY_ErrUnknownAddress,
+		wallet.ErrUnknownUxOut:                   SKY_ErrUnknownUxOut,
+		transaction.ErrNoUnspents:                SKY_ErrNoUnspents,
+		transaction.ErrNullChangeAddress:         SKY_ErrNullChangeAddress,
+		visor.ErrIncludesNullAddress:             SKY_ErrIncludesNullAddress,
+		visor.ErrDuplicateAddresses:              SKY_ErrDuplicateAddresses,
+		transaction.ErrMissingShareFactor:        SKY_ErrMissingShareFactor,
+		transaction.ErrInvalidShareFactor:        SKY_ErrInvalidShareFactor,
+		transaction.ErrShareFactorOutOfRange:     SKY_ErrShareFactorOutOfRange,
+		visor.ErrDuplicateUxOuts:                 SKY_ErrDuplicateUxOuts,
 		// params
 		params.ErrInvalidDecimals: SKY_ErrInvalidDecimals,
 	}

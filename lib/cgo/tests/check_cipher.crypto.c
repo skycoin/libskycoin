@@ -737,43 +737,6 @@ START_TEST(TestVerifyPubKeySignedHash)
 }
 END_TEST
 
-START_TEST(TestVerifySignedHash)
-{
-    cipher__SHA256 h;
-    cipher__Sig sig, badSig1, badSig2;
-    GoString hS, sigS, badSig1S, badSig2S;
-    int error;
-
-    hS.p = "127e9b0d6b71cecd0363b366413f0f19fcd924ae033513498e7486570ff2a1c8";
-    hS.n = strlen(hS.p);
-    error = SKY_cipher_SHA256FromHex(hS, &h);
-    ck_assert(error == SKY_OK);
-
-    sigS.p = "63c035b0c95d0c5744fc1c0bdf38af02cef2d2f65a8f923732ab44e436f8a491216d9ab5ff795e3144f4daee37077b8b9db54d2ba3a3df8d4992f06bb21f724401";
-    sigS.n = strlen(sigS.p);
-    error = SKY_cipher_SigFromHex(sigS, &sig);
-    ck_assert(error == SKY_OK);
-
-    badSig1S.p = "71f2c01516fe696328e79bcf464eb0db374b63d494f7a307d1e77114f18581d7a81eed5275a9e04a336292dd2fd16977d9bef2a54ea3161d0876603d00c53bc9dd";
-    badSig1S.n = strlen(badSig1S.p);
-    error = SKY_cipher_SigFromHex(badSig1S, &badSig1);
-    ck_assert(error == SKY_OK);
-
-    badSig2S.p = "63c035b0c95d0c5744fc1c0bdf39af02cef2d2f65a8f923732ab44e436f8a491216d9ab5ff795e3144f4daee37077b8b9db54d2ba3a3df8d4992f06bb21f724401";
-    badSig2S.n = strlen(badSig2S.p);
-    error = SKY_cipher_SigFromHex(badSig2S, &badSig2);
-    ck_assert(error == SKY_OK);
-
-    error = SKY_cipher_VerifySignedHash(&sig, &h);
-    ck_assert(error == SKY_OK);
-
-    error = SKY_cipher_VerifySignedHash(&badSig1, &h);
-    ck_assert(error == SKY_ErrInvalidHashForSig);
-
-    error = SKY_cipher_VerifySignedHash(&badSig2, &h);
-    ck_assert(error == SKY_ErrInvalidSigPubKeyRecovery);
-}
-END_TEST
 
 START_TEST(TestGenerateKeyPair)
 {
@@ -878,7 +841,7 @@ Suite* cipher_crypto(void)
     tcase_add_test(tc, TestPubKeyFromSecKey);
     tcase_add_test(tc, TestPubKeyFromSig);
     tcase_add_test(tc, TestVerifyPubKeySignedHash);
-    tcase_add_test(tc, TestVerifySignedHash);
+    // tcase_add_test(tc, TestVerifySignedHash);
     tcase_add_test(tc, TestGenerateDeterministicKeyPair);
     tcase_add_test(tc, TestSecKeTest);
     tcase_add_test(tc, TestSecKeyHashTest);

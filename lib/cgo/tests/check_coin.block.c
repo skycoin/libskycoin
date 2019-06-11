@@ -12,10 +12,10 @@
 
 Transactions__Handle makeTestTransactions()
 {
-    Transactions__Handle transactions;
-    Transaction__Handle transaction;
+    Transactions__Handle transactions = 0;
+    Transaction__Handle transaction = 0;
 
-    int result = SKY_coin_Create_Transactions(&transactions);
+    GoUint32 result = SKY_coin_Create_Transactions(&transactions);
     ck_assert_msg(result == SKY_OK, "SKY_coin_Create_Transactions failed");
     registerHandleClose(transactions);
     result = SKY_coin_Create_Transaction(&transaction);
@@ -26,9 +26,9 @@ Transactions__Handle makeTestTransactions()
     return transactions;
 }
 
-int makeNewBlock(cipher__SHA256* uxHash, Block__Handle* newBlock)
+GoUint32 makeNewBlock(cipher__SHA256* uxHash, Block__Handle* newBlock)
 {
-    int result;
+    GoUint32 result;
     cipher__SHA256 bodyhash;
     BlockBody__Handle block;
     Transactions__Handle transactions = makeTestTransactions();
@@ -44,7 +44,7 @@ int makeNewBlock(cipher__SHA256* uxHash, Block__Handle* newBlock)
     pBlock->Head.Time = 100;
     pBlock->Head.BkSeq = 0;
     pBlock->Head.Fee = 10;
-    BlockBody__Handle body;
+    BlockBody__Handle body = 0;
     result = SKY_coin_GetBlockBody(block, &body);
     ck_assert_msg(result == SKY_OK, "SKY_coin_Get_Block_Body failed");
     result = SKY_coin_BlockBody_Hash(body, &bodyhash);
@@ -64,11 +64,12 @@ GoUint32_ fix121FeeCalculator(Transaction__Handle handle, GoUint64_* pFee, void*
 
 START_TEST(TestNewBlock)
 {
+    printf("Load TestNewBlock\n");
     Block__Handle prevBlock = 0;
     Block__Handle newBlock = 0;
     coin__Block* pPrevBlock = NULL;
     coin__Block* pNewBlock = NULL;
-    int result = 0;
+    GoUint32 result = 0;
 
     Transactions__Handle transactions = makeTestTransactions();
     result = SKY_coin_NewEmptyBlock(transactions, &prevBlock);
@@ -82,12 +83,11 @@ START_TEST(TestNewBlock)
     pPrevBlock->Head.Time = 100;
     pPrevBlock->Head.BkSeq = 98;
 
-    GoSlice slice;
-    memset(&slice, 0, sizeof(GoSlice));
+    GoUint8 buffer_slice[1024];
+    GoSlice slice = {buffer_slice, 0, 1024};
     cipher__SHA256 hash;
 
-    result = SKY_cipher_RandByte(128, (coin__UxArray*)&slice);
-    ck_assert_msg(result == SKY_OK, "SKY_cipher_RandByte failed");
+    randBytes(&slice, 128);
     registerMemCleanup(slice.data);
     result = SKY_cipher_SumSHA256(slice, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_cipher_SumSHA256 failed");
@@ -127,15 +127,15 @@ END_TEST
 
 START_TEST(TestBlockHashHeader)
 {
-    int result;
+    printf("Load TestBlockHashHeader\n");
+    GoUint32_ result;
     Block__Handle block = 0;
     coin__Block* pBlock = NULL;
-    GoSlice slice;
-    memset(&slice, 0, sizeof(GoSlice));
+    GoUint8 buffer_slice[1024];
+    GoSlice slice = {buffer_slice, 0, 1024};
     cipher__SHA256 hash;
 
-    result = SKY_cipher_RandByte(128, (coin__UxArray*)&slice);
-    ck_assert_msg(result == SKY_OK, "SKY_cipher_RandByte failed");
+    randBytes(&slice, 128);
     registerMemCleanup(slice.data);
     result = SKY_cipher_SumSHA256(slice, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_cipher_SumSHA256 failed");
@@ -151,21 +151,20 @@ START_TEST(TestBlockHashHeader)
     result = SKY_coin_BlockHeader_Hash(&pBlock->Head, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_Hash failed");
     ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
-    strcpy(hash2,"");
+    strcpy(hash2, "");
     ck_assert(!isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
 }
 END_TEST
 
 START_TEST(TestBlockHashBody)
 {
-    int result;
+    printf("Load TestBlockHashBody\n");
+    GoUint32_ result;
     Block__Handle block = 0;
-    GoSlice slice;
-    memset(&slice, 0, sizeof(GoSlice));
+    GoUint8 buffer_slice[1024];
+    GoSlice slice = {buffer_slice, 0, 1024};
     cipher__SHA256 hash;
-
-    result = SKY_cipher_RandByte(128, (coin__UxArray*)&slice);
-    ck_assert_msg(result == SKY_OK, "SKY_cipher_RandByte failed");
+    randBytes(&slice, 128);
     registerMemCleanup(slice.data);
     result = SKY_cipher_SumSHA256(slice, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_cipher_SumSHA256 failed");
@@ -186,6 +185,7 @@ END_TEST
 
 START_TEST(TestNewGenesisBlock)
 {
+    printf("Load TestNewGenesisBlock\n");
     cipher__PubKey pubkey;
     cipher__SecKey seckey;
     cipher__Address address;
@@ -195,7 +195,7 @@ START_TEST(TestNewGenesisBlock)
     Block__Handle block = 0;
     coin__Block* pBlock = NULL;
 
-    int result = makeKeysAndAddress(&pubkey, &seckey, &address);
+    GoUint32_ result = makeKeysAndAddress(&pubkey, &seckey, &address);
     ck_assert_msg(result == SKY_OK, "makeKeysAndAddress failed");
     result = SKY_coin_NewGenesisBlock(&address, genCoins, genTime, &block);
     ck_assert_msg(result == SKY_OK, "SKY_coin_NewGenesisBlock failed");
@@ -232,10 +232,11 @@ typedef struct
 
 START_TEST(TestCreateUnspent)
 {
+    printf("Load TestCreateUnspent\n");
     cipher__PubKey pubkey;
     cipher__SecKey seckey;
     cipher__Address address;
-    int result = makeKeysAndAddress(&pubkey, &seckey, &address);
+    GoUint32 result = makeKeysAndAddress(&pubkey, &seckey, &address);
 
     cipher__SHA256 hash;
     coin__Transaction* ptx;
@@ -279,10 +280,11 @@ END_TEST
 
 START_TEST(TestCreateUnspents)
 {
+    printf("Load TestCreateUnspents\n");
     cipher__PubKey pubkey;
     cipher__SecKey seckey;
     cipher__Address address;
-    int result = makeKeysAndAddress(&pubkey, &seckey, &address);
+    GoUint32_ result = makeKeysAndAddress(&pubkey, &seckey, &address);
 
     cipher__SHA256 hash;
     coin__Transaction* ptx;

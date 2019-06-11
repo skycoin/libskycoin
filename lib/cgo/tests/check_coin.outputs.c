@@ -21,7 +21,7 @@ START_TEST(TestUxBodyHash)
     result = makeUxBody(&uxbody);
     ck_assert_msg(result == SKY_OK, "makeUxBody failed");
     cipher__SHA256 hash;
-    memset(&hash,0,sizeof(cipher__SHA256));
+    memset(&hash, 0, sizeof(cipher__SHA256));
     result = SKY_coin_UxBody_Hash(&uxbody, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
     cipher__SHA256 nullHash = "";

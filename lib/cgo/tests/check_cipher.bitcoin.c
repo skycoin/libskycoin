@@ -63,6 +63,177 @@ START_TEST(TestBitcoinAddress)
 }
 END_TEST
 
+START_TEST(TestDecodeBase58BitcoinAddress)
+{
+    cipher__PubKey p;
+    cipher__SecKey s;
+    cipher__BitcoinAddress a;
+    GoUint32 err;
+    err = SKY_cipher_GenerateKeyPair(&p, &s);
+    ck_assert_int_eq(err, SKY_OK);
+    SKY_cipher_BitcoinAddressFromPubKey(&p, &a);
+    err = SKY_cipher_BitcoinAddress_Verify(&a, &p);
+    ck_assert_int_eq(err, SKY_OK);
+
+    cipher__BitcoinAddress a2;
+    GoString str = {"", 0};
+    err = SKY_cipher_DecodeBase58BitcoinAddress(str, &a2);
+    ck_assert_int_ne(err, SKY_OK);
+
+    str.p = "cascs";
+    str.n = 5;
+    err = SKY_cipher_DecodeBase58BitcoinAddress(str, &a2);
+    ck_assert_int_ne(err, SKY_OK);
+
+    GoUint8 buffer_b[1024];
+    GoUint8 buffer_b_temp[1024];
+    GoSlice b = {buffer_b, 0, 1024};
+    GoUint8 buffer_h_temp[1024];
+    GoString_ h_tmp = {buffer_h_temp, 0};
+    coin__UxArray b_temp = {buffer_b_temp, 0, 1024};
+    SKY_cipher_BitcoinAddress_Bytes(&a, &b_temp);
+    copycoin_UxArraytoGoSlice(&b, &b_temp, b_temp.len);
+    GoInt_ len_b = b.len;
+    b.len = (GoInt_)(len_b / 2);
+    GoUint8_ buffer_h[1024];
+    GoString h = {buffer_h, 0};
+    err = SKY_base58_Hex2Base58(b, &h_tmp);
+    ck_assert_int_eq(err, SKY_OK);
+    h.n = h_tmp.n;
+    h.p = h_tmp.p;
+    err = SKY_cipher_DecodeBase58BitcoinAddress(h, &a2);
+    ck_assert_int_ne(err, SKY_OK);
+
+    memset(&b_temp, 0, sizeof(coin__UxArray));
+    SKY_cipher_BitcoinAddress_Bytes(&a, &b_temp);
+    err = copycoin_UxArraytoGoSlice(&b, &b_temp, b_temp.len);
+    ck_assert_int_eq(err, SKY_OK);
+    err = SKY_base58_Hex2Base58(b, &h_tmp);
+    ck_assert_int_eq(err, SKY_OK);
+    h.n = h_tmp.n;
+    h.p = h_tmp.p;
+    err = SKY_cipher_DecodeBase58BitcoinAddress(h, &a2);
+    ck_assert_int_eq(err, SKY_OK);
+    ck_assert(isBitcoinAddressEq(&a, &a2));
+
+    GoUint8_ buffer_as[1024];
+    GoString_ as = {buffer_as, 0};
+    memset(&a2, 0, sizeof(cipher__BitcoinAddress));
+    SKY_cipher_BitcoinAddress_String(&a, &as);
+    GoString as_temp;
+    as_temp.p = as.p;
+    as_temp.n = as.n;
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as_temp, &a2);
+    ck_assert_int_eq(err, SKY_OK);
+    ck_assert(isBitcoinAddressEq(&a, &a2));
+
+    // preceding whitespace is invalid
+    GoUint8_ buffer_as2[1024];
+    GoString as2 = {buffer_as2, 0};
+    char tempStr[50];
+    strcpy(tempStr, " ");
+    strcat(tempStr, as.p);
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    cipher__BitcoinAddress a3;
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    // preceding zeroes are invalid
+    strcpy(tempStr, "000");
+    strcat(tempStr, as.p);
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    // trailing whitespace is invalid
+    strcpy(tempStr, as.p);
+    strcat(tempStr, " ");
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    // trailing zeroes are invalid
+    strcpy(tempStr, as.p);
+    strcat(tempStr, "000");
+    as2.p = tempStr;
+    as2.n = strlen(tempStr);
+    err = SKY_cipher_DecodeBase58BitcoinAddress(as2, &a3);
+    ck_assert_int_ne(err, SKY_OK);
+
+    GoString nulls = {"1111111111111111111111111", 25};
+    err = SKY_cipher_DecodeBase58BitcoinAddress(nulls, &a3);
+    ck_assert_int_eq(err, SKY_ErrAddressInvalidChecksum);
+}
+END_TEST
+
+START_TEST(TestBitcoinAddressFromBytes)
+{
+    cipher__PubKey p;
+    cipher__SecKey s;
+    GoInt32 err;
+    err = SKY_cipher_GenerateKeyPair(&p, &s);
+    ck_assert_int_eq(err, SKY_OK);
+    cipher__BitcoinAddress a;
+    err = SKY_cipher_BitcoinAddressFromSecKey(&s, &a);
+    ck_assert_int_eq(err, SKY_OK);
+    // Valid pubkey+address
+    err = SKY_cipher_BitcoinAddress_Verify(&a, &p);
+    ck_assert_int_eq(err, SKY_OK);
+
+    memset(s, 0, sizeof(cipher__SecKey));
+    err = SKY_cipher_BitcoinAddressFromSecKey(&s, &a);
+    ck_assert_int_eq(err, SKY_ErrPubKeyFromNullSecKey);
+}
+END_TEST
+
+START_TEST(TestBitcoinAddressNull)
+{
+    cipher__BitcoinAddress a;
+    memset(&a, 0, sizeof(cipher__BitcoinAddress));
+    GoUint8 err = SKY_cipher_BitcoinAddress_Null(&a);
+    ck_assert_int_eq(err, 1);
+
+    cipher__PubKey p;
+    cipher__SecKey s;
+    err = SKY_cipher_GenerateKeyPair(&p, &s);
+    memset(&a, 0, sizeof(cipher__BitcoinAddress));
+    SKY_cipher_BitcoinAddressFromPubKey(&p, &a);
+    err = SKY_cipher_BitcoinAddress_Null(&a);
+    ck_assert_int_eq(err, 0);
+}
+END_TEST
+
+START_TEST(TestBitcoinAddressVerify)
+{
+    cipher__PubKey p;
+    cipher__SecKey s;
+    GoUint32 err;
+    err = SKY_cipher_GenerateKeyPair(&p, &s);
+    ck_assert_int_eq(err, SKY_OK);
+    cipher__BitcoinAddress a;
+    SKY_cipher_BitcoinAddressFromPubKey(&p, &a);
+    // Valid pubkey+address
+    err = SKY_cipher_BitcoinAddress_Verify(&a, &p);
+    ck_assert_int_eq(err, SKY_OK);
+    // Invalid pubkey
+    memset(&p, 0, sizeof(cipher__PubKey));
+    err = SKY_cipher_BitcoinAddress_Verify(&a, &p);
+    ck_assert_int_eq(err, SKY_ErrAddressInvalidPubKey);
+    cipher__PubKey p2;
+    err = SKY_cipher_GenerateKeyPair(&p2, &s);
+    ck_assert_int_eq(err, SKY_OK);
+    err = SKY_cipher_BitcoinAddress_Verify(&a, &p2);
+    ck_assert_int_eq(err, SKY_ErrAddressInvalidPubKey);
+    // Bad version
+    a.Version = 0x01;
+    err = SKY_cipher_BitcoinAddress_Verify(&a, &p);
+    ck_assert_int_eq(err, SKY_ErrAddressInvalidVersion);
+}
+END_TEST
+
 START_TEST(TestBitcoinWIFRoundTrip)
 {
     cipher__SecKey seckey;
@@ -150,6 +321,8 @@ START_TEST(TestBitcoinWIF)
     }
 }
 END_TEST
+
+
 // define test suite and cases
 Suite* cipher_bitcoin(void)
 {
@@ -158,6 +331,10 @@ Suite* cipher_bitcoin(void)
 
     tc = tcase_create("cipher.bitcoin");
     tcase_add_test(tc, TestBitcoinAddress);
+    tcase_add_test(tc, TestDecodeBase58BitcoinAddress);
+    tcase_add_test(tc, TestBitcoinAddressFromBytes);
+    tcase_add_test(tc, TestBitcoinAddressNull);
+    tcase_add_test(tc, TestBitcoinAddressVerify);
     tcase_add_test(tc, TestBitcoinWIFRoundTrip);
     tcase_add_test(tc, TestBitcoinWIF);
     suite_add_tcase(s, tc);

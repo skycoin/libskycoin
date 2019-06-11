@@ -7,12 +7,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
+- Added datatype `api__TransactionInput`
+- Added datatype `transaction__UxBalance`
+- Added function `SKY_transaction_NewUxBalances`, 
+- Added function `SKY_transaction_DistributeCoinHoursProportional`, `SKY_transaction_DistributeSpendHours`
+
 
 ### Fixed
 
 ### Changed
 
 ### Removed
+- Removed symbolic links from vendor
+- Removed function `SKY_webrpc_NewClient`, `SKY_webrpc_Client_CSRF`, `SKY_webrpc_Client_InjectTransaction`, `SKY_webrpc_Client_GetStatus`,`SKY_webrpc_Client_GetTransactionByID`, `SKY_webrpc_Client_GetAddressUxOuts`, `SKY_webrpc_Client_GetBlocksInRange`, `SKY_webrpc_Client_GetBlocksBySeq` and `SKY_webrpc_Client_GetLastBlocks`.
+- Removed datatype `wallet__UxBalance`
+- Removed fuction `SKY_cipher_VerifySignedHash`
+- Removed fuction `SKY_bip39_MnemonicToByteArray`
+- Removed fuction `SKY_api_Client_Spend`, `SKY_api_Client_AddressTransactions`
+- Removed fuction `SKY_coin_Block_PreHashHeader`, `SKY_coin_Block_String` and `SKY_coin_BlockHeader_String`.
+- Removed functions exported for `coin.math`
+- Removed function `SKY_coin_Transaction_TxID`
+- Removed function `SKY_wallet_DistributeSpendHours`
+- Removed function `SKY_wallet_DistributeCoinHoursProportional`
+- Removed function `SKY_wallet_NewUxBalances`
+
+
 
 ## [0.25.1] - 2019-05-24
 

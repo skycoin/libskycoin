@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"unsafe"
 
-	gobip39 "github.com/skycoin/skycoin/src/cipher/go-bip39"
+	gobip39 "github.com/skycoin/skycoin/src/cipher/bip39"
 )
 
 /*
@@ -48,21 +48,22 @@ func SKY_bip39_NewMnemonic(_entropy []byte, _arg1 *C.GoString_) (____error_code 
 	return
 }
 
-//export SKY_bip39_MnemonicToByteArray
-func SKY_bip39_MnemonicToByteArray(_mnemonic string, _arg1 *C.GoSlice_) (____error_code uint32) {
+//export SKY_bip39_ValidateMnemonic
+func SKY_bip39_ValidateMnemonic(_mnemonic string) (____error_code uint32) {
 	mnemonic := _mnemonic
-	__arg1, ____return_err := gobip39.MnemonicToByteArray(mnemonic)
+	____return_err := gobip39.ValidateMnemonic(mnemonic)
+	____error_code = libErrorCode(____return_err)
+	return
+}
+
+//export SKY_bip39_NewSeed
+func SKY_bip39_NewSeed(_mnemonic string, _password string, _arg1 *C.GoSlice_) (____error_code uint32) {
+	mnemonic := _mnemonic
+	password := _password
+	__arg1, ____return_err := gobip39.NewSeed(mnemonic, password)
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {
 		copyToGoSlice(reflect.ValueOf(__arg1), _arg1)
 	}
-	return
-}
-
-//export SKY_bip39_IsMnemonicValid
-func SKY_bip39_IsMnemonicValid(_mnemonic string, _arg1 *bool) (____error_code uint32) {
-	mnemonic := _mnemonic
-	__arg1 := gobip39.IsMnemonicValid(mnemonic)
-	*_arg1 = __arg1
 	return
 }
