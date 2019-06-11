@@ -361,25 +361,6 @@ func SKY_api_Client_WalletBalance(_c C.Client__Handle, _id string, _arg1 *C.wall
 	return
 }
 
-//export SKY_api_Client_Spend
-func SKY_api_Client_Spend(_c C.Client__Handle, _id, _dst string, _coins uint64, _password string, _arg3 *C.SpendResult_Handle) (____error_code uint32) {
-	c, okc := lookupClientHandle(_c)
-	if !okc {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	id := _id
-	dst := _dst
-	coins := _coins
-	password := _password
-	__arg3, ____return_err := c.Spend(id, dst, coins, password)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-		*_arg3 = registerSpendResultHandle(__arg3)
-	}
-	return
-}
-
 //export SKY_api_Client_CreateTransaction
 func SKY_api_Client_CreateTransaction(_c C.Client__Handle, _req *C.Handle, _arg1 *C.CreateTransactionResponse__Handle) (____error_code uint32) {
 	c, okc := lookupClientHandle(_c)
@@ -684,22 +665,6 @@ func SKY_api_Client_RawTransaction(_c C.Client__Handle, _txid string, _arg1 *C.G
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {
 		copyString(__arg1, _arg1)
-	}
-	return
-}
-
-//export SKY_api_Client_AddressTransactions
-func SKY_api_Client_AddressTransactions(_c C.Client__Handle, _addr string, _arg1 *C.Handle) (____error_code uint32) {
-	c, okc := lookupClientHandle(_c)
-	if !okc {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	addr := _addr
-	__arg1, ____return_err := c.AddressTransactions(addr)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-		*_arg1 = registerHandle(__arg1)
 	}
 	return
 }

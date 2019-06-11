@@ -1,8 +1,8 @@
-
+#!/usr/bin/env bash
 # Install gcc6 (6.4.0-2 on Mac OS) for Travis builds
 
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-  sudo apt-get install -qq g++-6 && sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 90;
+  sudo apt-get install -qq gcc-6 g++-6
 fi
 
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then

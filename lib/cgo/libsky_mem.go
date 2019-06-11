@@ -34,7 +34,7 @@ const (
 	SizeofTransactionOutput = unsafe.Sizeof(C.coin__TransactionOutput{})
 	SizeofTransaction       = unsafe.Sizeof(C.coin__Transaction{})
 	SizeofEntry             = unsafe.Sizeof(C.wallet__Entry{})
-	SizeofUxBalance         = unsafe.Sizeof(C.wallet__UxBalance{})
+	SizeofUxBalance         = unsafe.Sizeof(C.transaction__UxBalance{})
 )
 
 /**
@@ -128,30 +128,4 @@ func copyToGoSlice(src reflect.Value, dest *C.GoSlice_) {
 
 func copyToStringMap(gomap map[string]string, dest *C.GoStringMap_) {
 	*dest = (C.GoStringMap_)(registerHandle(gomap))
-}
-
-func splitCliArgs(args string) (result []string) {
-	prevSep := -1
-	quoted := false
-	var i int
-	for i = 0; i < len(args); i++ {
-		if args[i] == '"' {
-			quoted = !quoted
-			if !quoted {
-				result = append(result, args[prevSep+1:i])
-			}
-			prevSep = i
-		} else if !quoted && args[i] == ' ' {
-			if prevSep+1 < i {
-				result = append(result, args[prevSep+1:i])
-			}
-			prevSep = i
-		}
-	}
-	if len(args) > 0 {
-		if prevSep+1 < i {
-			result = append(result, args[prevSep+1:i])
-		}
-	}
-	return
 }

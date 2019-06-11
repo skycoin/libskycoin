@@ -236,36 +236,19 @@ func SKY_coin_Transaction_Verify(handle C.Transaction__Handle) (____error_code u
 	}
 	____return_err := txn.Verify()
 	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-	}
-	return
-}
-
-//export SKY_coin_Transaction_VerifyInput
-func SKY_coin_Transaction_VerifyInput(handle C.Transaction__Handle, _uxIn *C.coin__UxArray) (____error_code uint32) {
-	txn, ok := lookupTransactionHandle(handle)
-	if !ok {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	uxIn := *(*coin.UxArray)(unsafe.Pointer(_uxIn))
-	____return_err := txn.VerifyInput(uxIn)
-	____error_code = libErrorCode(____return_err)
-	if ____return_err == nil {
-	}
 	return
 }
 
 //export SKY_coin_Transaction_PushInput
-func SKY_coin_Transaction_PushInput(handle C.Transaction__Handle, _uxOut *C.cipher__SHA256, _arg1 *uint16) (____error_code uint32) {
+func SKY_coin_Transaction_PushInput(handle C.Transaction__Handle, _uxOut *C.cipher__SHA256) (____error_code uint32) {
 	txn, ok := lookupTransactionHandle(handle)
 	if !ok {
 		____error_code = SKY_BAD_HANDLE
 		return
 	}
 	uxOut := *(*cipher.SHA256)(unsafe.Pointer(_uxOut))
-	__arg1 := txn.PushInput(uxOut)
-	*_arg1 = __arg1
+	____return_err := txn.PushInput(uxOut)
+	____error_code = libErrorCode(____return_err)
 	return
 }
 
@@ -286,9 +269,10 @@ func SKY_coin_Transaction_PushOutput(handle C.Transaction__Handle, _dst *C.ciphe
 		return
 	}
 	dst := *(*cipher.Address)(unsafe.Pointer(_dst))
-	coins := _coins
-	hours := _hours
-	txn.PushOutput(dst, coins, hours)
+	coins := uint64(_coins)
+	hours := uint64(_hours)
+	____return_err := txn.PushOutput(dst, coins, hours)
+	____error_code = libErrorCode(____return_err)
 	return
 }
 
@@ -347,30 +331,6 @@ func SKY_coin_Transaction_SizeHash(handle C.Transaction__Handle, _arg0 *uint32, 
 	return
 }
 
-//export SKY_coin_Transaction_TxID
-func SKY_coin_Transaction_TxID(handle C.Transaction__Handle, _arg0 *C.GoSlice_) (____error_code uint32) {
-	txn, ok := lookupTransactionHandle(handle)
-	if !ok {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	__arg0 := txn.TxID()
-	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
-	return
-}
-
-//export SKY_coin_Transaction_TxIDHex
-func SKY_coin_Transaction_TxIDHex(handle C.Transaction__Handle, _arg0 *C.GoString_) (____error_code uint32) {
-	txn, ok := lookupTransactionHandle(handle)
-	if !ok {
-		____error_code = SKY_BAD_HANDLE
-		return
-	}
-	__arg0 := txn.TxIDHex()
-	copyString(__arg0, _arg0)
-	return
-}
-
 //export SKY_coin_Transaction_UpdateHeader
 func SKY_coin_Transaction_UpdateHeader(handle C.Transaction__Handle) (____error_code uint32) {
 	txn, ok := lookupTransactionHandle(handle)
@@ -402,15 +362,18 @@ func SKY_coin_Transaction_Serialize(handle C.Transaction__Handle, _arg0 *C.GoSli
 		____error_code = SKY_BAD_HANDLE
 		return
 	}
-	__arg0 := txn.Serialize()
-	copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+	__arg0, ____return_err := txn.Serialize()
+	____error_code = libErrorCode(____return_err)
+	if ____return_err == nil {
+		copyToGoSlice(reflect.ValueOf(__arg0), _arg0)
+	}
 	return
 }
 
 //export SKY_coin_TransactionDeserialize
 func SKY_coin_TransactionDeserialize(_b []byte, _arg1 *C.Transaction__Handle) (____error_code uint32) {
 	b := *(*[]byte)(unsafe.Pointer(&_b))
-	__arg1, ____return_err := coin.TransactionDeserialize(b)
+	__arg1, ____return_err := coin.DeserializeTransaction(b)
 	____error_code = libErrorCode(____return_err)
 	if ____return_err == nil {
 		*_arg1 = registerTransactionHandle(&__arg1)
@@ -435,7 +398,7 @@ func SKY_coin_Transaction_OutputHours(handle C.Transaction__Handle, _arg0 *uint6
 
 //export SKY_coin_Create_Transactions
 func SKY_coin_Create_Transactions(handle *C.Transactions__Handle) (____error_code uint32) {
-	txs := make(coin.Transactions, 0, 0)
+	txs := make(coin.Transactions, 0)
 	*handle = registerTransactionsHandle(&txs)
 	return SKY_OK
 }
@@ -685,7 +648,7 @@ func SKY_coin_VerifyTransactionCoinsSpending(_uxIn *C.coin__UxArray, _uxOut *C.c
 
 //export SKY_coin_VerifyTransactionHoursSpending
 func SKY_coin_VerifyTransactionHoursSpending(_headTime uint64, _uxIn *C.coin__UxArray, _uxOut *C.coin__UxArray) (____error_code uint32) {
-	headTime := _headTime
+	headTime := uint64(_headTime)
 	uxIn := *(*coin.UxArray)(unsafe.Pointer(_uxIn))
 	uxOut := *(*coin.UxArray)(unsafe.Pointer(_uxOut))
 	____return_err := coin.VerifyTransactionHoursSpending(headTime, uxIn, uxOut)
