@@ -1,7 +1,3 @@
-#include <signal.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "libskycoin.h"
 #include "math.h"
 #include "skyassert.h"
@@ -10,6 +6,9 @@
 #include "skytest.h"
 #include "skytxn.h"
 #include <check.h>
+#include <signal.h>
+#include <stdio.h>
+#include <string.h>
 
 #define BUFFER_SIZE 1024
 #define BurnFactor 2

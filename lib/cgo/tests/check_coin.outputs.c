@@ -1,18 +1,13 @@
-#include <stdio.h>
-#include <string.h>
-
-// #include <criterion/criterion.h>
-// #include <criterion/new/assert.h>
-#include <check.h>
-
 #include "libskycoin.h"
 #include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
 #include "skytxn.h"
+#include <check.h>
+#include <stdio.h>
+#include <string.h>
 
-// TestSuite(coin_outputs, .init = setup, .fini = teardown);
 
 START_TEST(TestUxBodyHash)
 {

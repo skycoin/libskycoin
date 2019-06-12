@@ -1,7 +1,5 @@
 
-#include <signal.h>
-#include <stdio.h>
-
+#include "check.h"
 #include "libskycoin.h"
 #include "skyassert.h"
 #include "skyerrors.h"
@@ -9,10 +7,10 @@
 #include "skytest.h"
 #include "skytxn.h"
 #include <check.h>
+#include <signal.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "check.h"
 
 GoUint64 Million = 1000000;
 

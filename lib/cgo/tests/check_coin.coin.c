@@ -1,19 +1,13 @@
 
-#include <stdio.h>
-#include <string.h>
-
-// #include <criterion/criterion.h>
-// #include <criterion/new/assert.h>
-#include <check.h>
-
 #include "libskycoin.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
 #include "skytxn.h"
 #include "time.h"
-
-// TestSuite(coin_coin, .init = setup, .fini = teardown);
+#include <check.h>
+#include <stdio.h>
+#include <string.h>
 
 START_TEST(TestAddress1)
 {

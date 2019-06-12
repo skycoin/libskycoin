@@ -8,8 +8,6 @@
 #include "skytest.h"
 #include <check.h>
 
-// TestSuite(cipher_hash, .init = setup, .fini = teardown);
-
 void freshSumRipemd160(GoSlice bytes, cipher__Ripemd160* rp160)
 {
     SKY_cipher_HashRipemd160(bytes, rp160);

@@ -13,11 +13,6 @@
 
 #define SKYCOIN_ADDRESS_VALID "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv"
 
-//TestSuite(cipher_bitcoin, .init = setup, .fini = teardown);
-
-// buffer big enough to hold all kind of data needed by test cases
-unsigned char buff[1024];
-
 START_TEST(TestBitcoinAddress)
 {
     cipher__SecKey seckey;
@@ -42,6 +37,7 @@ START_TEST(TestBitcoinAddress)
     GoString* addrStr = addrs;
     int i;
     for (i = 0; i < 3; ++i, ++secKeyStr, ++pubKeyStr, ++addrStr) {
+        GoUint8 buff[1024];
         error = SKY_cipher_SecKeyFromHex(*secKeyStr, &seckey);
         ck_assert_msg(error == SKY_OK, "Create SecKey from Hex"); // (seckeyFailMsg));
         error = SKY_cipher_PubKeyFromHex(*pubKeyStr, &pubkey);
@@ -238,10 +234,6 @@ START_TEST(TestBitcoinWIFRoundTrip)
 {
     cipher__SecKey seckey;
     cipher__PubKey pubkey;
-    GoSlice slice;
-    slice.data = buff;
-    slice.cap = sizeof(buff);
-    slice.len = 33;
     SKY_cipher_GenerateKeyPair(&pubkey, &seckey);
     unsigned char wip1_buff[50];
     unsigned char wip2_buff[50];
