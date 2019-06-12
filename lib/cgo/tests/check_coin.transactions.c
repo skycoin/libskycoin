@@ -280,8 +280,8 @@ START_TEST(TestTransactionUpdateHeader)
     memcpy(&hash, &ptx->InnerHash, sizeof(cipher__SHA256));
     memset(&ptx->InnerHash, 0, sizeof(cipher__SHA256));
     result = SKY_coin_Transaction_UpdateHeader(handle);
-    ck_assert(!isU8Eq(ptx->InnerHash, nullHash, sizeof(cipher__SHA256)));
-    ck_assert(isU8Eq(ptx->InnerHash, hash, sizeof(cipher__SHA256)));
+    ck_assert_int_eq(isU8Eq(ptx->InnerHash, nullHash, sizeof(cipher__SHA256)), 0);
+    ck_assert_int_eq(isU8Eq(ptx->InnerHash, hash, sizeof(cipher__SHA256)), 1);
     result = SKY_coin_Transaction_HashInner(handle, &hashInner);
     ck_assert(result == SKY_OK);
     ck_assert(isU8Eq(hashInner, ptx->InnerHash, sizeof(cipher__SHA256)));
