@@ -39,3 +39,15 @@ func SKY_secp256k1_VerifySecKey(__seckey []byte) (____error_code int) {
 	____error_code = secp256k1.VerifySeckey(seckey)
 	return
 }
+
+//export SKY_secp256k1_ECDH
+func SKY_secp256k1_ECDH(_pub []byte, _sec []byte, _arg1 *C.GoSlice_) (____error_code uint32) {
+	pubkey := *(*[]byte)(unsafe.Pointer(&_pub))
+	seckey := *(*[]byte)(unsafe.Pointer(&_sec))
+	__arg1 := secp256k1.ECDH(pubkey, seckey)
+	if __arg1 != nil {
+		copyToGoSlice(reflect.ValueOf(__arg1), _arg1)
+		return SKY_OK
+	}
+	return SKY_ERROR
+}
