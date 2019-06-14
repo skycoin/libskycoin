@@ -25,7 +25,7 @@ START_TEST(TestUxBodyHash)
     result = SKY_coin_UxBody_Hash(&uxbody, &hash);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxBody_Hash failed");
     cipher__SHA256 nullHash = "";
-    ck_assert(!isU8Eq(nullHash, hash, sizeof(cipher__SHA256)));
+    ck_assert_int_eq(isU8Eq(nullHash, hash, sizeof(cipher__SHA256)), 0);
 }
 END_TEST
 
@@ -69,37 +69,37 @@ START_TEST(TestUxOutSnapshotHash)
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Head.Time = 20;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
-    ck_assert_msg(!isU8Eq(hash1, hash2, sizeof(cipher__SHA256)), "SKY_coin_UxOut_SnapshotHash failed");
+    ck_assert_int_eq(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)), 0);
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Head.BkSeq = 4;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
+    ck_assert_int_eq((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), 0);
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     makeRandHash(&uxout2.Body.SrcTransaction);
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
+    ck_assert_int_eq((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), 0);
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     makeAddress(&uxout2.Body.Address);
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 0, "Snapshot hash must be different");
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Body.Coins = uxout.Body.Coins * 2;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 0, "Snapshot hash must be different");
 
     memcpy(&uxout2, &uxout, sizeof(coin__UxOut));
     uxout2.Body.Hours = uxout.Body.Hours * 2;
     result = SKY_coin_UxOut_SnapshotHash(&uxout2, &hash2);
     ck_assert_msg(result == SKY_OK, "SKY_coin_UxOut_SnapshotHash failed");
-    ck_assert_msg((!isU8Eq(hash1, hash2, sizeof(cipher__SHA256))), "Snapshot hash must be different");
+    ck_assert_msg((isU8Eq(hash1, hash2, sizeof(cipher__SHA256))) == 0, "Snapshot hash must be different");
 }
 END_TEST
 

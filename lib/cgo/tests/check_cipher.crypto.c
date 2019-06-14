@@ -593,7 +593,7 @@ START_TEST(TestVerifyAddressSignedHash)
     ck_assert(errorcode == SKY_OK);
     errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
     ck_assert(errorcode == SKY_OK);
-    ck_assert(!isU8Eq(sig, sig2, 65));
+    ck_assert_int_eq(isU8Eq(sig, sig2, 65), 0);
 
     randBytes(&b, 256);
     SKY_cipher_SumSHA256(b, &h);
@@ -603,7 +603,7 @@ START_TEST(TestVerifyAddressSignedHash)
     ck_assert(errorcode == SKY_OK);
     errorcode = SKY_cipher_VerifyAddressSignedHash(&addr2, &sig2, &h);
     ck_assert(errorcode == SKY_OK);
-    ck_assert(!isU8Eq(sig, sig2, 65));
+    ck_assert_int_eq(isU8Eq(sig, sig2, 65), 0);
 
     // Bad address should be invalid
     errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig2, &h);
@@ -632,7 +632,7 @@ START_TEST(TestSignHash)
     errorcode = SKY_cipher_SignHash(&h, &sk, &sig);
     ck_assert(errorcode == SKY_OK);
     memset((void*)&sig2, 0, 65);
-    ck_assert(!isU8Eq(sig, sig2, 65));
+    ck_assert_int_eq(isU8Eq(sig, sig2, 65), 0);
     errorcode = SKY_cipher_VerifyAddressSignedHash(&addr, &sig, &h);
     ck_assert(errorcode == SKY_OK);
 
