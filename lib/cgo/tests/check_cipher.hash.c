@@ -180,12 +180,13 @@ END_TEST
 
 START_TEST(TestSumSHA256)
 {
-    unsigned char bbuff[257], cbuff[257];
+    GoUint8 bbuff[257];
+    GoUint8 cbuff[257];
     GoSlice b = {bbuff, 0, 257};
     cipher__SHA256 h1;
     randBytes(&b, 256);
     SKY_cipher_SumSHA256(b, &h1);
-    cipher__SHA256 tmp;
+    cipher__SHA256 tmp = "";
     ck_assert_int_eq(isU8Eq(h1, tmp, 32), 0);
     GoSlice c = {cbuff, 0, 257};
     randBytes(&c, 256);

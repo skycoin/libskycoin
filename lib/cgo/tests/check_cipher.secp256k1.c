@@ -9,7 +9,7 @@
 
 START_TEST(Test_Abnormal_Keys2)
 {
-   
+   ck_assert_double_eq(0,0);
 }
 END_TEST
 
