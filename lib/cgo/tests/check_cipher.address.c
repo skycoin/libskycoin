@@ -306,13 +306,13 @@ Suite* cipher_address(void)
 
     tc = tcase_create("cipher.address");
     tcase_add_checked_fixture(tc, setup, teardown);
-    // tcase_add_test(tc, TestDecodeBase58Address);
-    // tcase_add_test(tc, TestAddressFromBytes);
-    // tcase_add_test(tc, TestAddressRoundtrip);
-    // tcase_add_test(tc, TestAddressVerify);
-    // tcase_add_test(tc, TestAddressString);
-    // tcase_add_test(tc, TestAddressBulk);
-    // tcase_add_test(tc, TestAddressNull);
+    tcase_add_test(tc, TestDecodeBase58Address);
+    tcase_add_test(tc, TestAddressFromBytes);
+    tcase_add_test(tc, TestAddressRoundtrip);
+    tcase_add_test(tc, TestAddressVerify);
+    tcase_add_test(tc, TestAddressString);
+    tcase_add_test(tc, TestAddressBulk);
+    tcase_add_test(tc, TestAddressNull);
     suite_add_tcase(s, tc);
     tcase_set_timeout(tc, 150);
 
