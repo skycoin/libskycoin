@@ -6,13 +6,13 @@
 
 
 inline_response_200_1_t *inline_response_200_1_create(
-    char *csrf_token
+    list_t *blocks
     ) {
 	inline_response_200_1_t *inline_response_200_1_local_var = malloc(sizeof(inline_response_200_1_t));
     if (!inline_response_200_1_local_var) {
         return NULL;
     }
-	inline_response_200_1_local_var->csrf_token = csrf_token;
+	inline_response_200_1_local_var->blocks = blocks;
 
 	return inline_response_200_1_local_var;
 }
@@ -20,17 +20,32 @@ inline_response_200_1_t *inline_response_200_1_create(
 
 void inline_response_200_1_free(inline_response_200_1_t *inline_response_200_1) {
     listEntry_t *listEntry;
-    free(inline_response_200_1->csrf_token);
+	list_ForEach(listEntry, inline_response_200_1->blocks) {
+		block_schema_free(listEntry->data);
+	}
+	list_free(inline_response_200_1->blocks);
 	free(inline_response_200_1);
 }
 
 cJSON *inline_response_200_1_convertToJSON(inline_response_200_1_t *inline_response_200_1) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_1->csrf_token
-    if(inline_response_200_1->csrf_token) { 
-    if(cJSON_AddStringToObject(item, "csrf_token", inline_response_200_1->csrf_token) == NULL) {
-    goto fail; //String
+	// inline_response_200_1->blocks
+    if(inline_response_200_1->blocks) { 
+    cJSON *blocks = cJSON_AddArrayToObject(item, "blocks");
+    if(blocks == NULL) {
+    goto fail; //nonprimitive container
+    }
+
+    listEntry_t *blocksListEntry;
+    if (inline_response_200_1->blocks) {
+    list_ForEach(blocksListEntry, inline_response_200_1->blocks) {
+    cJSON *itemLocal = block_schema_convertToJSON(blocksListEntry->data);
+    if(itemLocal == NULL) {
+    goto fail;
+    }
+    cJSON_AddItemToArray(blocks, itemLocal);
+    }
     }
      } 
 
@@ -46,18 +61,31 @@ inline_response_200_1_t *inline_response_200_1_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_1_t *inline_response_200_1_local_var = NULL;
 
-    // inline_response_200_1->csrf_token
-    cJSON *csrf_token = cJSON_GetObjectItemCaseSensitive(inline_response_200_1JSON, "csrf_token");
-    if (csrf_token) { 
-    if(!cJSON_IsString(csrf_token))
+    // inline_response_200_1->blocks
+    cJSON *blocks = cJSON_GetObjectItemCaseSensitive(inline_response_200_1JSON, "blocks");
+    list_t *blocksList;
+    if (blocks) { 
+    cJSON *blocks_local_nonprimitive;
+    if(!cJSON_IsArray(blocks)){
+        goto end; //nonprimitive container
+    }
+
+    blocksList = list_create();
+
+    cJSON_ArrayForEach(blocks_local_nonprimitive,blocks )
     {
-    goto end; //String
+        if(!cJSON_IsObject(blocks_local_nonprimitive)){
+            goto end;
+        }
+        block_schema_t *blocksItem = block_schema_parseFromJSON(blocks_local_nonprimitive);
+
+        list_addElement(blocksList, blocksItem);
     }
     }
 
 
     inline_response_200_1_local_var = inline_response_200_1_create (
-        csrf_token ? strdup(csrf_token->valuestring) : NULL
+        blocks ? blocksList : NULL
         );
 
     return inline_response_200_1_local_var;

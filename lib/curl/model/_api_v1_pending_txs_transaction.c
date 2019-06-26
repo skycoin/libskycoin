@@ -6,27 +6,25 @@
 
 
 _api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_create(
-    list_t *outputs,
-    char *inner_hash,
-    list_t *inputs,
-    list_t *sigs,
-    int length,
+    long length,
+    long type,
     char *txid,
-    int type,
-    int timestamp
+    char *inner_hash,
+    list_t *sigs,
+    list_t *inputs,
+    list_t *outputs
     ) {
 	_api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_local_var = malloc(sizeof(_api_v1_pending_txs_transaction_t));
     if (!_api_v1_pending_txs_transaction_local_var) {
         return NULL;
     }
-	_api_v1_pending_txs_transaction_local_var->outputs = outputs;
-	_api_v1_pending_txs_transaction_local_var->inner_hash = inner_hash;
-	_api_v1_pending_txs_transaction_local_var->inputs = inputs;
-	_api_v1_pending_txs_transaction_local_var->sigs = sigs;
 	_api_v1_pending_txs_transaction_local_var->length = length;
-	_api_v1_pending_txs_transaction_local_var->txid = txid;
 	_api_v1_pending_txs_transaction_local_var->type = type;
-	_api_v1_pending_txs_transaction_local_var->timestamp = timestamp;
+	_api_v1_pending_txs_transaction_local_var->txid = txid;
+	_api_v1_pending_txs_transaction_local_var->inner_hash = inner_hash;
+	_api_v1_pending_txs_transaction_local_var->sigs = sigs;
+	_api_v1_pending_txs_transaction_local_var->inputs = inputs;
+	_api_v1_pending_txs_transaction_local_var->outputs = outputs;
 
 	return _api_v1_pending_txs_transaction_local_var;
 }
@@ -34,42 +32,46 @@ _api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_create(
 
 void _api_v1_pending_txs_transaction_free(_api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction) {
     listEntry_t *listEntry;
-	list_ForEach(listEntry, _api_v1_pending_txs_transaction->outputs) {
-		_api_v1_explorer_address_outputs_free(listEntry->data);
-	}
-	list_free(_api_v1_pending_txs_transaction->outputs);
+    free(_api_v1_pending_txs_transaction->txid);
     free(_api_v1_pending_txs_transaction->inner_hash);
-	list_ForEach(listEntry, _api_v1_pending_txs_transaction->inputs) {
-		free(listEntry->data);
-	}
-	list_free(_api_v1_pending_txs_transaction->inputs);
 	list_ForEach(listEntry, _api_v1_pending_txs_transaction->sigs) {
 		free(listEntry->data);
 	}
 	list_free(_api_v1_pending_txs_transaction->sigs);
-    free(_api_v1_pending_txs_transaction->txid);
+	list_ForEach(listEntry, _api_v1_pending_txs_transaction->inputs) {
+		free(listEntry->data);
+	}
+	list_free(_api_v1_pending_txs_transaction->inputs);
+	list_ForEach(listEntry, _api_v1_pending_txs_transaction->outputs) {
+		_api_v1_pending_txs_transaction_outputs_free(listEntry->data);
+	}
+	list_free(_api_v1_pending_txs_transaction->outputs);
 	free(_api_v1_pending_txs_transaction);
 }
 
 cJSON *_api_v1_pending_txs_transaction_convertToJSON(_api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction) {
 	cJSON *item = cJSON_CreateObject();
 
-	// _api_v1_pending_txs_transaction->outputs
-    if(_api_v1_pending_txs_transaction->outputs) { 
-    cJSON *outputs = cJSON_AddArrayToObject(item, "outputs");
-    if(outputs == NULL) {
-    goto fail; //nonprimitive container
+	// _api_v1_pending_txs_transaction->length
+    if(_api_v1_pending_txs_transaction->length) { 
+    if(cJSON_AddNumberToObject(item, "length", _api_v1_pending_txs_transaction->length) == NULL) {
+    goto fail; //Numeric
     }
+     } 
 
-    listEntry_t *outputsListEntry;
-    if (_api_v1_pending_txs_transaction->outputs) {
-    list_ForEach(outputsListEntry, _api_v1_pending_txs_transaction->outputs) {
-    cJSON *itemLocal = _api_v1_explorer_address_outputs_convertToJSON(outputsListEntry->data);
-    if(itemLocal == NULL) {
-    goto fail;
+
+	// _api_v1_pending_txs_transaction->type
+    if(_api_v1_pending_txs_transaction->type) { 
+    if(cJSON_AddNumberToObject(item, "type", _api_v1_pending_txs_transaction->type) == NULL) {
+    goto fail; //Numeric
     }
-    cJSON_AddItemToArray(outputs, itemLocal);
-    }
+     } 
+
+
+	// _api_v1_pending_txs_transaction->txid
+    if(_api_v1_pending_txs_transaction->txid) { 
+    if(cJSON_AddStringToObject(item, "txid", _api_v1_pending_txs_transaction->txid) == NULL) {
+    goto fail; //String
     }
      } 
 
@@ -78,23 +80,6 @@ cJSON *_api_v1_pending_txs_transaction_convertToJSON(_api_v1_pending_txs_transac
     if(_api_v1_pending_txs_transaction->inner_hash) { 
     if(cJSON_AddStringToObject(item, "inner_hash", _api_v1_pending_txs_transaction->inner_hash) == NULL) {
     goto fail; //String
-    }
-     } 
-
-
-	// _api_v1_pending_txs_transaction->inputs
-    if(_api_v1_pending_txs_transaction->inputs) { 
-	cJSON *inputs = cJSON_AddArrayToObject(item, "inputs");
-	if(inputs == NULL) {
-		goto fail; //primitive container
-	}
-
-	listEntry_t *inputsListEntry;
-    list_ForEach(inputsListEntry, _api_v1_pending_txs_transaction->inputs) {
-    if(cJSON_AddStringToObject(inputs, "", (char*)inputsListEntry->data) == NULL)
-    {
-        goto fail;
-    }
     }
      } 
 
@@ -116,34 +101,39 @@ cJSON *_api_v1_pending_txs_transaction_convertToJSON(_api_v1_pending_txs_transac
      } 
 
 
-	// _api_v1_pending_txs_transaction->length
-    if(_api_v1_pending_txs_transaction->length) { 
-    if(cJSON_AddNumberToObject(item, "length", _api_v1_pending_txs_transaction->length) == NULL) {
-    goto fail; //Numeric
+	// _api_v1_pending_txs_transaction->inputs
+    if(_api_v1_pending_txs_transaction->inputs) { 
+	cJSON *inputs = cJSON_AddArrayToObject(item, "inputs");
+	if(inputs == NULL) {
+		goto fail; //primitive container
+	}
+
+	listEntry_t *inputsListEntry;
+    list_ForEach(inputsListEntry, _api_v1_pending_txs_transaction->inputs) {
+    if(cJSON_AddStringToObject(inputs, "", (char*)inputsListEntry->data) == NULL)
+    {
+        goto fail;
+    }
     }
      } 
 
 
-	// _api_v1_pending_txs_transaction->txid
-    if(_api_v1_pending_txs_transaction->txid) { 
-    if(cJSON_AddStringToObject(item, "txid", _api_v1_pending_txs_transaction->txid) == NULL) {
-    goto fail; //String
+	// _api_v1_pending_txs_transaction->outputs
+    if(_api_v1_pending_txs_transaction->outputs) { 
+    cJSON *outputs = cJSON_AddArrayToObject(item, "outputs");
+    if(outputs == NULL) {
+    goto fail; //nonprimitive container
     }
-     } 
 
-
-	// _api_v1_pending_txs_transaction->type
-    if(_api_v1_pending_txs_transaction->type) { 
-    if(cJSON_AddNumberToObject(item, "type", _api_v1_pending_txs_transaction->type) == NULL) {
-    goto fail; //Numeric
+    listEntry_t *outputsListEntry;
+    if (_api_v1_pending_txs_transaction->outputs) {
+    list_ForEach(outputsListEntry, _api_v1_pending_txs_transaction->outputs) {
+    cJSON *itemLocal = _api_v1_pending_txs_transaction_outputs_convertToJSON(outputsListEntry->data);
+    if(itemLocal == NULL) {
+    goto fail;
     }
-     } 
-
-
-	// _api_v1_pending_txs_transaction->timestamp
-    if(_api_v1_pending_txs_transaction->timestamp) { 
-    if(cJSON_AddNumberToObject(item, "timestamp", _api_v1_pending_txs_transaction->timestamp) == NULL) {
-    goto fail; //Numeric
+    cJSON_AddItemToArray(outputs, itemLocal);
+    }
     }
      } 
 
@@ -159,25 +149,30 @@ _api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_parseFromJSON
 
     _api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_local_var = NULL;
 
-    // _api_v1_pending_txs_transaction->outputs
-    cJSON *outputs = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "outputs");
-    list_t *outputsList;
-    if (outputs) { 
-    cJSON *outputs_local_nonprimitive;
-    if(!cJSON_IsArray(outputs)){
-        goto end; //nonprimitive container
+    // _api_v1_pending_txs_transaction->length
+    cJSON *length = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "length");
+    if (length) { 
+    if(!cJSON_IsNumber(length))
+    {
+    goto end; //Numeric
+    }
     }
 
-    outputsList = list_create();
-
-    cJSON_ArrayForEach(outputs_local_nonprimitive,outputs )
+    // _api_v1_pending_txs_transaction->type
+    cJSON *type = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "type");
+    if (type) { 
+    if(!cJSON_IsNumber(type))
     {
-        if(!cJSON_IsObject(outputs_local_nonprimitive)){
-            goto end;
-        }
-        _api_v1_explorer_address_outputs_t *outputsItem = _api_v1_explorer_address_outputs_parseFromJSON(outputs_local_nonprimitive);
+    goto end; //Numeric
+    }
+    }
 
-        list_addElement(outputsList, outputsItem);
+    // _api_v1_pending_txs_transaction->txid
+    cJSON *txid = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "txid");
+    if (txid) { 
+    if(!cJSON_IsString(txid))
+    {
+    goto end; //String
     }
     }
 
@@ -187,26 +182,6 @@ _api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_parseFromJSON
     if(!cJSON_IsString(inner_hash))
     {
     goto end; //String
-    }
-    }
-
-    // _api_v1_pending_txs_transaction->inputs
-    cJSON *inputs = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "inputs");
-    list_t *inputsList;
-    if (inputs) { 
-    cJSON *inputs_local;
-    if(!cJSON_IsArray(inputs)) {
-        goto end;//primitive container
-    }
-    inputsList = list_create();
-
-    cJSON_ArrayForEach(inputs_local, inputs)
-    {
-        if(!cJSON_IsString(inputs_local))
-        {
-            goto end;
-        }
-        list_addElement(inputsList , strdup(inputs_local->valuestring));
     }
     }
 
@@ -230,52 +205,57 @@ _api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_parseFromJSON
     }
     }
 
-    // _api_v1_pending_txs_transaction->length
-    cJSON *length = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "length");
-    if (length) { 
-    if(!cJSON_IsNumber(length))
+    // _api_v1_pending_txs_transaction->inputs
+    cJSON *inputs = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "inputs");
+    list_t *inputsList;
+    if (inputs) { 
+    cJSON *inputs_local;
+    if(!cJSON_IsArray(inputs)) {
+        goto end;//primitive container
+    }
+    inputsList = list_create();
+
+    cJSON_ArrayForEach(inputs_local, inputs)
     {
-    goto end; //Numeric
+        if(!cJSON_IsString(inputs_local))
+        {
+            goto end;
+        }
+        list_addElement(inputsList , strdup(inputs_local->valuestring));
     }
     }
 
-    // _api_v1_pending_txs_transaction->txid
-    cJSON *txid = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "txid");
-    if (txid) { 
-    if(!cJSON_IsString(txid))
-    {
-    goto end; //String
-    }
-    }
-
-    // _api_v1_pending_txs_transaction->type
-    cJSON *type = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "type");
-    if (type) { 
-    if(!cJSON_IsNumber(type))
-    {
-    goto end; //Numeric
-    }
+    // _api_v1_pending_txs_transaction->outputs
+    cJSON *outputs = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "outputs");
+    list_t *outputsList;
+    if (outputs) { 
+    cJSON *outputs_local_nonprimitive;
+    if(!cJSON_IsArray(outputs)){
+        goto end; //nonprimitive container
     }
 
-    // _api_v1_pending_txs_transaction->timestamp
-    cJSON *timestamp = cJSON_GetObjectItemCaseSensitive(_api_v1_pending_txs_transactionJSON, "timestamp");
-    if (timestamp) { 
-    if(!cJSON_IsNumber(timestamp))
+    outputsList = list_create();
+
+    cJSON_ArrayForEach(outputs_local_nonprimitive,outputs )
     {
-    goto end; //Numeric
+        if(!cJSON_IsObject(outputs_local_nonprimitive)){
+            goto end;
+        }
+        _api_v1_pending_txs_transaction_outputs_t *outputsItem = _api_v1_pending_txs_transaction_outputs_parseFromJSON(outputs_local_nonprimitive);
+
+        list_addElement(outputsList, outputsItem);
     }
     }
 
 
     _api_v1_pending_txs_transaction_local_var = _api_v1_pending_txs_transaction_create (
-        outputs ? outputsList : NULL,
-        inner_hash ? strdup(inner_hash->valuestring) : NULL,
-        inputs ? inputsList : NULL,
-        sigs ? sigsList : NULL,
         length ? length->valuedouble : 0,
-        txid ? strdup(txid->valuestring) : NULL,
         type ? type->valuedouble : 0,
-        timestamp ? timestamp->valuedouble : 0
+        txid ? strdup(txid->valuestring) : NULL,
+        inner_hash ? strdup(inner_hash->valuestring) : NULL,
+        sigs ? sigsList : NULL,
+        inputs ? inputsList : NULL,
+        outputs ? outputsList : NULL
         );
 
     return _api_v1_pending_txs_transaction_local_var;
