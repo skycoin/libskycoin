@@ -12,7 +12,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=ubuntu --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   raspberrypi3:
     docker:
@@ -26,7 +26,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=ubuntu --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   raspberrypi2:
     docker:
@@ -40,7 +40,7 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=ubuntu --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   bananapi_m1_plus:
     docker:
@@ -54,25 +54,28 @@ jobs:
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=debian --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
+      - run: docker build  --build-arg QEMU_PLATFORM --build-arg QEMU_OS=ubuntu --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/test-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-test
 
   publish-github-release_32:
     docker:
       - image: docker:18.06.0-ce-git
+    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
+    environment:
+      TAG_DEPLOY: $(git tag -l --points-at HEAD)
     steps:
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
+      - run: if [[ $TAG_DEPLOY ]]; then echo $TAG_DEPLOY ; fi
       - checkout
       - setup_remote_docker:
           version: 18.06.0-ce
-      - run: if [[ $CIRCLE_TAG ]]; then   docker build  --build-arg SHA1=$CIRCLE_SHA1 --build-arg GITHUB_OAUTH_TOKEN --build-arg PROJECT_USERNAME=$CIRCLE_PROJECT_USERNAME --build-arg PROJECT_REPONAME=$CIRCLE_PROJECT_REPONAME --build-arg QEMU_PLATFORM=raspberrypi3 --build-arg VERSION  --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/deploy-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-deploy ; fi
-          
+      - run: if [[ $TAG_DEPLOY ]]; then docker build  --build-arg SHA1=$CIRCLE_SHA1 --build-arg GITHUB_OAUTH_TOKEN --build-arg PROJECT_USERNAME=$CIRCLE_PROJECT_USERNAME --build-arg PROJECT_REPONAME=$CIRCLE_PROJECT_REPONAME --build-arg QEMU_PLATFORM=raspberrypi3 --build-arg VERSION  --file $GOPATH/src/github.com/skycoin/libskycoin/docker/images/deploy-arm/Dockerfile  $GOPATH/src/github.com/skycoin/libskycoin -t skydev-deploy ; fi
 
 workflows:
   version: 2
   arm_test:
     jobs:
-      - raspberrypi3
-      - orangepi-plus2
-      - raspberrypi2
       - bananapi_m1_plus
+      - raspberrypi2
+      - raspberrypi3
+      - orangepi-plus2      
       - publish-github-release_32
