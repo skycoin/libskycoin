@@ -7,7 +7,6 @@ project(CGenerator)
 #set(CMAKE_CXX_VISIBILITY_PRESET default)
 #set(CMAKE_VISIBILITY_INLINES_HIDDEN OFF)
 set(CMAKE_BUILD_TYPE Release)
-endif(NOT CMAKE_BUILD_TYPE)
 
 set(pkgName "skyapi")
 
