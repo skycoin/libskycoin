@@ -12,7 +12,6 @@ RUN [ "cross-build-start" ]
 RUN ls -oa $GOPATH/src/github.com/skycoin/libskycoin/
 RUN sh $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/docker_install_ubuntu.sh
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin dep
-RUN make -C $GOPATH/src/github.com/skycoin/libskycoin install-deps-skyapi-Linux
 RUN go get github.com/gz-c/gox
 RUN go get -t ./...
 ENV CGO_ENABLED=1
