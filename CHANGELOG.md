@@ -12,11 +12,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added function `SKY_transaction_NewUxBalances`, 
 - Added function `SKY_transaction_DistributeCoinHoursProportional`, `SKY_transaction_DistributeSpendHours`
 - See [this](https://github.com/skycoin/skycoin/blob/develop/CHANGELOG.md#0260---2019-05-21) for API changelog for skyapi functions
+- Add unsigned option to POST /api/v1/wallet/transaction to create unsigned transactions from a wallet
+- Add unsigned option to POST /api/v2/transaction/verify for verifying an unsigned transaction
+- Add POST /api/v2/wallet/transaction/sign to sign an unsigned transaction with a wallet
+- Add POST /api/v2/transaction to create an unsigned transaction from addresses or unspent outputs without a wallet
+- Add /api/v2/data APIs for transaction notes and generic key-value storage.
+- Update /metrics endpoint to add metrics from /health: unspent_outputs, unconfirmed_txns, time_since_last_block_seconds, open_connections, outgoing_connections, incoming_connections, start_at, uptime_seconds, last_block_seq.
 
 ### Fixed
 
 ### Changed
 - Update functions in Skycoin 0.26.0 core API's for `skyapi` wrapper
+- Add /api/v1/resendUnconfirmedTxns to the WALLET API set
+- In POST /api/v1/wallet/transaction, moved wallet parameters to the top level of the object
+- POST /api/v2/wallet/seed/verify returns an error if the seed's checksum is invalid
+- Increase the detail of error messages for invalid seeds sent to POST /api/v2/wallet/seed/verify
 
 ### Removed
 - Removed symbolic links from vendor
@@ -31,7 +41,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Removed function `SKY_wallet_DistributeSpendHours`
 - Removed function `SKY_wallet_DistributeCoinHoursProportional`
 - Removed function `SKY_wallet_NewUxBalances`
-
+- Removed /api/v1/explorer/address endpoint (use GET /api/v1/transactions?verbose=1 instead). See https://github.com/skycoin/skycoin/blob/develop/src/api/README.md#migrating-from--api-v1-explorer-address
+- Removed the unversioned REST API (the -enable-unversioned-api is removed, prefix your API requests with /api/v1 if they don't have an /api/vx prefix already). See https://github.com/skycoin/skycoin/blob/develop/src/api/README.md#migrating-from-the-unversioned-api JSON-RPC 2.0 interface (this is no longer used by the CLI tool, and the REST API supports everything the JSON-RPC 2.0 API does). See https://github.com/skycoin/skycoin/blob/develop/src/api/README.md#migrating-from-the-jsonrpc-api
+- Removed /api/v1/wallet/spend endpoint (use POST /api/v1/wallet/transaction followed by POST /api/v1/injectTransaction instead). See https://github.com/skycoin/skycoin/blob/develop/src/api/README.md#migrating-from--api-v1-spend
 
 
 ## [0.25.1] - 2019-05-24
