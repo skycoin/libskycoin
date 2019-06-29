@@ -15,11 +15,11 @@ RUN make -C $GOPATH/src/github.com/skycoin/libskycoin dep
 RUN go get github.com/gz-c/gox
 RUN go get -t ./...
 ENV CGO_ENABLED=1
-RUN export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
+RUN export VERSION="$(git tag -l --points-at HEAD)"
 RUN export ARCH="$(uname -m)"
 RUN export OS="$(uname -s)"
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin build
-RUN tar -c -z -f libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C $GOPATH/src/github.com/skycoin/libskycoin/build $GOPATH/src/github.com/skycoin/libskycoin/build/*
+RUN tar -czf libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C $GOPATH/src/github.com/skycoin/libskycoin/build $GOPATH/src/github.com/skycoin/libskycoin/build/*
 RUN go get github.com/tcnksm/ghr
 RUN ghr -t ${GITHUB_OAUTH_TOKEN} -u ${PROJECT_USERNAME} -r ${PROJECT_REPONAME} -c ${SHA1} -delete ${VERSION} libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz
 
