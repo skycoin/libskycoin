@@ -1,57 +1,70 @@
 .DEFAULT_GOAL := help
-.PHONY: run run-help test test-core test-libc test-lint build-libc check
-.PHONY: integration-test-stable integration-test-stable-disable-csrf
-.PHONY: integration-test-live integration-test-live-wallet
-.PHONY: integration-test-disable-wallet-api integration-test-disable-seed-api
-.PHONY: integration-test-enable-seed-api integration-test-enable-seed-api
-.PHONY: integration-test-disable-gui integration-test-disable-gui
-.PHONY: integration-test-db-no-unconfirmed integration-test-auth
-.PHONY: install-linters format release clean-release clean-coverage
-.PHONY: install-deps-ui build-ui help newcoins merge-coverage
-.PHONY: generate-mocks update-golden-files
+.PHONY: test-libc test-lint build-libc check build build-skyapi test-skyapi
+.PHONY: install-linters format clean-libc format-libc lint-libc docs
 
 COIN ?= skycoin
 
-# Static files directory
-GUI_STATIC_DIR = src/gui/static
-
-# Electron files directory
-ELECTRON_DIR = electron
+# Resource paths
+# --- Absolute path to repository root
+LIBSRC_ABS_PATH        = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+# --- Relative path to repository root
+LIBSRC_REL_PATH        = .
+# --- Relative path to repository root from local vendor directory
+LIBSRC_VENDORREL_PATH  = ..
+# --- Relative path to repository root from Skycoin source root directory
+LIBSRC_SKYSRCREL_PATH  = ../../../..
+# --- Relative path to libskycoin vendor directory
+LIBVENDOR_REL_PATH     = vendor
+# --- Relative path to Skycoin source code submodule
+SKYSRC_REL_PATH        = $(LIBVENDOR_REL_PATH)/github.com/skycoin/skycoin
+# --- Relative path to Skycoin vendor directory
+SKYVENDOR_REL_PATH     = $(SKYSRC_REL_PATH)/vendor
 
 # Compilation output for libskycoin
 BUILD_DIR = build
 BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
+BUILDLIBSKYAPI_DIR = $(BUILD_DIR)/libskyapi
+LIBNAME_Linux = libskyapi.so
+LIBNAME_Darwin = libskyapi.dylib
+LIBNAME_Static = libskyapiStatic.a
 LIB_DIR = lib
-LIB_FILES = $(shell find ./lib/cgo -type f -name "*.go")
-SRC_FILES = $(shell find ./src -type f -name "*.go")
-HEADER_FILES = $(shell find ./include -type f -name "*.h")
 BIN_DIR = bin
 DOC_DIR = docs
 INCLUDE_DIR = include
 LIBSRC_DIR = lib/cgo
-LIBDOC_DIR = $(DOC_DIR)/libc
+LIBSKYDOC_DIR = $(DOC_DIR)/libc
+LIBCURLDOC_DIR = $(DOC_DIR)/curl
+SWAGGER_SPEC_DIR = lib/swagger
+SWAGGER_CLIENT_DIR = lib/curl
+
+# Source files
+LIB_FILES = $(shell find $(LIBSRC_DIR) -type f -name "*.go")
+HEADER_FILES = $(shell find $(INCLUDE_DIR) -type f -name "*.h")
+SWAGGER_FILES += skycoin.v0.25.1.openapi.v2.json
+SWAGGER_FILES += skycoin.v0.25.1.openapi.v2.yml
 
 # Compilation flags for libskycoin
 CC_VERSION = $(shell $(CC) -dumpversion)
 STDC_FLAG = $(python -c "if tuple(map(int, '$(CC_VERSION)'.split('.'))) < (6,): print('-std=C99'")
-LIBC_LIBS = -lcriterion
+LIBC_LIBS = `pkg-config --cflags --libs check`
 LIBC_FLAGS = -I$(LIBSRC_DIR) -I$(INCLUDE_DIR) -I$(BUILD_DIR)/usr/include -L $(BUILDLIB_DIR) -L$(BUILD_DIR)/usr/lib
-
 # Platform specific checks
-OSNAME = $(TRAVIS_OS_NAME)
+OSNAME  = $(TRAVIS_OS_NAME)
+UNAME_S = $(shell uname -s)
+CGO_ENABLED=1
 
-ifeq ($(shell uname -s),Linux)
+PKG_CLANG_FORMAT = clang-format
+PKG_CLANG_LINTER = clang-tidy
+PKG_LIB_TEST = check
+
+ifeq ($(UNAME_S),Linux)
   LDLIBS=$(LIBC_LIBS) -lpthread
   LDPATH=$(shell printenv LD_LIBRARY_PATH)
   LDPATHVAR=LD_LIBRARY_PATH
   LDFLAGS=$(LIBC_FLAGS) $(STDC_FLAG)
-ifndef OSNAME
-  OSNAME = linux
-endif
-else ifeq ($(shell uname -s),Darwin)
-ifndef OSNAME
-  OSNAME = osx
-endif
+  OSNAME ?= linux
+else ifeq ($(UNAME_S),Darwin)
+  OSNAME ?= osx
   LDLIBS = $(LIBC_LIBS)
   LDPATH=$(shell printenv DYLD_LIBRARY_PATH)
   LDPATHVAR=DYLD_LIBRARY_PATH
@@ -63,37 +76,16 @@ else
   LDFLAGS=$(LIBC_FLAGS)
 endif
 
-run-client:  ## Run skycoin with desktop client configuration. To add arguments, do 'make ARGS="--foo" run'.
-	./run-client.sh ${ARGS}
-
-run-daemon:  ## Run skycoin with server daemon configuration. To add arguments, do 'make ARGS="--foo" run'.
-	./run-daemon.sh ${ARGS}
-
-run-help: ## Show skycoin node help
-	@go run cmd/$(COIN)/$(COIN).go --help
-
-run-integration-test-live: ## Run the skycoin node configured for live integration tests
-	./ci-scripts/run-live-integration-test-node.sh
-
-run-integration-test-live-cover: ## Run the skycoin node configured for live integration tests with coverage
-	./ci-scripts/run-live-integration-test-node-cover.sh
-
-test: ## Run tests for Skycoin
-	@mkdir -p coverage/
-	COIN=$(COIN) go test -coverpkg="github.com/$(COIN)/$(COIN)/..." -coverprofile=coverage/go-test-cmd.coverage.out -timeout=5m ./cmd/...
-	COIN=$(COIN) go test -coverpkg="github.com/$(COIN)/$(COIN)/..." -coverprofile=coverage/go-test-src.coverage.out -timeout=5m ./src/...
-
-test-386: ## Run tests for Skycoin with GOARCH=386
-	GOARCH=386 COIN=$(COIN) go test ./cmd/... -timeout=5m
-	GOARCH=386 COIN=$(COIN) go test ./src/... -timeout=5m
-
-test-amd64: ## Run tests for Skycoin with GOARCH=amd64
-	GOARCH=amd64 COIN=$(COIN) go test ./cmd/... -timeout=5m
-	GOARCH=amd64 COIN=$(COIN) go test ./src/... -timeout=5m
-
 configure-build:
 	mkdir -p $(BUILD_DIR)/usr/tmp $(BUILD_DIR)/usr/lib $(BUILD_DIR)/usr/include
 	mkdir -p $(BUILDLIB_DIR) $(BIN_DIR) $(INCLUDE_DIR)
+
+## Update links to dependency packages
+dep:
+	git submodule update --init --recursive
+	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/golang.org $(LIBVENDOR_REL_PATH)/golang.org
+	ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/gopkg.in $(LIBVENDOR_REL_PATH)/gopkg.in
+	ls -1 $(SKYVENDOR_REL_PATH)/github.com | grep -v '^skycoin$$' | xargs -I NAME ln -nsf ../$(LIBSRC_VENDORREL_PATH)/$(SKYVENDOR_REL_PATH)/github.com/NAME $(LIBVENDOR_REL_PATH)/github.com/NAME
 
 $(BUILDLIB_DIR)/libskycoin.so: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	rm -Rf $(BUILDLIB_DIR)/libskycoin.so
@@ -105,14 +97,19 @@ $(BUILDLIB_DIR)/libskycoin.a: $(LIB_FILES) $(SRC_FILES) $(HEADER_FILES)
 	go build -buildmode=c-archive -o $(BUILDLIB_DIR)/libskycoin.a  $(LIB_FILES)
 	mv $(BUILDLIB_DIR)/libskycoin.h $(INCLUDE_DIR)/
 
-## Build libskycoin C static library
-build-libc-static: $(BUILDLIB_DIR)/libskycoin.a
+build-libc-static: $(BUILDLIB_DIR)/libskycoin.a ## Build libskycoin C static library
 
-## Build libskycoin C shared library
-build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so
+build-libc-shared: $(BUILDLIB_DIR)/libskycoin.so ## Build libskycoin C shared library
 
-## Build libskycoin C client libraries
-build-libc: configure-build build-libc-static build-libc-shared
+build-libc: configure-build build-libc-static build-libc-shared ## Build libskycoin C client libraries
+
+build-skyapi: ## Build skyapi(libcurl based) library
+	(cd lib/curl && bash ./install_lib_curl.sh)
+	mkdir -p ./build/libskyapi
+	cp lib/curl/build/$(LIBNAME_$(UNAME_S)) ./build/libskyapi
+	cp lib/curl/build/$(LIBNAME_Static) ./build/libskyapi
+
+build: build-libc build-skyapi ## Build libraries
 
 ## Build libskycoin C client library and executable C test suites
 ## with debug symbols. Use this target to debug the source code
@@ -126,152 +123,105 @@ test-libc: build-libc ## Run tests for libskycoin C client library
 	$(CC) -o $(BIN_DIR)/test_libskycoin_shared $(LIB_DIR)/cgo/tests/*.c $(LIB_DIR)/cgo/tests/testutils/*.c -lskycoin                    $(LDLIBS) $(LDFLAGS)
 	$(CC) -o $(BIN_DIR)/test_libskycoin_static $(LIB_DIR)/cgo/tests/*.c $(LIB_DIR)/cgo/tests/testutils/*.c $(BUILDLIB_DIR)/libskycoin.a $(LDLIBS) $(LDFLAGS)
 	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib:$(BUILDLIB_DIR)" $(BIN_DIR)/test_libskycoin_shared
-	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"                 $(BIN_DIR)/test_libskycoin_static
+	$(LDPATHVAR)="$(LDPATH):$(BUILD_DIR)/usr/lib"         $(BIN_DIR)/test_libskycoin_static
 
-docs-libc:
+test-skyapi: build-skyapi ## Run test for skyapi(libcurl based) library
+
+test: test-libc test-skyapi ## Run all test for libskycoin
+
+docs-skyapi: ## Generate SkyApi (libcurl) documentation
+	openapi-generator generate -g html2 -i lib/swagger/skycoin.v0.25.1.openapi.v2.yml -o $(LIBCURLDOC_DIR)
+
+docs-libc: ## Generate libskycoin documentation
 	doxygen ./.Doxyfile
-	moxygen -o $(LIBDOC_DIR)/API.md $(LIBDOC_DIR)/xml/
+	moxygen -o $(LIBSKYDOC_DIR)/API.md $(LIBSKYDOC_DIR)/xml/
 
-docs: docs-libc
+docs: docs-libc docs-skyapi ## Generate documentation for all libraries
 
 lint: ## Run linters. Use make install-linters first.
 	vendorcheck ./...
-	golangci-lint run -c .golangci.yml ./...
 	# lib/cgo needs separate linting rules
 	golangci-lint run -c .golangci.libcgo.yml ./lib/cgo/...
 	# The govet version in golangci-lint is out of date and has spurious warnings, run it separately
 	go vet -all ./...
 
-check-newcoin: newcoin ## Check that make newcoin succeeds and no files are changed.
-	if [ "$(shell git diff ./ | wc -l | tr -d ' ')" != "0" ] ; then echo 'Changes detected after make newcoin' ; exit 2 ; fi
+lint-libc: format-libc
+	# Linter LIBC
+	clang-tidy  lib/cgo/tests/*.c -- $(LIBC_FLAGS) -Wincompatible-pointer-types
 
-check: lint clean-coverage test integration-test-stable integration-test-stable-disable-csrf \
-	integration-test-disable-wallet-api integration-test-disable-seed-api \
-	integration-test-enable-seed-api integration-test-disable-gui \
-	integration-test-auth integration-test-db-no-unconfirmed check-newcoin ## Run tests and linters
 
-integration-test-stable: ## Run stable integration tests
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -c -n enable-csrf
+check: lint test-libc lint-libc test-skyapi ## Run tests and linters
 
-integration-test-stable-disable-csrf: ## Run stable integration tests with CSRF disabled
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -n disable-csrf
+install-linters-Linux: ## Install linters on GNU/Linux
+	sudo apt-get update
+	sudo apt-get install $(PKG_CLANG_FORMAT)
+	sudo apt-get install $(PKG_CLANG_LINTER)
 
-integration-test-live: ## Run live integration tests
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh -c
+install-linters-Darwin: ## Install linters on Mac OSX
+	# brew install $(PKG_CLANG_FORMAT)
+	brew install llvm
+	ln -s "/usr/local/opt/llvm/bin/clang-format" "/usr/local/bin/clang-format"
+	ln -s "/usr/local/opt/llvm/bin/clang-tidy" "/usr/local/bin/clang-tidy"
 
-integration-test-live-wallet: ## Run live integration tests with wallet
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh -w
+install-deps-Linux: ## Install deps on GNU/Linux
+	sudo apt-get install $(PKG_LIB_TEST)
 
-integration-test-live-disable-csrf: ## Run live integration tests against a node with CSRF disabled
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh
+install-deps-Darwin: ## Install deps on Mac OSX
+	brew install $(PKG_LIB_TEST)
 
-integration-test-live-disable-networking: ## Run live integration tests against a node with networking disabled (requires wallet)
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-live.sh -c -k
-
-integration-test-disable-wallet-api: ## Run disable wallet api integration tests
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-disable-wallet-api.sh
-
-integration-test-enable-seed-api: ## Run enable seed api integration test
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-enable-seed-api.sh
-
-integration-test-disable-gui: ## Run tests with the GUI disabled
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-disable-gui.sh
-
-integration-test-db-no-unconfirmed: ## Run stable tests against the stable database that has no unconfirmed transactions
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-stable.sh -d -n no-unconfirmed
-
-integration-test-auth: ## Run stable tests with HTTP Basic auth enabled
-	GOCACHE=off COIN=$(COIN) ./ci-scripts/integration-test-auth.sh
-
-install-linters: ## Install linters
+install-linters: install-linters-$(UNAME_S) ## Install linters
 	go get -u github.com/FiloSottile/vendorcheck
-	# For some reason this install method is not recommended, see https://github.com/golangci/golangci-lint#install
-	# However, they suggest `curl ... | bash` which we should not do
-	go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+	cat ./ci-scripts/install-golangci-lint.sh | sh -s -- -b $(GOPATH)/bin v1.10.2
 
-install-deps-libc: configure-build ## Install locally dependencies for testing libskycoin
-	git clone --recursive https://github.com/skycoin/Criterion $(BUILD_DIR)/usr/tmp/Criterion
-	mkdir $(BUILD_DIR)/usr/tmp/Criterion/build
-	cd    $(BUILD_DIR)/usr/tmp/Criterion/build && cmake .. && cmake --build .
-	mv    $(BUILD_DIR)/usr/tmp/Criterion/build/libcriterion.* $(BUILD_DIR)/usr/lib/
-	cp -R $(BUILD_DIR)/usr/tmp/Criterion/include/* $(BUILD_DIR)/usr/include/
+install-deps-skyapi-Linux:
+	mkdir -p deps
+	sudo add-apt-repository ppa:george-edison55/cmake-3.x -y
+	sudo apt-get update
+	sudo apt-get install cmake
+	sudo apt-get install libcurl3-gnutls
+	sudo apt remove curl
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xvf curl-7.58.0.tar.gz && cd curl-7.58.0/ && ./configure && make && sudo make install)
+	(cd deps && git clone https://github.com/uncrustify/uncrustify.git && cd uncrustify && mkdir build && cd build && cmake .. && make && sudo make install)
+
+install-deps-skyapi-Darwin:
+	export LDFLAGS="-L/usr/local/opt/curl/lib"
+	export CPPFLAGS="-I/usr/local/opt/curl/include"
+	mkdir -p deps
+	brew update
+	brew install openssl curl uncrustify || true
+	(cd deps && wget http://curl.haxx.se/download/curl-7.58.0.tar.gz && tar -xf curl-7.58.0.tar.gz && cd curl-7.58.0/ && mkdir build && cd build && cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl .. && make && sudo make install)
+
+install-deps-libc: install-deps-libc-$(UNAME_S) ## Install deps for libc
+
+install-deps-skyapi: install-deps-skyapi-$(UNAME_S) ## Install skyapi(libcurl based) library.
+
+install-deps-libc-Linux: configure-build ## Install locally dependencies for testing libskycoin
+	wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
+	tar -xzf check-0.12.0.tar.gz
+	cd check-0.12.0 && ./configure --prefix=/usr --disable-static && make && sudo make install
+
+install-deps-libc-Darwin: configure-build ## Install locally dependencies for testing libskycoin
+	brew install check
+
+install-deps: install-deps-libc install-deps-skyapi ## Install deps for libc and skyapi
 
 format: ## Formats the code. Must have goimports installed (use make install-linters).
-	goimports -w -local github.com/skycoin/skycoin ./cmd
-	goimports -w -local github.com/skycoin/skycoin ./src
 	goimports -w -local github.com/skycoin/skycoin ./lib
 
-install-deps-ui:  ## Install the UI dependencies
-	cd $(GUI_STATIC_DIR) && npm install
+clean-libc: ## Clean files generated by libc
+	rm -rfv $(BUILDLIB_DIR)
+	rm -rfv bin
+	rm -rfv qemu_test_libskycoin*
+	rm -rfv include/libskycoin.h
 
-lint-ui:  ## Lint the UI code
-	cd $(GUI_STATIC_DIR) && npm run lint
+clean-skyapi: ## Clean files generated by skyapi
+	rm -rfv $(BUILDLIBSKYAPI_DIR)
 
-test-ui:  ## Run UI tests
-	cd $(GUI_STATIC_DIR) && npm run test
+clean: clean-libc clean-skyapi ## Clean all files generated by libraries
 
-test-ui-e2e:  ## Run UI e2e tests
-	./ci-scripts/ui-e2e.sh
-
-build-ui:  ## Builds the UI
-	cd $(GUI_STATIC_DIR) && npm run build
-
-build-ui-travis:  ## Builds the UI for travis
-	cd $(GUI_STATIC_DIR) && npm run build-travis
-
-release: ## Build electron, standalone and daemon apps. Use osarch=${osarch} to specify the platform. Example: 'make release osarch=darwin/amd64', multiple platform can be supported in this way: 'make release osarch="darwin/amd64 windows/amd64"'. Supported architectures are: darwin/amd64 windows/amd64 windows/386 linux/amd64 linux/arm, the builds are located in electron/release folder.
-	cd $(ELECTRON_DIR) && ./build.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-standalone: ## Build standalone apps. Use osarch=${osarch} to specify the platform. Example: 'make release-standalone osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-standalone-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-electron: ## Build electron apps. Use osarch=${osarch} to specify the platform. Example: 'make release-electron osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-electron-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-daemon: ## Build daemon apps. Use osarch=${osarch} to specify the platform. Example: 'make release-daemon osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-daemon-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-release-cli: ## Build CLI apps. Use osarch=${osarch} to specify the platform. Example: 'make release-cli osarch=darwin/amd64' Supported architectures are the same as 'release' command.
-	cd $(ELECTRON_DIR) && ./build-cli-release.sh ${osarch}
-	@echo release files are in the folder of electron/release
-
-clean-release: ## Remove all electron build artifacts
-	rm -rf $(ELECTRON_DIR)/release
-	rm -rf $(ELECTRON_DIR)/.gox_output
-	rm -rf $(ELECTRON_DIR)/.daemon_output
-	rm -rf $(ELECTRON_DIR)/.cli_output
-	rm -rf $(ELECTRON_DIR)/.standalone_output
-	rm -rf $(ELECTRON_DIR)/.electron_output
-
-clean-coverage: ## Remove coverage output files
-	rm -rf ./coverage/
-
-newcoin: ## Rebuild cmd/$COIN/$COIN.go file from the template. Call like "make newcoin COIN=foo".
-	go run cmd/newcoin/newcoin.go createcoin --coin $(COIN)
-
-generate-mocks: ## Regenerate test interface mocks
-	go generate ./src/...
-	# mockery can't generate the UnspentPooler mock in package visor, patch it
-	mv ./src/visor/blockdb/mock_unspent_pooler_test.go ./src/visor/mock_unspent_pooler_test.go
-	sed -i "" -e 's/package blockdb/package visor/g' ./src/visor/mock_unspent_pooler_test.go
-
-update-golden-files: ## Run integration tests in update mode
-	./ci-scripts/integration-test-stable.sh -u >/dev/null 2>&1 || true
-	./ci-scripts/integration-test-stable.sh -c -u >/dev/null 2>&1 || true
-	./ci-scripts/integration-test-stable.sh -d -u >/dev/null 2>&1 || true
-	./ci-scripts/integration-test-stable.sh -c -d -u >/dev/null 2>&1 || true
-
-merge-coverage: ## Merge coverage files and create HTML coverage output. gocovmerge is required, install with `go get github.com/wadey/gocovmerge`
-	@echo "To install gocovmerge do:"
-	@echo "go get github.com/wadey/gocovmerge"
-	gocovmerge coverage/*.coverage.out > coverage/all-coverage.merged.out
-	go tool cover -html coverage/all-coverage.merged.out -o coverage/all-coverage.html
-	@echo "Total coverage HTML file generated at coverage/all-coverage.html"
-	@echo "Open coverage/all-coverage.html in your browser to view"
+format-libc:
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format lib/cgo/tests/*.c
+	$(PKG_CLANG_FORMAT) -sort-includes -i -assume-filename=.clang-format include/*.h
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

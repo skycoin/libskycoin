@@ -1,116 +1,61 @@
 sudo: required
-dist: trusty
+services:
+  - docker
 language: go
 go:
-  - "1.11.x"
-
 matrix:
   include:
     - os: linux
-      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=45s
+      dist: xenial
     - os: osx
-      # Do not start osx build for PR
-      if: type != pull_request
-      osx_image: xcode8
-      env: VERSION_UPGRADE_TEST_WAIT_TIMEOUT=60s
-
+      osx_image: xcode8.3
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test && sudo apt-get update -qq;
+    fi
+  - ./ci-scripts/install-travis-gcc.sh
   - eval "CC=gcc-6 && CXX=g++-6"
-
 env:
   global:
-    - ELECTRON_CACHE: $HOME/.cache/electron
-    - ELECTRON_BUILDER_CACHE: $HOME/.cache/electron-builder
     - BUILD_DIR: build
-    - BUILDLIB_DIR: $BUILD_DIR/libskycoin
+    - BUILDLIB_DIR: "$BUILD_DIR/libskycoin"
     - LIB_DIR: lib
-    - BUILD_UI_TRAVIS_DIR: HOME/.skycoin-ui-travis
-
-cache:
-  directories:
-  - electron/node_modules
-  - electron/src/node_modules
-  - $HOME/.cache/electron
-  - $HOME/.cache/electron-builder
-  - $HOME/.npm/_prebuilds
-  - src/gui/static/node_modules
-
-addons:
-  chrome: stable
-
+    - CGO_ENABLED: 1
+    - VERSION_UPGRADE_TEST_WAIT_TIMEOUT: 60s
+    - PATH_DIR: "$GOPATH/src/github.com/skycoin/libskycoin/"
 install:
   # Install gox
   - go get github.com/gz-c/gox
-  # Install dependences for building wallet
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_PULL_REQUEST" == false ]]; then sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils && nvm install 8; fi
-  - if [[ ! -d $GOPATH/src/github.com/skycoin/skycoin ]]; then mkdir -p $GOPATH/src/github.com/skycoin; ln -s $TRAVIS_BUILD_DIR $GOPATH/src/github.com/skycoin/skycoin; fi
-  - cd $GOPATH/src/github.com/skycoin/skycoin
   - go get -t ./...
   - make install-linters
-  # Install pinned golangci-lint, overriding the latest version install by make install-linters
-  - VERSION=1.10.2 ./ci-scripts/install-golangci-lint.sh
-  - ./ci-scripts/install-travis-gcc.sh
   - make install-deps-libc
-  - nvm install 8.11.0
-  - nvm use 8.11.0
-  - make install-deps-ui
-
-before_script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" && "$TRAVIS_PULL_REQUEST" == false ]]; then ./ci-scripts/add-key.sh; fi
-  - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start; fi
-
+  - make install-deps-skyapi
 script:
-  - make check-newcoin
+  - make build-skyapi
   - make lint
-  - make test-386
-  - make test-amd64
-  # Stable integration tests
-  - make integration-test-stable
-  # Stable integration tests without CSRF
-  - make integration-test-stable-disable-csrf
-  # Disable wallet api test
-  - make integration-test-disable-wallet-api
-  # Disable seed api test
-  - make integration-test-disable-seed-api
-  # Enable seed api test
-  - make integration-test-enable-seed-api
-  # Disable GUI test
-  - make integration-test-disable-gui
-  # Enable auth test
-  - make integration-test-auth
-  # Stable integration tests without unconfirmed transactions
-  - make integration-test-db-no-unconfirmed
-  # libskycoin tests
-  - CC=gcc-6 make test-libc
-  # TODO: test pyskycoin
-  # - CC=gcc-6 make test-libpy
-  # TODO: test ui
-  # - make test-ui
-  # - make test-libpy
-  - make lint-ui
-  - make build-ui-travis
-  - make test-ui
-  - make test-ui-e2e
-  # Build wallets
-  - if [[ "$TRAVIS_PULL_REQUEST" == false ]]; then ./ci-scripts/build-wallet.sh; fi
+  - make test-libc
+  - make lint-libc
+  - make test-skyapi
 
-notifications:
-  email:
-    - travis@skycoin.net
-  # https://github.com/kvld/travisci-telegram TravisCI Telegram Bot integration
-  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
-
+before_deploy:
+  - export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"
+  - export ARCH="$(uname -m)"
+  - export OS="$(uname -s)"
+  - make build
+  - ( cd build && tar czf ../libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz ./* )
+  - pwd && ls -l .
 deploy:
-  provider: s3
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  bucket: $AWS_BUCKET
-  skip_cleanup: true
-  local_dir: electron/release
-  upload-dir: wallet
-  acl: public_read
-  region: $AWS_REGION
-  on:
-    repo: skycoin/skycoin
-    branch: master
+  - provider: releases
+    api_key:
+      secure: ZqagrrwPFXs4bgHV9lJkZaex6dxAEUJprSdhsqJLYTkF4uBN5VYNM4KCy+azBabV8pVLxiCCZ8G/ocRw+omQgzJ/1lymNtYez8C/SLAuKzOFxdTxkvyQ9pW5Xr+fjptTEpe/E/lRYvS6LFtQEEpbrtjW/km9HWc7EdMNxUaGhBCRun0YhK3a7JSpQE7JbsyR691Zco8hLb2b5PO8qYx5NoVWHKPMLMYUZhbSZbWs0Viu8s8t9VLVhrSIudAKnQiNs5viWp0YZy6U6mRMuBeZ7wazebx0d/BAj78f+atGOZIiJbHgOxupnhhgR10X7b5B89JggxVe3IFr5t96qz3VV4aTl1yuLZ3i8eYanMIvdirnpPU36bbfAVMJuG7L4hFmZ+pD22ZmiOI4COqHDxSd0gF8DUri+Cf9S+5RF5Kk3YBArQzdue6DjNPBtKyQja1xINfj3Go2LQnaKH+/ffzBJIlw9TICcqf241FS3bNtx0QvUDV/+ezqy0dcD7xKOoUQmLDhyWt5NltNKu/JjoCwj99B9P45GQHJCrSvMu71hwNYlTJxtTJuLIVRXqI5BUEGpnBK99MV+6nycl0ePla4zXTBbJ/uOFzwfj1njAdw2DT4ceTsvtkTAc9qEi3S1hrRL2z3mHQ4loZCTJ9Nn9Cx0WOgfs/bCDvExa7b+AJ3ScE=
+    file:
+      - libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz
+    skip_cleanup: true
+    draft: true
+    overwrite: true
+    on:
+      repo: skycoin/libskycoin
+      tags: true
+notifications:
+  email: false
+  webhooks: https://fathomless-fjord-24024.herokuapp.com/notify

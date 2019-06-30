@@ -7,7 +7,8 @@
 *.so
 
 sb
-
+lib/curl/build
+lib/curl/cmake-build-debug
 build
 data
 pkg
@@ -152,9 +153,14 @@ docs/libc/xml
 
 *.prof
 *.profile
+*.cpuprofile
+*.memprofile
 
 # cli fiberAddressGen default output
 addresses.txt
 seeds.csv
 
 histogram
+# Ignore compilator by qemu
+qemu_*
+core
