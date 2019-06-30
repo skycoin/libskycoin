@@ -6,9 +6,7 @@ project(CGenerator)
 #set(CMAKE_C_VISIBILITY_PRESET default)
 #set(CMAKE_CXX_VISIBILITY_PRESET default)
 #set(CMAKE_VISIBILITY_INLINES_HIDDEN OFF)
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Debug)
-endif(NOT CMAKE_BUILD_TYPE)
+set(CMAKE_BUILD_TYPE Release)
 
 set(pkgName "skyapi")
 
@@ -77,6 +75,7 @@ set(HDRS
 include_directories(${CURL_INCLUDE_DIR})
 # Add library with project file with projectname as library name
 add_library(${pkgName} SHARED ${SRCS} ${HDRS})
+add_library(${pkgName}Static STATIC ${SRCS} ${HDRS})
 # Link dependent libraries
 target_link_libraries(${pkgName} ${CURL_LIBRARIES})
 #install library to destination
