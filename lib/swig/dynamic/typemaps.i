@@ -1,6 +1,11 @@
 /*GoInt64* as function return typemap*/
 %typemap(argout) GoInt64* {
-	%append_output( SWIG_From_long( *$1 ) );
+	%append_output( SWIG_From_long_SS_long( *$1 ) );
+}
+
+/*GoUint64* as function return typemap*/
+%typemap(argout) GoUint64* {
+	%append_output( SWIG_From_unsigned_SS_long_SS_long( *$1 ) );
 }
 
 /*

@@ -11,12 +11,12 @@
 
 /* Handle out typemap. */
 %typemap(argout) Handle* {
-	%append_output( SWIG_From_long(*$1) );
+	%append_output( SWIG_From_long_SS_long(*$1) );
 }
 
 /* Handle not as pointer is input. */
 %typemap(in) Handle {
-	SWIG_AsVal_long($input, (long*)&$1);
+	SWIG_AsVal_long_SS_long($input, (long*)&$1);
 }
 
 

@@ -88,7 +88,7 @@ $ make test-libc
 0. Make a PR merging the release branch into `master`
 0. Review the PR and merge it
 0. Tag the `master` branch with the version number. Version tags start with `v`, e.g. `v0.20.0`. Sign the tag. If you have your GPG key in github, creating a release on the Github website will automatically tag the release. It can be tagged from the command line with `git tag -as v0.20.0 $COMMIT_ID`, but Github will not recognize it as a "release".
-0. Release builds are created and uploaded by travis. To do it manually, checkout the master branch and follow the [create release builds instructions](#creating-release-builds).
+0. Release builds are created and uploaded by travis. To do it manually, checkout the master branch and make release.
 0. Merge changes in `master` back into `develop` branch to start working towards next stable version.
 
 #### Pre-release testing
@@ -98,6 +98,43 @@ Perform these actions before releasing:
 ```sh
 make check
 ```
+#### Release signing
+
+Releases are signed with this PGP key:
+
+`0x5801631BD27C7874`
+
+The fingerprint for this key is:
+
+```
+pub   ed25519 2017-09-01 [SC] [expires: 2023-03-18]
+      10A7 22B7 6F2F FE7B D238  0222 5801 631B D27C 7874
+uid                      GZ-C SKYCOIN <token@protonmail.com>
+sub   cv25519 2017-09-01 [E] [expires: 2023-03-18]
+```
+
+Keybase.io account: https://keybase.io/gzc 
+
+##### Alternative signing keys:
+
+Keybase.io account: https://keybase.io/olemis
+
+The fingerprint for this key is:
+
+```
+pub   rsa4096 2019-01-17 [SC] [expires: 2024-01-16]
+uid           Olemis Lang <olemis@simelo.tech>
+sub   rsa4096 2019-01-17 [E] [expires: 2024-01-16]
+```
+
+Follow the [Tor Project's instructions for verifying signatures](https://www.torproject.org/docs/verifying-signatures.html.en).
+
+If you can't or don't want to import the keys from a keyserver, the signing key is available in the repo: [gz-c.asc](gz-c.asc).
+
+Releases and their signatures can be found on the [releases page](https://github.com/skycoin/skycoin/releases).
+
+Instructions for generating a PGP key, publishing it, signing the tags and binaries:
+https://gist.github.com/gz-c/de3f9c43343b2f1a27c640fe529b067c
 
 ## Development
 
