@@ -69,7 +69,7 @@ jobs:
       - setup_remote_docker:
           version: 18.06.0-ce
           docker_layer_caching: true
-      - run: bash $GOPATH/src/github.com/skycoin/libskycoin/ci-script/deploy-arm.sh
+      - run: bash $GOPATH/src/github.com/skycoin/libskycoin/ci-scripts/deploy-arm.sh
 
 workflows:
   version: 2
