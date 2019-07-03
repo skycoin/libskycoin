@@ -17,7 +17,7 @@ RUN go get github.com/gz-c/gox
 RUN go get -t ./...
 ENV CGO_ENABLED=1
 ENV ARCH="armv7"
-RUN OS="Linux"
+ENV OS="Linux"
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin build
 RUN tar -czf libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C $GOPATH/src/github.com/skycoin/libskycoin/build $GOPATH/src/github.com/skycoin/libskycoin/build/*
 RUN go get github.com/tcnksm/ghr
