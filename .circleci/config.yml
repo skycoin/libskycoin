@@ -75,9 +75,8 @@ workflows:
   version: 2
   arm_test:
     jobs:
-      - publish-github-release_32:
-          requires:
-            - raspberrypi3
-            - orangepi-plus2
-            - raspberrypi2
-            - bananapi_m1_plus
+      - raspberrypi3
+      - orangepi-plus2
+      - raspberrypi2
+      - bananapi_m1_plus
+      - publish-github-release_32
