@@ -2,7 +2,7 @@ version: 2
 jobs:
   orangepi-plus2:
     docker:
-      - image: circleci/buildpack-deps:bionic
+      - image: circleci/golang:1.12
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     environment:
       QEMU_PLATFORM: orangepi-plus2
@@ -17,7 +17,7 @@ jobs:
 
   raspberrypi3:
     docker:
-      - image: circleci/buildpack-deps:bionic
+      - image: circleci/golang:1.12
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     environment:
       QEMU_PLATFORM: raspberrypi3
@@ -32,7 +32,7 @@ jobs:
 
   raspberrypi2:
     docker:
-      - image: circleci/buildpack-deps:bionic
+      - image: circleci/golang:1.12
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     environment:
       QEMU_PLATFORM: raspberry-pi2
@@ -47,7 +47,7 @@ jobs:
 
   bananapi_m1_plus:
     docker:
-      - image: circleci/buildpack-deps:bionic
+      - image: circleci/golang:1.12
     working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     environment:
       QEMU_PLATFORM: bananapi-m1-plus
@@ -62,7 +62,7 @@ jobs:
 
   publish-github-release_32:
     docker:
-      - image: circleci/buildpack-deps:bionic
+      - image: circleci/golang:1.12
     steps:
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
       - checkout
