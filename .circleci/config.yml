@@ -63,6 +63,7 @@ jobs:
   publish-github-release_32:
     docker:
       - image: circleci/golang:1.12
+    working_directory: $GOPATH/src/github.com/skycoin/libskycoin
     steps:
       - run: mkdir -p $GOPATH/src/github.com/ $GOPATH/src/github.com/skycoin
       - checkout
