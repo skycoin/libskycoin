@@ -32,13 +32,13 @@ START_TEST(TestHashRipemd160)
     SKY_cipher_HashRipemd160(slice, &tmp);
     randBytes(&slice, 160);
     SKY_cipher_HashRipemd160(slice, &r);
-    ck_assert(!isU8Eq(tmp, r, sizeof(cipher__Ripemd160)));
+    ck_assert_int_eq(isU8Eq(tmp, r, sizeof(cipher__Ripemd160)), 0);
 
     unsigned char buff1[257];
     GoSlice b = {buff1, 0, 257};
     randBytes(&b, 256);
     SKY_cipher_HashRipemd160(b, &r2);
-    ck_assert(!isU8Eq(tmp, r2, sizeof(cipher__Ripemd160)));
+    ck_assert_int_eq(isU8Eq(tmp, r2, sizeof(cipher__Ripemd160)), 0);
     freshSumRipemd160(b, &tmp);
     ck_assert(isU8Eq(tmp, r2, sizeof(cipher__Ripemd160)));
 }
@@ -180,18 +180,19 @@ END_TEST
 
 START_TEST(TestSumSHA256)
 {
-    unsigned char bbuff[257], cbuff[257];
+    GoUint8 bbuff[257];
+    GoUint8 cbuff[257];
     GoSlice b = {bbuff, 0, 257};
     cipher__SHA256 h1;
     randBytes(&b, 256);
     SKY_cipher_SumSHA256(b, &h1);
-    cipher__SHA256 tmp;
-    ck_assert(!isU8Eq(h1, tmp, 32));
+    cipher__SHA256 tmp = "";
+    ck_assert_int_eq(isU8Eq(h1, tmp, 32), 0);
     GoSlice c = {cbuff, 0, 257};
     randBytes(&c, 256);
     cipher__SHA256 h2;
     SKY_cipher_SumSHA256(c, &h2);
-    ck_assert(!isU8Eq(h1, tmp, 32));
+    ck_assert_int_eq(isU8Eq(h1, tmp, 32), 0);
     cipher__SHA256 tmp_h2;
     freshSumSHA256(c, &tmp_h2);
     ck_assert(isU8Eq(h2, tmp_h2, 32));
@@ -239,9 +240,9 @@ START_TEST(TestDoubleSHA256)
     cipher__SHA256 h;
     cipher__SHA256 tmp;
     SKY_cipher_DoubleSHA256(b, &h);
-    ck_assert(!isU8Eq(tmp, h, 32));
+    ck_assert_int_eq(isU8Eq(tmp, h, 32), 0);
     freshSumSHA256(b, &tmp);
-    ck_assert(!isU8Eq(tmp, h, 32));
+    ck_assert_int_eq(isU8Eq(tmp, h, 32), 0);
 }
 END_TEST
 
@@ -263,9 +264,9 @@ START_TEST(TestAddSHA256)
     cipher__SHA256 tmp;
 
     SKY_cipher_AddSHA256(&h, &i, &add);
-    ck_assert(!isU8Eq(add, tmp, 32));
-    ck_assert(!isU8Eq(add, h, 32));
-    ck_assert(!isU8Eq(add, i, 32));
+    ck_assert_int_eq(isU8Eq(add, tmp, 32), 0);
+    ck_assert_int_eq(isU8Eq(add, h, 32), 0);
+    ck_assert_int_eq(isU8Eq(add, i, 32), 0);
 }
 END_TEST
 
@@ -287,9 +288,9 @@ START_TEST(TestXorSHA256)
 
     SKY_cipher_SHA256_Xor(&h, &i, &tmp_xor1);
     SKY_cipher_SHA256_Xor(&i, &h, &tmp_xor2);
-    ck_assert(!isU8Eq(tmp_xor1, h, 32));
-    ck_assert(!isU8Eq(tmp_xor1, i, 32));
-    ck_assert(!isU8Eq(tmp_xor1, tmp, 32));
+    ck_assert_int_eq(isU8Eq(tmp_xor1, h, 32), 0);
+    ck_assert_int_eq(isU8Eq(tmp_xor1, i, 32), 0);
+    ck_assert_int_eq(isU8Eq(tmp_xor1, tmp, 32), 0);
     ck_assert(isU8Eq(tmp_xor1, tmp_xor2, 32));
 }
 END_TEST
