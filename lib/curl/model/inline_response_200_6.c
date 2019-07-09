@@ -6,13 +6,13 @@
 
 
 inline_response_200_6_t *inline_response_200_6_create(
-    char *address
+    list_t *transactions
     ) {
 	inline_response_200_6_t *inline_response_200_6_local_var = malloc(sizeof(inline_response_200_6_t));
     if (!inline_response_200_6_local_var) {
         return NULL;
     }
-	inline_response_200_6_local_var->address = address;
+	inline_response_200_6_local_var->transactions = transactions;
 
 	return inline_response_200_6_local_var;
 }
@@ -20,17 +20,32 @@ inline_response_200_6_t *inline_response_200_6_create(
 
 void inline_response_200_6_free(inline_response_200_6_t *inline_response_200_6) {
     listEntry_t *listEntry;
-    free(inline_response_200_6->address);
+	list_ForEach(listEntry, inline_response_200_6->transactions) {
+		transaction_encoded_free(listEntry->data);
+	}
+	list_free(inline_response_200_6->transactions);
 	free(inline_response_200_6);
 }
 
 cJSON *inline_response_200_6_convertToJSON(inline_response_200_6_t *inline_response_200_6) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_6->address
-    if(inline_response_200_6->address) { 
-    if(cJSON_AddStringToObject(item, "address", inline_response_200_6->address) == NULL) {
-    goto fail; //String
+	// inline_response_200_6->transactions
+    if(inline_response_200_6->transactions) { 
+    cJSON *transactions = cJSON_AddArrayToObject(item, "transactions");
+    if(transactions == NULL) {
+    goto fail; //nonprimitive container
+    }
+
+    listEntry_t *transactionsListEntry;
+    if (inline_response_200_6->transactions) {
+    list_ForEach(transactionsListEntry, inline_response_200_6->transactions) {
+    cJSON *itemLocal = transaction_encoded_convertToJSON(transactionsListEntry->data);
+    if(itemLocal == NULL) {
+    goto fail;
+    }
+    cJSON_AddItemToArray(transactions, itemLocal);
+    }
     }
      } 
 
@@ -46,18 +61,31 @@ inline_response_200_6_t *inline_response_200_6_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_6_t *inline_response_200_6_local_var = NULL;
 
-    // inline_response_200_6->address
-    cJSON *address = cJSON_GetObjectItemCaseSensitive(inline_response_200_6JSON, "address");
-    if (address) { 
-    if(!cJSON_IsString(address))
+    // inline_response_200_6->transactions
+    cJSON *transactions = cJSON_GetObjectItemCaseSensitive(inline_response_200_6JSON, "transactions");
+    list_t *transactionsList;
+    if (transactions) { 
+    cJSON *transactions_local_nonprimitive;
+    if(!cJSON_IsArray(transactions)){
+        goto end; //nonprimitive container
+    }
+
+    transactionsList = list_create();
+
+    cJSON_ArrayForEach(transactions_local_nonprimitive,transactions )
     {
-    goto end; //String
+        if(!cJSON_IsObject(transactions_local_nonprimitive)){
+            goto end;
+        }
+        transaction_encoded_t *transactionsItem = transaction_encoded_parseFromJSON(transactions_local_nonprimitive);
+
+        list_addElement(transactionsList, transactionsItem);
     }
     }
 
 
     inline_response_200_6_local_var = inline_response_200_6_create (
-        address ? strdup(address->valuestring) : NULL
+        transactions ? transactionsList : NULL
         );
 
     return inline_response_200_6_local_var;

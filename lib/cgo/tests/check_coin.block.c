@@ -152,7 +152,7 @@ START_TEST(TestBlockHashHeader)
     ck_assert_msg(result == SKY_OK, "SKY_coin_BlockHeader_Hash failed");
     ck_assert(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
     strcpy(hash2, "");
-    ck_assert(!isU8Eq(hash1, hash2, sizeof(cipher__SHA256)));
+    ck_assert_int_eq(isU8Eq(hash1, hash2, sizeof(cipher__SHA256)), 0);
 }
 END_TEST
 

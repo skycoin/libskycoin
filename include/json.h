@@ -166,7 +166,7 @@ typedef struct _json_value {
 #endif
 
 
-    /* Some C++ operator sugar */
+/* Some C++ operator sugar */
 
 #ifdef __cplusplus
 

@@ -17,29 +17,50 @@ set(SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/apiKey.c
     ${CMAKE_CURRENT_SOURCE_DIR}/src/apiClient.c
     ${CMAKE_CURRENT_SOURCE_DIR}/external/cJSON.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_inputs.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_outputs.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_status.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_hours_selection.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_to.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_wallet.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_entries.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_meta.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_object.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction_outputs.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/address.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema_body.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_verbose_schema.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_verbose_schema_body.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_verbose_schema_header.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_10.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_2.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3_unconfirmed_verify_transaction.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_4.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_5.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_6.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7_data.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8_data.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_9.c
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_default.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/network_connection_schema.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/network_connection_schema_unconfirmed_verify_transaction.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_encoded.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_encoded_s.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_status.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_txn.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_address.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_address_hours_selection.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_unspent.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_unspent_hours_selection.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_unspent_to.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verbose.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verbose_txn.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verbose_txn_inputs.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verify_request.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request_hours_selection.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request_wallet.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_sign_request.c
     ${CMAKE_CURRENT_SOURCE_DIR}/api/DefaultAPI.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.c
+
 )
 
 set(HDRS
@@ -47,29 +68,49 @@ set(HDRS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/list.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/keyValuePair.h
     ${CMAKE_CURRENT_SOURCE_DIR}/external/cJSON.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_inputs.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_outputs.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_explorer_address_status.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_hours_selection.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_to.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallet_transaction_wallet.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_entries.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_wallets_meta.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_object.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/_api_v1_pending_txs_transaction_outputs.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/address.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_schema_body.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_verbose_schema.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_verbose_schema_body.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/block_verbose_schema_header.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_1.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_10.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_2.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_3_unconfirmed_verify_transaction.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_4.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_5.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_6.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_7_data.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_8_data.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_200_9.h
     ${CMAKE_CURRENT_SOURCE_DIR}/model/inline_response_default.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/network_connection_schema.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/network_connection_schema_unconfirmed_verify_transaction.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_encoded.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_encoded_s.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_status.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_txn.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_address.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_address_hours_selection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_unspent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_unspent_hours_selection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_v2_params_unspent_to.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verbose.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verbose_txn.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verbose_txn_inputs.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/transaction_verify_request.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request_hours_selection.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_request_wallet.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/wallet_transaction_sign_request.h
     ${CMAKE_CURRENT_SOURCE_DIR}/api/DefaultAPI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/model/object.h
 )
 
 include_directories(${CURL_INCLUDE_DIR})
