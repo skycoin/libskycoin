@@ -36,6 +36,11 @@ GoInt_ isAddressEq(cipher__Address *addr1, cipher__Address *addr2)
   return (addr1->Version == addr2->Version && memcmp((void *)addr1, (void *)addr2, sizeof(cipher__Address)) == 0);
 }
 
+GoInt_ isBitcoinAddressEq(cipher__BitcoinAddress* addr1, cipher__BitcoinAddress* addr2)
+{
+  return (addr1->Version == addr2->Version && memcmp((void *)addr1, (void *)addr2, sizeof(cipher__Address)) == 0);
+}
+
 GoInt_ isGoStringEq(GoString string1, GoString string2) {
   return (string1.n == string2.n) &&
          (strcmp(string1.p, string2.p) == 0);

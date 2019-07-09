@@ -7,6 +7,7 @@
 extern GoInt_ isAddressEq(cipher__Address* addr1, cipher__Address* addr2);
 extern GoInt_ isAddressEqPtr(cipher__Address addr1, cipher__Address addr2);
 
+extern GoInt_ isBitcoinAddressEq(cipher__BitcoinAddress* addr1, cipher__BitcoinAddress* addr2);
 extern GoInt_ isPubKeyEq(cipher__PubKey* pubkey1, cipher__PubKey* pubkey2);
 extern GoInt_ isSigEq(cipher__Sig* sig1, cipher__Sig* sig2);
 
@@ -27,5 +28,6 @@ extern GoInt_ isTransactionsEq(coin__Transactions* x1, coin__Transactions* x2);
 extern GoInt_ isTransactionOutputEq(coin__TransactionOutput* x1, coin__TransactionOutput* x2);
 
 extern GoInt_ isGoStringEq(GoString string1, GoString string2);
+extern GoInt_ isGoString_Eq(GoString_ string1, GoString_ string2);
 
 #endif // LIBSKY_ASSERT_H

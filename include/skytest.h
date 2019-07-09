@@ -40,6 +40,7 @@ void cleanRegisteredWallet(
 
 int copySlice(GoSlice_* pdest, GoSlice_* psource, int elem_size);
 int copyGoSlice_toGoSlice(GoSlice* pdest, GoSlice_* psource, int elem_size);
+int copycoin_UxArraytoGoSlice(GoSlice* pdest, coin__UxArray* psource, int elem_size);
 
 int cutSlice(GoSlice_* slice, int start, int end, int elem_size, GoSlice_* result);
 

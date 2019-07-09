@@ -6,21 +6,13 @@
 
 
 inline_response_200_4_t *inline_response_200_4_create(
-    char *announced,
-    int is_valid,
-    char *checked,
-    char *received,
-    _api_v1_pending_txs_transaction_t *transaction
+    list_t *connections
     ) {
 	inline_response_200_4_t *inline_response_200_4_local_var = malloc(sizeof(inline_response_200_4_t));
     if (!inline_response_200_4_local_var) {
         return NULL;
     }
-	inline_response_200_4_local_var->announced = announced;
-	inline_response_200_4_local_var->is_valid = is_valid;
-	inline_response_200_4_local_var->checked = checked;
-	inline_response_200_4_local_var->received = received;
-	inline_response_200_4_local_var->transaction = transaction;
+	inline_response_200_4_local_var->connections = connections;
 
 	return inline_response_200_4_local_var;
 }
@@ -28,57 +20,32 @@ inline_response_200_4_t *inline_response_200_4_create(
 
 void inline_response_200_4_free(inline_response_200_4_t *inline_response_200_4) {
     listEntry_t *listEntry;
-    free(inline_response_200_4->announced);
-    free(inline_response_200_4->checked);
-    free(inline_response_200_4->received);
-    _api_v1_pending_txs_transaction_free(inline_response_200_4->transaction);
+	list_ForEach(listEntry, inline_response_200_4->connections) {
+		network_connection_schema_free(listEntry->data);
+	}
+	list_free(inline_response_200_4->connections);
 	free(inline_response_200_4);
 }
 
 cJSON *inline_response_200_4_convertToJSON(inline_response_200_4_t *inline_response_200_4) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_4->announced
-    if(inline_response_200_4->announced) { 
-    if(cJSON_AddStringToObject(item, "announced", inline_response_200_4->announced) == NULL) {
-    goto fail; //String
+	// inline_response_200_4->connections
+    if(inline_response_200_4->connections) { 
+    cJSON *connections = cJSON_AddArrayToObject(item, "connections");
+    if(connections == NULL) {
+    goto fail; //nonprimitive container
     }
-     } 
 
-
-	// inline_response_200_4->is_valid
-    if(inline_response_200_4->is_valid) { 
-    if(cJSON_AddBoolToObject(item, "is_valid", inline_response_200_4->is_valid) == NULL) {
-    goto fail; //Bool
-    }
-     } 
-
-
-	// inline_response_200_4->checked
-    if(inline_response_200_4->checked) { 
-    if(cJSON_AddStringToObject(item, "checked", inline_response_200_4->checked) == NULL) {
-    goto fail; //String
-    }
-     } 
-
-
-	// inline_response_200_4->received
-    if(inline_response_200_4->received) { 
-    if(cJSON_AddStringToObject(item, "received", inline_response_200_4->received) == NULL) {
-    goto fail; //String
-    }
-     } 
-
-
-	// inline_response_200_4->transaction
-    if(inline_response_200_4->transaction) { 
-    cJSON *transaction_local_JSON = _api_v1_pending_txs_transaction_convertToJSON(inline_response_200_4->transaction);
-    if(transaction_local_JSON == NULL) {
-    goto fail; //model
-    }
-    cJSON_AddItemToObject(item, "transaction", transaction_local_JSON);
-    if(item->child == NULL) {
+    listEntry_t *connectionsListEntry;
+    if (inline_response_200_4->connections) {
+    list_ForEach(connectionsListEntry, inline_response_200_4->connections) {
+    cJSON *itemLocal = network_connection_schema_convertToJSON(connectionsListEntry->data);
+    if(itemLocal == NULL) {
     goto fail;
+    }
+    cJSON_AddItemToArray(connections, itemLocal);
+    }
     }
      } 
 
@@ -94,56 +61,31 @@ inline_response_200_4_t *inline_response_200_4_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_4_t *inline_response_200_4_local_var = NULL;
 
-    // inline_response_200_4->announced
-    cJSON *announced = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "announced");
-    if (announced) { 
-    if(!cJSON_IsString(announced))
-    {
-    goto end; //String
-    }
-    }
-
-    // inline_response_200_4->is_valid
-    cJSON *is_valid = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "is_valid");
-    if (is_valid) { 
-    if(!cJSON_IsBool(is_valid))
-    {
-    goto end; //Bool
-    }
+    // inline_response_200_4->connections
+    cJSON *connections = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "connections");
+    list_t *connectionsList;
+    if (connections) { 
+    cJSON *connections_local_nonprimitive;
+    if(!cJSON_IsArray(connections)){
+        goto end; //nonprimitive container
     }
 
-    // inline_response_200_4->checked
-    cJSON *checked = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "checked");
-    if (checked) { 
-    if(!cJSON_IsString(checked))
-    {
-    goto end; //String
-    }
-    }
+    connectionsList = list_create();
 
-    // inline_response_200_4->received
-    cJSON *received = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "received");
-    if (received) { 
-    if(!cJSON_IsString(received))
+    cJSON_ArrayForEach(connections_local_nonprimitive,connections )
     {
-    goto end; //String
-    }
-    }
+        if(!cJSON_IsObject(connections_local_nonprimitive)){
+            goto end;
+        }
+        network_connection_schema_t *connectionsItem = network_connection_schema_parseFromJSON(connections_local_nonprimitive);
 
-    // inline_response_200_4->transaction
-    cJSON *transaction = cJSON_GetObjectItemCaseSensitive(inline_response_200_4JSON, "transaction");
-    _api_v1_pending_txs_transaction_t *transaction_local_nonprim = NULL;
-    if (transaction) { 
-    transaction_local_nonprim = _api_v1_pending_txs_transaction_parseFromJSON(transaction); //nonprimitive
+        list_addElement(connectionsList, connectionsItem);
+    }
     }
 
 
     inline_response_200_4_local_var = inline_response_200_4_create (
-        announced ? strdup(announced->valuestring) : NULL,
-        is_valid ? is_valid->valueint : 0,
-        checked ? strdup(checked->valuestring) : NULL,
-        received ? strdup(received->valuestring) : NULL,
-        transaction ? transaction_local_nonprim : NULL
+        connections ? connectionsList : NULL
         );
 
     return inline_response_200_4_local_var;
