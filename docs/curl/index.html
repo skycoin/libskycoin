@@ -816,7 +816,7 @@ ul.nav-tabs {
   <script>
     // Script section to load models into a JS Var
     var defs = {}
-    defs["apiv1exploreraddress_inputs"] = {
+    defs["_api_v1_explorer_address_inputs"] = {
   "properties" : {
     "owner" : {
       "type" : "string"
@@ -837,7 +837,7 @@ ul.nav-tabs {
     }
   }
 };
-    defs["apiv1exploreraddress_outputs"] = {
+    defs["_api_v1_explorer_address_outputs"] = {
   "properties" : {
     "hours" : {
       "type" : "integer",
@@ -854,7 +854,7 @@ ul.nav-tabs {
     }
   }
 };
-    defs["apiv1exploreraddress_status"] = {
+    defs["_api_v1_explorer_address_status"] = {
   "properties" : {
     "unconfirmed" : {
       "type" : "boolean"
@@ -872,12 +872,12 @@ ul.nav-tabs {
     }
   }
 };
-    defs["apiv1pendingTxs_transaction"] = {
+    defs["_api_v1_pendingTxs_transaction"] = {
   "properties" : {
     "outputs" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/apiv1exploreraddress_outputs"
+        "$ref" : "#/components/schemas/_api_v1_explorer_address_outputs"
       }
     },
     "inner_hash" : {
@@ -913,7 +913,57 @@ ul.nav-tabs {
   },
   "description" : "BlockTransactionVerbose has readable transaction data for transactions inside a block. It differs from Transaction in that it includes metadata for transaction inputs and the calculated coinhour fee spent by the block"
 };
-    defs["apiv1wallets_entries"] = {
+    defs["_api_v1_wallet_transaction_hours_selection"] = {
+  "properties" : {
+    "mode" : {
+      "type" : "string"
+    },
+    "share_factor" : {
+      "type" : "string"
+    },
+    "type" : {
+      "type" : "string"
+    }
+  }
+};
+    defs["_api_v1_wallet_transaction_to"] = {
+  "properties" : {
+    "hours" : {
+      "type" : "integer",
+      "format" : "int64"
+    },
+    "address" : {
+      "type" : "string"
+    },
+    "coins" : {
+      "type" : "integer",
+      "format" : "int64"
+    }
+  }
+};
+    defs["_api_v1_wallet_transaction_wallet"] = {
+  "properties" : {
+    "unspents" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "addresses" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "password" : {
+      "type" : "string"
+    },
+    "id" : {
+      "type" : "string"
+    }
+  }
+};
+    defs["_api_v1_wallets_entries"] = {
   "properties" : {
     "public_key" : {
       "type" : "string"
@@ -923,7 +973,7 @@ ul.nav-tabs {
     }
   }
 };
-    defs["apiv1wallets_meta"] = {
+    defs["_api_v1_wallets_meta"] = {
   "properties" : {
     "filename" : {
       "type" : "string"
@@ -951,56 +1001,6 @@ ul.nav-tabs {
     }
   }
 };
-    defs["apiv1wallettransaction_hours_selection"] = {
-  "properties" : {
-    "mode" : {
-      "type" : "string"
-    },
-    "share_factor" : {
-      "type" : "string"
-    },
-    "type" : {
-      "type" : "string"
-    }
-  }
-};
-    defs["apiv1wallettransaction_to"] = {
-  "properties" : {
-    "hours" : {
-      "type" : "integer",
-      "format" : "int64"
-    },
-    "address" : {
-      "type" : "string"
-    },
-    "coins" : {
-      "type" : "integer",
-      "format" : "int64"
-    }
-  }
-};
-    defs["apiv1wallettransaction_wallet"] = {
-  "properties" : {
-    "unspents" : {
-      "type" : "array",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "addresses" : {
-      "type" : "array",
-      "items" : {
-        "type" : "string"
-      }
-    },
-    "password" : {
-      "type" : "string"
-    },
-    "id" : {
-      "type" : "string"
-    }
-  }
-};
     defs["inline_object"] = {
   "type" : "object",
   "properties" : {
@@ -1008,7 +1008,7 @@ ul.nav-tabs {
       "type" : "string"
     },
     "hours_selection" : {
-      "$ref" : "#/components/schemas/apiv1wallettransaction_hours_selection"
+      "$ref" : "#/components/schemas/_api_v1_wallet_transaction_hours_selection"
     },
     "ignore_unconfirmed" : {
       "type" : "boolean"
@@ -1016,11 +1016,11 @@ ul.nav-tabs {
     "to" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/apiv1wallettransaction_to"
+        "$ref" : "#/components/schemas/_api_v1_wallet_transaction_to"
       }
     },
     "wallet" : {
-      "$ref" : "#/components/schemas/apiv1wallettransaction_wallet"
+      "$ref" : "#/components/schemas/_api_v1_wallet_transaction_wallet"
     }
   }
 };
@@ -1072,7 +1072,7 @@ ul.nav-tabs {
     "outputs" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/apiv1exploreraddress_outputs"
+        "$ref" : "#/components/schemas/_api_v1_explorer_address_outputs"
       }
     },
     "inner_hash" : {
@@ -1081,7 +1081,7 @@ ul.nav-tabs {
     "inputs" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/apiv1exploreraddress_inputs"
+        "$ref" : "#/components/schemas/_api_v1_explorer_address_inputs"
       }
     },
     "fee" : {
@@ -1106,7 +1106,7 @@ ul.nav-tabs {
       "format" : "in64"
     },
     "status" : {
-      "$ref" : "#/components/schemas/apiv1exploreraddress_status"
+      "$ref" : "#/components/schemas/_api_v1_explorer_address_status"
     },
     "timestamp" : {
       "type" : "integer",
@@ -1197,7 +1197,7 @@ ul.nav-tabs {
       "type" : "string"
     },
     "transaction" : {
-      "$ref" : "#/components/schemas/apiv1pendingTxs_transaction"
+      "$ref" : "#/components/schemas/_api_v1_pendingTxs_transaction"
     }
   }
 };
@@ -1206,11 +1206,11 @@ ul.nav-tabs {
     "entries" : {
       "type" : "array",
       "items" : {
-        "$ref" : "#/components/schemas/apiv1wallets_entries"
+        "$ref" : "#/components/schemas/_api_v1_wallets_entries"
       }
     },
     "meta" : {
-      "$ref" : "#/components/schemas/apiv1wallets_meta"
+      "$ref" : "#/components/schemas/_api_v1_wallets_meta"
     }
   }
 };
@@ -1547,7 +1547,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-addressCount-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -1899,7 +1899,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-addressUxouts-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var address = address_example; // {String} address to filter by
@@ -2290,7 +2290,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-balanceGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var addrs = addrs_example; // {String} command separated list of addresses
@@ -2694,7 +2694,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-balancePost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -3114,7 +3114,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-block-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -3518,7 +3518,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-blockchainMetadata-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -3868,7 +3868,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-blockchainProgress-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -4232,7 +4232,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-blocksGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -4689,7 +4689,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-blocksPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -5144,7 +5144,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-coinSupply-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -5492,7 +5492,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-csrf-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -5842,7 +5842,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-defaultConnections-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -6197,7 +6197,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-explorerAddress-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -6584,7 +6584,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-health-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -6936,7 +6936,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-lastBlocks-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var num = 56; // {Integer} 
@@ -7321,7 +7321,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-networkConnection-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var addr = addr_example; // {String} Address port
@@ -7729,7 +7729,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-networkConnections-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -8182,7 +8182,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-networkConnectionsDisconnect-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -8550,7 +8550,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-networkConnectionsExchange-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -8915,7 +8915,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-networkConnectionsTrust-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -9302,7 +9302,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-outputsGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -9729,7 +9729,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-outputsPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -10161,7 +10161,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-pendingTxs-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -10520,7 +10520,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-resendUnconfirmedTxns-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -10859,7 +10859,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-richlist-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -11277,7 +11277,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-transaction-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var txid = txid_example; // {String} transaction hash
@@ -11707,7 +11707,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-transactionInject-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -12124,7 +12124,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-transactionRaw-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -12523,7 +12523,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-transactionVerify-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -12905,7 +12905,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-transactionsGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -13338,7 +13338,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-transactionsPost-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -13780,7 +13780,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-uxout-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -14183,7 +14183,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-verifyAddress-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -14596,7 +14596,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-version-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
@@ -14947,7 +14947,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-wallet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var id = id_example; // {String} tags to filter by
@@ -15337,7 +15337,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletBalance-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var id = id_example; // {String} tags to filter by
@@ -15757,7 +15757,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletCreate-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -16299,7 +16299,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletDecrypt-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -16763,7 +16763,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletEncrypt-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -17208,7 +17208,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletFolder-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var addr = addr_example; // {String} Address port
@@ -17617,7 +17617,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletNewAddress-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -18085,7 +18085,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletNewSeed-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var opts = {
@@ -18494,7 +18494,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletRecover-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -18986,7 +18986,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletSeed-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -19446,7 +19446,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletSeedVerify-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -19910,7 +19910,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletSpent-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -20366,9 +20366,9 @@ public class DefaultApiExample {
         //csrfAuth.setApiKeyPrefix("Token");
 
         DefaultApi apiInstance = new DefaultApi();
-        Inline_object inlineObject = ; // Inline_object | 
+        InlineObject body = ; // InlineObject | 
         try {
-            Object result = apiInstance.walletTransaction(inlineObject);
+            Object result = apiInstance.walletTransaction(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#walletTransaction");
@@ -20385,9 +20385,9 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        Inline_object inlineObject = ; // Inline_object | 
+        InlineObject body = ; // InlineObject | 
         try {
-            Object result = apiInstance.walletTransaction(inlineObject);
+            Object result = apiInstance.walletTransaction(body);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#walletTransaction");
@@ -20408,11 +20408,11 @@ public class DefaultApiExample {
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 //[apiConfig setApiKeyPrefix:@"Bearer" forApiKeyIdentifier:@"X-CSRF-TOKEN"];
 
-Inline_object *inlineObject = ; //  (optional)
+InlineObject *body = ; // 
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
-[apiInstance walletTransactionWith:inlineObject
+[apiInstance walletTransactionWith:body
               completionHandler: ^(Object output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -20425,7 +20425,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletTransaction-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -20435,9 +20435,7 @@ csrfAuth.apiKey = "YOUR API KEY"
 //csrfAuth.apiKeyPrefix['X-CSRF-TOKEN'] = "Token"
 
 var api = new SkycoinRestApi.DefaultApi()
-var opts = {
-  'inlineObject':  // {Inline_object} 
-};
+var body = ; // {InlineObject} 
 
 var callback = function(error, data, response) {
   if (error) {
@@ -20446,7 +20444,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.walletTransaction(opts, callback);
+api.walletTransaction(body, callback);
 </code></pre>
                             </div>
 
@@ -20473,11 +20471,11 @@ namespace Example
             // Configuration.Default.ApiKeyPrefix.Add("X-CSRF-TOKEN", "Bearer");
 
             var apiInstance = new DefaultApi();
-            var inlineObject = new Inline_object(); // Inline_object |  (optional) 
+            var body = new InlineObject(); // InlineObject | 
 
             try
             {
-                Object result = apiInstance.walletTransaction(inlineObject);
+                Object result = apiInstance.walletTransaction(body);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -20500,10 +20498,10 @@ OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKey('X-CSRF-
 // OpenAPITools\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('X-CSRF-TOKEN', 'Bearer');
 
 $api_instance = new OpenAPITools\Client\Api\DefaultApi();
-$inlineObject = ; // Inline_object | 
+$body = ; // InlineObject | 
 
 try {
-    $result = $api_instance->walletTransaction($inlineObject);
+    $result = $api_instance->walletTransaction($body);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DefaultApi->walletTransaction: ', $e->getMessage(), PHP_EOL;
@@ -20522,10 +20520,10 @@ $WWW::OPenAPIClient::Configuration::api_key->{'X-CSRF-TOKEN'} = 'YOUR_API_KEY';
 #$WWW::OPenAPIClient::Configuration::api_key_prefix->{'X-CSRF-TOKEN'} = "Bearer";
 
 my $api_instance = WWW::OPenAPIClient::DefaultApi->new();
-my $inlineObject = WWW::OPenAPIClient::Object::Inline_object->new(); # Inline_object | 
+my $body = WWW::OPenAPIClient::Object::InlineObject->new(); # InlineObject | 
 
 eval { 
-    my $result = $api_instance->walletTransaction(inlineObject => $inlineObject);
+    my $result = $api_instance->walletTransaction(body => $body);
     print Dumper($result);
 };
 if ($@) {
@@ -20547,10 +20545,10 @@ openapi_client.configuration.api_key['X-CSRF-TOKEN'] = 'YOUR_API_KEY'
 
 # create an instance of the API class
 api_instance = openapi_client.DefaultApi()
-inlineObject =  # Inline_object |  (optional)
+body =  # InlineObject | 
 
 try: 
-    api_response = api_instance.wallet_transaction(inlineObject=inlineObject)
+    api_response = api_instance.wallet_transaction(body)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling DefaultApi->walletTransaction: %s\n" % e)</code></pre>
@@ -20560,10 +20558,10 @@ except ApiException as e:
                               <pre class="prettyprint"><code class="language-rust">extern crate DefaultApi;
 
 pub fn main() {
-    let inlineObject = ; // Inline_object
+    let body = ; // InlineObject
 
     let mut context = DefaultApi::Context::default();
-    let result = client.walletTransaction(inlineObject, &context).wait();
+    let result = client.walletTransaction(body, &context).wait();
     println!("{:?}", result);
 
 }
@@ -20586,7 +20584,7 @@ pub fn main() {
                                 <th width="150px">Name</th>
                                 <th>Description</th>
                               </tr>
-                                <tr><td style="width:150px;">inlineObject </td>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
 <td>
 <p class="marked"></p>
 <script>
@@ -20603,12 +20601,12 @@ $(document).ready(function() {
   }
 
   var view = new JSONSchemaView(schema,2,{isBodyParam: true});
-  var result = $('#d2e199_walletTransaction_inlineObject');
+  var result = $('#d2e199_walletTransaction_body');
   result.empty();
   result.append(view.render());
 });
 </script>
-<div id="d2e199_walletTransaction_inlineObject"></div>
+<div id="d2e199_walletTransaction_body"></div>
 </td>
 </tr>
 
@@ -20844,7 +20842,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletTransactions-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var id = id_example; // {String} Wallet id.
@@ -21241,7 +21239,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletUnload-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -21628,7 +21626,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-walletUpdate-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 var defaultClient = SkycoinRestApi.ApiClient.instance;
 
 // Configure API key authorization: csrfAuth
@@ -22027,7 +22025,7 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                             </div>
 
                             <div class="tab-pane" id="examples-Default-wallets-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api');
+                              <pre class="prettyprint"><code class="language-js">var SkycoinRestApi = require('skycoin_rest_api_');
 
 var api = new SkycoinRestApi.DefaultApi()
 var callback = function(error, data, response) {
