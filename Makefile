@@ -26,6 +26,7 @@ BUILDLIB_DIR = $(BUILD_DIR)/libskycoin
 BUILDLIBSKYAPI_DIR = $(BUILD_DIR)/libskyapi
 LIBNAME_Linux = libskyapi.so
 LIBNAME_Darwin = libskyapi.dylib
+LIBNAME_Static = libskyapiStatic.a
 LIB_DIR = lib
 BIN_DIR = bin
 DOC_DIR = docs
@@ -103,6 +104,7 @@ build-skyapi: ## Build skyapi(libcurl based) library
 	(cd lib/curl && bash ./install_lib_curl.sh)
 	mkdir -p ./build/libskyapi
 	cp lib/curl/build/$(LIBNAME_$(UNAME_S)) ./build/libskyapi
+	cp lib/curl/build/$(LIBNAME_Static) ./build/libskyapi
 
 build: build-libc build-skyapi ## Build libraries
 
