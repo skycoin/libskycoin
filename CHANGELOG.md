@@ -11,11 +11,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added datatype `transaction__UxBalance`
 - Added function `SKY_transaction_NewUxBalances`, 
 - Added function `SKY_transaction_DistributeCoinHoursProportional`, `SKY_transaction_DistributeSpendHours`
-
+- Support for this new functions in `skyapi`:
+  - Add POST /api/v2/wallet/transaction/sign to sign an unsigned transaction with a wallet
+  - Add POST /api/v2/transaction to create an unsigned transaction from addresses or unspent outputs without a wallet
+  - Add /api/v2/data APIs for transaction notes and generic key-value storage.
+  - Update /metrics endpoint to add metrics from /health: unspent_outputs, unconfirmed_txns, time_since_last_block_seconds, open_connections, outgoing_connections, incoming_connections, start_at, uptime_seconds, last_block_seq.
 
 ### Fixed
 
 ### Changed
+- Support for this changed functions in `skyapi`:
+  - Add /api/v1/resendUnconfirmedTxns to the WALLET API set
+  - In POST /api/v1/wallet/transaction, moved wallet parameters to the top level of the object
+  - POST /api/v2/wallet/seed/verify returns an error if the seed's checksum is invalid
+  - Increase the detail of error messages for invalid seeds sent to POST /api/v2/wallet/seed/verify
 
 ### Removed
 - Removed symbolic links from vendor
@@ -30,7 +39,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Removed function `SKY_wallet_DistributeSpendHours`
 - Removed function `SKY_wallet_DistributeCoinHoursProportional`
 - Removed function `SKY_wallet_NewUxBalances`
-
+- Removed support for next functions in `skyapi`:
+  - /api/v1/explorer/address endpoint (use GET /api/v1/transactions?verbose=1 instead). See https://github.com/skycoin/skycoin/blob/develop/src/api/README.md#migrating-from--api-v1-explorer-address
+  - The unversioned REST API (the -enable-unversioned-api is removed, prefix your API requests with /api/v1 if they don't have an /api/vx prefix already). See https://github.com/skycoin/skycoin/blob/develop/src/api/README.md#migrating-from-the-unversioned-api
+  - /api/v1/wallet/spend endpoint (use POST /api/v1/wallet/transaction followed by POST /api/v1/injectTransaction instead). See https://github.com/skycoin/skycoin/blob/develop/src/api/README.md#migrating-from--api-v1-spend
 
 
 ## [0.25.1] - 2019-05-24
