@@ -1,12 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "libskycoin.h"
 #include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
 #include <check.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 START_TEST(TestDistributionAddressArrays)

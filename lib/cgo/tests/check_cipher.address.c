@@ -9,18 +9,13 @@
 
 #define SKYCOIN_ADDRESS_VALID "2GgFvqoyk9RjwVzj8tqfcXVXB4orBwoc9qv"
 
-// TestSuite(cipher_address, .init = setup, .fini = teardown);
-//
-// buffer big enough to hold all kind of data needed by test cases
-unsigned char buff[1024];
-//
 START_TEST(TestDecodeBase58Address)
 {
     GoString strAddr = {SKYCOIN_ADDRESS_VALID, 35};
     cipher__Address addr;
     GoUint32 err = SKY_cipher_DecodeBase58Address(strAddr, &addr);
     ck_assert_int_eq(err, SKY_OK);
-
+    GoUint8 buff[1024];
     char tempStr[50];
     int errorcode;
 
@@ -103,7 +98,7 @@ START_TEST(TestAddressFromBytes)
     cipher__PubKey pk;
     GoSlice bytes;
     GoSlice_ tempBytes;
-
+    GoUint8 buff[1024];
     GoUint32 err = SKY_cipher_GenerateKeyPair(&pk, &sk);
     ck_assert(err == SKY_OK);
     SKY_cipher_AddressFromPubKey(&pk, &addr);
@@ -202,6 +197,7 @@ START_TEST(TestAddressString)
     cipher__PubKey pk;
     cipher__SecKey sk;
     cipher__Address addr, addr2, addr3;
+    GoUint8 buff[1024];
     GoString str = {buff, 0};
 
     GoUint32 err = SKY_cipher_GenerateKeyPair(&pk, &sk);
