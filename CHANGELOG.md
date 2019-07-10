@@ -37,6 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+- Be able to set a build type for lib curl.
 - Export functions in Skycoin 0.25.1 core API's
 - `skyapi` C client for Skycoin node REST at `lib/curl`.
 - Support for building `libskycoin` on ARM and 32 / 64 bits.
