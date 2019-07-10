@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added datatype `transaction__UxBalance`
 - Added function `SKY_transaction_NewUxBalances`, 
 - Added function `SKY_transaction_DistributeCoinHoursProportional`, `SKY_transaction_DistributeSpendHours`
+- Added funcion `SKY_coin_VerifyInputSignatures`
 
 
 ### Fixed
