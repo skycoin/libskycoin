@@ -7,8 +7,6 @@
 #include "skytest.h"
 #include <check.h>
 
-// TestSuite(cipher_crypto, .init = setup, .fini = teardown);
-
 START_TEST(TestNewPubKey)
 {
     unsigned char buff[101];

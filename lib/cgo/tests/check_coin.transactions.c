@@ -1,18 +1,15 @@
 
-#include <signal.h>
-#include <stdio.h>
-
+#include "check.h"
 #include "libskycoin.h"
 #include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
 #include "skytxn.h"
-#include <check.h>
+#include <signal.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "check.h"
 
 GoUint64 Million = 1000000;
 
@@ -281,7 +278,7 @@ START_TEST(TestTransactionUpdateHeader)
     memset(&ptx->InnerHash, 0, sizeof(cipher__SHA256));
     result = SKY_coin_Transaction_UpdateHeader(handle);
     ck_assert_int_eq(isU8Eq(ptx->InnerHash, nullHash, sizeof(cipher__SHA256)), 0);
-    ck_assert(isU8Eq(ptx->InnerHash, hash, sizeof(cipher__SHA256)));
+    ck_assert_int_eq(isU8Eq(ptx->InnerHash, hash, sizeof(cipher__SHA256)), 1);
     result = SKY_coin_Transaction_HashInner(handle, &hashInner);
     ck_assert(result == SKY_OK);
     ck_assert(isU8Eq(hashInner, ptx->InnerHash, sizeof(cipher__SHA256)));
@@ -314,6 +311,7 @@ START_TEST(TestTransactionsSize)
 }
 END_TEST
 
+//TODO : Not define SKY_coin_Transaction_VerifyInput in skycoin:0.26.0
 // START_TEST(TestTransactionVerifyInput)
 // {
 //     printf("Load TestTransactionVerifyInput\n");
