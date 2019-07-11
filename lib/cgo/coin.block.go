@@ -381,6 +381,7 @@ func SKY_coin_BlockBody_Transactions(_bb C.BlockBody__Handle, _arg0 *C.Transacti
 }
 
 //export SKY_coin_BlockHeader_SetTime
+// nolint megacheck
 func SKY_coin_BlockHeader_SetTime(_bh C.BlockHeader__Handle, _arg0 uint64) (____error_code uint32) {
 
 	bh, ok := lookupBlockHeaderHandle(_bh)
@@ -394,6 +395,7 @@ func SKY_coin_BlockHeader_SetTime(_bh C.BlockHeader__Handle, _arg0 uint64) (____
 }
 
 //export SKY_coin_BlockHeader_SetBkSeq
+// nolint megacheck
 func SKY_coin_BlockHeader_SetBkSeq(_bh C.BlockHeader__Handle, _arg0 uint64) (____error_code uint32) {
 
 	bh, ok := lookupBlockHeaderHandle(_bh)
@@ -407,6 +409,7 @@ func SKY_coin_BlockHeader_SetBkSeq(_bh C.BlockHeader__Handle, _arg0 uint64) (___
 }
 
 //export SKY_coin_BlockHeader_SetFee
+// nolint megacheck
 func SKY_coin_BlockHeader_SetFee(_bh C.BlockHeader__Handle, _arg0 uint64) (____error_code uint32) {
 
 	bh, ok := lookupBlockHeaderHandle(_bh)
@@ -420,6 +423,7 @@ func SKY_coin_BlockHeader_SetFee(_bh C.BlockHeader__Handle, _arg0 uint64) (____e
 }
 
 //export SKY_coin_BlockHeader_SetVersion
+// nolint megacheck
 func SKY_coin_BlockHeader_SetVersion(_bh C.BlockHeader__Handle, _arg0 uint32) (____error_code uint32) {
 
 	bh, ok := lookupBlockHeaderHandle(_bh)
