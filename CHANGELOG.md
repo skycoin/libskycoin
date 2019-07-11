@@ -11,11 +11,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added datatype `transaction__UxBalance`
 - Added function `SKY_transaction_NewUxBalances`, 
 - Added function `SKY_transaction_DistributeCoinHoursProportional`, `SKY_transaction_DistributeSpendHours`
+- Added funcion `SKY_coin_VerifyInputSignatures`
+- Added funcion `SKY_coin_BlockHeader_SetTime`
+- Added funcion `SKY_coin_BlockHeader_SetBkSeq`
+- Added funcion `SKY_coin_BlockHeader_SetFee`
+- Added funcion `SKY_coin_BlockHeader_SetVersion`
+- Added funcion `SKY_coin_BlockHeader_Version`
+- Added funcion `SKY_coin_BlockHeader_PrevHash`
 - Support for this new functions in `skyapi`:
   - Add POST /api/v2/wallet/transaction/sign to sign an unsigned transaction with a wallet
   - Add POST /api/v2/transaction to create an unsigned transaction from addresses or unspent outputs without a wallet
   - Add /api/v2/data APIs for transaction notes and generic key-value storage.
   - Update /metrics endpoint to add metrics from /health: unspent_outputs, unconfirmed_txns, time_since_last_block_seconds, open_connections, outgoing_connections, incoming_connections, start_at, uptime_seconds, last_block_seq.
+
 
 ### Fixed
 

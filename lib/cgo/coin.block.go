@@ -163,8 +163,12 @@ func SKY_coin_NewBlockHeader(_prev *C.coin__BlockHeader, _uxHash *C.cipher__SHA2
 }
 
 //export SKY_coin_BlockHeader_Hash
-func SKY_coin_BlockHeader_Hash(_bh *C.coin__BlockHeader, _arg0 *C.cipher__SHA256) (____error_code uint32) {
-	bh := *(*coin.BlockHeader)(unsafe.Pointer(_bh))
+func SKY_coin_BlockHeader_Hash(_bh C.BlockHeader__Handle, _arg0 *C.cipher__SHA256) (____error_code uint32) {
+	bh, ok := lookupBlockHeaderHandle(_bh)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
 	__arg0 := bh.Hash()
 	*_arg0 = *(*C.cipher__SHA256)(unsafe.Pointer(&__arg0))
 	return
@@ -373,5 +377,83 @@ func SKY_coin_BlockBody_Transactions(_bb C.BlockBody__Handle, _arg0 *C.Transacti
 	}
 	__arg0 := bb.Transactions
 	*_arg0 = registerTransactionsHandle(&__arg0)
+	return
+}
+
+//export SKY_coin_BlockHeader_SetTime
+// nolint megacheck
+func SKY_coin_BlockHeader_SetTime(_bh C.BlockHeader__Handle, _arg0 uint64) (____error_code uint32) {
+
+	bh, ok := lookupBlockHeaderHandle(_bh)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	bh.Time = uint64(_arg0)
+	_bh = registerBlockHeaderHandle(bh)
+	return
+}
+
+//export SKY_coin_BlockHeader_SetBkSeq
+// nolint megacheck
+func SKY_coin_BlockHeader_SetBkSeq(_bh C.BlockHeader__Handle, _arg0 uint64) (____error_code uint32) {
+
+	bh, ok := lookupBlockHeaderHandle(_bh)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	bh.BkSeq = uint64(_arg0)
+	_bh = registerBlockHeaderHandle(bh)
+	return
+}
+
+//export SKY_coin_BlockHeader_SetFee
+// nolint megacheck
+func SKY_coin_BlockHeader_SetFee(_bh C.BlockHeader__Handle, _arg0 uint64) (____error_code uint32) {
+
+	bh, ok := lookupBlockHeaderHandle(_bh)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	bh.Fee = uint64(_arg0)
+	_bh = registerBlockHeaderHandle(bh)
+	return
+}
+
+//export SKY_coin_BlockHeader_SetVersion
+// nolint megacheck
+func SKY_coin_BlockHeader_SetVersion(_bh C.BlockHeader__Handle, _arg0 uint32) (____error_code uint32) {
+
+	bh, ok := lookupBlockHeaderHandle(_bh)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	bh.Version = uint32(_arg0)
+	_bh = registerBlockHeaderHandle(bh)
+	return
+}
+
+//export SKY_coin_BlockHeader_Version
+func SKY_coin_BlockHeader_Version(_b C.BlockHeader__Handle, _arg0 *uint32) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_arg0 = uint32(b.Version)
+	}
+	return
+}
+
+//export SKY_coin_BlockHeader_PrevHash
+func SKY_coin_BlockHeader_PrevHash(_b C.BlockHeader__Handle, _arg0 *C.cipher__SHA256) (____error_code uint32) {
+	b, ok := lookupBlockHeaderHandle(_b)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+	} else {
+		*_arg0 = *(*C.cipher__SHA256)(unsafe.Pointer(&b.PrevHash))
+	}
 	return
 }

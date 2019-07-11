@@ -657,3 +657,17 @@ func SKY_coin_VerifyTransactionHoursSpending(_headTime uint64, _uxIn *C.coin__Ux
 	}
 	return
 }
+
+//export SKY_coin_VerifyInputSignatures
+func SKY_coin_VerifyInputSignatures(handle C.Transaction__Handle, _uxIn *C.coin__UxArray) (____error_code uint32) {
+	tx, ok := lookupTransactionHandle(handle)
+	if !ok {
+		____error_code = SKY_BAD_HANDLE
+		return
+	}
+	uxIn := *(*coin.UxArray)(unsafe.Pointer(_uxIn))
+	____return_err := tx.VerifyInputSignatures(uxIn)
+	____error_code = libErrorCode(____return_err)
+
+	return
+}
