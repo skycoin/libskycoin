@@ -839,7 +839,6 @@ Suite* cipher_crypto(void)
     tcase_add_test(tc, TestPubKeyFromSecKey);
     tcase_add_test(tc, TestPubKeyFromSig);
     tcase_add_test(tc, TestVerifyPubKeySignedHash);
-    // tcase_add_test(tc, TestVerifySignedHash);
     tcase_add_test(tc, TestGenerateDeterministicKeyPair);
     tcase_add_test(tc, TestSecKeTest);
     tcase_add_test(tc, TestSecKeyHashTest);
