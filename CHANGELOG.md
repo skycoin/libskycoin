@@ -24,9 +24,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - Add /api/v2/data APIs for transaction notes and generic key-value storage.
   - Update /metrics endpoint to add metrics from /health: unspent_outputs, unconfirmed_txns, time_since_last_block_seconds, open_connections, outgoing_connections, incoming_connections, start_at, uptime_seconds, last_block_seq.
 
-
-### Fixed
-
 ### Changed
 - Support for this changed functions in `skyapi`:
   - Add /api/v1/resendUnconfirmedTxns to the WALLET API set
