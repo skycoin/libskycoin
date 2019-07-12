@@ -422,59 +422,39 @@ void ValidateSeedData(SeedTestData* seedData, InputTestData* inputData)
         mem_expect.data = skNull;
         mem_actual.data = *s;
         mem_actual.size = mem_expect.size = sizeof(cipher__SecKey);
-        // cr_assert(ne(mem, mem_actual, mem_expect), "%d-th secret key must not be null", i);
         ck_assert_ptr_ne(&mem_actual, &mem_expect);
         ck_assert_msg(isU8Eq(*s, expected->Secret, sizeof(cipher__SecKey)), "%d-th generated secret key must match provided secret key", i);
-        // cr_assert(eq(u8[32], (*s), expected->Secret), "%d-th generated secret key must match provided secret key", i);
 
         cipher__PubKey p;
         SKY_cipher_PubKeyFromSecKey(s, &p);
         mem_expect.data = pkNull;
         mem_actual.data = p;
         mem_actual.size = mem_expect.size = sizeof(cipher__PubKey);
-        // cr_assert(ne(mem, mem_actual, mem_expect),
-        //           "%d-th public key must not be null", i);
         ck_assert_ptr_ne(&mem_actual, &mem_expect);
-        // cr_assert(eq(u8[33], expected->Public, p),
-        //           "%d-th derived public key must match provided public key", i);
         ck_assert_msg(isU8Eq(expected->Public, p, sizeof(cipher__PubKey)), "%d-th derived public key must match provided public key", i);
         cipher__Address addr1;
         SKY_cipher_AddressFromPubKey(&p, &addr1);
         ck_assert_msg(!isAddressEq(&addrNull, &addr1), "%d-th address from pubkey must not be null", i);
-        // cr_assert(ne(type(cipher__Address), addrNull, addr1),
-        //           "%d-th address from pubkey must not be null", i);
         ck_assert_msg(isAddressEq(&expected->Address, &addr1), "%d-th address from pubkey must not be null", i);
-        // cr_assert(eq(type(cipher__Address), expected->Address, addr1),
-        // "%d-th derived address must match provided address", i);
-
         cipher__Address addr2;
         SKY_cipher_AddressFromSecKey(s, &addr2);
-        // cr_assert(ne(type(cipher__Address), addrNull, addr1),
-        //           "%d-th address from sec key must not be null", i);
         ck_assert_msg(!isAddressEq(&addrNull, &addr1), "%d-th address from sec key must not be null", i);
-        // cr_assert(eq(type(cipher__Address), addr1, addr2),
-        //           "%d-th SKY_cipher_AddressFromPubKey and SKY_cipher_AddressFromSecKey must generate same addresses", i);
         ck_assert_msg(isAddressEq(&addr2, &addr1), "%d-th SKY_cipher_AddressFromPubKey and SKY_cipher_AddressFromSecKey must generate same addresses", i);
-        //-----------------------------------------------
-        // secp256k1 not exported in the libc API
-        //-----------------------------------------------
-        /*
-    GoInt validSec;
-    char bufferSecKey[101];
-    strnhex((unsigned char *)s, bufferSecKey, sizeof(cipher__SecKey));
-    GoSlice slseckey = { bufferSecKey,sizeof(cipher__SecKey),65  };
-    SKY_secp256k1_VerifySeckey(slseckey,&validSec);
-    cr_assert(validSec ==1 ,"SKY_secp256k1_VerifySeckey failed");
+        GoInt validSec;
+        char bufferSecKey[101];
+        strnhex((unsigned char*)s, bufferSecKey, sizeof(cipher__SecKey));
+        GoSlice slseckey = {bufferSecKey, sizeof(cipher__SecKey), 65};
+        validSec  = SKY_secp256k1_VerifySecKey(slseckey);
+        ck_assert_msg(validSec == 1, "SKY_secp256k1_VerifySeckey failed");
 
-    GoInt validPub;
-    GoSlice slpubkey = { &p,sizeof(cipher__PubKey), sizeof(cipher__PubKey) };
-    SKY_secp256k1_VerifyPubkey(slpubkey,&validPub);
-    cr_assert(validPub ==1 ,"SKY_secp256k1_VerifyPubkey failed");
+        GoInt validPub;
+        GoSlice slpubkey = {&p, sizeof(cipher__PubKey), sizeof(cipher__PubKey)};
+        validPub = SKY_secp256k1_VerifyPubkey(slpubkey);
+        ck_assert_msg(validPub == 1, "SKY_secp256k1_VerifyPubkey failed");
 
-    // FIXME: without cond : 'not give a valid preprocessing token'
-    bool cond = (!(inputData == NULL && expected->Signatures.len != 0));
-    cr_assert(cond, "%d seed data contains signatures but input data was not provided", i);
-    */
+        int cond = (!(inputData == NULL && expected->Signatures.len != 0));
+        ck_assert_msg(cond, "%d seed data contains signatures but input data was not provided", i);
+
 
         if (inputData != NULL) {
             ck_assert_msg(expected->Signatures.len == inputData->Hashes.len,
@@ -487,25 +467,17 @@ void ValidateSeedData(SeedTestData* seedData, InputTestData* inputData)
                 mem_expect.data = sigNull;
                 mem_actual.data = *sig;
                 mem_actual.size = mem_expect.size = sizeof(cipher__Sig);
-                // cr_assert(ne(mem, mem_actual, mem_expect),
-                //           "%d-th provided signature for %d-th data set must not be null", j, i);
                 ck_assert_ptr_ne(&mem_actual, &mem_expect);
                 GoUint32 err = SKY_cipher_VerifyPubKeySignedHash(&p, sig, h);
                 ck_assert_msg(err == SKY_OK,
                     "SKY_cipher_VerifyPubKeySignedHash failed: error=%d dataset=%d hashidx=%d", err, i, j);
                 err = SKY_cipher_VerifyAddressSignedHash(&addr1, sig, h);
                 ck_assert_msg(err == SKY_OK, "SKY_cipher_VerifyAddressSignedHash failed: error=%d dataset=%d hashidx=%d", err, i, j);
-                err = SKY_cipher_VerifySignedHash(sig, h);
-                ck_assert_msg(err == SKY_OK,
-                    "SKY_cipher_VerifySignedHash failed: error=%d dataset=%d hashidx=%d", err, i, j);
 
                 cipher__PubKey p2;
                 err = SKY_cipher_PubKeyFromSig(sig, h, &p2);
                 ck_assert_msg(err == SKY_OK,
                     "SKY_cipher_PubKeyFromSig failed: error=%d dataset=%d hashidx=%d", err, i, j);
-                // cr_assert(eq(u8[32], p, p2),
-                // "public key derived from %d-th signature in %d-th dataset must match public key derived from secret",
-                // j, i);
                 ck_assert_msg(isU8Eq(p, p2, sizeof(cipher__SecKey)), "public key derived from %d-th signature in %d-th dataset must match public key derived from secret",
                     j, i);
                 cipher__Sig sig2;
@@ -513,11 +485,7 @@ void ValidateSeedData(SeedTestData* seedData, InputTestData* inputData)
                 mem_expect.data = sigNull;
                 mem_actual.data = sig2;
                 mem_actual.size = mem_expect.size = sizeof(cipher__Sig);
-                // cr_assert(ne(mem, mem_actual, mem_expect),
-                // "created signature for %d-th hash in %d-th dataset is null", j, i);
                 ck_assert_ptr_ne(&mem_actual, &mem_expect);
-                // NOTE: signatures are not deterministic, they use a nonce,
-                // so we don't compare the generated sig to the provided sig
             }
         }
     }

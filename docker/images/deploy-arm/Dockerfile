@@ -1,6 +1,6 @@
 ARG QEMU_PLATFORM
 FROM balenalib/${QEMU_PLATFORM}-debian-golang
-
+ARG QEMU_PLATFORM
 ARG GITHUB_OAUTH_TOKEN
 ARG PROJECT_USERNAME
 ARG PROJECT_REPONAME
@@ -16,7 +16,7 @@ RUN make -C $GOPATH/src/github.com/skycoin/libskycoin dep
 RUN go get github.com/gz-c/gox
 RUN go get -t ./...
 ENV CGO_ENABLED=1
-ENV ARCH="armv7"
+ENV ARCH=${QEMU_PLATFORM}
 ENV OS="Linux"
 RUN make -C $GOPATH/src/github.com/skycoin/libskycoin build
 RUN tar -czf libskycoin-${VERSION}-${OS}-${ARCH}.tar.gz -C $GOPATH/src/github.com/skycoin/libskycoin/build $GOPATH/src/github.com/skycoin/libskycoin/build/*

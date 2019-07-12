@@ -1,7 +1,7 @@
 /*
  * _api_v1_pending_txs_transaction.h
  *
- * BlockTransactionVerbose has readable transaction data for transactions inside a block. It differs from Transaction in that it includes metadata for transaction inputs and the calculated coinhour fee spent by the block
+ * 
  */
 
 #ifndef __api_v1_pending_txs_transaction_H_
@@ -11,31 +11,29 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
-#include "_api_v1_explorer_address_outputs.h"
+#include "_api_v1_pending_txs_transaction_outputs.h"
 
 
 
 typedef struct _api_v1_pending_txs_transaction_t {
-    list_t *outputs; //nonprimitive container
-    char *inner_hash; // string
-    list_t *inputs; //primitive container
-    list_t *sigs; //primitive container
-    int length; //numeric
+    long length; //numeric
+    long type; //numeric
     char *txid; // string
-    int type; //numeric
-    int timestamp; //numeric
+    char *inner_hash; // string
+    list_t *sigs; //primitive container
+    list_t *inputs; //primitive container
+    list_t *outputs; //nonprimitive container
 
 } _api_v1_pending_txs_transaction_t;
 
 _api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction_create(
-    list_t *outputs,
-    char *inner_hash,
-    list_t *inputs,
-    list_t *sigs,
-    int length,
+    long length,
+    long type,
     char *txid,
-    int type,
-    int timestamp
+    char *inner_hash,
+    list_t *sigs,
+    list_t *inputs,
+    list_t *outputs
 );
 
 void _api_v1_pending_txs_transaction_free(_api_v1_pending_txs_transaction_t *_api_v1_pending_txs_transaction);

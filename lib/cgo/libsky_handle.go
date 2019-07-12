@@ -16,7 +16,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/skycoin/skycoin/src/api"
-	"github.com/skycoin/skycoin/src/api/webrpc"
 	"github.com/skycoin/skycoin/src/cli"
 	"github.com/skycoin/skycoin/src/coin"
 	"github.com/skycoin/skycoin/src/readable"
@@ -50,20 +49,6 @@ func overwriteHandle(handle C.Handle, obj interface{}) bool {
 		return true
 	}
 	return false
-}
-
-func registerWebRpcClientHandle(obj *webrpc.Client) C.WebRpcClient__Handle {
-	return (C.WebRpcClient__Handle)(registerHandle(obj))
-}
-
-func lookupWebRpcClientHandle(handle C.WebRpcClient__Handle) (*webrpc.Client, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*webrpc.Client); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
 }
 
 func registerWalletHandle(obj *wallet.Wallet) C.Wallet__Handle {
@@ -360,28 +345,14 @@ func lookupBalanceResultHandle(handle C.BalanceResult_Handle) (*cli.BalanceResul
 	return nil, false
 }
 
-func registerSpendResultHandle(obj *api.SpendResult) C.SpendResult_Handle {
-	return (C.SpendResult_Handle)(registerHandle(obj))
-}
-
-func lookupSpendResultHandle(handle C.SpendResult_Handle) (*api.SpendResult, bool) {
-	obj, ok := lookupHandle(C.Handle(handle))
-	if ok {
-		if obj, isOK := (obj).(*api.SpendResult); isOK {
-			return obj, true
-		}
-	}
-	return nil, false
-}
-
-func registerTransactionResultHandle(obj *webrpc.TxnResult) C.TransactionResult_Handle {
+func registerTransactionResultHandle(obj *cli.TxnResult) C.TransactionResult_Handle {
 	return (C.TransactionResult_Handle)(registerHandle(obj))
 }
 
-func lookupTransactionResultHandle(handle C.TransactionResult_Handle) (*webrpc.TxnResult, bool) {
+func lookupTransactionResultHandle(handle C.TransactionResult_Handle) (*cli.TxnResult, bool) {
 	obj, ok := lookupHandle(C.Handle(handle))
 	if ok {
-		if obj, isOK := (obj).(*webrpc.TxnResult); isOK {
+		if obj, isOK := (obj).(*cli.TxnResult); isOK {
 			return obj, true
 		}
 	}
@@ -402,28 +373,28 @@ func lookupSortableTransactionHandle(handle C.SortableTransactionResult_Handle) 
 	return nil, false
 }
 
-func registerOutputsResultHandle(obj *webrpc.OutputsResult) C.OutputsResult_Handle {
+func registerOutputsResultHandle(obj *cli.OutputsResult) C.OutputsResult_Handle {
 	return (C.OutputsResult_Handle)(registerHandle(obj))
 }
 
-func lookupOutputsResultHandle(handle C.OutputsResult_Handle) (*webrpc.OutputsResult, bool) {
+func lookupOutputsResultHandle(handle C.OutputsResult_Handle) (*cli.OutputsResult, bool) {
 	obj, ok := lookupHandle(C.Handle(handle))
 	if ok {
-		if obj, isOK := (obj).(*webrpc.OutputsResult); isOK {
+		if obj, isOK := (obj).(*cli.OutputsResult); isOK {
 			return obj, true
 		}
 	}
 	return nil, false
 }
 
-func registerStatusResultHandle(obj *webrpc.StatusResult) C.StatusResult_Handle {
+func registerStatusResultHandle(obj *cli.StatusResult) C.StatusResult_Handle {
 	return (C.StatusResult_Handle)(registerHandle(obj))
 }
 
-func lookupStatusResultHandle(handle C.StatusResult_Handle) (*webrpc.StatusResult, bool) {
+func lookupStatusResultHandle(handle C.StatusResult_Handle) (*cli.StatusResult, bool) {
 	obj, ok := lookupHandle(C.Handle(handle))
 	if ok {
-		if obj, isOK := (obj).(*webrpc.StatusResult); isOK {
+		if obj, isOK := (obj).(*cli.StatusResult); isOK {
 			return obj, true
 		}
 	}

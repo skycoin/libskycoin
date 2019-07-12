@@ -34,7 +34,7 @@ const (
 	SizeofTransactionOutput = unsafe.Sizeof(C.coin__TransactionOutput{})
 	SizeofTransaction       = unsafe.Sizeof(C.coin__Transaction{})
 	SizeofEntry             = unsafe.Sizeof(C.wallet__Entry{})
-	SizeofUxBalance         = unsafe.Sizeof(C.wallet__UxBalance{})
+	SizeofUxBalance         = unsafe.Sizeof(C.transaction__UxBalance{})
 )
 
 /**

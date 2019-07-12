@@ -11,16 +11,17 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
+#include "transaction_encoded.h"
 
 
 
 typedef struct inline_response_200_6_t {
-    char *address; // string
+    list_t *transactions; //nonprimitive container
 
 } inline_response_200_6_t;
 
 inline_response_200_6_t *inline_response_200_6_create(
-    char *address
+    list_t *transactions
 );
 
 void inline_response_200_6_free(inline_response_200_6_t *inline_response_200_6);
