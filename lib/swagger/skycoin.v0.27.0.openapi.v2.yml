@@ -2607,6 +2607,12 @@ components:
                       type: string
                     public_key:
                       type: string
+                    child_number:
+                      type: integer
+                      format: int64
+                    change:
+                      type: integer
+                      format: int64
                 type: array
               meta:
                 properties:
@@ -2625,6 +2631,9 @@ components:
                     type: integer
                   type:
                     type: string
+                  bip44_coin:
+                    type: integer
+                    format: int64
                   version:
                     type: string
                 type: object
