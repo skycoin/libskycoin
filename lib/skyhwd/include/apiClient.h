@@ -13,6 +13,7 @@ typedef struct apiClient_t {
     char *basePath;
     void *dataReceived;
     long response_code;
+    int accessToken;
     list_t *apiKeys;
 } apiClient_t;
 

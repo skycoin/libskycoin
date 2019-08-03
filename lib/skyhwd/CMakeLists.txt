@@ -8,7 +8,7 @@ set(CMAKE_CXX_VISIBILITY_PRESET default)
 set(CMAKE_VISIBILITY_INLINES_HIDDEN OFF)
 set(CMAKE_BUILD_TYPE Debug)
 
-set(pkgName "hardware_wallet_daemon_api")
+set(pkgName "skyhwd")
 
 find_package(CURL 7.58.0 REQUIRED)
 if(CURL_FOUND)
@@ -92,6 +92,7 @@ set(HDRS
 add_library(${pkgName} SHARED ${SRCS} ${HDRS})
 # Link dependent libraries
 target_link_libraries(${pkgName} ${CURL_LIBRARIES} )
+add_library(${pkgName}Static STATIC ${SRCS} ${HDRS})
 #install library to destination
 install(TARGETS ${pkgName} DESTINATION ${CMAKE_INSTALL_PREFIX})
 
