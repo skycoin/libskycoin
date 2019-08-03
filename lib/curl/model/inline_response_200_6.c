@@ -6,17 +6,13 @@
 
 
 inline_response_200_6_t *inline_response_200_6_create(
-    char *branch,
-    char *commit,
-    char *version
+    list_t *transactions
     ) {
 	inline_response_200_6_t *inline_response_200_6_local_var = malloc(sizeof(inline_response_200_6_t));
     if (!inline_response_200_6_local_var) {
         return NULL;
     }
-	inline_response_200_6_local_var->branch = branch;
-	inline_response_200_6_local_var->commit = commit;
-	inline_response_200_6_local_var->version = version;
+	inline_response_200_6_local_var->transactions = transactions;
 
 	return inline_response_200_6_local_var;
 }
@@ -24,35 +20,32 @@ inline_response_200_6_t *inline_response_200_6_create(
 
 void inline_response_200_6_free(inline_response_200_6_t *inline_response_200_6) {
     listEntry_t *listEntry;
-    free(inline_response_200_6->branch);
-    free(inline_response_200_6->commit);
-    free(inline_response_200_6->version);
+	list_ForEach(listEntry, inline_response_200_6->transactions) {
+		transaction_encoded_free(listEntry->data);
+	}
+	list_free(inline_response_200_6->transactions);
 	free(inline_response_200_6);
 }
 
 cJSON *inline_response_200_6_convertToJSON(inline_response_200_6_t *inline_response_200_6) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_6->branch
-    if(inline_response_200_6->branch) { 
-    if(cJSON_AddStringToObject(item, "branch", inline_response_200_6->branch) == NULL) {
-    goto fail; //String
+	// inline_response_200_6->transactions
+    if(inline_response_200_6->transactions) { 
+    cJSON *transactions = cJSON_AddArrayToObject(item, "transactions");
+    if(transactions == NULL) {
+    goto fail; //nonprimitive container
     }
-     } 
 
-
-	// inline_response_200_6->commit
-    if(inline_response_200_6->commit) { 
-    if(cJSON_AddStringToObject(item, "commit", inline_response_200_6->commit) == NULL) {
-    goto fail; //String
+    listEntry_t *transactionsListEntry;
+    if (inline_response_200_6->transactions) {
+    list_ForEach(transactionsListEntry, inline_response_200_6->transactions) {
+    cJSON *itemLocal = transaction_encoded_convertToJSON(transactionsListEntry->data);
+    if(itemLocal == NULL) {
+    goto fail;
     }
-     } 
-
-
-	// inline_response_200_6->version
-    if(inline_response_200_6->version) { 
-    if(cJSON_AddStringToObject(item, "version", inline_response_200_6->version) == NULL) {
-    goto fail; //String
+    cJSON_AddItemToArray(transactions, itemLocal);
+    }
     }
      } 
 
@@ -68,38 +61,31 @@ inline_response_200_6_t *inline_response_200_6_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_6_t *inline_response_200_6_local_var = NULL;
 
-    // inline_response_200_6->branch
-    cJSON *branch = cJSON_GetObjectItemCaseSensitive(inline_response_200_6JSON, "branch");
-    if (branch) { 
-    if(!cJSON_IsString(branch))
-    {
-    goto end; //String
-    }
-    }
-
-    // inline_response_200_6->commit
-    cJSON *commit = cJSON_GetObjectItemCaseSensitive(inline_response_200_6JSON, "commit");
-    if (commit) { 
-    if(!cJSON_IsString(commit))
-    {
-    goto end; //String
-    }
+    // inline_response_200_6->transactions
+    cJSON *transactions = cJSON_GetObjectItemCaseSensitive(inline_response_200_6JSON, "transactions");
+    list_t *transactionsList;
+    if (transactions) { 
+    cJSON *transactions_local_nonprimitive;
+    if(!cJSON_IsArray(transactions)){
+        goto end; //nonprimitive container
     }
 
-    // inline_response_200_6->version
-    cJSON *version = cJSON_GetObjectItemCaseSensitive(inline_response_200_6JSON, "version");
-    if (version) { 
-    if(!cJSON_IsString(version))
+    transactionsList = list_create();
+
+    cJSON_ArrayForEach(transactions_local_nonprimitive,transactions )
     {
-    goto end; //String
+        if(!cJSON_IsObject(transactions_local_nonprimitive)){
+            goto end;
+        }
+        transaction_encoded_t *transactionsItem = transaction_encoded_parseFromJSON(transactions_local_nonprimitive);
+
+        list_addElement(transactionsList, transactionsItem);
     }
     }
 
 
     inline_response_200_6_local_var = inline_response_200_6_create (
-        branch ? strdup(branch->valuestring) : NULL,
-        commit ? strdup(commit->valuestring) : NULL,
-        version ? strdup(version->valuestring) : NULL
+        transactions ? transactionsList : NULL
         );
 
     return inline_response_200_6_local_var;

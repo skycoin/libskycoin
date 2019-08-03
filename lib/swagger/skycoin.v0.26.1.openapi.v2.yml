@@ -50,28 +50,6 @@ paths:
       summary: Returns the balance of one or more addresses, both confirmed and
         predicted. The predicted balance is the confirmed balance minus the
         pending spends.
-  /api/v1/block/verbose:
-    get:
-      operationId: blockVerbose
-      parameters:
-        - description: get block by hash
-          in: query
-          name: hash
-          schema:
-            type: string
-        - description: get block by sequence number
-          in: query
-          name: seq
-          schema:
-            type: integer
-      responses:
-        "200":
-          $ref: '#/components/responses/blockVerboseSchemaArray'
-        default:
-          $ref: "#/components/responses/genericError"
-      summary: Returns the balance of one or more addresses, both confirmed and
-        predicted. The predicted balance is the confirmed balance minus the
-        pending spends.
   /api/v1/blocks:
     get:
       operationId: blocks
@@ -96,35 +74,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/blocksResponse"
-        default:
-          $ref: "#/components/responses/genericError"
-      summary: Returns the balance of one or more addresses, both confirmed and
-        predicted. The predicted balance is the confirmed balance minus the
-        pending spends.
-  /api/v1/blocks/verbose:
-    get:
-      operationId: blocksVerbose
-      parameters:
-        - description: start seq
-          in: query
-          name: start
-          schema:
-            type: integer
-        - description: end seq
-          in: query
-          name: end
-          schema:
-            type: integer
-        - description: comma-separated list of block seqs
-          in: query
-          name: seq
-          schema:
-            items:
-              type: integer
-            type: array
-      responses:
-        "200":
-          $ref: "#/components/responses/blocksVerboseResponse"
         default:
           $ref: "#/components/responses/genericError"
       summary: Returns the balance of one or more addresses, both confirmed and
@@ -248,7 +197,7 @@ paths:
           $ref: "#/components/responses/genericError"
       security:
         - csrfAuth:
-            []/da
+            []
   /api/v1/network/connections:
     get:
       operationId: networkConnections
@@ -404,38 +353,6 @@ paths:
           $ref: "#/components/responses/transactionResponse"
         default:
           $ref: "#/components/responses/genericError"
-  /api/v1/transaction/verbose:
-    get:
-      description: Returns a transaction identified by its txid hash with just id
-      operationId: transactionVerbose
-      parameters:
-        - description: transaction Id
-          in: query
-          name: txid
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          $ref: "#/components/responses/transactionVerboseResponse"
-        default:
-          $ref: "#/components/responses/genericError"
-  /api/v1/transaction/encoded:
-    get:
-      description: Returns a transaction identified by its txid hash with just id
-      operationId: transactionEncoded
-      parameters:
-        - description: transaction Id
-          in: query
-          name: txid
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          $ref: "#/components/responses/transactionEncodedResponse"
-        default:
-          $ref: "#/components/responses/genericError"
   /api/v1/transactions:
     get:
       operationId: transactionsGet
@@ -474,50 +391,6 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/transactionsResponse"
-        default:
-          $ref: "#/components/responses/genericError"
-      security:
-        - csrfAuth:
-            []
-      summary: Returns transactions that match the filters.
-  /api/v1/transactions/verbose:
-    get:
-      operationId: transactionsGetVerbose
-      parameters:
-        - description: command separated list of addresses
-          in: query
-          name: addrs
-          schema:
-            type: string
-        - description: Whether the transactions should be confirmed [optional, must be 0 or
-            1; if not provided, returns all]
-          in: query
-          name: confirmed
-          schema:
-            type: string
-      responses:
-        "200":
-          $ref: "#/components/responses/transactionVerboseResponse"
-        default:
-          $ref: "#/components/responses/genericError"
-      summary: Returns transactions that match the filters.
-    post:
-      operationId: transactionsPostVerbose
-      parameters:
-        - description: command separated list of addresses
-          in: query
-          name: addrs
-          schema:
-            type: string
-        - description: Whether the transactions should be confirmed [optional, must be 0 or
-            1; if not provided, returns all]
-          in: query
-          name: confirmed
-          schema:
-            type: string
-      responses:
-        "200":
-          $ref: "#/components/responses/transactionVerboseResponse"
         default:
           $ref: "#/components/responses/genericError"
       security:
@@ -782,21 +655,6 @@ paths:
           $ref: "#/components/responses/walletTransactionsResponses"
         default:
           $ref: "#/components/responses/genericError"
-  /api/v1/wallet/transactions/verbose:
-    get:
-      operationId: walletTransactionsVerbose
-      parameters:
-        - description: Wallet Id.
-          in: query
-          name: id
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          $ref: "#/components/responses/walletTransactionsVerboseResponses"
-        default:
-          $ref: "#/components/responses/genericError"
   /api/v1/wallet/unload:
     post:
       operationId: walletUnload
@@ -1057,26 +915,6 @@ paths:
         - csrfAuth:
             []
       summary: Verifies a wallet seed.
-  /api/v2/data/single:
-    get:
-      operationId: dataGETSingle
-      parameters:
-        - description: storage type.
-          in: header
-          name: type
-          schema:
-            type: string
-        - description: key of the specific value to get.
-          in: header
-          name: key
-          schema:
-            type: string
-      responses:
-        "200":
-          $ref: '#/components/responses/singleKey'
-        default:
-          $ref: "#/components/responses/genericError"
-
   /api/v2/data:
     get:
       operationId: dataGET
@@ -1145,14 +983,6 @@ paths:
           $ref: '#/components/responses/pendingTxsResponse'
         default:
           $ref: "#/components/responses/genericError"
-  /api/v1/pendingTxs/verbose:
-    get:
-      operationId: pendingTxsVerbose
-      responses:
-        "200":
-          $ref: '#/components/responses/pendingTxsVerboseResponse'
-        default:
-          $ref: "#/components/responses/genericError"
   /api/v1/rawtx:
     get:
       responses:
@@ -1177,22 +1007,6 @@ paths:
       responses:
         "200":
           $ref: '#/components/responses/lastBlocksResponse'
-        default:
-          $ref: '#/components/responses/genericError'
-  /api/v1/last_blocks/verbose:
-    get:
-      description: Returns the most recent N blocks on the blockchain
-      operationId: lastBlocksVerbose
-      parameters:
-        - description: Num of blockss
-          in: query
-          name: num
-          required: true
-          schema:
-            type: integer
-      responses:
-        "200":
-          $ref: '#/components/responses/lastBlocksVerboseResponse'
         default:
           $ref: '#/components/responses/genericError'
   /api/v1/address_uxouts:

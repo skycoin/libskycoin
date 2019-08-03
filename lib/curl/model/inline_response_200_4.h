@@ -11,16 +11,17 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
+#include "network_connection_schema.h"
 
 
 
 typedef struct inline_response_200_4_t {
-    char *csrf_token; // string
+    list_t *connections; //nonprimitive container
 
 } inline_response_200_4_t;
 
 inline_response_200_4_t *inline_response_200_4_create(
-    char *csrf_token
+    list_t *connections
 );
 
 void inline_response_200_4_free(inline_response_200_4_t *inline_response_200_4);

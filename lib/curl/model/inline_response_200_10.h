@@ -11,17 +11,25 @@
 #include "../external/cJSON.h"
 #include "../include/list.h"
 #include "../include/keyValuePair.h"
-#include "inline_response_200_10_data.h"
+#include "_api_v1_pending_txs_transaction.h"
 
 
 
 typedef struct inline_response_200_10_t {
-    inline_response_200_10_data_t *data; //model
+    _api_v1_pending_txs_transaction_t *transaction; //model
+    char *received; // string
+    char *checked; // string
+    char *announced; // string
+    int is_valid; //boolean
 
 } inline_response_200_10_t;
 
 inline_response_200_10_t *inline_response_200_10_create(
-    inline_response_200_10_data_t *data
+    _api_v1_pending_txs_transaction_t *transaction,
+    char *received,
+    char *checked,
+    char *announced,
+    int is_valid
 );
 
 void inline_response_200_10_free(inline_response_200_10_t *inline_response_200_10);

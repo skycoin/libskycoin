@@ -6,13 +6,13 @@
 
 
 inline_response_200_9_t *inline_response_200_9_create(
-    char *address
+    object_t *data
     ) {
 	inline_response_200_9_t *inline_response_200_9_local_var = malloc(sizeof(inline_response_200_9_t));
     if (!inline_response_200_9_local_var) {
         return NULL;
     }
-	inline_response_200_9_local_var->address = address;
+	inline_response_200_9_local_var->data = data;
 
 	return inline_response_200_9_local_var;
 }
@@ -20,17 +20,22 @@ inline_response_200_9_t *inline_response_200_9_create(
 
 void inline_response_200_9_free(inline_response_200_9_t *inline_response_200_9) {
     listEntry_t *listEntry;
-    free(inline_response_200_9->address);
+    object_free(inline_response_200_9->data);
 	free(inline_response_200_9);
 }
 
 cJSON *inline_response_200_9_convertToJSON(inline_response_200_9_t *inline_response_200_9) {
 	cJSON *item = cJSON_CreateObject();
 
-	// inline_response_200_9->address
-    if(inline_response_200_9->address) { 
-    if(cJSON_AddStringToObject(item, "address", inline_response_200_9->address) == NULL) {
-    goto fail; //String
+	// inline_response_200_9->data
+    if(inline_response_200_9->data) { 
+    cJSON *data_local_JSON = object_convertToJSON(inline_response_200_9->data);
+    if(data_local_JSON == NULL) {
+    goto fail; //model
+    }
+    cJSON_AddItemToObject(item, "data", data_local_JSON);
+    if(item->child == NULL) {
+    goto fail;
     }
      } 
 
@@ -46,18 +51,16 @@ inline_response_200_9_t *inline_response_200_9_parseFromJSON(cJSON *inline_respo
 
     inline_response_200_9_t *inline_response_200_9_local_var = NULL;
 
-    // inline_response_200_9->address
-    cJSON *address = cJSON_GetObjectItemCaseSensitive(inline_response_200_9JSON, "address");
-    if (address) { 
-    if(!cJSON_IsString(address))
-    {
-    goto end; //String
-    }
+    // inline_response_200_9->data
+    cJSON *data = cJSON_GetObjectItemCaseSensitive(inline_response_200_9JSON, "data");
+    object_t *data_local_nonprim = NULL;
+    if (data) { 
+    data_local_nonprim = object_parseFromJSON(data); //nonprimitive
     }
 
 
     inline_response_200_9_local_var = inline_response_200_9_create (
-        address ? strdup(address->valuestring) : NULL
+        data ? data_local_nonprim : NULL
         );
 
     return inline_response_200_9_local_var;

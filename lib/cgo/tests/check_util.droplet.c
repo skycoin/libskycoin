@@ -1,15 +1,13 @@
-#include <signal.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "libskycoin.h"
 #include "skyassert.h"
 #include "skyerrors.h"
 #include "skystring.h"
 #include "skytest.h"
 #include <check.h>
+#include <signal.h>
+#include <stdio.h>
+#include <string.h>
 
-// TestSuite(util_droplet, .init = setup, .fini = teardown);
 #define BUFFER_SIZE 1024
 typedef struct
 {
