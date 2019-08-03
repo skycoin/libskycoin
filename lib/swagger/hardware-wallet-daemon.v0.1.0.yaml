@@ -1,0 +1,759 @@
+openapi: 3.0.1
+info:
+  title: Hardware Wallet Daemon API
+  description: This is the hardware-wallet-daemon API
+  contact:
+    email: steve@skycoin.net
+  license:
+    name: GPLv3
+    url: 'https://www.gnu.org/licenses/gpl-3.0.en.html'
+  version: 0.1.0
+servers:
+  - url: 'http://127.0.0.1:9510/api/v1'
+paths:
+  /csrf:
+    get:
+      description: Returns csrf token
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CSRFResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+  /generate_addresses:
+    post:
+      description: Generate addresses for the hardware wallet seed.
+      requestBody:
+        description: >-
+          GenerateAddressesRequest is request data for
+          /api/v1/generate_addresses
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateAddressesRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateAddressesResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /apply_settings:
+    post:
+      description: Apply hardware wallet settings.
+      requestBody:
+        description: ApplySettingsRequest is request data for /api/v1/apply_settings
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplySettingsRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /backup:
+    post:
+      description: Start seed backup procedure.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /cancel:
+    put:
+      description: Cancels the current operation.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /check_message_signature:
+    post:
+      description: Check a message signature matches the given address.
+      requestBody:
+        description: >-
+          CheckMessageSignatureRequest is request data for
+          /api/v1/check_message_signature
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckMessageSignatureRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /features:
+    get:
+      description: Returns device information.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeaturesResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /firmware_update:
+    put:
+      description: Update firmware
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /recovery:
+    post:
+      description: Recover existing wallet using seed.
+      requestBody:
+        description: RecoveryRequest is request data for /api/v1/recovery
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryRequest'
+        required: false
+      responses:
+        '200':
+          description: intermediate response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /generate_mnemonic:
+    post:
+      description: >-
+        Generate mnemonic can be used to initialize the device with a random
+        seed.
+      requestBody:
+        description: GenerateMnemonicRequest is request data for /api/v1/generate_mnemonic
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateMnemonicRequest'
+        required: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /set_mnemonic:
+    post:
+      description: Set mnemonic can be used to initialize the device with your own seed.
+      requestBody:
+        description: SetMnemonicRequest is request data for /api/v1/set_mnemonic
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetMnemonicRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /configure_pin_code:
+    post:
+      description: Configure a pin code on the device.
+      requestBody:
+        description: ConfigurePinCodeRequest is request data for /api/v1/configure_pin_code
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigurePinCodeRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /sign_message:
+    post:
+      description: Sign a message using the secret key at given index.
+      requestBody:
+        description: SignMessageRequest is request data for /api/v1/sign_message
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignMessageRequest'
+        required: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignMessageResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /transaction_sign:
+    post:
+      description: Sign a transaction with the hardware wallet.
+      requestBody:
+        description: TransactionSignRequest is request data for /api/v1/transactionSign
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionSignRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /wipe:
+    delete:
+      description: clean all the configurations.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /available:
+    get:
+      description: check whether a skywallet is connected to the machine.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: boolean
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /version:
+    get:
+      description: Returns daemon version information.
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /intermediate/pin_matrix:
+    post:
+      description: pin matrix ack request.
+      requestBody:
+        description: PinMatrixRequest is request data for /api/v1/intermediate/pin_matrix
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinMatrixRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /intermediate/passphrase:
+    post:
+      description: passphrase ack request.
+      requestBody:
+        description: PassPhraseRequest is request data for /api/v1/intermediate/passphrase
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PassphraseRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /intermediate/word:
+    post:
+      description: word ack request.
+      requestBody:
+        description: WordRequest is request data for /api/v1/intermediate/word
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WordRequest'
+        required: false
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+  /intermediate/button:
+    post:
+      description: button ack request.
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPSuccessResponse'
+        default:
+          description: error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPErrorResponse'
+      security:
+        - csrfAuth: []
+components:
+  schemas:
+    TransactionSignRequest:
+      required:
+        - transaction_inputs
+        - transaction_outputs
+      type: object
+      properties:
+        transaction_inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionInput'
+        transaction_outputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionOutput'
+    WordRequest:
+      required:
+        - word
+      type: object
+      properties:
+        word:
+          type: string
+    TransactionOutput:
+      required:
+        - address
+        - address_index
+        - coins
+        - hours
+      type: object
+      properties:
+        address_index:
+          type: integer
+        address:
+          type: string
+        coins:
+          type: string
+        hours:
+          type: string
+    VersionResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            commit:
+              type: string
+            version:
+              type: string
+            branch:
+              type: string
+    SetMnemonicRequest:
+      required:
+        - mnemonic
+      type: object
+      properties:
+        mnemonic:
+          type: string
+          example: >-
+            cloud flower upset remain green metal below cup stem infant art
+            thank
+    ConfigurePinCodeRequest:
+      required:
+        - remove_pin
+      type: object
+      properties:
+        remove_pin:
+          type: boolean
+    CheckMessageSignatureRequest:
+      required:
+        - address
+        - message
+        - signature
+      type: object
+      properties:
+        message:
+          type: string
+          example: Hello World
+        signature:
+          type: string
+          example: >-
+            6ebd63dd5e57cad07b6d229e96b5d2ac7d1bec1466d2a95bd200c21be6a0bf194b5ad5123f6e37c6393ee3635b38b938fcd91bbf1327fc957849a9e5736f6e4300
+        address:
+          type: string
+          example: 2EU3JbveHdkxW6z5tdhbbB2kRAWvXC2pLzw
+    GenerateAddressesRequest:
+      required:
+        - address_n
+      type: object
+      properties:
+        address_n:
+          type: integer
+          example: 2
+        start_index:
+          type: integer
+          example: 1
+        confirm_address:
+          type: boolean
+          example: false
+    SignMessageResponse:
+      type: object
+      properties:
+        data:
+          type: string
+    PinMatrixRequest:
+      required:
+        - pin
+      type: object
+      properties:
+        pin:
+          type: string
+    TransactionInput:
+      required:
+        - hash
+        - index
+      type: object
+      properties:
+        index:
+          type: integer
+        hash:
+          type: string
+    GenerateAddressesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+    GenerateMnemonicRequest:
+      required:
+        - word_count
+      type: object
+      properties:
+        word_count:
+          type: integer
+          example: 32
+        use_passphrase:
+          type: boolean
+          example: false
+    TransactionSignResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+    FeaturesResponse:
+      type: object
+      properties:
+        data:
+          required:
+            - firmware_features
+            - fw_major
+            - fw_minor
+            - fw_patch
+            - initialized
+            - needs_backup
+            - passphrase_cached
+            - passphrase_protection
+            - pin_cached
+            - pin_protection
+            - vendor
+          type: object
+          properties:
+            firmware_features:
+              type: integer
+            device_id:
+              type: string
+            passphrase_protection:
+              type: boolean
+            label:
+              type: string
+            fw_patch:
+              type: integer
+            fw_major:
+              type: integer
+            fw_minor:
+              type: integer
+            minor_version:
+              type: integer
+            pin_protection:
+              type: boolean
+            bootloader_hash:
+              type: string
+            major_version:
+              type: integer
+            pin_cached:
+              type: boolean
+            vendor:
+              type: string
+            needs_backup:
+              type: boolean
+            initialized:
+              type: boolean
+            model:
+              type: string
+            passphrase_cached:
+              type: boolean
+            patch_version:
+              type: integer
+    RecoveryRequest:
+      required:
+        - use_passphrase
+        - word_count
+      type: object
+      properties:
+        word_count:
+          type: integer
+          example: 32
+        use_passphrase:
+          type: boolean
+          example: false
+        dry_run:
+          type: boolean
+          example: false
+    PassphraseRequest:
+      required:
+        - passphrase
+      type: object
+      properties:
+        passphrase:
+          type: string
+    CSRFResponse:
+      type: object
+      properties:
+        data:
+          type: string
+    HTTPErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: integer
+            message:
+              type: string
+    ApplySettingsRequest:
+      required:
+        - use_passphrase
+      type: object
+      properties:
+        label:
+          type: string
+          example: foo
+        use_passphrase:
+          type: boolean
+          example: false
+        language:
+          type: string
+          example: english
+    SignMessageRequest:
+      required:
+        - address_n
+        - message
+      type: object
+      properties:
+        address_n:
+          type: integer
+          example: 2
+        message:
+          type: string
+          example: Hello World!
+    HTTPSuccessResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    csrfAuth:
+      type: apiKey
+      name: X-CSRF-TOKEN
+      in: header
