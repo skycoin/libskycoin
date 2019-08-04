@@ -31,11 +31,10 @@ install:
   - make install-deps-libc
   - make install-deps-skyapi
 script:
-  - make build-skyapi
+  - make build
   - make lint
-  - make test-libc
+  - make test
   - make lint-libc
-  - make test-skyapi
 
 before_deploy:
   - export VERSION="$(git describe --tags --exact-match HEAD 2> /dev/null)"

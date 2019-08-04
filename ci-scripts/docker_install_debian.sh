@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-set -ex
-
-apt update
-
-apt install gcc g++ wget make cmake libcurl3-gnutls -y
+apt-get update
+apt-get install gcc g++ wget cmake libcurl3-gnutls -y
 
 wget -c https://github.com/libcheck/check/releases/download/0.12.0/check-0.12.0.tar.gz
 tar -xzf check-0.12.0.tar.gz

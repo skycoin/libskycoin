@@ -3,7 +3,7 @@
 
 # Skycoin C library
 
-[![Build Status](https://travis-ci.org/skycoin/libskycoin.svg)](https://travis-ci.org/skycoin/libskycoin)
+[![Build Status](https://travis-ci.com/skycoin/libskycoin.svg)](https://travis-ci.com/skycoin/libskycoin)
 
 Skycoin C library (a.k.a `libskycoin`) exports the Skycoin API to DApps using the C programming language.
 It is also the foundation to build client libraries for other programming languages.
