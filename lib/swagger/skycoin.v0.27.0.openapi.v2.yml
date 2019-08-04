@@ -6,7 +6,7 @@ info:
     url: https://skycoin.net
   description: Skycoin is a next-generation cryptocurrency.
   title: Skycoin REST API.
-  version: 0.26.0
+  version: 0.27.0
 paths:
   /api/v2/metrics:
     get:
@@ -458,7 +458,7 @@ paths:
         predicted balance is the confirmed balance minus the pending spends.
   /api/v1/wallet/create:
     post:
-      description: Create a wallet 
+      description: Create a wallet
       operationId: walletCreate
       parameters:
         - description: wallet seed passphrase [optional, bip44 type wallet only]
@@ -468,13 +468,13 @@ paths:
             type: string
         - description: wallet seed passphrase [optional, bip44 type wallet only]
           in: header
-          name: type 
+          name: type
           required: true
           schema:
             type: string
         - description: BIP44 coin type [optional, defaults to 8000 (skycoin's coin type), only valid if type is "bip44"]
           in: header
-          name: bip44-coin  
+          name: bip44-coin
           schema:
             type: string
         - description: Wallet seed.
@@ -485,7 +485,7 @@ paths:
             type: string
         - description: xpub key [required for xpub wallets]
           in: header
-          name: xpub 
+          name: xpub
           schema:
             type: string
         - description: Wallet label.
@@ -819,7 +819,7 @@ paths:
           in: header
           name: no_broadcast
           schema:
-            type: boolean 
+            type: boolean
       responses:
         "200":
           description: Broadcasts a hex-encoded, serialized transaction to the network
@@ -2927,21 +2927,21 @@ components:
               fiber:
                 properties:
                   name:
-                    type: string 
+                    type: string
                   display_name:
-                    type: string 
+                    type: string
                   ticker:
-                    type: string 
+                    type: string
                   coin_hours_display_name:
-                    type: string 
+                    type: string
                   coin_hours_display_name_singular:
-                    type: string 
+                    type: string
                   coin_hours_ticker:
-                    type: string 
+                    type: string
                   explorer_url:
-                    type: string 
+                    type: string
                   bip44_coin:
-                    type: integer 
+                    type: integer
                     format: int64
                 type: object
               unversioned_api_enabled:
