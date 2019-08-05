@@ -4,6 +4,7 @@
 #include "../include/list.h"
 #include "../external/cJSON.h"
 #include "../include/keyValuePair.h"
+#include "../model/address.h"
 #include "../model/block_schema.h"
 #include "../model/inline_response_200.h"
 #include "../model/inline_response_200_1.h"
@@ -192,7 +193,7 @@ DefaultAPI_transaction(apiClient_t *apiClient ,char * txid);
 // Broadcast a hex-encoded, serialized transaction to the network.
 //
 char*
-DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx);
+DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx ,int no_broadcast);
 
 
 inline_response_200_8_t*
@@ -257,10 +258,10 @@ object_t*
 DefaultAPI_walletBalance(apiClient_t *apiClient ,char * id);
 
 
-// Loads wallet from seed, will scan ahead N address and load addresses till the last one that have coins.
+// Create a wallet
 //
 object_t*
-DefaultAPI_walletCreate(apiClient_t *apiClient ,char * seed ,char * label ,int scan ,int encrypt ,char * password);
+DefaultAPI_walletCreate(apiClient_t *apiClient ,char * type ,char * seed ,char * label ,char * seed_passphrase ,char * bip44_coin ,char * xpub ,int scan ,int encrypt ,char * password);
 
 
 // Decrypts wallet.
@@ -295,8 +296,10 @@ DefaultAPI_walletNewSeed(apiClient_t *apiClient ,char* entropy);
 
 // Recovers an encrypted wallet by providing the seed. The first address will be generated from seed and compared to the first address of the specified wallet. If they match, the wallet will be regenerated with an optional password. If the wallet is not encrypted, an error is returned.
 //
+// Recovers an encrypted wallet by providing the wallet seed and optional seed passphrase
+//
 object_t*
-DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * password);
+DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * seed_passphrase ,char * password);
 
 
 // This endpoint only works for encrypted wallets. If the wallet is unencrypted, The seed will be not returned.

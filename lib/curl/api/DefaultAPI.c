@@ -2130,7 +2130,7 @@ end:
 // Broadcast a hex-encoded, serialized transaction to the network.
 //
 char*
-DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx)
+DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx ,int no_broadcast)
 {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = list_create();
@@ -2156,6 +2156,18 @@ DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx)
         valueHeader_rawtx = strdup((rawtx));
         keyPairHeader_rawtx = keyValuePair_create(keyHeader_rawtx, valueHeader_rawtx);
         list_addElement(localVarHeaderParameters,keyPairHeader_rawtx);
+    }
+
+
+    // header parameters
+    char *keyHeader_no_broadcast;
+    int valueHeader_no_broadcast;
+    keyValuePair_t *keyPairHeader_no_broadcast = 0;
+    if (no_broadcast) {
+        keyHeader_no_broadcast = strdup("no_broadcast");
+        valueHeader_no_broadcast = (no_broadcast);
+        keyPairHeader_no_broadcast = keyValuePair_create(keyHeader_no_broadcast, &valueHeader_no_broadcast);
+        list_addElement(localVarHeaderParameters,keyPairHeader_no_broadcast);
     }
 
     list_addElement(localVarHeaderType,"text/plain"); //produces
@@ -2192,6 +2204,8 @@ DefaultAPI_transactionInject(apiClient_t *apiClient ,char * rawtx)
     free(keyHeader_rawtx);
     free(valueHeader_rawtx);
     free(keyPairHeader_rawtx);
+    free(keyHeader_no_broadcast);
+    free(keyPairHeader_no_broadcast);
     return elementToReturn;
 end:
     return NULL;
@@ -3035,10 +3049,10 @@ end:
 
 }
 
-// Loads wallet from seed, will scan ahead N address and load addresses till the last one that have coins.
+// Create a wallet
 //
 object_t*
-DefaultAPI_walletCreate(apiClient_t *apiClient ,char * seed ,char * label ,int scan ,int encrypt ,char * password)
+DefaultAPI_walletCreate(apiClient_t *apiClient ,char * type ,char * seed ,char * label ,char * seed_passphrase ,char * bip44_coin ,char * xpub ,int scan ,int encrypt ,char * password)
 {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = list_create();
@@ -3056,6 +3070,42 @@ DefaultAPI_walletCreate(apiClient_t *apiClient ,char * seed ,char * label ,int s
 
 
     // header parameters
+    char *keyHeader_seed_passphrase;
+    char * valueHeader_seed_passphrase;
+    keyValuePair_t *keyPairHeader_seed_passphrase = 0;
+    if (seed_passphrase) {
+        keyHeader_seed_passphrase = strdup("seed_passphrase");
+        valueHeader_seed_passphrase = strdup((seed_passphrase));
+        keyPairHeader_seed_passphrase = keyValuePair_create(keyHeader_seed_passphrase, valueHeader_seed_passphrase);
+        list_addElement(localVarHeaderParameters,keyPairHeader_seed_passphrase);
+    }
+
+
+    // header parameters
+    char *keyHeader_type;
+    char * valueHeader_type;
+    keyValuePair_t *keyPairHeader_type = 0;
+    if (type) {
+        keyHeader_type = strdup("type");
+        valueHeader_type = strdup((type));
+        keyPairHeader_type = keyValuePair_create(keyHeader_type, valueHeader_type);
+        list_addElement(localVarHeaderParameters,keyPairHeader_type);
+    }
+
+
+    // header parameters
+    char *keyHeader_bip44_coin;
+    char * valueHeader_bip44_coin;
+    keyValuePair_t *keyPairHeader_bip44_coin = 0;
+    if (bip44_coin) {
+        keyHeader_bip44_coin = strdup("bip44_coin");
+        valueHeader_bip44_coin = strdup((bip44_coin));
+        keyPairHeader_bip44_coin = keyValuePair_create(keyHeader_bip44_coin, valueHeader_bip44_coin);
+        list_addElement(localVarHeaderParameters,keyPairHeader_bip44_coin);
+    }
+
+
+    // header parameters
     char *keyHeader_seed;
     char * valueHeader_seed;
     keyValuePair_t *keyPairHeader_seed = 0;
@@ -3064,6 +3114,18 @@ DefaultAPI_walletCreate(apiClient_t *apiClient ,char * seed ,char * label ,int s
         valueHeader_seed = strdup((seed));
         keyPairHeader_seed = keyValuePair_create(keyHeader_seed, valueHeader_seed);
         list_addElement(localVarHeaderParameters,keyPairHeader_seed);
+    }
+
+
+    // header parameters
+    char *keyHeader_xpub;
+    char * valueHeader_xpub;
+    keyValuePair_t *keyPairHeader_xpub = 0;
+    if (xpub) {
+        keyHeader_xpub = strdup("xpub");
+        valueHeader_xpub = strdup((xpub));
+        keyPairHeader_xpub = keyValuePair_create(keyHeader_xpub, valueHeader_xpub);
+        list_addElement(localVarHeaderParameters,keyPairHeader_xpub);
     }
 
 
@@ -3127,7 +3189,7 @@ DefaultAPI_walletCreate(apiClient_t *apiClient ,char * seed ,char * label ,int s
                     "POST");
 
     if (apiClient->response_code == 200) {
-        printf("%s\n","This endpoint return a new wallet");
+        printf("%s\n","Response for endpoint /api/v1/wallet");
     }
     if (apiClient->response_code == 0) {
         printf("%s\n","A GenericError is the default error message that is generated. For certain status codes there are more appropriate error structures.");
@@ -3150,9 +3212,21 @@ DefaultAPI_walletCreate(apiClient_t *apiClient ,char * seed ,char * label ,int s
     list_free(localVarHeaderType);
 
     free(localVarPath);
+    free(keyHeader_seed_passphrase);
+    free(valueHeader_seed_passphrase);
+    free(keyPairHeader_seed_passphrase);
+    free(keyHeader_type);
+    free(valueHeader_type);
+    free(keyPairHeader_type);
+    free(keyHeader_bip44_coin);
+    free(valueHeader_bip44_coin);
+    free(keyPairHeader_bip44_coin);
     free(keyHeader_seed);
     free(valueHeader_seed);
     free(keyPairHeader_seed);
+    free(keyHeader_xpub);
+    free(valueHeader_xpub);
+    free(keyPairHeader_xpub);
     free(keyHeader_label);
     free(valueHeader_label);
     free(keyPairHeader_label);
@@ -3610,8 +3684,10 @@ end:
 
 // Recovers an encrypted wallet by providing the seed. The first address will be generated from seed and compared to the first address of the specified wallet. If they match, the wallet will be regenerated with an optional password. If the wallet is not encrypted, an error is returned.
 //
+// Recovers an encrypted wallet by providing the wallet seed and optional seed passphrase
+//
 object_t*
-DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * password)
+DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * seed_passphrase ,char * password)
 {
     list_t    *localVarQueryParameters = NULL;
     list_t    *localVarHeaderParameters = list_create();
@@ -3649,6 +3725,18 @@ DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * 
         valueHeader_seed = strdup((seed));
         keyPairHeader_seed = keyValuePair_create(keyHeader_seed, valueHeader_seed);
         list_addElement(localVarHeaderParameters,keyPairHeader_seed);
+    }
+
+
+    // header parameters
+    char *keyHeader_seed_passphrase;
+    char * valueHeader_seed_passphrase;
+    keyValuePair_t *keyPairHeader_seed_passphrase = 0;
+    if (seed_passphrase) {
+        keyHeader_seed_passphrase = strdup("seed_passphrase");
+        valueHeader_seed_passphrase = strdup((seed_passphrase));
+        keyPairHeader_seed_passphrase = keyValuePair_create(keyHeader_seed_passphrase, valueHeader_seed_passphrase);
+        list_addElement(localVarHeaderParameters,keyPairHeader_seed_passphrase);
     }
 
 
@@ -3705,6 +3793,9 @@ DefaultAPI_walletRecover(apiClient_t *apiClient ,char * id ,char * seed ,char * 
     free(keyHeader_seed);
     free(valueHeader_seed);
     free(keyPairHeader_seed);
+    free(keyHeader_seed_passphrase);
+    free(valueHeader_seed_passphrase);
+    free(keyPairHeader_seed_passphrase);
     free(keyHeader_password);
     free(valueHeader_password);
     free(keyPairHeader_password);

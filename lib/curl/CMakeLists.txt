@@ -10,7 +10,13 @@ set(CMAKE_BUILD_TYPE Release)
 
 set(pkgName "skyapi")
 
-find_package(CURL 7.58.0 EXACT REQUIRED)
+find_package(CURL 7.58.0 REQUIRED)
+if(CURL_FOUND)
+	include_directories(${CURL_INCLUDE_DIR})
+	set(PLATFORM_LIBRARIES ${PLATFORM_LIBRARIES} ${CURL_LIBRARIES} )
+else(CURL_FOUND)
+	message(FATAL_ERROR "Could not find the CURL library and development files.")
+endif()
 
 set(SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/src/list.c
